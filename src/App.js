@@ -1,7 +1,10 @@
 import React from 'react';
+import LoginDialogContainer from './containers/LoginDialog/LoginDialogContainer';
 
-function App() {
-  return <div className="App">코드를 작성함...</div>;
-}
+const App = () => (
+  <>
+    <LoginDialogContainer />
+  </>
+);
 
 export default App;
