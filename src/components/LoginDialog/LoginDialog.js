@@ -72,7 +72,7 @@ const LoginDialog = props => {
           <Button onClick={onLogin}>로그인</Button>
         </DialogActions>
         <Link onClick={handleClose} to="signup">
-          횐가입
+          회원가입
         </Link>
       </Dialog>
     </span>

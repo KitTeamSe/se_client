@@ -1,7 +1,7 @@
 import React from 'react';
 
-const SignupDialog = () => {
+const SignupPage = () => {
   return <span>회원가입</span>;
 };
 
-export default SignupDialog;
+export default SignupPage;

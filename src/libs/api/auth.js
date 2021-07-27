@@ -21,16 +21,20 @@ export const signup = ({
   questionId,
   studentId,
   type
-}) =>
-  client.post('signup', {
-    answer,
-    email,
-    id,
-    name,
-    nickname,
-    password,
-    phoneNumber,
-    questionId,
-    studentId,
-    type
+}) => {
+  const data = {
+    answer: { answer }.answer,
+    email: { email }.email,
+    id: { id }.id,
+    name: { name }.name,
+    nickname: { nickname }.nickname,
+    password: { password }.password,
+    phoneNumber: { phoneNumber }.phoneNumber,
+    questionId: { questionId }.questionId,
+    studentId: { studentId }.studentId,
+    type: { type }.type
+  };
+  return client.post('signup', data).catch(error => {
+    throw error;
   });
+};
