@@ -47,6 +47,11 @@ const LoginDialogContainer = () => {
     }
   };
 
+  const onSignup = e => {
+    e.preventDefault();
+    console.log('회원가입하고시퍼요');
+  };
+
   const onLogout = e => {
     e.preventDefault();
     localStorage.removeItem('token');
@@ -77,12 +82,15 @@ const LoginDialogContainer = () => {
       {login ? (
         <LogoutDialog onLogout={onLogout} />
       ) : (
-        <LoginDialog
-          onLogin={onLogin}
-          onChange={onChange}
-          form={form}
-          error={error}
-        />
+        <>
+          <LoginDialog
+            onLogin={onLogin}
+            onSignup={onSignup}
+            onChange={onChange}
+            form={form}
+            error={error}
+          />
+        </>
       )}
     </>
   );

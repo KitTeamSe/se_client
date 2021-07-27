@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDoorClosed } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   Button,
   TextField,
@@ -70,6 +71,9 @@ const LoginDialog = props => {
           <Button onClick={handleClose}>취소</Button>
           <Button onClick={onLogin}>로그인</Button>
         </DialogActions>
+        <Link onClick={handleClose} to="signup">
+          횐가입
+        </Link>
       </Dialog>
     </span>
   );

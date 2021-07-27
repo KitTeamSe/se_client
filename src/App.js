@@ -1,10 +1,12 @@
 import React from 'react';
-import LoginDialogContainer from './containers/LoginDialog/LoginDialogContainer';
+import Routes from './Router';
 
-const App = () => (
-  <>
-    <LoginDialogContainer />
-  </>
-);
+const App = () => {
+  return (
+    <>
+      <Routes />
+    </>
+  );
+};
 
 export default App;
