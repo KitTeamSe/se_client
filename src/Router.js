@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import LoginDialogContainer from './containers/LoginDialog/LoginDialogContainer';
-import SignupDialog from './components/SignupPage/SignupPage';
+import SignupPageContainer from './containers/SignupPage/SignupPageContainer';
 import ProfileContainer from './containers/ProfilePage/ProfilePageContainer';
 
 const ProfilePage = () => (
@@ -20,7 +20,7 @@ const MainPage = () => (
 const SignupPage = () => (
   <>
     <LoginDialogContainer />
-    <SignupDialog />
+    <SignupPageContainer />
   </>
 );
 
