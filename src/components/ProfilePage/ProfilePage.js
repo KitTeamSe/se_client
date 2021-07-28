@@ -6,21 +6,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-function createData(param, value) {
-  return { param, value };
-}
-
-const rows = [
-  createData('사진', '사진을 추가하여 계정을 맞춤설정할 수 있습니다'),
-  createData('이름', '길무짱'),
-  createData('생년월일', '생일추가'),
-  createData('성별', '남성'),
-  createData('비밀번호', 'se75407540')
-];
-
 const PropfilePage = props => {
   const { dummyData } = props;
-  console.log(dummyData);
+  const rows = Object.entries(dummyData);
 
   return (
     <TableContainer>
@@ -30,11 +18,11 @@ const PropfilePage = props => {
         </TableHead>
         <TableBody>
           {rows.map(row => (
-            <TableRow key={row.param}>
+            <TableRow key={row[0]}>
               <TableCell component="th" scope="row">
-                {row.param}
+                {row[0]}
               </TableCell>
-              <TableCell align="right">{row.value}</TableCell>
+              <TableCell align="right">{row[1]}</TableCell>
             </TableRow>
           ))}
         </TableBody>
