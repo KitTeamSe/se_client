@@ -5,7 +5,7 @@ export const signin = ({ id, pw }) => {
     id: { id }.id,
     pw: { pw }.pw
   };
-  return client.post('signin/manager', data).catch(error => {
+  return client.post('signin', data).catch(error => {
     throw error;
   });
 };
