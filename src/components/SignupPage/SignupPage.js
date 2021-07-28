@@ -29,7 +29,7 @@ const SignupPage = props => {
     signupSubmit,
     handleChange,
     classChange,
-    quetionChange,
+    questionChange,
     inputs
   } = props;
 
@@ -101,7 +101,7 @@ const SignupPage = props => {
           id="demo-simple-select"
           value={inputs.questionId}
           displayEmpty
-          onChange={quetionChange}
+          onChange={questionChange}
         >
           <MenuItem value="1">고향은?</MenuItem>
           <MenuItem value="2">졸업한 초등학교는?</MenuItem>
