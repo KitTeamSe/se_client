@@ -14,8 +14,13 @@ const FormField = styled.form`
   align-items: center;
 `;
 
+const Welcome = styled.div`
+  margin: 24px;
+  font-size: 24px;
+`;
+
 const FormTextField = styled(TextField)`
-  margin: 6px;
+  margin: 4px;
 `;
 
 const FormSelectField = styled(Select)`
@@ -36,7 +41,9 @@ const SignupPage = props => {
   return (
     <>
       <FormField autoComplete="on">
+        <Welcome>회원가입</Welcome>
         <FormTextField
+          margin="dense"
           required
           id="id"
           label="ID"
@@ -44,6 +51,7 @@ const SignupPage = props => {
           onChange={handleChange}
         />
         <FormTextField
+          margin="dense"
           required
           id="password"
           label="Password"
@@ -52,14 +60,16 @@ const SignupPage = props => {
           onChange={handleChange}
         />
         <FormTextField
+          margin="dense"
           required
           id="passwordCheck"
-          label="passwordCheck"
+          label="PasswordCheck"
           type="password"
           variant="outlined"
           onChange={handleChange}
         />
         <FormTextField
+          margin="dense"
           required
           id="email"
           label="email"
@@ -67,6 +77,7 @@ const SignupPage = props => {
           onChange={handleChange}
         />
         <FormTextField
+          margin="dense"
           required
           id="name"
           label="이름"
@@ -74,6 +85,7 @@ const SignupPage = props => {
           onChange={handleChange}
         />
         <FormTextField
+          margin="dense"
           id="nickname"
           label="닉네임"
           helperText="미입력시 익명입니다"
@@ -81,6 +93,7 @@ const SignupPage = props => {
           onChange={handleChange}
         />
         <FormTextField
+          margin="dense"
           id="phoneNumber"
           label="전화번호"
           helperText="-를 빼고 입력하세요"
@@ -89,6 +102,7 @@ const SignupPage = props => {
           onChange={handleChange}
         />
         <FormTextField
+          margin="dense"
           id="studentId"
           label="학번"
           variant="outlined"
@@ -108,6 +122,7 @@ const SignupPage = props => {
           <MenuItem value={3}>첫사랑 이름은?</MenuItem>
         </FormSelectField>
         <FormTextField
+          margin="dense"
           id="answer"
           label="질문 답"
           variant="outlined"
@@ -126,11 +141,11 @@ const SignupPage = props => {
           <MenuItem value="교수">교수</MenuItem>
           <MenuItem value="조교">조교</MenuItem>
         </FormSelectField>
+        <div>{error}</div>
+        <Button variant="contained" color="primary" onClick={signupSubmit}>
+          회원가입
+        </Button>
       </FormField>
-      <div>{error}</div>
-      <Button variant="contained" color="primary" onClick={signupSubmit}>
-        Primary
-      </Button>
     </>
   );
 };
