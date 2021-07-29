@@ -76,7 +76,7 @@ const initialState = {
     password: '',
     passwordCheck: '',
     phoneNumber: '',
-    questionId: '',
+    questionId: 1,
     studentId: '',
     type: 'STUDENT'
   },
@@ -85,7 +85,8 @@ const initialState = {
     pw: ''
   },
   auth: null,
-  authError: null
+  authError: null,
+  signupResponse: null
 };
 
 export default handleActions(
@@ -102,12 +103,13 @@ export default handleActions(
     [INITIALIZE_AUTH]: state => ({
       ...state,
       auth: null,
-      authError: null
+      authError: null,
+      signupResponse: null
     }),
-    [SIGNUP_SUCCESS]: (state, { payload: auth }) => ({
+    [SIGNUP_SUCCESS]: (state, { payload: signupResponse }) => ({
       ...state,
       authError: null,
-      auth
+      signupResponse
     }),
     [SIGNUP_FAILURE]: (state, { payload: error }) => ({
       ...state,

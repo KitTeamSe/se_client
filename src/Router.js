@@ -1,28 +1,9 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import LoginDialogContainer from './containers/LoginDialog/LoginDialogContainer';
-import SignupPageContainer from './containers/SignupPage/SignupPageContainer';
-import ProfileContainer from './containers/ProfilePage/ProfilePageContainer';
 
-const ProfilePage = () => (
-  <>
-    <LoginDialogContainer />
-    <ProfileContainer />
-  </>
-);
-
-const MainPage = () => (
-  <>
-    <LoginDialogContainer />
-  </>
-);
-
-const SignupPage = () => (
-  <>
-    <LoginDialogContainer />
-    <SignupPageContainer />
-  </>
-);
+import MainPage from './pages/MainPage';
+import ProfilePage from './pages/ProfilePage';
+import SignupPage from './pages/SignupPage';
 
 const Routes = () => (
   <Switch>
