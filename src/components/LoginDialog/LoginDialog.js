@@ -9,9 +9,11 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
+  // eslint-disable-next-line spaced-comment
+  //DialogContentText,
   DialogTitle
 } from '@material-ui/core';
+import styled from 'styled-components';
 import { initializeForm } from '../../modules/auth';
 
 const LoginDialog = props => {
@@ -28,6 +30,31 @@ const LoginDialog = props => {
     dispatch(initializeForm('signin'));
   };
 
+  const StyledDialogContent = styled(DialogContent)`
+    height: 180px;
+  `;
+
+  const StyledButton = styled(Button)`
+    width: 50%;
+    padding: 14px 0;
+    margin: 0px;
+    text-align: center;
+  `;
+
+  const StyledButtonPositive = styled(Button)`
+    width: 50%;
+    padding: 14px 0;
+    margin: 0px;
+    text-align: center;
+    background: #000;
+    color: #fff;
+  `;
+
+  const StyledLink = styled(Link)`
+    text-decoration: none;
+    color: #666;
+  `;
+
   return (
     <span>
       <FontAwesomeIcon
@@ -38,10 +65,10 @@ const LoginDialog = props => {
         style={{ cursor: 'pointer' }}
       />
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>관리자 로그인</DialogTitle>
-        <DialogContent>
-          <DialogContentText>아이디 admin</DialogContentText>
-          <DialogContentText>비밀번호 se75407540</DialogContentText>
+        <DialogTitle align="center">관리자 로그인</DialogTitle>
+        <StyledDialogContent>
+          {/* <DialogContentText>아이디 admin</DialogContentText> */}
+          {/* <DialogContentText>비밀번호 se75407540</DialogContentText> */}
           <TextField
             autoFocus
             margin="dense"
@@ -60,20 +87,19 @@ const LoginDialog = props => {
             variant="standard"
             id="pw"
             name="pw"
-            label="PW"
+            label="PASSWORD"
             onChange={onChange}
             value={form.pw}
             type="password"
           />
           <div>{error}</div>
-        </DialogContent>
+        </StyledDialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>취소</Button>
-          <Button onClick={onLogin}>로그인</Button>
+          <StyledButton onClick={handleClose}>
+            <StyledLink to="signup">회원가입</StyledLink>
+          </StyledButton>
+          <StyledButtonPositive onClick={onLogin}>로그인</StyledButtonPositive>
         </DialogActions>
-        <Link onClick={handleClose} to="signup">
-          횐가입
-        </Link>
       </Dialog>
     </span>
   );
