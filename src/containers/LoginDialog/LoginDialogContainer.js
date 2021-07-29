@@ -6,6 +6,7 @@ import {
   initializeAuth,
   signin
 } from '../../modules/auth';
+
 import LoginDialog from '../../components/LoginDialog/LoginDialog';
 import LogoutDialog from '../../components/LoginDialog/LogoutDialog';
 
@@ -47,16 +48,12 @@ const LoginDialogContainer = () => {
     }
   };
 
-  const onSignup = e => {
-    e.preventDefault();
-    console.log('회원가입하고시퍼요');
-  };
-
   const onLogout = e => {
     e.preventDefault();
     localStorage.removeItem('token');
     setLogin(false);
     console.log('log out');
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -86,7 +83,6 @@ const LoginDialogContainer = () => {
         <>
           <LoginDialog
             onLogin={onLogin}
-            onSignup={onSignup}
             onChange={onChange}
             form={form}
             error={error}
