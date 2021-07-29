@@ -15,7 +15,7 @@ import {
 import { initializeForm } from '../../modules/auth';
 
 const LoginDialog = props => {
-  const { onLogin, onChange, form, error } = props;
+  const { onLogin, onChange, onEnterPress, form, error } = props;
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 
@@ -62,6 +62,7 @@ const LoginDialog = props => {
             name="pw"
             label="PW"
             onChange={onChange}
+            onKeyPress={onEnterPress}
             value={form.pw}
             type="password"
           />

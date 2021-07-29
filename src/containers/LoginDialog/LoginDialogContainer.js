@@ -56,6 +56,12 @@ const LoginDialogContainer = () => {
     window.location.reload();
   };
 
+  const onEnterPress = e => {
+    if (e.key === 'Enter') {
+      onLogin(e);
+    }
+  };
+
   useEffect(() => {
     if (authError) {
       setError(String(authError));
@@ -84,6 +90,7 @@ const LoginDialogContainer = () => {
           <LoginDialog
             onLogin={onLogin}
             onChange={onChange}
+            onEnterPress={onEnterPress}
             form={form}
             error={error}
           />
