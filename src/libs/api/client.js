@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const client = axios.create();
+export const client = axios.create();
 
 client.defaults.baseURL = process.env.REACT_APP_API_URL;
 client.defaults.crossDomain = true;
@@ -21,5 +21,4 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-export default client;
+export const tokenHeader = token => ({ headers: { 'X-AUTH-TOKEN': token } });

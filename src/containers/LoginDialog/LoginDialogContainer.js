@@ -68,6 +68,7 @@ const LoginDialogContainer = () => {
         'token',
         JSON.stringify(auths.data.token).replaceAll('"', '')
       );
+      localStorage.setItem('userId', form.id);
       dispatch(initializeAuth());
       dispatch(initializeForm('signin'));
     }

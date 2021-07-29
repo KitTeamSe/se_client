@@ -7,8 +7,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 const PropfilePage = props => {
-  const { dummyData } = props;
-  const rows = Object.entries(dummyData);
+  const { info } = props;
+  const rows = Object.entries(info);
 
   return (
     <TableContainer>
