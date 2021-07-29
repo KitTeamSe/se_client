@@ -117,9 +117,15 @@ const SignupPage = props => {
           displayEmpty
           onChange={questionChange}
         >
-          <MenuItem value={1}>고향은?</MenuItem>
-          <MenuItem value={2}>졸업한 초등학교는?</MenuItem>
-          <MenuItem value={3}>첫사랑 이름은?</MenuItem>
+          <MenuItem value={1}>다른 이메일 주소는?</MenuItem>
+          <MenuItem value={2}>나의 보물 1호는?</MenuItem>
+          <MenuItem value={3}>나의 출신 초등학교는?</MenuItem>
+          <MenuItem value={4}>나의 출신 고향은?</MenuItem>
+          <MenuItem value={5}>나의 이상형은?</MenuItem>
+          <MenuItem value={6}>어머니 성함은?</MenuItem>
+          <MenuItem value={7}>아버지 성함은?</MenuItem>
+          <MenuItem value={8}>가장 좋아하는 색깔은?</MenuItem>
+          <MenuItem value={9}>가장 좋아하는 음식은?</MenuItem>
         </FormSelectField>
         <FormTextField
           margin="dense"
