@@ -9,8 +9,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  // eslint-disable-next-line spaced-comment
-  //DialogContentText,
+  DialogContentText,
   DialogTitle
 } from '@material-ui/core';
 import styled from 'styled-components';
@@ -30,12 +29,22 @@ const LoginDialog = props => {
     dispatch(initializeForm('signin'));
   };
 
+  const ErrorMsg = styled.div`
+    color: #ff5555;
+    font-size: 12px;
+    margin-top: 5px;
+  `;
+
   const StyledDialogContent = styled(DialogContent)`
-    height: 180px;
+    height: 150px;
+  `;
+
+  const StyledDialogContentText = styled(DialogContentText)`
+    font-size: 12px;
   `;
 
   const StyledButton = styled(Button)`
-    width: 50%;
+    width: 100%;
     padding: 14px 0;
     margin: 0px;
     text-align: center;
@@ -51,6 +60,8 @@ const LoginDialog = props => {
   `;
 
   const StyledLink = styled(Link)`
+    width: 50%;
+    text-align: center;
     text-decoration: none;
     color: #666;
   `;
@@ -92,12 +103,15 @@ const LoginDialog = props => {
             value={form.pw}
             type="password"
           />
-          <div>{error}</div>
+          <ErrorMsg>{error}</ErrorMsg>
         </StyledDialogContent>
+        <StyledDialogContentText align="center">
+          아이디/비밀번호 찾기
+        </StyledDialogContentText>
         <DialogActions>
-          <StyledButton onClick={handleClose}>
-            <StyledLink to="signup">회원가입</StyledLink>
-          </StyledButton>
+          <StyledLink to="signup">
+            <StyledButton onClick={handleClose}>회원가입</StyledButton>
+          </StyledLink>
           <StyledButtonPositive onClick={onLogin}>로그인</StyledButtonPositive>
         </DialogActions>
       </Dialog>
