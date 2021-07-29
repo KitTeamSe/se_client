@@ -2,7 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import SignupPage from '../../components/SignupPage/SignupPage';
-import { changeField, signup, initializeForm } from '../../modules/auth';
+import {
+  changeField,
+  signup,
+  initializeForm,
+  initializeAuth,
+  signin
+} from '../../modules/auth';
 
 const SignupPageContainer = () => {
   const history = useHistory();
@@ -16,11 +22,18 @@ const SignupPageContainer = () => {
 
   useEffect(() => {
     if (authError) {
-      setError(String(authError));
+      setError(JSON.stringify(authError.message));
       return;
     }
     if (signupResponse) {
+      console.log(JSON.stringify(signupResponse.message));
+      const { id, password } = form;
+      const pw = password;
+      dispatch(signin({ id, pw }));
+      console.log('로그인 시도');
       dispatch(initializeForm('signup'));
+      dispatch(initializeAuth());
+
       history.push('/');
     }
   }, [signupResponse, authError]);
@@ -59,15 +72,44 @@ const SignupPageContainer = () => {
   };
   const signupSubmit = e => {
     e.preventDefault();
-    const { id } = form;
+    const {
+      id,
+      password,
+      passwordCheck,
+      email,
+      phoneNumber,
+      studentId,
+      answer
+    } = form;
     if (id === '') {
       setError('ID 를 입력하세요');
       return;
     }
-    dispatch(signup(form));
-    if (!error) {
-      console.log('error 없음');
+    if (password.length < 4 || password.length > 20) {
+      setError('password 는 4자 이상 12자 이하 입니다');
+      return;
     }
+    if (passwordCheck !== password) {
+      setError('비밀번호가 일치하지 않습니다');
+      return;
+    }
+    if (email.includes('@') === false) {
+      setError('올바른 이메일 형식이 아닙니다');
+      return;
+    }
+    if (phoneNumber.length < 10 || phoneNumber.length > 20) {
+      setError('올바른 전화번호 길이가 아닙니다');
+      return;
+    }
+    if (studentId.length !== 8) {
+      setError('올바른 학번이 아닙니다');
+      return;
+    }
+    if (answer === '') {
+      setError('나만의 질문에 답하지 않았습니다');
+      return;
+    }
+    dispatch(signup(form));
   };
   return (
     <SignupPage

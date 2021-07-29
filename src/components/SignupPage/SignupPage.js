@@ -103,9 +103,9 @@ const SignupPage = props => {
           displayEmpty
           onChange={questionChange}
         >
-          <MenuItem value="1">고향은?</MenuItem>
-          <MenuItem value="2">졸업한 초등학교는?</MenuItem>
-          <MenuItem value="3">첫사랑 이름은?</MenuItem>
+          <MenuItem value={1}>고향은?</MenuItem>
+          <MenuItem value={2}>졸업한 초등학교는?</MenuItem>
+          <MenuItem value={3}>첫사랑 이름은?</MenuItem>
         </FormSelectField>
         <FormTextField
           id="answer"

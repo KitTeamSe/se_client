@@ -76,7 +76,7 @@ const initialState = {
     password: '',
     passwordCheck: '',
     phoneNumber: '',
-    questionId: '',
+    questionId: 1,
     studentId: '',
     type: 'STUDENT'
   },
@@ -103,7 +103,8 @@ export default handleActions(
     [INITIALIZE_AUTH]: state => ({
       ...state,
       auth: null,
-      authError: null
+      authError: null,
+      signupResponse: null
     }),
     [SIGNUP_SUCCESS]: (state, { payload: signupResponse }) => ({
       ...state,
