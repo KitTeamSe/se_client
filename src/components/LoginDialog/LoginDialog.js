@@ -19,6 +19,7 @@ const FormTextField = styled(TextField)`
   margin: 4px;
   margin="dense"
   variant="standard"
+  fullWidth
   `;
 
 const ErrorText = styled.div`
@@ -57,16 +58,13 @@ const LoginDialog = props => {
           <form onSubmit={onLogin}>
             <FormTextField
               autoFocus
-              fullWidth
               id="id"
               name="id"
               label="ID"
-              onChange={onChange}
               value={form.id}
               type="id"
             />
             <FormTextField
-              fullWidth
               id="pw"
               name="pw"
               label="PW"

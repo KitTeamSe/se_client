@@ -45,7 +45,8 @@ const SignupPage = props => {
     classChange,
     questionChange,
     inputs,
-    questionList
+    questionList,
+    typeList
   } = props;
 
   return (
@@ -67,12 +68,7 @@ const SignupPage = props => {
         />
         <FormTextField id="email" label="email" onChange={handleChange} />
         <FormTextField id="name" label="이름" onChange={handleChange} />
-        <FormTextField
-          margin="dense"
-          id="nickname"
-          label="닉네임"
-          onChange={handleChange}
-        />
+        <FormTextField id="nickname" label="닉네임" onChange={handleChange} />
         <FormTextField
           id="phoneNumber"
           label="전화번호"
@@ -110,9 +106,11 @@ const SignupPage = props => {
           onChange={classChange}
           displayEmpty
         >
-          <MenuItem value="STUDENT">학생</MenuItem>
-          <MenuItem value="교수">교수</MenuItem>
-          <MenuItem value="조교">조교</MenuItem>
+          {typeList.map(type => (
+            <MenuItem value={type.userType} key={type.typeid}>
+              {type.userType}
+            </MenuItem>
+          ))}
         </FormSelectField>
         <ErrorText>{error}</ErrorText>
         <Button variant="contained" color="primary" onClick={signupSubmit}>
