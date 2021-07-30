@@ -7,7 +7,7 @@ const ProfilePageContainer = () => {
   const [info, setInfo] = useState({ waiting: 'waiting' });
   const history = useHistory();
   const token = localStorage.getItem('token');
-  if (token == null) {
+  if (token === null) {
     history.push('/');
   }
   useEffect(async () => {

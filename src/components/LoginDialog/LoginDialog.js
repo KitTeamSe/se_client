@@ -12,10 +12,22 @@ import {
   DialogContentText,
   DialogTitle
 } from '@material-ui/core';
+import styled from 'styled-components';
 import { initializeForm } from '../../modules/auth';
 
+const FormTextField = styled(TextField)`
+  margin: 4px;
+  margin="dense"
+  variant="standard"
+  `;
+
+const ErrorText = styled.div`
+  margin: 6px;
+  font-size: 18px;
+`;
+
 const LoginDialog = props => {
-  const { onLogin, onChange, onEnterPress, form, error } = props;
+  const { onLogin, onEnterPress, onChange, form, error } = props;
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 
@@ -42,31 +54,29 @@ const LoginDialog = props => {
         <DialogContent>
           <DialogContentText>아이디 admin</DialogContentText>
           <DialogContentText>비밀번호 se75407540</DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            fullWidth
-            variant="standard"
-            id="id"
-            name="id"
-            label="ID"
-            onChange={onChange}
-            value={form.id}
-            type="id"
-          />
-          <TextField
-            margin="dense"
-            fullWidth
-            variant="standard"
-            id="pw"
-            name="pw"
-            label="PW"
-            onChange={onChange}
-            onKeyPress={onEnterPress}
-            value={form.pw}
-            type="password"
-          />
-          <div>{error}</div>
+          <form onSubmit={onLogin}>
+            <FormTextField
+              autoFocus
+              fullWidth
+              id="id"
+              name="id"
+              label="ID"
+              onChange={onChange}
+              value={form.id}
+              type="id"
+            />
+            <FormTextField
+              fullWidth
+              id="pw"
+              name="pw"
+              label="PW"
+              onChange={onChange}
+              onKeyPress={onEnterPress}
+              value={form.pw}
+              type="password"
+            />
+          </form>
+          <ErrorText>{error}</ErrorText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>취소</Button>

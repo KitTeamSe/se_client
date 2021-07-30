@@ -1,10 +1,12 @@
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
+import {
+  TextField,
+  Select,
+  InputLabel,
+  MenuItem,
+  Button
+} from '@material-ui/core';
 
 const FormField = styled.form`
   display: flex;
@@ -21,11 +23,18 @@ const Welcome = styled.div`
 
 const FormTextField = styled(TextField)`
   margin: 4px;
+  margin="dense"
+  variant="outlined"
 `;
 
 const FormSelectField = styled(Select)`
   margin: 6px;
   min-width: 72px;
+`;
+
+const ErrorText = styled.div`
+  margin: 6px;
+  font-size: 18px;
 `;
 
 const SignupPage = props => {
@@ -35,77 +44,45 @@ const SignupPage = props => {
     handleChange,
     classChange,
     questionChange,
-    inputs
+    inputs,
+    questionList
   } = props;
 
   return (
     <>
       <FormField autoComplete="on">
         <Welcome>회원가입</Welcome>
+        <FormTextField id="id" label="ID" onChange={handleChange} />
         <FormTextField
-          margin="dense"
-          required
-          id="id"
-          label="ID"
-          variant="outlined"
-          onChange={handleChange}
-        />
-        <FormTextField
-          margin="dense"
-          required
           id="password"
           label="Password"
           type="password"
-          variant="outlined"
           onChange={handleChange}
         />
         <FormTextField
-          margin="dense"
-          required
           id="passwordCheck"
           label="PasswordCheck"
           type="password"
-          variant="outlined"
           onChange={handleChange}
         />
-        <FormTextField
-          margin="dense"
-          required
-          id="email"
-          label="email"
-          variant="outlined"
-          onChange={handleChange}
-        />
-        <FormTextField
-          margin="dense"
-          required
-          id="name"
-          label="이름"
-          variant="outlined"
-          onChange={handleChange}
-        />
+        <FormTextField id="email" label="email" onChange={handleChange} />
+        <FormTextField id="name" label="이름" onChange={handleChange} />
         <FormTextField
           margin="dense"
           id="nickname"
           label="닉네임"
-          helperText="미입력시 익명입니다"
-          variant="outlined"
           onChange={handleChange}
         />
         <FormTextField
-          margin="dense"
           id="phoneNumber"
           label="전화번호"
           helperText="-를 빼고 입력하세요"
-          variant="outlined"
           type="number"
           onChange={handleChange}
         />
         <FormTextField
-          margin="dense"
           id="studentId"
           label="학번"
-          variant="outlined"
           onChange={handleChange}
           type="number"
         />
@@ -117,23 +94,13 @@ const SignupPage = props => {
           displayEmpty
           onChange={questionChange}
         >
-          <MenuItem value={1}>다른 이메일 주소는?</MenuItem>
-          <MenuItem value={2}>나의 보물 1호는?</MenuItem>
-          <MenuItem value={3}>나의 출신 초등학교는?</MenuItem>
-          <MenuItem value={4}>나의 출신 고향은?</MenuItem>
-          <MenuItem value={5}>나의 이상형은?</MenuItem>
-          <MenuItem value={6}>어머니 성함은?</MenuItem>
-          <MenuItem value={7}>아버지 성함은?</MenuItem>
-          <MenuItem value={8}>가장 좋아하는 색깔은?</MenuItem>
-          <MenuItem value={9}>가장 좋아하는 음식은?</MenuItem>
+          {questionList.map(question => (
+            <MenuItem value={question.questionid} key={question.questionid}>
+              {question.question}
+            </MenuItem>
+          ))}
         </FormSelectField>
-        <FormTextField
-          margin="dense"
-          id="answer"
-          label="질문 답"
-          variant="outlined"
-          onChange={handleChange}
-        />
+        <FormTextField id="answer" label="질문 답" onChange={handleChange} />
         <InputLabel shrink id="demo-simple-select-placeholder-label-label">
           신분
         </InputLabel>
@@ -147,7 +114,7 @@ const SignupPage = props => {
           <MenuItem value="교수">교수</MenuItem>
           <MenuItem value="조교">조교</MenuItem>
         </FormSelectField>
-        <div>{error}</div>
+        <ErrorText>{error}</ErrorText>
         <Button variant="contained" color="primary" onClick={signupSubmit}>
           회원가입
         </Button>

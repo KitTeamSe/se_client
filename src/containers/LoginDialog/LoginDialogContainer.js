@@ -43,8 +43,11 @@ const LoginDialogContainer = () => {
       return;
     }
     dispatch(signin({ id, pw }));
-    if (!error) {
-      console.log('log in');
+  };
+
+  const onEnterPress = e => {
+    if (e.key === 'Enter') {
+      onLogin(e);
     }
   };
 
@@ -52,14 +55,7 @@ const LoginDialogContainer = () => {
     e.preventDefault();
     localStorage.removeItem('token');
     setLogin(false);
-    console.log('log out');
     window.location.reload();
-  };
-
-  const onEnterPress = e => {
-    if (e.key === 'Enter') {
-      onLogin(e);
-    }
   };
 
   useEffect(() => {
@@ -89,8 +85,8 @@ const LoginDialogContainer = () => {
         <>
           <LoginDialog
             onLogin={onLogin}
-            onChange={onChange}
             onEnterPress={onEnterPress}
+            onChange={onChange}
             form={form}
             error={error}
           />

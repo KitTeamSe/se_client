@@ -18,6 +18,19 @@ const SignupPageContainer = () => {
     signupResponse: auth.signupResponse,
     authError: auth.authError
   }));
+
+  const questionList = [
+    { questionid: 1, question: '다른 이메일 주소는?' },
+    { questionid: 2, question: '나의 보물 1호는?' },
+    { questionid: 3, question: '나의 출신 초등학교는?' },
+    { questionid: 4, question: '나의 출신 고향은?' },
+    { questionid: 5, question: '나의 이상형은?' },
+    { questionid: 6, question: '어머니 성함은?' },
+    { questionid: 7, question: '아버지 성함은?' },
+    { questionid: 8, question: '가장 좋아하는 색깔은?' },
+    { questionid: 9, question: '가장 좋아하는 음식은?' }
+  ];
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -26,14 +39,11 @@ const SignupPageContainer = () => {
       return;
     }
     if (signupResponse) {
-      console.log(JSON.stringify(signupResponse.message));
       const { id, password } = form;
       const pw = password;
       dispatch(signin({ id, pw }));
-      console.log('로그인 시도');
       dispatch(initializeForm('signup'));
       dispatch(initializeAuth());
-
       history.push('/');
     }
   }, [signupResponse, authError]);
@@ -119,6 +129,7 @@ const SignupPageContainer = () => {
       signupSubmit={signupSubmit}
       inputs={form}
       error={error}
+      questionList={questionList}
     />
   );
 };
