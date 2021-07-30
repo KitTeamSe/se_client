@@ -35,6 +35,7 @@ const FormSelectField = styled(Select)`
 const ErrorText = styled.div`
   margin: 6px;
   font-size: 18px;
+  color: red;
 `;
 
 const SignupPage = props => {
@@ -51,7 +52,7 @@ const SignupPage = props => {
 
   return (
     <>
-      <FormField autoComplete="on">
+      <FormField autoComplete="on" onSubmit={signupSubmit}>
         <Welcome>회원가입</Welcome>
         <FormTextField id="id" label="ID" onChange={handleChange} />
         <FormTextField
@@ -113,7 +114,7 @@ const SignupPage = props => {
           ))}
         </FormSelectField>
         <ErrorText>{error}</ErrorText>
-        <Button variant="contained" color="primary" onClick={signupSubmit}>
+        <Button variant="contained" color="primary" type="submit">
           회원가입
         </Button>
       </FormField>

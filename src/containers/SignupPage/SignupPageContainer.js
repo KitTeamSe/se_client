@@ -31,17 +31,17 @@ const typeList = [
 const SignupPageContainer = () => {
   const history = useHistory();
   const [error, setError] = useState(null);
-  const { form, signupResponse, authError } = useSelector(({ auth }) => ({
+  const { form, signupResponse, signupError } = useSelector(({ auth }) => ({
     form: auth.signup,
     signupResponse: auth.signupResponse,
-    authError: auth.authError
+    signupError: auth.signupError
   }));
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (authError) {
-      setError(JSON.stringify(authError.message));
+    if (signupError) {
+      setError(String(signupError));
       return;
     }
     if (signupResponse) {
@@ -52,7 +52,7 @@ const SignupPageContainer = () => {
       dispatch(initializeAuth());
       history.push('/');
     }
-  }, [signupResponse, authError]);
+  }, [signupResponse, signupError]);
 
   // Select 는 작동방식을 알수가 없고 inputs 안에 들어가질 않아서 뺴놨습니다.
   const handleChange = e => {

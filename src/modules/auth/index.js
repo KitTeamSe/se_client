@@ -86,7 +86,8 @@ const initialState = {
   },
   auth: null,
   authError: null,
-  signupResponse: null
+  signupResponse: null,
+  signupError: null
 };
 
 export default handleActions(
@@ -108,12 +109,12 @@ export default handleActions(
     }),
     [SIGNUP_SUCCESS]: (state, { payload: signupResponse }) => ({
       ...state,
-      authError: null,
+      signupError: null,
       signupResponse
     }),
     [SIGNUP_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      authError: error
+      signupError: error
     }),
     [SIGNIN_SUCCESS]: (state, { payload: auth }) => ({
       ...state,

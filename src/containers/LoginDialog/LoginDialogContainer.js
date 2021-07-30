@@ -13,12 +13,23 @@ import LogoutDialog from '../../components/LoginDialog/LogoutDialog';
 const LoginDialogContainer = () => {
   const [login, setLogin] = useState(false);
   const [error, setError] = useState(null);
+  const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const { form, auths, authError } = useSelector(({ auth }) => ({
     form: auth.signin,
     auths: auth.auth,
     authError: auth.authError
   }));
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setError(null);
+    dispatch(initializeForm('signin'));
+  };
 
   const onChange = e => {
     const { value, name } = e.target;
@@ -45,12 +56,6 @@ const LoginDialogContainer = () => {
     dispatch(signin({ id, pw }));
   };
 
-  const onEnterPress = e => {
-    if (e.key === 'Enter') {
-      onLogin(e);
-    }
-  };
-
   const onLogout = e => {
     e.preventDefault();
     localStorage.removeItem('token');
@@ -72,6 +77,7 @@ const LoginDialogContainer = () => {
       dispatch(initializeForm('signin'));
     }
     if (localStorage.getItem('token')) {
+      setOpen(false);
       setLogin(true);
       setError(false);
     }
@@ -85,7 +91,9 @@ const LoginDialogContainer = () => {
         <>
           <LoginDialog
             onLogin={onLogin}
-            onEnterPress={onEnterPress}
+            handleClickOpen={handleClickOpen}
+            handleClose={handleClose}
+            open={open}
             onChange={onChange}
             form={form}
             error={error}
