@@ -8,10 +8,7 @@ import { myinfoedit } from '../../libs/api/auth';
 const ProfilePageContainer = () => {
   const [info, setInfo] = useState({ Waitting: 'Waitting' });
   const [editMode, setEditMode] = useState(false);
-  const [open, setOpen] = useState(false);
   const [infoEdit, setInfoEdit] = useState();
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -37,6 +34,7 @@ const ProfilePageContainer = () => {
       const { data } = myInformation;
       setInfo(data);
       setInfoEdit(data);
+      console.log(data);
     }
   }, [myinfoError, myInformation, dispatch]);
 
@@ -47,22 +45,9 @@ const ProfilePageContainer = () => {
   };
 
   const handleChange = e => {
+    e.preventDefault();
     const { value, id } = e.target;
     setInfoEdit({ ...infoEdit, [id]: value });
-  };
-
-  const pwChange = e => {
-    const { value } = e.target;
-    setPassword(value);
-  };
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setError(null);
   };
 
   const onMyinfoEditSubmit = e => {
@@ -72,18 +57,21 @@ const ProfilePageContainer = () => {
       return;
     }
     const userId = localStorage.getItem('userId');
-    const { informationOpenAgree, name, nickname, studentId, type } = infoEdit;
+    // const { informationOpenAgree, name, nickname, studentId, type, password } =
+    //   infoEdit;
+    const { nickname } = infoEdit;
     const parameter = {
-      answer: '대충아무거나',
+      // answer: '대충아무거나',
       id: userId,
-      informationOpenAgree,
-      name,
-      nickname,
-      password,
-      questionId: 1,
-      studentId: studentId + 1,
-      type
+      // informationOpenAgree,
+      // name,
+      nickname
+      // password,
+      // questionId: 1,
+      // studentId: studentId + 1,
+      // type
     };
+    console.log(parameter);
     myinfoedit({ parameter, token });
   };
 
@@ -95,12 +83,6 @@ const ProfilePageContainer = () => {
       infoEdit={infoEdit}
       handleChange={handleChange}
       onMyinfoEditSubmit={onMyinfoEditSubmit}
-      handleClickOpen={handleClickOpen}
-      handleClose={handleClose}
-      open={open}
-      error={error}
-      pwChange={pwChange}
-      password={password}
     />
   );
 };

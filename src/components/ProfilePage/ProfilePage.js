@@ -5,13 +5,7 @@ import {
   TableCell,
   TableContainer,
   TableRow,
-  TextField,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle
+  Button
 } from '@material-ui/core';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -59,22 +53,8 @@ const FormInput = styled.input`
   width: 196px;
 `;
 
-const FormTextField = styled(TextField)`
-  margin: 4px;
-  margin="dense";
-  variant="standard";
-  fullWidth;
-  width: 100%;
-  `;
-
-const ErrorText = styled.div`
-  margin: 6px;
-  font-size: 18px;
-`;
-
 const ProfileMode = props => {
-  const { info, myinfoEditMode } = props;
-  const rows = Object.entries(info);
+  const { myinfoEditMode, rows } = props;
 
   return (
     <Wrapper>
@@ -110,19 +90,13 @@ const ProfileMode = props => {
 
 const EditMode = props => {
   const {
-    info,
+    rows,
     myinfoEditMode,
     handleChange,
     infoEdit,
     onMyinfoEditSubmit,
-    handleClickOpen,
-    handleClose,
-    open,
-    error,
-    password,
-    pwChange
+    editMode
   } = props;
-  const rows = Object.entries(info);
 
   return (
     <Wrapper>
@@ -142,7 +116,7 @@ const EditMode = props => {
             <TableBody>
               {rows.map(row => (
                 <TableRow key={row[0]}>
-                  {changebleAccount.includes(row[0]) ? (
+                  {changebleAccount.includes(row[0]) && editMode ? (
                     <>
                       <TableCell component="th" scope="row">
                         {accountData[row[0]]}
@@ -175,33 +149,10 @@ const EditMode = props => {
           color="primary"
           type="submit"
           style={{ margin: '24px', cursor: 'pointer' }}
-          onClick={handleClickOpen}
+          onClick={onMyinfoEditSubmit}
         >
           수정
         </Button>
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>개인정보 수정</DialogTitle>
-          <form onSubmit={onMyinfoEditSubmit}>
-            <DialogContent>
-              <DialogContentText>
-                개인정보를 수정하시려면 비밀번호를 입력해주세요
-              </DialogContentText>
-              <FormTextField
-                id="pw"
-                name="pw"
-                label="PW"
-                onChange={pwChange}
-                value={password}
-                type="password"
-              />
-              <ErrorText>{error}</ErrorText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose}>취소</Button>
-              <Button type="submit">수정하기</Button>
-            </DialogActions>
-          </form>
-        </Dialog>
       </InfoTableWrapper>
     </Wrapper>
   );
@@ -214,32 +165,23 @@ const PropfilePage = props => {
     editMode,
     infoEdit,
     handleChange,
-    onMyinfoEditSubmit,
-    handleClickOpen,
-    handleClose,
-    open,
-    error,
-    pwChange,
-    password
+    onMyinfoEditSubmit
   } = props;
+  const rows = Object.entries(info);
+
   return (
     <div>
       {editMode ? (
         <EditMode
-          info={info}
+          rows={rows}
           myinfoEditMode={myinfoEditMode}
           handleChange={handleChange}
           infoEdit={infoEdit}
           onMyinfoEditSubmit={onMyinfoEditSubmit}
-          handleClickOpen={handleClickOpen}
-          handleClose={handleClose}
-          open={open}
-          error={error}
-          pwChange={pwChange}
-          password={password}
+          editMode={editMode}
         />
       ) : (
-        <ProfileMode info={info} myinfoEditMode={myinfoEditMode} />
+        <ProfileMode rows={rows} myinfoEditMode={myinfoEditMode} />
       )}
     </div>
   );

@@ -87,9 +87,7 @@ const initialState = {
   auth: null,
   authError: null,
   signupResponse: null,
-  signupError: null,
-  myInfo: null,
-  myinfoError: null
+  signupError: null
 };
 
 export default handleActions(
