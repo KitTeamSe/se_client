@@ -27,7 +27,7 @@ export const changeField = createAction(
 export const myinfo = createAction(MYINFO, ({ token }) => ({
   token
 }));
-export const myinfodeit = createAction(MYINFOEDIT, ({ parameter, token }) => ({
+export const myinfoedit = createAction(MYINFOEDIT, ({ parameter, token }) => ({
   parameter,
   token
 }));
@@ -44,7 +44,9 @@ export function* accountSaga() {
 // reducer (handleActions => switch문 대체)
 const initialState = {
   myinfo: null,
-  myinfoError: null
+  myinfoError: null,
+  myinfoEditRes: null,
+  myinfoEditError: null
 };
 
 export default handleActions(
@@ -64,15 +66,15 @@ export default handleActions(
       myinfo: null,
       myinfoError: error
     }),
-    [MYINFOEDIT_SUCCESS]: (state, { payload: myInfo }) => ({
+    [MYINFOEDIT_SUCCESS]: (state, { payload: myinfoEditRes }) => ({
       ...state,
-      myinfo: myInfo,
-      myinfoError: null
+      myinfoEditRes,
+      myinfoEditError: null
     }),
     [MYINFOEDIT_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      myinfo: null,
-      myinfoError: error
+      myinfoEditRes: null,
+      myinfoEditError: error
     })
   },
   initialState

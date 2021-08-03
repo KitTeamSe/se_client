@@ -36,3 +36,8 @@ export const changebleAccount = [
   'phoneNumber',
   'informationOpenAgree'
 ];
+
+export const informationOpenAgreeEnum = {
+  AGREE: '🟢',
+  DISAGREE: '🔴'
+};

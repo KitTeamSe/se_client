@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ProfilePage from '../../components/ProfilePage/ProfilePage';
-import { myinfo } from '../../modules/account';
-import { myinfoedit } from '../../libs/api/auth';
+import { myinfo, myinfoedit } from '../../modules/account';
 
 const ProfilePageContainer = () => {
   const [info, setInfo] = useState({ Waitting: 'Waitting' });
   const [editMode, setEditMode] = useState(false);
-  const [infoEdit, setInfoEdit] = useState();
+  const [infoEdit, setInfoEdit] = useState({});
+  const [editRes, setEditRes] = useState(null);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -17,10 +17,13 @@ const ProfilePageContainer = () => {
     history.push('/');
   }
 
-  const { myInformation, myinfoError } = useSelector(({ account }) => ({
-    myInformation: account.myinfo,
-    myinfoError: account.myinfoError
-  }));
+  const { myInformation, myinfoError, myinfoEditRes, myinfoEditError } =
+    useSelector(({ account }) => ({
+      myInformation: account.myinfo,
+      myinfoError: account.myinfoError,
+      myinfoEditRes: account.myinfoEditRes,
+      myinfoEditError: account.myinfoEditError
+    }));
 
   useEffect(() => {
     dispatch(myinfo({ token }));
@@ -34,9 +37,17 @@ const ProfilePageContainer = () => {
       const { data } = myInformation;
       setInfo(data);
       setInfoEdit(data);
-      console.log(data);
     }
   }, [myinfoError, myInformation, dispatch]);
+
+  useEffect(() => {
+    if (myinfoEditRes) {
+      setEditRes(myinfoEditRes.message);
+    }
+    if (myinfoEditError) {
+      setEditRes(myinfoEditRes);
+    }
+  }, [myinfoEditRes, myinfoEditError, dispatch]);
 
   const myinfoEditMode = e => {
     e.preventDefault();
@@ -57,22 +68,16 @@ const ProfilePageContainer = () => {
       return;
     }
     const userId = localStorage.getItem('userId');
-    // const { informationOpenAgree, name, nickname, studentId, type, password } =
-    //   infoEdit;
-    const { nickname } = infoEdit;
-    const parameter = {
-      // answer: '대충아무거나',
-      id: userId,
-      // informationOpenAgree,
-      // name,
-      nickname
-      // password,
-      // questionId: 1,
-      // studentId: studentId + 1,
-      // type
-    };
-    console.log(parameter);
-    myinfoedit({ parameter, token });
+    const parameter = {};
+    const objarray = Object.keys(infoEdit);
+    for (let i = 0; i < objarray.length; i += 1) {
+      const key = objarray[i];
+      if (info[key] !== infoEdit[key]) {
+        parameter[key] = infoEdit[key];
+      }
+    }
+    parameter.id = userId;
+    dispatch(myinfoedit({ parameter, token }));
   };
 
   return (
@@ -83,6 +88,7 @@ const ProfilePageContainer = () => {
       infoEdit={infoEdit}
       handleChange={handleChange}
       onMyinfoEditSubmit={onMyinfoEditSubmit}
+      editRes={editRes}
     />
   );
 };

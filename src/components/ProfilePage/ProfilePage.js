@@ -10,7 +10,11 @@ import {
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTools } from '@fortawesome/free-solid-svg-icons';
-import { accountData, changebleAccount } from '../../DataExport';
+import {
+  accountData,
+  changebleAccount,
+  informationOpenAgreeEnum
+} from '../../DataExport';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -43,14 +47,32 @@ const MyinfoHeader = styled.div`
   width: 100%;
 `;
 
+const EditTableCell = styled.th`
+  text-align: right;
+  padding: 6px;
+  display: table-cell;
+  font-size: 0.875rem;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-weight: 400;
+  line-height: 1.43;
+  border-bottom: 1px solid rgba(224, 224, 224, 1);
+  letter-spacing: 0.01071em;
+  vertical-align: inherit;
+`;
+
 const FormInput = styled.input`
   height: 15px;
   border: none;
+  padding: 12px;
   text-align: right;
   font-size: 0.875rem;
   font-weight: bold;
-  outline: 0;
   width: 196px;
+  autocomplete: off;
+  &:focus {
+    outline: none;
+    border: none;
+  }
 `;
 
 const ProfileMode = props => {
@@ -77,7 +99,13 @@ const ProfileMode = props => {
                   <TableCell component="th" scope="row">
                     {accountData[row[0]]}
                   </TableCell>
-                  <TableCell align="right">{row[1]}</TableCell>
+                  {row[0] === 'informationOpenAgree' ? (
+                    <TableCell align="right">
+                      {informationOpenAgreeEnum[row[1]]}
+                    </TableCell>
+                  ) : (
+                    <TableCell align="right">{row[1]}</TableCell>
+                  )}
                 </TableRow>
               ))}
             </TableBody>
@@ -121,14 +149,14 @@ const EditMode = props => {
                       <TableCell component="th" scope="row">
                         {accountData[row[0]]}
                       </TableCell>
-                      <TableCell align="right">
+                      <EditTableCell>
                         <FormInput
                           name={accountData[row[0]]}
                           id={row[0]}
                           value={infoEdit[row[0]]}
                           onChange={handleChange}
                         />
-                      </TableCell>
+                      </EditTableCell>
                     </>
                   ) : (
                     <>
@@ -165,12 +193,14 @@ const PropfilePage = props => {
     editMode,
     infoEdit,
     handleChange,
-    onMyinfoEditSubmit
+    onMyinfoEditSubmit,
+    editRes
   } = props;
   const rows = Object.entries(info);
 
   return (
     <div>
+      {editRes}
       {editMode ? (
         <EditMode
           rows={rows}
