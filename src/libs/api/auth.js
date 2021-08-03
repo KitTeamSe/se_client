@@ -44,3 +44,9 @@ export const myinfo = ({ token }) => {
     throw error.response.data.message;
   });
 };
+
+export const editmyinfo = ({ parameter, token }) => {
+  return client.put('account', parameter, tokenHeader(token)).catch(error => {
+    throw error.response.data.message;
+  });
+};

@@ -18,9 +18,6 @@ const [SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAILURE] =
 const [SIGNIN, SIGNIN_SUCCESS, SIGNIN_FAILURE] =
   createRequestActionTypes('auth/SIGNIN');
 
-const [MYINFO, MYINFO_SUCCESS, MYINFO_FAILURE] =
-  createRequestActionTypes('auth/MYINFO');
-
 export const changeField = createAction(
   CHANGE_FIELD,
   ({ form, key, value }) => ({ form, key, value })
@@ -59,18 +56,13 @@ export const signup = createAction(
 
 export const signin = createAction(SIGNIN, ({ id, pw }) => ({ id, pw }));
 
-export const myinfo = createAction(MYINFO, ({ token }) => ({
-  token
-}));
 // Sagas
 const signupSaga = createRequestSaga(SIGNUP, api.signup);
 const signinSaga = createRequestSaga(SIGNIN, api.signin);
-const myinfoSaga = createRequestSaga(MYINFO, api.myinfo);
 
 export function* authSaga() {
   yield takeLatest(SIGNUP, signupSaga);
   yield takeLatest(SIGNIN, signinSaga);
-  yield takeLatest(MYINFO, myinfoSaga);
 }
 
 // reducer (handleActions => switch문 대체)
@@ -137,15 +129,6 @@ export default handleActions(
     [SIGNIN_FAILURE]: (state, { payload: error }) => ({
       ...state,
       authError: error
-    }),
-    [MYINFO_SUCCESS]: (state, { payload: myInfo }) => ({
-      ...state,
-      myinfoError: null,
-      myInfo
-    }),
-    [MYINFO_FAILURE]: (state, { payload: error }) => ({
-      ...state,
-      myinfoError: error
     })
   },
   initialState

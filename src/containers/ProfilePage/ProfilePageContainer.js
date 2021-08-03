@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ProfilePage from '../../components/ProfilePage/ProfilePage';
-import { myinfo, initializeAuth } from '../../modules/auth';
+import { myinfo } from '../../modules/account';
 
 const ProfilePageContainer = () => {
   const [info, setInfo] = useState({ Waitting: 'Waitting' });
@@ -13,9 +13,9 @@ const ProfilePageContainer = () => {
     history.push('/');
   }
 
-  const { myInformation, myinfoError } = useSelector(({ auth }) => ({
-    myInformation: auth.myInfo,
-    myinfoError: auth.myinfoError
+  const { myInformation, myinfoError } = useSelector(({ account }) => ({
+    myInformation: account.myinfo,
+    myinfoError: account.myinfoError
   }));
 
   useEffect(() => {
@@ -26,10 +26,8 @@ const ProfilePageContainer = () => {
     if (myinfoError) {
       setInfo({ Error: String(myinfoError) });
     }
-    if (myInformation && myInformation.state !== 'Waitting') {
+    if (myInformation) {
       setInfo(myInformation.data);
-      console.log(myInformation.data);
-      dispatch(initializeAuth());
     }
   }, [myinfoError, myInformation, dispatch]);
 
