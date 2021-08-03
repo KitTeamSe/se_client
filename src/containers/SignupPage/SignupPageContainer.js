@@ -9,24 +9,7 @@ import {
   initializeAuth,
   signin
 } from '../../modules/auth';
-
-const questionList = [
-  { questionid: 1, question: '다른 이메일 주소는?' },
-  { questionid: 2, question: '나의 보물 1호는?' },
-  { questionid: 3, question: '나의 출신 초등학교는?' },
-  { questionid: 4, question: '나의 출신 고향은?' },
-  { questionid: 5, question: '나의 이상형은?' },
-  { questionid: 6, question: '어머니 성함은?' },
-  { questionid: 7, question: '아버지 성함은?' },
-  { questionid: 8, question: '가장 좋아하는 색깔은?' },
-  { questionid: 9, question: '가장 좋아하는 음식은?' }
-];
-
-const typeList = [
-  { typeid: 1, userType: 'STUDENT' },
-  { typeid: 2, userType: 'PROFESSOR' },
-  { typeid: 3, userType: 'ASSISTANT' }
-];
+import { questionList, typeList } from '../DataExport';
 
 const SignupPageContainer = () => {
   const history = useHistory();
@@ -54,7 +37,6 @@ const SignupPageContainer = () => {
     }
   }, [signupResponse, signupError]);
 
-  // Select 는 작동방식을 알수가 없고 inputs 안에 들어가질 않아서 뺴놨습니다.
   const handleChange = e => {
     const { value, id } = e.target;
     dispatch(
@@ -86,6 +68,7 @@ const SignupPageContainer = () => {
       })
     );
   };
+
   const signupSubmit = e => {
     e.preventDefault();
     const {
@@ -127,6 +110,7 @@ const SignupPageContainer = () => {
     }
     dispatch(signup(form));
   };
+
   return (
     <SignupPage
       classChange={classChange}

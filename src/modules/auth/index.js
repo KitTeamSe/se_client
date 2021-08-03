@@ -96,9 +96,7 @@ const initialState = {
   authError: null,
   signupResponse: null,
   signupError: null,
-  myInfo: {
-    state: 'Waitting'
-  },
+  myInfo: null,
   myinfoError: null
 };
 

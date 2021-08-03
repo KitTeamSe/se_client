@@ -28,6 +28,7 @@ const ProfilePageContainer = () => {
     }
     if (myInformation && myInformation.state !== 'Waitting') {
       setInfo(myInformation.data);
+      console.log(myInformation.data);
       dispatch(initializeAuth());
     }
   }, [myinfoError, myInformation, dispatch]);
