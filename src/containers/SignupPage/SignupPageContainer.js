@@ -9,7 +9,7 @@ import {
   initializeAuth,
   signin
 } from '../../modules/auth';
-import { questionList, typeList } from '../DataExport';
+import { questionList, typeList } from '../../DataExport';
 
 const SignupPageContainer = () => {
   const history = useHistory();

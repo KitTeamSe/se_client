@@ -12,7 +12,8 @@ const INITIALIZE = 'account/INITIALIZE';
 const CHANGE_FIELD = 'account/CHANGE_FIELD';
 const [MYINFO, MYINFO_SUCCESS, MYINFO_FAILURE] =
   createRequestActionTypes('account/MYINFO');
-
+const [MYINFOEDIT, MYINFOEDIT_SUCCESS, MYINFOEDIT_FAILURE] =
+  createRequestActionTypes('account/MYINFOEDIT');
 // Action Creators
 export const initialize = createAction(INITIALIZE);
 export const changeField = createAction(
@@ -26,12 +27,18 @@ export const changeField = createAction(
 export const myinfo = createAction(MYINFO, ({ token }) => ({
   token
 }));
+export const myinfodeit = createAction(MYINFOEDIT, ({ parameter, token }) => ({
+  parameter,
+  token
+}));
 
 // Sagas
 const myinfoSaga = createRequestSaga(MYINFO, api.myinfo);
+const myinfoeditSaga = createRequestSaga(MYINFOEDIT, api.myinfoedit);
 
 export function* accountSaga() {
   yield takeLatest(MYINFO, myinfoSaga);
+  yield takeLatest(MYINFOEDIT, myinfoeditSaga);
 }
 
 // reducer (handleActions => switch문 대체)
@@ -53,6 +60,16 @@ export default handleActions(
       myinfoError: null
     }),
     [MYINFO_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      myinfo: null,
+      myinfoError: error
+    }),
+    [MYINFOEDIT_SUCCESS]: (state, { payload: myInfo }) => ({
+      ...state,
+      myinfo: myInfo,
+      myinfoError: null
+    }),
+    [MYINFOEDIT_FAILURE]: (state, { payload: error }) => ({
       ...state,
       myinfo: null,
       myinfoError: error

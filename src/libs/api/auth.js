@@ -45,7 +45,7 @@ export const myinfo = ({ token }) => {
   });
 };
 
-export const editmyinfo = ({ parameter, token }) => {
+export const myinfoedit = ({ parameter, token }) => {
   return client.put('account', parameter, tokenHeader(token)).catch(error => {
     throw error.response.data.message;
   });

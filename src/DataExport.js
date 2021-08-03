@@ -28,3 +28,11 @@ export const accountData = {
   informationOpenAgree: '정보공유동의',
   lastSignInIp: '최근접속IP'
 };
+
+export const changebleAccount = [
+  'nickname',
+  'email',
+  'type',
+  'phoneNumber',
+  'informationOpenAgree'
+];
