@@ -76,7 +76,7 @@ const FormInput = styled.input`
 `;
 
 const ProfileHeader = props => {
-  const { myinfoEditMode } = props;
+  const { editModeChange } = props;
 
   return (
     <MyinfoHeader>
@@ -86,104 +86,69 @@ const ProfileHeader = props => {
         icon={faTools}
         size="lg"
         style={{ cursor: 'pointer' }}
-        onClick={myinfoEditMode}
+        onClick={editModeChange}
       />
     </MyinfoHeader>
   );
 };
 
-const ProfileMode = props => {
-  const { myinfoEditMode, rows } = props;
-
+const ProfileRow = props => {
+  const { row } = props;
   return (
-    <Wrapper>
-      <InfoTableWrapper>
-        <ProfileHeader myinfoEditMode={myinfoEditMode} />
-        <InfoTable>
-          <Table>
-            <TableBody>
-              {rows.map(row => (
-                <TableRow key={row[0]}>
-                  <TableCell component="th" scope="row">
-                    {accountData[row[0]]}
-                  </TableCell>
-                  {row[0] === 'informationOpenAgree' ? (
-                    <TableCell align="right">
-                      {informationOpenAgreeEnum[row[1]]}
-                    </TableCell>
-                  ) : (
-                    <TableCell align="right">{row[1]}</TableCell>
-                  )}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </InfoTable>
-      </InfoTableWrapper>
-    </Wrapper>
+    <>
+      <TableRow key={row[0]}>
+        <TableCell component="th" scope="row">
+          {accountData[row[0]]}
+        </TableCell>
+        {row[0] === 'informationOpenAgree' ? (
+          <TableCell align="right">
+            {informationOpenAgreeEnum[row[1]]}
+          </TableCell>
+        ) : (
+          <TableCell align="right">{row[1]}</TableCell>
+        )}
+      </TableRow>
+    </>
   );
 };
 
-const EditMode = props => {
-  const {
-    rows,
-    myinfoEditMode,
-    handleChange,
-    infoEdit,
-    onMyinfoEditSubmit,
-    editMode,
-    informationOpenAgreeChange
-  } = props;
-
+const EditRow = props => {
+  const { informationOpenAgreeChange, row, infoEdit, handleChange } = props;
   return (
-    <Wrapper>
-      <InfoTableWrapper>
-        <ProfileHeader myinfoEditMode={myinfoEditMode} />
-        <InfoTable>
-          <Table>
-            <TableBody>
-              {rows.map(row => (
-                <TableRow key={row[0]}>
-                  {changebleAccount.includes(row[0]) && editMode ? (
-                    <>
-                      <TableCell component="th" scope="row">
-                        {accountData[row[0]]}
-                      </TableCell>
-                      {row[0] === 'informationOpenAgree' ? (
-                        <EditTableCell
-                          align="right"
-                          onClick={informationOpenAgreeChange}
-                          style={{
-                            paddingRight: '16px',
-                            cursor: 'pointer'
-                          }}
-                        >
-                          {informationOpenAgreeEnum[infoEdit[row[0]]]}
-                        </EditTableCell>
-                      ) : (
-                        <EditTableCell>
-                          <FormInput
-                            name={accountData[row[0]]}
-                            id={row[0]}
-                            value={infoEdit[row[0]]}
-                            onChange={handleChange}
-                          />
-                        </EditTableCell>
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      <TableCell component="th" scope="row">
-                        {accountData[row[0]]}
-                      </TableCell>
-                      <TableCell align="right">{row[1]}</TableCell>
-                    </>
-                  )}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </InfoTable>
+    <TableRow key={row[0]}>
+      <TableCell component="th" scope="row">
+        {accountData[row[0]]}
+      </TableCell>
+      {row[0] === 'informationOpenAgree' ? (
+        <EditTableCell
+          align="right"
+          onClick={informationOpenAgreeChange}
+          style={{
+            paddingRight: '16px',
+            cursor: 'pointer'
+          }}
+        >
+          {informationOpenAgreeEnum[infoEdit[row[0]]]}
+        </EditTableCell>
+      ) : (
+        <EditTableCell>
+          <FormInput
+            name={accountData[row[0]]}
+            id={row[0]}
+            value={infoEdit[row[0]]}
+            onChange={handleChange}
+          />
+        </EditTableCell>
+      )}
+    </TableRow>
+  );
+};
+
+const SubmitButton = props => {
+  const { editMode, onMyinfoEditSubmit } = props;
+  return (
+    <>
+      {editMode ? (
         <Button
           variant="contained"
           color="primary"
@@ -193,41 +158,56 @@ const EditMode = props => {
         >
           수정
         </Button>
-      </InfoTableWrapper>
-    </Wrapper>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };
 
 const PropfilePage = props => {
+  const { info, editMode, infoEdit, editRes } = props;
+
   const {
-    info,
-    myinfoEditMode,
-    editMode,
-    infoEdit,
+    editModeChange,
     handleChange,
-    onMyinfoEditSubmit,
-    editRes,
-    informationOpenAgreeChange
+    informationOpenAgreeChange,
+    onMyinfoEditSubmit
   } = props;
+
   const rows = Object.entries(info);
 
   return (
-    <div>
-      {editRes}
-      {editMode ? (
-        <EditMode
-          rows={rows}
-          myinfoEditMode={myinfoEditMode}
-          handleChange={handleChange}
-          infoEdit={infoEdit}
-          onMyinfoEditSubmit={onMyinfoEditSubmit}
+    <Wrapper>
+      <InfoTableWrapper>
+        <ProfileHeader editModeChange={editModeChange} />
+        {editRes}
+        <InfoTable>
+          <Table>
+            <TableBody>
+              {rows.map(row => (
+                <>
+                  {changebleAccount.includes(row[0]) && editMode ? (
+                    <EditRow
+                      informationOpenAgreeChange={informationOpenAgreeChange}
+                      row={row}
+                      infoEdit={infoEdit}
+                      handleChange={handleChange}
+                    />
+                  ) : (
+                    <ProfileRow row={row} />
+                  )}
+                </>
+              ))}
+            </TableBody>
+          </Table>
+        </InfoTable>
+        <SubmitButton
           editMode={editMode}
-          informationOpenAgreeChange={informationOpenAgreeChange}
+          onMyinfoEditSubmit={onMyinfoEditSubmit}
         />
-      ) : (
-        <ProfileMode rows={rows} myinfoEditMode={myinfoEditMode} />
-      )}
-    </div>
+      </InfoTableWrapper>
+    </Wrapper>
   );
 };
 

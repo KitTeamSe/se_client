@@ -42,15 +42,16 @@ const ProfilePageContainer = () => {
 
   useEffect(() => {
     if (myinfoEditRes) {
-      setEditRes(myinfoEditRes.message);
-      window.location.reload();
+      setEditRes(String(myinfoEditRes.message));
+      setEditMode(!editMode);
+      // window.location.reload();
     }
     if (myinfoEditError) {
-      setEditRes(myinfoEditRes);
+      setEditRes(String(myinfoEditError));
     }
   }, [myinfoEditRes, myinfoEditError, dispatch]);
 
-  const myinfoEditMode = e => {
+  const editModeChange = e => {
     e.preventDefault();
     setEditMode(!editMode);
     setInfoEdit(myInformation.data);
@@ -79,10 +80,7 @@ const ProfilePageContainer = () => {
 
   const onMyinfoEditSubmit = e => {
     e.preventDefault();
-    if (info === infoEdit) {
-      console.log('변한게 없습니다');
-      return;
-    }
+
     const userId = localStorage.getItem('userId');
     const parameter = {};
     const objarray = Object.keys(infoEdit);
@@ -92,6 +90,11 @@ const ProfilePageContainer = () => {
         parameter[key] = infoEdit[key];
       }
     }
+
+    if (parameter && Object.keys(parameter).length === 0) {
+      console.log('변한게 없습니다');
+      return;
+    }
     parameter.id = userId;
     dispatch(myinfoedit({ parameter, token }));
   };
@@ -99,12 +102,12 @@ const ProfilePageContainer = () => {
   return (
     <ProfilePage
       info={info}
-      myinfoEditMode={myinfoEditMode}
       editMode={editMode}
       infoEdit={infoEdit}
+      editRes={editRes}
       handleChange={handleChange}
       onMyinfoEditSubmit={onMyinfoEditSubmit}
-      editRes={editRes}
+      editModeChange={editModeChange}
       informationOpenAgreeChange={informationOpenAgreeChange}
     />
   );
