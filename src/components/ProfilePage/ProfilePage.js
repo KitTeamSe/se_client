@@ -7,7 +7,11 @@ import {
   TableRow,
   Button,
   Menu,
-  MenuItem
+  MenuItem,
+  TextField,
+  DialogActions,
+  Dialog,
+  DialogTitle
 } from '@material-ui/core';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -78,9 +82,89 @@ const FormInput = styled.input`
   }
 `;
 
-const ProfileHeader = props => {
-  const { editMode, editModeChange, menuOpenClick, menuCloseClick, anchorEl } =
+const FormField = styled.form`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+`;
+
+const FormTextField = styled(TextField)`
+  margin: 12px;
+  margin-left: 32px;
+  margin-right: 32px;
+  margin="dense"
+`;
+
+const ErrorText = styled.div`
+  margin: 6px;
+  font-size: 18px;
+  color: red;
+`;
+
+const PwChangeDialog = props => {
+  const { open, pwChangeClick, pwChangeSubmit, error, pwForm, pwFormChange } =
     props;
+  return (
+    <div>
+      <Dialog
+        open={open}
+        onClose={pwChangeClick}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">비밀번호 변경</DialogTitle>
+        <FormField onSubmit={pwChangeSubmit}>
+          <FormTextField
+            autoFocus
+            id="nowPassword"
+            label="현재 비밀번호를 입력하세요"
+            type="password"
+            onChange={pwFormChange}
+            value={pwForm.nowPassword}
+          />
+          <FormTextField
+            id="newPassword"
+            label="새로운 비밀번호"
+            type="password"
+            onChange={pwFormChange}
+            value={pwForm.newPassword}
+          />
+          <FormTextField
+            id="newPasswordConfirm"
+            label="새로운 비밀번호 확인"
+            type="password"
+            onChange={pwFormChange}
+            value={pwForm.newPasswordConfirm}
+          />
+        </FormField>
+        <ErrorText>{error}</ErrorText>
+        <DialogActions>
+          <Button onClick={pwChangeClick} color="primary">
+            취소
+          </Button>
+          <Button onClick={pwChangeSubmit} color="primary">
+            변경하기
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+};
+
+const ProfileHeader = props => {
+  const {
+    editMode,
+    editModeChange,
+    menuOpenClick,
+    menuCloseClick,
+    anchorEl,
+    open,
+    pwChangeClick,
+    pwForm,
+    pwFormChange,
+    pwChangeSubmit
+  } = props;
 
   return (
     <MyinfoHeader>
@@ -115,7 +199,14 @@ const ProfileHeader = props => {
             style={{ marginLeft: '36px' }}
           >
             <MenuItem onClick={editModeChange}>개인정보 수정</MenuItem>
-            <MenuItem onClick={menuCloseClick}>비밀번호 변경</MenuItem>
+            <MenuItem onClick={pwChangeClick}>비밀번호 변경</MenuItem>
+            <PwChangeDialog
+              open={open}
+              pwChangeClick={pwChangeClick}
+              pwForm={pwForm}
+              pwFormChange={pwFormChange}
+              pwChangeSubmit={pwChangeSubmit}
+            />
             <MenuItem onClick={menuCloseClick}>회원탈퇴</MenuItem>
           </Menu>
         </>
@@ -198,7 +289,7 @@ const SubmitButton = props => {
 };
 
 const PropfilePage = props => {
-  const { info, editMode, infoEdit, editRes, anchorEl } = props;
+  const { info, editMode, infoEdit, editRes, anchorEl, open, pwForm } = props;
 
   const {
     editModeChange,
@@ -206,7 +297,10 @@ const PropfilePage = props => {
     informationOpenAgreeChange,
     onMyinfoEditSubmit,
     menuOpenClick,
-    menuCloseClick
+    menuCloseClick,
+    pwChangeClick,
+    pwFormChange,
+    pwChangeSubmit
   } = props;
 
   const rows = Object.entries(info);
@@ -220,6 +314,11 @@ const PropfilePage = props => {
           editModeChange={editModeChange}
           menuOpenClick={menuOpenClick}
           menuCloseClick={menuCloseClick}
+          open={open}
+          pwChangeClick={pwChangeClick}
+          pwForm={pwForm}
+          pwFormChange={pwFormChange}
+          pwChangeSubmit={pwChangeSubmit}
         />
         {editRes}
         <InfoTable>

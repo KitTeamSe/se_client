@@ -24,7 +24,6 @@ const Welcome = styled.div`
 const FormTextField = styled(TextField)`
   margin: 4px;
   margin="dense"
-  variant="outlined"
 `;
 
 const FormSelectField = styled(Select)`

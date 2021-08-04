@@ -10,6 +10,12 @@ const ProfilePageContainer = () => {
   const [infoEdit, setInfoEdit] = useState({});
   const [editRes, setEditRes] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [pwForm, setpwForm] = useState({
+    nowPassword: '',
+    newPassword: '',
+    newPasswordConfirm: ''
+  });
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -55,12 +61,34 @@ const ProfilePageContainer = () => {
     setAnchorEl(null);
     setEditMode(!editMode);
     setInfoEdit(myInformation.data);
+    setOpen(!open);
   };
 
   const handleChange = e => {
     e.preventDefault();
     const { value, id } = e.target;
     setInfoEdit({ ...infoEdit, [id]: value });
+  };
+
+  const pwFormChange = e => {
+    e.preventDefault();
+    const { value, id } = e.target;
+    setpwForm({ ...pwForm, [id]: value });
+  };
+
+  const pwChangeClick = e => {
+    e.preventDefault();
+    setAnchorEl(null);
+    setOpen(!open);
+  };
+
+  const pwChangeSubmit = e => {
+    e.preventDefault();
+    setOpen(!open);
+    const parameter = {};
+    parameter.password = pwForm.newPassword;
+    parameter.id = userId;
+    dispatch(myinfoedit({ parameter, token }));
   };
 
   const informationOpenAgreeChange = e => {
@@ -114,12 +142,17 @@ const ProfilePageContainer = () => {
       infoEdit={infoEdit}
       editRes={editRes}
       anchorEl={anchorEl}
+      open={open}
+      pwForm={pwForm}
       handleChange={handleChange}
       onMyinfoEditSubmit={onMyinfoEditSubmit}
       editModeChange={editModeChange}
       informationOpenAgreeChange={informationOpenAgreeChange}
       menuOpenClick={menuOpenClick}
       menuCloseClick={menuCloseClick}
+      pwChangeClick={pwChangeClick}
+      pwFormChange={pwFormChange}
+      pwChangeSubmit={pwChangeSubmit}
     />
   );
 };
