@@ -1,4 +1,4 @@
-import client from './client';
+import { client, tokenHeader } from './client';
 
 export const signin = ({ id, pw }) => {
   const data = {
@@ -6,7 +6,7 @@ export const signin = ({ id, pw }) => {
     pw: { pw }.pw
   };
   return client.post('signin', data).catch(error => {
-    throw error;
+    throw error.response.data.message;
   });
 };
 
@@ -35,6 +35,18 @@ export const signup = ({
     type: { type }.type
   };
   return client.post('signup', data).catch(error => {
-    throw error;
+    throw error.response.data.message;
+  });
+};
+
+export const myinfo = ({ token }) => {
+  return client.get('account/my', tokenHeader(token)).catch(error => {
+    throw error.response.data.message;
+  });
+};
+
+export const myinfoedit = ({ parameter, token }) => {
+  return client.put('account', parameter, tokenHeader(token)).catch(error => {
+    throw error.response.data.message;
   });
 };

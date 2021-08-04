@@ -9,36 +9,34 @@ import {
   initializeAuth,
   signin
 } from '../../modules/auth';
+import { questionList, typeList } from '../../DataExport';
 
 const SignupPageContainer = () => {
   const history = useHistory();
   const [error, setError] = useState(null);
-  const { form, signupResponse, authError } = useSelector(({ auth }) => ({
+  const { form, signupResponse, signupError } = useSelector(({ auth }) => ({
     form: auth.signup,
     signupResponse: auth.signupResponse,
-    authError: auth.authError
+    signupError: auth.signupError
   }));
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (authError) {
-      setError(JSON.stringify(authError.message));
+    if (signupError) {
+      setError(String(signupError));
       return;
     }
     if (signupResponse) {
-      console.log(JSON.stringify(signupResponse.message));
       const { id, password } = form;
       const pw = password;
       dispatch(signin({ id, pw }));
-      console.log('로그인 시도');
       dispatch(initializeForm('signup'));
       dispatch(initializeAuth());
-
       history.push('/');
     }
-  }, [signupResponse, authError]);
+  }, [signupResponse, signupError]);
 
-  // Select 는 작동방식을 알수가 없고 inputs 안에 들어가질 않아서 뺴놨습니다.
   const handleChange = e => {
     const { value, id } = e.target;
     dispatch(
@@ -70,6 +68,7 @@ const SignupPageContainer = () => {
       })
     );
   };
+
   const signupSubmit = e => {
     e.preventDefault();
     const {
@@ -111,6 +110,7 @@ const SignupPageContainer = () => {
     }
     dispatch(signup(form));
   };
+
   return (
     <SignupPage
       classChange={classChange}
@@ -119,6 +119,8 @@ const SignupPageContainer = () => {
       signupSubmit={signupSubmit}
       inputs={form}
       error={error}
+      questionList={questionList}
+      typeList={typeList}
     />
   );
 };
