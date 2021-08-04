@@ -13,7 +13,7 @@ import LogoutDialog from '../../components/LoginDialog/LogoutDialog';
 const LoginDialogContainer = () => {
   const [login, setLogin] = useState(false);
   const [error, setError] = useState(null);
-  const [open, setOpen] = useState(false);
+  const [open, setPwChangeDialogOpen] = useState(false);
   const dispatch = useDispatch();
   const { form, auths, authError } = useSelector(({ auth }) => ({
     form: auth.signin,
@@ -22,11 +22,11 @@ const LoginDialogContainer = () => {
   }));
 
   const handleClickOpen = () => {
-    setOpen(true);
+    setPwChangeDialogOpen(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setPwChangeDialogOpen(false);
     setError(null);
     dispatch(initializeForm('signin'));
   };
@@ -77,7 +77,7 @@ const LoginDialogContainer = () => {
       dispatch(initializeForm('signin'));
     }
     if (localStorage.getItem('token')) {
-      setOpen(false);
+      setPwChangeDialogOpen(false);
       setLogin(true);
       setError(false);
     }

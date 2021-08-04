@@ -5,12 +5,12 @@ import ProfilePage from '../../components/ProfilePage/ProfilePage';
 import { myinfo, myinfoedit, changeField } from '../../modules/account';
 
 const ProfilePageContainer = () => {
-  const [info, setInfo] = useState({ Waitting: 'Waitting' });
+  const [infoObj, setInfoObj] = useState({ Waitting: 'Waitting' });
   const [editMode, setEditMode] = useState(false);
   const [infoEdit, setInfoEdit] = useState({});
-  const [editRes, setEditRes] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [pwChangeDialogOpen, setOpen] = useState(false);
+  const [pwChangeDialogOpen, setPwChangeDialogOpen] = useState(false);
+  const [error, setError] = useState(null);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -41,19 +41,19 @@ const ProfilePageContainer = () => {
 
   useEffect(() => {
     if (myinfoError) {
-      setInfo({ Error: String(myinfoError) });
+      setInfoObj({ Error: String(myinfoError) });
+      setError(String(myinfoError));
     }
     if (myInformation) {
       const { data } = myInformation;
-      setInfo(data);
+      setInfoObj(data);
       setInfoEdit(data);
     }
     if (myinfoEditRes) {
-      setEditRes(String(myinfoEditRes.message));
       window.location.reload();
     }
     if (myinfoEditError) {
-      setEditRes(String(myinfoEditError));
+      setError(String(myinfoEditError));
     }
   }, [myinfoError, myInformation, myinfoEditRes, myinfoEditError, dispatch]);
 
@@ -80,18 +80,18 @@ const ProfilePageContainer = () => {
     setAnchorEl(null);
     setEditMode(!editMode);
     setInfoEdit(myInformation.data);
-    setOpen(false);
+    setError(null);
   };
 
   const pwChangeClick = e => {
     e.preventDefault();
     setAnchorEl(null);
-    setOpen(!pwChangeDialogOpen);
+    setPwChangeDialogOpen(!pwChangeDialogOpen);
   };
 
   const pwChangeSubmit = e => {
     e.preventDefault();
-    setOpen(!pwChangeDialogOpen);
+    setPwChangeDialogOpen(!pwChangeDialogOpen);
     const parameter = {};
     parameter.password = newPwForm.newPassword;
     parameter.id = userId;
@@ -128,13 +128,13 @@ const ProfilePageContainer = () => {
     const infoEditKeys = Object.keys(infoEdit);
     for (let i = 0; i < infoEditKeys.length; i += 1) {
       const key = infoEditKeys[i];
-      if (info[key] !== infoEdit[key]) {
+      if (infoObj[key] !== infoEdit[key]) {
         parameter[key] = infoEdit[key];
       }
     }
 
     if (parameter && Object.keys(parameter).length === 0) {
-      console.log('변한게 없습니다');
+      setError('수정사항이 없습니다');
       return;
     }
 
@@ -144,10 +144,9 @@ const ProfilePageContainer = () => {
 
   return (
     <ProfilePage
-      info={info}
+      infoObj={infoObj}
       editMode={editMode}
       infoEdit={infoEdit}
-      editRes={editRes}
       anchorEl={anchorEl}
       pwChangeDialogOpen={pwChangeDialogOpen}
       newPwForm={newPwForm}
@@ -159,6 +158,7 @@ const ProfilePageContainer = () => {
       pwChangeClick={pwChangeClick}
       pwFormChange={pwFormChange}
       pwChangeSubmit={pwChangeSubmit}
+      error={error}
     />
   );
 };

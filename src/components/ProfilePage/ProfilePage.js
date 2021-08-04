@@ -295,13 +295,13 @@ const SubmitButton = props => {
 
 const PropfilePage = props => {
   const {
-    info,
+    infoObj,
     editMode,
     infoEdit,
-    editRes,
     anchorEl,
     pwChangeDialogOpen,
-    newPwForm
+    newPwForm,
+    error
   } = props;
 
   const {
@@ -315,7 +315,7 @@ const PropfilePage = props => {
     pwChangeSubmit
   } = props;
 
-  const rows = Object.entries(info);
+  const rows = Object.entries(infoObj);
 
   return (
     <Wrapper>
@@ -331,7 +331,6 @@ const PropfilePage = props => {
           pwFormChange={pwFormChange}
           pwChangeSubmit={pwChangeSubmit}
         />
-        {editRes}
         <InfoTable>
           <Table>
             <TableBody>
@@ -352,6 +351,7 @@ const PropfilePage = props => {
             </TableBody>
           </Table>
         </InfoTable>
+        <ErrorText>{error}</ErrorText>
         <SubmitButton
           editMode={editMode}
           onMyinfoEditSubmit={onMyinfoEditSubmit}
