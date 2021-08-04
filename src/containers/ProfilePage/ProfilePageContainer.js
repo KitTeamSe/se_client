@@ -49,14 +49,18 @@ const ProfilePageContainer = () => {
   }, []);
 
   useEffect(() => {
+    if (myInformation) {
+      const { data } = myInformation;
+      console.log('myinformation 갱신');
+      setInfoObj(data);
+      setInfoEdit(data);
+    }
+  }, [myInformation]);
+
+  useEffect(() => {
     if (myinfoError) {
       setInfoObj({ Error: String(myinfoError) });
       setError(String(myinfoError));
-    }
-    if (myInformation) {
-      const { data } = myInformation;
-      setInfoObj(data);
-      setInfoEdit(data);
     }
     if (myinfoEditRes) {
       window.location.reload();

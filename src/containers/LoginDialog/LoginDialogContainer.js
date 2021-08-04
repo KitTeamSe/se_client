@@ -59,6 +59,7 @@ const LoginDialogContainer = () => {
   const onLogout = e => {
     e.preventDefault();
     localStorage.removeItem('token');
+    localStorage.removeItem('userId');
     setLogin(false);
     window.location.reload();
   };
