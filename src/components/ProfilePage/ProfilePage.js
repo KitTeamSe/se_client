@@ -12,7 +12,9 @@ import {
   TextField,
   DialogActions,
   Dialog,
-  DialogTitle
+  DialogTitle,
+  DialogContent,
+  DialogContentText
 } from '@material-ui/core';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -165,6 +167,59 @@ const PwChangeDialog = props => {
   );
 };
 
+const WithdrawalDialog = props => {
+  const {
+    withdrawalOpen,
+    withdrawalClick,
+    error,
+    withDrawalForm,
+    withDrawalFormChange,
+    withdrawalSubmit
+  } = props;
+  return (
+    <>
+      <Dialog
+        open={withdrawalOpen}
+        onClose={withdrawalClick}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">회원 탈퇴</DialogTitle>
+        <DialogContent>
+          <DialogContentText> 나 탈퇴한다~~~~~~~~~</DialogContentText>
+        </DialogContent>
+        <FormField submit={withdrawalSubmit}>
+          <FormTextField
+            autoFocus
+            id="password"
+            label="비밀번호를 입력하세요"
+            type="password"
+            onChange={withDrawalFormChange}
+            value={withDrawalForm.password}
+          />
+          <FormTextField
+            id="text"
+            label="'탈퇴'를 입력하세요"
+            type="text"
+            onChange={withDrawalFormChange}
+            value={withDrawalForm.text}
+          />
+        </FormField>
+        <Wrapper>
+          <ErrorText style={{ fontSize: '16px' }}>{error}</ErrorText>
+        </Wrapper>
+        <DialogActions>
+          <Button onClick={withdrawalClick} color="primary">
+            취소
+          </Button>
+          <Button onClick={withdrawalSubmit} color="primary">
+            탈퇴
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+};
+
 const ProfileHeader = props => {
   const {
     editMode,
@@ -176,7 +231,12 @@ const ProfileHeader = props => {
     newPwForm,
     pwFormChange,
     pwChangeSubmit,
-    error
+    error,
+    withdrawalOpen,
+    withdrawalClick,
+    withDrawalForm,
+    withDrawalFormChange,
+    withdrawalSubmit
   } = props;
 
   return (
@@ -213,7 +273,7 @@ const ProfileHeader = props => {
           >
             <MenuItem onClick={editModeChangeClick}>개인정보 수정</MenuItem>
             <MenuItem onClick={pwChangeClick}>비밀번호 변경</MenuItem>
-            <MenuItem onClick={menuClick}>회원탈퇴</MenuItem>
+            <MenuItem onClick={withdrawalClick}>회원탈퇴</MenuItem>
           </Menu>
         </>
       )}
@@ -223,6 +283,15 @@ const ProfileHeader = props => {
         newPwForm={newPwForm}
         pwFormChange={pwFormChange}
         pwChangeSubmit={pwChangeSubmit}
+        error={error}
+      />
+      <WithdrawalDialog
+        withdrawalOpen={withdrawalOpen}
+        withdrawalClick={withdrawalClick}
+        pwFormChange={pwFormChange}
+        withDrawalFormChange={withDrawalFormChange}
+        withDrawalForm={withDrawalForm}
+        withdrawalSubmit={withdrawalSubmit}
         error={error}
       />
     </MyinfoHeader>
@@ -354,7 +423,9 @@ const PropfilePage = props => {
     anchorEl,
     pwChangeDialogOpen,
     newPwForm,
-    error
+    error,
+    withdrawalOpen,
+    withDrawalForm
   } = props;
 
   const {
@@ -366,7 +437,10 @@ const PropfilePage = props => {
     pwChangeClick,
     pwFormChange,
     pwChangeSubmit,
-    typeChange
+    typeChange,
+    withdrawalClick,
+    withDrawalFormChange,
+    withdrawalSubmit
   } = props;
 
   const rows = Object.entries(infoObj);
@@ -385,6 +459,11 @@ const PropfilePage = props => {
           pwFormChange={pwFormChange}
           pwChangeSubmit={pwChangeSubmit}
           error={error}
+          withdrawalOpen={withdrawalOpen}
+          withdrawalClick={withdrawalClick}
+          withDrawalForm={withDrawalForm}
+          withDrawalFormChange={withDrawalFormChange}
+          withdrawalSubmit={withdrawalSubmit}
         />
         <InfoTable>
           <Table>

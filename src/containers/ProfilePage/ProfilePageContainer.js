@@ -5,8 +5,9 @@ import ProfilePage from '../../components/ProfilePage/ProfilePage';
 import {
   myinfo,
   myinfoedit,
-  initialize,
-  changeField
+  initializeForm,
+  changeField,
+  accountdelete
 } from '../../modules/account';
 
 const ProfilePageContainer = () => {
@@ -15,6 +16,7 @@ const ProfilePageContainer = () => {
   const [infoEdit, setInfoEdit] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
   const [pwChangeDialogOpen, setPwChangeDialogOpen] = useState(false);
+  const [withdrawalOpen, setWithdrawalOpen] = useState(false);
   const [error, setError] = useState(null);
 
   const history = useHistory();
@@ -31,13 +33,15 @@ const ProfilePageContainer = () => {
     myinfoError,
     myinfoEditRes,
     myinfoEditError,
-    newPwForm
+    newPwForm,
+    withDrawalForm
   } = useSelector(({ account }) => ({
     myInformation: account.myinfo,
     myinfoError: account.myinfoError,
     myinfoEditRes: account.myinfoEditRes,
     myinfoEditError: account.myinfoEditError,
-    newPwForm: account.newPwForm
+    newPwForm: account.newPwForm,
+    withDrawalForm: account.withDrawalForm
   }));
 
   useEffect(() => {
@@ -86,6 +90,18 @@ const ProfilePageContainer = () => {
     );
   };
 
+  const withDrawalFormChange = e => {
+    e.preventDefault();
+    const { value, id } = e.target;
+    dispatch(
+      changeField({
+        form: 'withDrawalForm',
+        key: id,
+        value
+      })
+    );
+  };
+
   const editModeChangeClick = e => {
     e.preventDefault();
     setAnchorEl(null);
@@ -99,7 +115,14 @@ const ProfilePageContainer = () => {
     setAnchorEl(null);
     setPwChangeDialogOpen(!pwChangeDialogOpen);
     setError(null);
-    dispatch(initialize());
+    dispatch(initializeForm('newPwForm'));
+  };
+
+  const withdrawalClick = e => {
+    e.preventDefault();
+    setAnchorEl(null);
+    setWithdrawalOpen(!withdrawalOpen);
+    setError(null);
   };
 
   const pwChangeSubmit = e => {
@@ -108,6 +131,11 @@ const ProfilePageContainer = () => {
     parameter.password = newPwForm.newPassword;
     parameter.id = userId;
     dispatch(myinfoedit({ parameter, token }));
+  };
+
+  const withdrawalSubmit = e => {
+    e.preventDefault();
+    dispatch(accountdelete({ userId, token }));
   };
 
   const informationOpenAgreeChange = e => {
@@ -163,6 +191,8 @@ const ProfilePageContainer = () => {
       pwChangeDialogOpen={pwChangeDialogOpen}
       newPwForm={newPwForm}
       error={error}
+      withdrawalOpen={withdrawalOpen}
+      withDrawalForm={withDrawalForm}
       handleChange={handleChange}
       onMyinfoEditSubmit={onMyinfoEditSubmit}
       editModeChangeClick={editModeChangeClick}
@@ -172,6 +202,9 @@ const ProfilePageContainer = () => {
       pwFormChange={pwFormChange}
       pwChangeSubmit={pwChangeSubmit}
       typeChange={typeChange}
+      withdrawalClick={withdrawalClick}
+      withDrawalFormChange={withDrawalFormChange}
+      withdrawalSubmit={withdrawalSubmit}
     />
   );
 };
