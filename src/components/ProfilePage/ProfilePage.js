@@ -7,6 +7,7 @@ import {
   TableRow,
   Button,
   Menu,
+  Select,
   MenuItem,
   TextField,
   DialogActions,
@@ -20,7 +21,8 @@ import { faTools, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import {
   accountData,
   changebleAccount,
-  informationOpenAgreeEnum
+  informationOpenAgreeEnum,
+  typeList
 } from '../../DataExport';
 
 const Wrapper = styled.div`
@@ -35,7 +37,7 @@ const InfoTableWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 540px;
+  max-width: 396px;
 `;
 
 const InfoTable = styled(TableContainer)`
@@ -91,16 +93,19 @@ const FormField = styled.form`
 `;
 
 const FormTextField = styled(TextField)`
-  margin: 12px;
-  margin-left: 32px;
-  margin-right: 32px;
-  margin="dense"
+  margin: 12px 32px 12px 32px;
+  min-width: 256px;
 `;
 
 const ErrorText = styled.div`
   margin: 6px;
   font-size: 18px;
   color: red;
+`;
+
+const FormSelectField = styled(Select)`
+  margin-right: 2px;
+  width: 128px;
 `;
 
 const PwChangeDialog = props => {
@@ -144,7 +149,9 @@ const PwChangeDialog = props => {
             value={newPwForm.newPasswordConfirm}
           />
         </FormField>
-        <ErrorText>{error}</ErrorText>
+        <Wrapper>
+          <ErrorText style={{ fontSize: '16px' }}>{error}</ErrorText>
+        </Wrapper>
         <DialogActions>
           <Button onClick={pwChangeClick} color="primary">
             취소
@@ -168,7 +175,8 @@ const ProfileHeader = props => {
     pwChangeClick,
     newPwForm,
     pwFormChange,
-    pwChangeSubmit
+    pwChangeSubmit,
+    error
   } = props;
 
   return (
@@ -215,6 +223,7 @@ const ProfileHeader = props => {
         newPwForm={newPwForm}
         pwFormChange={pwFormChange}
         pwChangeSubmit={pwChangeSubmit}
+        error={error}
       />
     </MyinfoHeader>
   );
@@ -240,34 +249,78 @@ const ProfileRow = props => {
   );
 };
 
+const EditRowClassifier = props => {
+  const {
+    row,
+    informationOpenAgreeChange,
+    infoEdit,
+    handleChange,
+    typeChange
+  } = props;
+  if (row[0] === 'informationOpenAgree') {
+    return (
+      <EditTableCell
+        align="right"
+        onClick={informationOpenAgreeChange}
+        style={{
+          paddingRight: '16px',
+          cursor: 'pointer'
+        }}
+      >
+        {informationOpenAgreeEnum[infoEdit[row[0]]]}
+      </EditTableCell>
+    );
+  }
+  if (row[0] === 'type') {
+    return (
+      <EditTableCell>
+        <FormSelectField
+          name="zzz"
+          id={row[0]}
+          value={infoEdit[row[0]]}
+          onChange={typeChange}
+        >
+          {typeList.map(type => (
+            <MenuItem value={type.userType} key={type.typeid}>
+              {type.userType}
+            </MenuItem>
+          ))}
+        </FormSelectField>
+      </EditTableCell>
+    );
+  }
+  return (
+    <EditTableCell>
+      <FormInput
+        name={accountData[row[0]]}
+        id={row[0]}
+        value={infoEdit[row[0]]}
+        onChange={handleChange}
+      />
+    </EditTableCell>
+  );
+};
+
 const EditRow = props => {
-  const { informationOpenAgreeChange, row, infoEdit, handleChange } = props;
+  const {
+    informationOpenAgreeChange,
+    row,
+    infoEdit,
+    handleChange,
+    typeChange
+  } = props;
   return (
     <TableRow key={row[0]}>
       <TableCell component="th" scope="row">
         {accountData[row[0]]}
       </TableCell>
-      {row[0] === 'informationOpenAgree' ? (
-        <EditTableCell
-          align="right"
-          onClick={informationOpenAgreeChange}
-          style={{
-            paddingRight: '16px',
-            cursor: 'pointer'
-          }}
-        >
-          {informationOpenAgreeEnum[infoEdit[row[0]]]}
-        </EditTableCell>
-      ) : (
-        <EditTableCell>
-          <FormInput
-            name={accountData[row[0]]}
-            id={row[0]}
-            value={infoEdit[row[0]]}
-            onChange={handleChange}
-          />
-        </EditTableCell>
-      )}
+      <EditRowClassifier
+        row={row}
+        informationOpenAgreeChange={informationOpenAgreeChange}
+        infoEdit={infoEdit}
+        handleChange={handleChange}
+        typeChange={typeChange}
+      />
     </TableRow>
   );
 };
@@ -312,7 +365,8 @@ const PropfilePage = props => {
     menuClick,
     pwChangeClick,
     pwFormChange,
-    pwChangeSubmit
+    pwChangeSubmit,
+    typeChange
   } = props;
 
   const rows = Object.entries(infoObj);
@@ -330,6 +384,7 @@ const PropfilePage = props => {
           newPwForm={newPwForm}
           pwFormChange={pwFormChange}
           pwChangeSubmit={pwChangeSubmit}
+          error={error}
         />
         <InfoTable>
           <Table>
@@ -342,6 +397,7 @@ const PropfilePage = props => {
                       row={row}
                       infoEdit={infoEdit}
                       handleChange={handleChange}
+                      typeChange={typeChange}
                     />
                   ) : (
                     <ProfileRow row={row} />

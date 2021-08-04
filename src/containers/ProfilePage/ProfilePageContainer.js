@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ProfilePage from '../../components/ProfilePage/ProfilePage';
-import { myinfo, myinfoedit, changeField } from '../../modules/account';
+import {
+  myinfo,
+  myinfoedit,
+  initialize,
+  changeField
+} from '../../modules/account';
 
 const ProfilePageContainer = () => {
   const [infoObj, setInfoObj] = useState({ Waitting: 'Waitting' });
@@ -63,6 +68,12 @@ const ProfilePageContainer = () => {
     setInfoEdit({ ...infoEdit, [id]: value });
   };
 
+  const typeChange = e => {
+    e.preventDefault();
+    const { value } = e.target;
+    setInfoEdit({ ...infoEdit, type: value });
+  };
+
   const pwFormChange = e => {
     e.preventDefault();
     const { value, id } = e.target;
@@ -87,11 +98,12 @@ const ProfilePageContainer = () => {
     e.preventDefault();
     setAnchorEl(null);
     setPwChangeDialogOpen(!pwChangeDialogOpen);
+    setError(null);
+    dispatch(initialize());
   };
 
   const pwChangeSubmit = e => {
     e.preventDefault();
-    setPwChangeDialogOpen(!pwChangeDialogOpen);
     const parameter = {};
     parameter.password = newPwForm.newPassword;
     parameter.id = userId;
@@ -150,6 +162,7 @@ const ProfilePageContainer = () => {
       anchorEl={anchorEl}
       pwChangeDialogOpen={pwChangeDialogOpen}
       newPwForm={newPwForm}
+      error={error}
       handleChange={handleChange}
       onMyinfoEditSubmit={onMyinfoEditSubmit}
       editModeChangeClick={editModeChangeClick}
@@ -158,7 +171,7 @@ const ProfilePageContainer = () => {
       pwChangeClick={pwChangeClick}
       pwFormChange={pwFormChange}
       pwChangeSubmit={pwChangeSubmit}
-      error={error}
+      typeChange={typeChange}
     />
   );
 };
