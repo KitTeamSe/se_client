@@ -61,13 +61,13 @@ const EditTableCell = styled.th`
 `;
 
 const FormInput = styled.input`
+  size: 20;
   height: 15px;
   border: none;
   padding: 12px;
   text-align: right;
   font-size: 0.875rem;
   font-weight: bold;
-  width: 196px;
   autocomplete: off;
   &:focus {
     outline: none;
@@ -75,22 +75,30 @@ const FormInput = styled.input`
   }
 `;
 
+const ProfileHeader = props => {
+  const { myinfoEditMode } = props;
+
+  return (
+    <MyinfoHeader>
+      <div />
+      <Welcome>기본정보</Welcome>
+      <FontAwesomeIcon
+        icon={faTools}
+        size="lg"
+        style={{ cursor: 'pointer' }}
+        onClick={myinfoEditMode}
+      />
+    </MyinfoHeader>
+  );
+};
+
 const ProfileMode = props => {
   const { myinfoEditMode, rows } = props;
 
   return (
     <Wrapper>
       <InfoTableWrapper>
-        <MyinfoHeader>
-          <div />
-          <Welcome>기본정보</Welcome>
-          <FontAwesomeIcon
-            icon={faTools}
-            size="lg"
-            style={{ cursor: 'pointer' }}
-            onClick={myinfoEditMode}
-          />
-        </MyinfoHeader>
+        <ProfileHeader myinfoEditMode={myinfoEditMode} />
         <InfoTable>
           <Table>
             <TableBody>
@@ -123,22 +131,14 @@ const EditMode = props => {
     handleChange,
     infoEdit,
     onMyinfoEditSubmit,
-    editMode
+    editMode,
+    informationOpenAgreeChange
   } = props;
 
   return (
     <Wrapper>
       <InfoTableWrapper>
-        <MyinfoHeader>
-          <div />
-          <Welcome>기본정보</Welcome>
-          <FontAwesomeIcon
-            icon={faTools}
-            size="lg"
-            style={{ cursor: 'pointer' }}
-            onClick={myinfoEditMode}
-          />
-        </MyinfoHeader>
+        <ProfileHeader myinfoEditMode={myinfoEditMode} />
         <InfoTable>
           <Table>
             <TableBody>
@@ -149,14 +149,27 @@ const EditMode = props => {
                       <TableCell component="th" scope="row">
                         {accountData[row[0]]}
                       </TableCell>
-                      <EditTableCell>
-                        <FormInput
-                          name={accountData[row[0]]}
-                          id={row[0]}
-                          value={infoEdit[row[0]]}
-                          onChange={handleChange}
-                        />
-                      </EditTableCell>
+                      {row[0] === 'informationOpenAgree' ? (
+                        <EditTableCell
+                          align="right"
+                          onClick={informationOpenAgreeChange}
+                          style={{
+                            paddingRight: '16px',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          {informationOpenAgreeEnum[infoEdit[row[0]]]}
+                        </EditTableCell>
+                      ) : (
+                        <EditTableCell>
+                          <FormInput
+                            name={accountData[row[0]]}
+                            id={row[0]}
+                            value={infoEdit[row[0]]}
+                            onChange={handleChange}
+                          />
+                        </EditTableCell>
+                      )}
                     </>
                   ) : (
                     <>
@@ -171,7 +184,6 @@ const EditMode = props => {
             </TableBody>
           </Table>
         </InfoTable>
-
         <Button
           variant="contained"
           color="primary"
@@ -194,7 +206,8 @@ const PropfilePage = props => {
     infoEdit,
     handleChange,
     onMyinfoEditSubmit,
-    editRes
+    editRes,
+    informationOpenAgreeChange
   } = props;
   const rows = Object.entries(info);
 
@@ -209,6 +222,7 @@ const PropfilePage = props => {
           infoEdit={infoEdit}
           onMyinfoEditSubmit={onMyinfoEditSubmit}
           editMode={editMode}
+          informationOpenAgreeChange={informationOpenAgreeChange}
         />
       ) : (
         <ProfileMode rows={rows} myinfoEditMode={myinfoEditMode} />

@@ -43,6 +43,7 @@ const ProfilePageContainer = () => {
   useEffect(() => {
     if (myinfoEditRes) {
       setEditRes(myinfoEditRes.message);
+      window.location.reload();
     }
     if (myinfoEditError) {
       setEditRes(myinfoEditRes);
@@ -59,6 +60,21 @@ const ProfilePageContainer = () => {
     e.preventDefault();
     const { value, id } = e.target;
     setInfoEdit({ ...infoEdit, [id]: value });
+  };
+
+  const informationOpenAgreeChange = e => {
+    e.preventDefault();
+    if (infoEdit.informationOpenAgree === 'AGREE') {
+      setInfoEdit({
+        ...infoEdit,
+        informationOpenAgree: 'DISAGREE'
+      });
+    } else {
+      setInfoEdit({
+        ...infoEdit,
+        informationOpenAgree: 'AGREE'
+      });
+    }
   };
 
   const onMyinfoEditSubmit = e => {
@@ -89,6 +105,7 @@ const ProfilePageContainer = () => {
       handleChange={handleChange}
       onMyinfoEditSubmit={onMyinfoEditSubmit}
       editRes={editRes}
+      informationOpenAgreeChange={informationOpenAgreeChange}
     />
   );
 };
