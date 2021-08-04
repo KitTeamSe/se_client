@@ -5,11 +5,14 @@ import {
   TableCell,
   TableContainer,
   TableRow,
-  Button
+  Button,
+  Menu,
+  MenuItem
 } from '@material-ui/core';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTools } from '@fortawesome/free-solid-svg-icons';
+import { faTools, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+
 import {
   accountData,
   changebleAccount,
@@ -76,18 +79,47 @@ const FormInput = styled.input`
 `;
 
 const ProfileHeader = props => {
-  const { editModeChange } = props;
+  const { editMode, editModeChange, menuOpenClick, menuCloseClick, anchorEl } =
+    props;
 
   return (
     <MyinfoHeader>
-      <div />
-      <Welcome>기본정보</Welcome>
-      <FontAwesomeIcon
-        icon={faTools}
-        size="lg"
-        style={{ cursor: 'pointer' }}
-        onClick={editModeChange}
-      />
+      {editMode ? (
+        <>
+          <div />
+          <Welcome>기본정보</Welcome>
+          <FontAwesomeIcon
+            icon={faTimesCircle}
+            size="lg"
+            color="#DC143C"
+            style={{ cursor: 'pointer' }}
+            onClick={editModeChange}
+          />
+        </>
+      ) : (
+        <>
+          <div />
+          <Welcome>기본정보</Welcome>
+          <FontAwesomeIcon
+            icon={faTools}
+            size="lg"
+            style={{ cursor: 'pointer' }}
+            onClick={menuOpenClick}
+          />
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={menuCloseClick}
+            style={{ marginLeft: '36px' }}
+          >
+            <MenuItem onClick={editModeChange}>개인정보 수정</MenuItem>
+            <MenuItem onClick={menuCloseClick}>비밀번호 변경</MenuItem>
+            <MenuItem onClick={menuCloseClick}>회원탈퇴</MenuItem>
+          </Menu>
+        </>
+      )}
     </MyinfoHeader>
   );
 };
@@ -166,13 +198,15 @@ const SubmitButton = props => {
 };
 
 const PropfilePage = props => {
-  const { info, editMode, infoEdit, editRes } = props;
+  const { info, editMode, infoEdit, editRes, anchorEl } = props;
 
   const {
     editModeChange,
     handleChange,
     informationOpenAgreeChange,
-    onMyinfoEditSubmit
+    onMyinfoEditSubmit,
+    menuOpenClick,
+    menuCloseClick
   } = props;
 
   const rows = Object.entries(info);
@@ -180,7 +214,13 @@ const PropfilePage = props => {
   return (
     <Wrapper>
       <InfoTableWrapper>
-        <ProfileHeader editModeChange={editModeChange} />
+        <ProfileHeader
+          anchorEl={anchorEl}
+          editMode={editMode}
+          editModeChange={editModeChange}
+          menuOpenClick={menuOpenClick}
+          menuCloseClick={menuCloseClick}
+        />
         {editRes}
         <InfoTable>
           <Table>

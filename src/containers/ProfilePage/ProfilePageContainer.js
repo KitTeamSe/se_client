@@ -9,10 +9,13 @@ const ProfilePageContainer = () => {
   const [editMode, setEditMode] = useState(false);
   const [infoEdit, setInfoEdit] = useState({});
   const [editRes, setEditRes] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const history = useHistory();
   const dispatch = useDispatch();
   const token = localStorage.getItem('token');
+  const userId = localStorage.getItem('userId');
+
   if (token === null) {
     history.push('/');
   }
@@ -38,21 +41,18 @@ const ProfilePageContainer = () => {
       setInfo(data);
       setInfoEdit(data);
     }
-  }, [myinfoError, myInformation, dispatch]);
-
-  useEffect(() => {
     if (myinfoEditRes) {
       setEditRes(String(myinfoEditRes.message));
-      setEditMode(!editMode);
-      // window.location.reload();
+      window.location.reload();
     }
     if (myinfoEditError) {
       setEditRes(String(myinfoEditError));
     }
-  }, [myinfoEditRes, myinfoEditError, dispatch]);
+  }, [myinfoError, myInformation, myinfoEditRes, myinfoEditError, dispatch]);
 
   const editModeChange = e => {
     e.preventDefault();
+    setAnchorEl(null);
     setEditMode(!editMode);
     setInfoEdit(myInformation.data);
   };
@@ -78,14 +78,21 @@ const ProfilePageContainer = () => {
     }
   };
 
+  const menuOpenClick = e => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const menuCloseClick = () => {
+    setAnchorEl(null);
+  };
+
   const onMyinfoEditSubmit = e => {
     e.preventDefault();
 
-    const userId = localStorage.getItem('userId');
     const parameter = {};
-    const objarray = Object.keys(infoEdit);
-    for (let i = 0; i < objarray.length; i += 1) {
-      const key = objarray[i];
+    const infoEditKeys = Object.keys(infoEdit);
+    for (let i = 0; i < infoEditKeys.length; i += 1) {
+      const key = infoEditKeys[i];
       if (info[key] !== infoEdit[key]) {
         parameter[key] = infoEdit[key];
       }
@@ -95,6 +102,7 @@ const ProfilePageContainer = () => {
       console.log('변한게 없습니다');
       return;
     }
+
     parameter.id = userId;
     dispatch(myinfoedit({ parameter, token }));
   };
@@ -105,10 +113,13 @@ const ProfilePageContainer = () => {
       editMode={editMode}
       infoEdit={infoEdit}
       editRes={editRes}
+      anchorEl={anchorEl}
       handleChange={handleChange}
       onMyinfoEditSubmit={onMyinfoEditSubmit}
       editModeChange={editModeChange}
       informationOpenAgreeChange={informationOpenAgreeChange}
+      menuOpenClick={menuOpenClick}
+      menuCloseClick={menuCloseClick}
     />
   );
 };
