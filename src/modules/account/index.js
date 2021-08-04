@@ -43,6 +43,11 @@ export function* accountSaga() {
 
 // reducer (handleActions => switch문 대체)
 const initialState = {
+  newPwForm: {
+    nowPassword: '',
+    newPassword: '',
+    newPasswordConfirm: ''
+  },
   myinfo: null,
   myinfoError: null,
   myinfoEditRes: null,
@@ -54,7 +59,7 @@ export default handleActions(
     [INITIALIZE]: () => initialState,
     [CHANGE_FIELD]: (state, { payload: { form, key, value } }) =>
       produce(state, draft => {
-        draft.myinfo[form][key] = value;
+        draft[form][key] = value;
       }),
     [MYINFO_SUCCESS]: (state, { payload: myInfo }) => ({
       ...state,

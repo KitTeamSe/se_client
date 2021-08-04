@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ProfilePage from '../../components/ProfilePage/ProfilePage';
-import { myinfo, myinfoedit } from '../../modules/account';
+import { myinfo, myinfoedit, changeField } from '../../modules/account';
 
 const ProfilePageContainer = () => {
   const [info, setInfo] = useState({ Waitting: 'Waitting' });
@@ -10,12 +10,7 @@ const ProfilePageContainer = () => {
   const [infoEdit, setInfoEdit] = useState({});
   const [editRes, setEditRes] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [open, setOpen] = useState(false);
-  const [pwForm, setpwForm] = useState({
-    nowPassword: '',
-    newPassword: '',
-    newPasswordConfirm: ''
-  });
+  const [pwChangeDialogOpen, setOpen] = useState(false);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -26,13 +21,19 @@ const ProfilePageContainer = () => {
     history.push('/');
   }
 
-  const { myInformation, myinfoError, myinfoEditRes, myinfoEditError } =
-    useSelector(({ account }) => ({
-      myInformation: account.myinfo,
-      myinfoError: account.myinfoError,
-      myinfoEditRes: account.myinfoEditRes,
-      myinfoEditError: account.myinfoEditError
-    }));
+  const {
+    myInformation,
+    myinfoError,
+    myinfoEditRes,
+    myinfoEditError,
+    newPwForm
+  } = useSelector(({ account }) => ({
+    myInformation: account.myinfo,
+    myinfoError: account.myinfoError,
+    myinfoEditRes: account.myinfoEditRes,
+    myinfoEditError: account.myinfoEditError,
+    newPwForm: account.newPwForm
+  }));
 
   useEffect(() => {
     dispatch(myinfo({ token }));
@@ -56,14 +57,6 @@ const ProfilePageContainer = () => {
     }
   }, [myinfoError, myInformation, myinfoEditRes, myinfoEditError, dispatch]);
 
-  const editModeChange = e => {
-    e.preventDefault();
-    setAnchorEl(null);
-    setEditMode(!editMode);
-    setInfoEdit(myInformation.data);
-    setOpen(!open);
-  };
-
   const handleChange = e => {
     e.preventDefault();
     const { value, id } = e.target;
@@ -73,20 +66,34 @@ const ProfilePageContainer = () => {
   const pwFormChange = e => {
     e.preventDefault();
     const { value, id } = e.target;
-    setpwForm({ ...pwForm, [id]: value });
+    dispatch(
+      changeField({
+        form: 'newPwForm',
+        key: id,
+        value
+      })
+    );
+  };
+
+  const editModeChangeClick = e => {
+    e.preventDefault();
+    setAnchorEl(null);
+    setEditMode(!editMode);
+    setInfoEdit(myInformation.data);
+    setOpen(false);
   };
 
   const pwChangeClick = e => {
     e.preventDefault();
     setAnchorEl(null);
-    setOpen(!open);
+    setOpen(!pwChangeDialogOpen);
   };
 
   const pwChangeSubmit = e => {
     e.preventDefault();
-    setOpen(!open);
+    setOpen(!pwChangeDialogOpen);
     const parameter = {};
-    parameter.password = pwForm.newPassword;
+    parameter.password = newPwForm.newPassword;
     parameter.id = userId;
     dispatch(myinfoedit({ parameter, token }));
   };
@@ -106,12 +113,12 @@ const ProfilePageContainer = () => {
     }
   };
 
-  const menuOpenClick = e => {
-    setAnchorEl(e.currentTarget);
-  };
-
-  const menuCloseClick = () => {
-    setAnchorEl(null);
+  const menuClick = e => {
+    if (anchorEl) {
+      setAnchorEl(null);
+    } else {
+      setAnchorEl(e.currentTarget);
+    }
   };
 
   const onMyinfoEditSubmit = e => {
@@ -142,14 +149,13 @@ const ProfilePageContainer = () => {
       infoEdit={infoEdit}
       editRes={editRes}
       anchorEl={anchorEl}
-      open={open}
-      pwForm={pwForm}
+      pwChangeDialogOpen={pwChangeDialogOpen}
+      newPwForm={newPwForm}
       handleChange={handleChange}
       onMyinfoEditSubmit={onMyinfoEditSubmit}
-      editModeChange={editModeChange}
+      editModeChangeClick={editModeChangeClick}
       informationOpenAgreeChange={informationOpenAgreeChange}
-      menuOpenClick={menuOpenClick}
-      menuCloseClick={menuCloseClick}
+      menuClick={menuClick}
       pwChangeClick={pwChangeClick}
       pwFormChange={pwFormChange}
       pwChangeSubmit={pwChangeSubmit}

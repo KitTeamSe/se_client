@@ -104,12 +104,18 @@ const ErrorText = styled.div`
 `;
 
 const PwChangeDialog = props => {
-  const { open, pwChangeClick, pwChangeSubmit, error, pwForm, pwFormChange } =
-    props;
+  const {
+    pwChangeDialogOpen,
+    pwChangeClick,
+    pwChangeSubmit,
+    error,
+    newPwForm,
+    pwFormChange
+  } = props;
   return (
-    <div>
+    <>
       <Dialog
-        open={open}
+        open={pwChangeDialogOpen}
         onClose={pwChangeClick}
         aria-labelledby="form-dialog-title"
       >
@@ -121,21 +127,21 @@ const PwChangeDialog = props => {
             label="현재 비밀번호를 입력하세요"
             type="password"
             onChange={pwFormChange}
-            value={pwForm.nowPassword}
+            value={newPwForm.nowPassword}
           />
           <FormTextField
             id="newPassword"
             label="새로운 비밀번호"
             type="password"
             onChange={pwFormChange}
-            value={pwForm.newPassword}
+            value={newPwForm.newPassword}
           />
           <FormTextField
             id="newPasswordConfirm"
             label="새로운 비밀번호 확인"
             type="password"
             onChange={pwFormChange}
-            value={pwForm.newPasswordConfirm}
+            value={newPwForm.newPasswordConfirm}
           />
         </FormField>
         <ErrorText>{error}</ErrorText>
@@ -148,20 +154,19 @@ const PwChangeDialog = props => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 };
 
 const ProfileHeader = props => {
   const {
     editMode,
-    editModeChange,
-    menuOpenClick,
-    menuCloseClick,
+    editModeChangeClick,
+    menuClick,
     anchorEl,
-    open,
+    pwChangeDialogOpen,
     pwChangeClick,
-    pwForm,
+    newPwForm,
     pwFormChange,
     pwChangeSubmit
   } = props;
@@ -177,7 +182,7 @@ const ProfileHeader = props => {
             size="lg"
             color="#DC143C"
             style={{ cursor: 'pointer' }}
-            onClick={editModeChange}
+            onClick={editModeChangeClick}
           />
         </>
       ) : (
@@ -188,29 +193,29 @@ const ProfileHeader = props => {
             icon={faTools}
             size="lg"
             style={{ cursor: 'pointer' }}
-            onClick={menuOpenClick}
+            onClick={menuClick}
           />
           <Menu
             id="simple-menu"
             anchorEl={anchorEl}
             keepMounted
             open={Boolean(anchorEl)}
-            onClose={menuCloseClick}
+            onClose={menuClick}
             style={{ marginLeft: '36px' }}
           >
-            <MenuItem onClick={editModeChange}>개인정보 수정</MenuItem>
+            <MenuItem onClick={editModeChangeClick}>개인정보 수정</MenuItem>
             <MenuItem onClick={pwChangeClick}>비밀번호 변경</MenuItem>
-            <PwChangeDialog
-              open={open}
-              pwChangeClick={pwChangeClick}
-              pwForm={pwForm}
-              pwFormChange={pwFormChange}
-              pwChangeSubmit={pwChangeSubmit}
-            />
-            <MenuItem onClick={menuCloseClick}>회원탈퇴</MenuItem>
+            <MenuItem onClick={menuClick}>회원탈퇴</MenuItem>
           </Menu>
         </>
       )}
+      <PwChangeDialog
+        pwChangeDialogOpen={pwChangeDialogOpen}
+        pwChangeClick={pwChangeClick}
+        newPwForm={newPwForm}
+        pwFormChange={pwFormChange}
+        pwChangeSubmit={pwChangeSubmit}
+      />
     </MyinfoHeader>
   );
 };
@@ -289,15 +294,22 @@ const SubmitButton = props => {
 };
 
 const PropfilePage = props => {
-  const { info, editMode, infoEdit, editRes, anchorEl, open, pwForm } = props;
+  const {
+    info,
+    editMode,
+    infoEdit,
+    editRes,
+    anchorEl,
+    pwChangeDialogOpen,
+    newPwForm
+  } = props;
 
   const {
-    editModeChange,
+    editModeChangeClick,
     handleChange,
     informationOpenAgreeChange,
     onMyinfoEditSubmit,
-    menuOpenClick,
-    menuCloseClick,
+    menuClick,
     pwChangeClick,
     pwFormChange,
     pwChangeSubmit
@@ -311,12 +323,11 @@ const PropfilePage = props => {
         <ProfileHeader
           anchorEl={anchorEl}
           editMode={editMode}
-          editModeChange={editModeChange}
-          menuOpenClick={menuOpenClick}
-          menuCloseClick={menuCloseClick}
-          open={open}
+          editModeChangeClick={editModeChangeClick}
+          menuClick={menuClick}
+          pwChangeDialogOpen={pwChangeDialogOpen}
           pwChangeClick={pwChangeClick}
-          pwForm={pwForm}
+          newPwForm={newPwForm}
           pwFormChange={pwFormChange}
           pwChangeSubmit={pwChangeSubmit}
         />
