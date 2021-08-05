@@ -48,13 +48,16 @@ const ProfilePageContainer = () => {
     dispatch(myinfo({ token }));
   }, []);
 
-  useEffect(() => {
+  function editFormRefresh() {
     if (myInformation) {
       const { data } = myInformation;
-      console.log('myinformation 갱신');
       setInfoObj(data);
       setInfoEdit(data);
     }
+  }
+
+  useEffect(() => {
+    editFormRefresh();
   }, [myInformation]);
 
   useEffect(() => {
@@ -68,7 +71,7 @@ const ProfilePageContainer = () => {
     if (myinfoEditError) {
       setError(String(myinfoEditError));
     }
-  }, [myinfoError, myInformation, myinfoEditRes, myinfoEditError, dispatch]);
+  }, [myinfoError, myinfoEditRes, myinfoEditError, dispatch]);
 
   const handleChange = e => {
     e.preventDefault();
@@ -209,6 +212,7 @@ const ProfilePageContainer = () => {
       withdrawalClick={withdrawalClick}
       withDrawalFormChange={withDrawalFormChange}
       withdrawalSubmit={withdrawalSubmit}
+      editFormRefresh={editFormRefresh}
     />
   );
 };

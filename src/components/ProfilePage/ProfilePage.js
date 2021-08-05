@@ -18,7 +18,11 @@ import {
 } from '@material-ui/core';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTools, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import {
+  faTools,
+  faTimesCircle,
+  faSyncAlt
+} from '@fortawesome/free-solid-svg-icons';
 
 import {
   accountData,
@@ -56,6 +60,7 @@ const MyinfoHeader = styled.div`
   align-items: center;
   justify-content: space-around;
   width: 100%;
+  position: relative;
 `;
 
 const EditTableCell = styled.th`
@@ -108,6 +113,16 @@ const ErrorText = styled.div`
 const FormSelectField = styled(Select)`
   margin-right: 2px;
   width: 128px;
+`;
+
+const RefreshIcon = styled(FontAwesomeIcon)`
+  position: absolute;
+  right: -10px;
+  transition: 0.5s;
+  &:hover {
+    transform: rotate(180deg);
+    transition: 1s;
+  }
 `;
 
 const PwChangeDialog = props => {
@@ -236,7 +251,8 @@ const ProfileHeader = props => {
     withdrawalClick,
     withDrawalForm,
     withDrawalFormChange,
-    withdrawalSubmit
+    withdrawalSubmit,
+    editFormRefresh
   } = props;
 
   return (
@@ -251,6 +267,12 @@ const ProfileHeader = props => {
             color="#DC143C"
             style={{ cursor: 'pointer' }}
             onClick={editModeChangeClick}
+          />
+          <RefreshIcon
+            icon={faSyncAlt}
+            size="lg"
+            style={{ cursor: 'pointer' }}
+            onClick={editFormRefresh}
           />
         </>
       ) : (
@@ -440,7 +462,8 @@ const PropfilePage = props => {
     typeChange,
     withdrawalClick,
     withDrawalFormChange,
-    withdrawalSubmit
+    withdrawalSubmit,
+    editFormRefresh
   } = props;
 
   const rows = Object.entries(infoObj);
@@ -464,6 +487,7 @@ const PropfilePage = props => {
           withDrawalForm={withDrawalForm}
           withDrawalFormChange={withDrawalFormChange}
           withdrawalSubmit={withdrawalSubmit}
+          editFormRefresh={editFormRefresh}
         />
         <InfoTable>
           <Table>
