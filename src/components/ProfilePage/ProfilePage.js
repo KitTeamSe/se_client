@@ -167,7 +167,7 @@ const PwChangeDialog = props => {
           />
         </FormField>
         <Wrapper>
-          <ErrorText style={{ fontSize: '16px' }}>{error}</ErrorText>
+          <ErrorText>{error}</ErrorText>
         </Wrapper>
         <DialogActions>
           <Button onClick={pwChangeClick} color="primary">

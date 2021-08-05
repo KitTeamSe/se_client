@@ -55,7 +55,7 @@ const SignupPage = props => {
         <Welcome>회원가입</Welcome>
         <FormTextField id="id" label="ID" onChange={handleChange} />
         <FormTextField
-          id="password"
+          id="pw"
           label="Password"
           type="password"
           onChange={handleChange}

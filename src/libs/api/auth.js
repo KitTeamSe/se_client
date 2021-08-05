@@ -16,7 +16,7 @@ export const signup = ({
   id,
   name,
   nickname,
-  password,
+  pw,
   phoneNumber,
   questionId,
   studentId,
@@ -28,7 +28,7 @@ export const signup = ({
     id: { id }.id,
     name: { name }.name,
     nickname: { nickname }.nickname,
-    password: { password }.password,
+    pw: { pw }.pw,
     phoneNumber: { phoneNumber }.phoneNumber,
     questionId: { questionId }.questionId,
     studentId: { studentId }.studentId,
@@ -52,7 +52,7 @@ export const myinfoedit = ({ parameter, token }) => {
 };
 
 export const accountdelete = ({ userId, token }) => {
-  console.log('계정 삭제 실행');
+  console.log('잘가요');
   return client.delete(`account/${userId}`, tokenHeader(token)).catch(error => {
     throw error.response.data.message;
   });

@@ -6,13 +6,16 @@ import {
   changeField,
   signup,
   initializeForm,
-  initializeAuth,
   signin
 } from '../../modules/auth';
 import { questionList, typeList } from '../../DataExport';
 
 const SignupPageContainer = () => {
   const history = useHistory();
+  if (localStorage.token) {
+    history.push('/');
+  }
+
   const [error, setError] = useState(null);
   const { form, signupResponse, signupError } = useSelector(({ auth }) => ({
     form: auth.signup,
@@ -28,12 +31,16 @@ const SignupPageContainer = () => {
       return;
     }
     if (signupResponse) {
-      const { id, password } = form;
-      const pw = password;
+      const { id, pw } = form;
+      dispatch(
+        changeField({
+          form: 'signin',
+          key: 'id',
+          id
+        })
+      );
       dispatch(signin({ id, pw }));
       dispatch(initializeForm('signup'));
-      dispatch(initializeAuth());
-      history.push('/');
     }
   }, [signupResponse, signupError]);
 
@@ -71,24 +78,17 @@ const SignupPageContainer = () => {
 
   const signupSubmit = e => {
     e.preventDefault();
-    const {
-      id,
-      password,
-      passwordCheck,
-      email,
-      phoneNumber,
-      studentId,
-      answer
-    } = form;
+    const { id, pw, passwordCheck, email, phoneNumber, studentId, answer } =
+      form;
     if (id === '') {
       setError('ID 를 입력하세요');
       return;
     }
-    if (password.length < 4 || password.length > 20) {
+    if (pw.length < 4 || pw.length > 20) {
       setError('password 는 4자 이상 12자 이하 입니다');
       return;
     }
-    if (passwordCheck !== password) {
+    if (passwordCheck !== pw) {
       setError('비밀번호가 일치하지 않습니다');
       return;
     }

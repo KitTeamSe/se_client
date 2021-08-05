@@ -135,6 +135,10 @@ const ProfilePageContainer = () => {
   const pwChangeSubmit = e => {
     e.preventDefault();
     const parameter = {};
+    if (newPwForm.newPassword !== newPwForm.newPasswordConfirm) {
+      setError('새비밀번호 확인이 맞지 않습니다');
+      return;
+    }
     parameter.password = newPwForm.newPassword;
     parameter.id = userId;
     dispatch(myinfoedit({ parameter, token }));
