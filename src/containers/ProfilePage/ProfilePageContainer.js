@@ -146,7 +146,15 @@ const ProfilePageContainer = () => {
 
   const withdrawalSubmit = e => {
     e.preventDefault();
-    dispatch(accountdelete({ userId, token }));
+    const { password, text } = withDrawalForm;
+    // 비밀번호 확인하는 로직 필요
+    console.log(password);
+    if (text === '탈퇴') {
+      dispatch(accountdelete({ userId, token }));
+      setError('탈퇴가 완료되었습니다.');
+    } else {
+      setError('탈퇴를 입력하세요');
+    }
   };
 
   const informationOpenAgreeChange = e => {

@@ -31,14 +31,17 @@ const SignupPageContainer = () => {
       return;
     }
     if (signupResponse) {
-      const { id, pw } = form;
+      const { id, password } = form;
+      const value = id;
       dispatch(
         changeField({
           form: 'signin',
           key: 'id',
-          id
+          value
         })
       );
+      // signup 은 password 로 받고 signin 은 pw 로받아서 에러가 뜸
+      const pw = password;
       dispatch(signin({ id, pw }));
       dispatch(initializeForm('signup'));
     }
@@ -78,17 +81,24 @@ const SignupPageContainer = () => {
 
   const signupSubmit = e => {
     e.preventDefault();
-    const { id, pw, passwordCheck, email, phoneNumber, studentId, answer } =
-      form;
+    const {
+      id,
+      password,
+      passwordCheck,
+      email,
+      phoneNumber,
+      studentId,
+      answer
+    } = form;
     if (id === '') {
       setError('ID 를 입력하세요');
       return;
     }
-    if (pw.length < 4 || pw.length > 20) {
+    if (password.length < 4 || password.length > 20) {
       setError('password 는 4자 이상 12자 이하 입니다');
       return;
     }
-    if (passwordCheck !== pw) {
+    if (passwordCheck !== password) {
       setError('비밀번호가 일치하지 않습니다');
       return;
     }

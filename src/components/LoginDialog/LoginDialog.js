@@ -95,7 +95,7 @@ const LoginDialog = props => {
               type="id"
             />
             <FormTextField
-              id="pw"
+              id="password"
               name="pw"
               label="PW"
               onChange={onChange}
