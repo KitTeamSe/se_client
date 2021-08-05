@@ -2,13 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDoorClosed } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import {
-  Button,
-  TextField,
-  Dialog,
-  DialogContent,
-  DialogTitle
-} from '@material-ui/core';
+import { Button, TextField, Dialog, DialogTitle } from '@material-ui/core';
 import styled from 'styled-components';
 
 const AlignCenter = styled.div`
@@ -21,6 +15,7 @@ const AlignCenter = styled.div`
 const FormFlex = styled.form`
   display: flex;
   flex-direction: column;
+  padding: 12px 24px 0px 24px;
 `;
 
 const FormTextField = styled(TextField)`
@@ -30,13 +25,6 @@ const FormTextField = styled(TextField)`
   variant="standard"
   fullWidth
   `;
-
-const DialogContentFlex = styled(DialogContent)`
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 0;
-`;
-
 const ErrorText = styled.div`
   margin: 6px;
   font-size: 18px;
@@ -51,6 +39,7 @@ const FindButtonWrapper = styled.div`
   width: 100%;
   height: 36px;
   text-align: right;
+  margin-bottom: 4px;
 `;
 
 const FindLink = styled(Link)`
@@ -96,26 +85,24 @@ const LoginDialog = props => {
         <AlignCenter>
           <DialogTitle>SE 로그인</DialogTitle>
           <FormFlex onSubmit={onLogin}>
-            <DialogContentFlex>
-              <FormTextField
-                autoFocus
-                id="id"
-                name="id"
-                label="ID"
-                onChange={onChange}
-                value={form.id}
-                type="id"
-              />
-              <FormTextField
-                id="pw"
-                name="pw"
-                label="PW"
-                onChange={onChange}
-                value={form.pw}
-                type="password"
-              />
-              <ErrorText>{error}</ErrorText>
-            </DialogContentFlex>
+            <FormTextField
+              autoFocus
+              id="id"
+              name="id"
+              label="ID"
+              onChange={onChange}
+              value={form.id}
+              type="id"
+            />
+            <FormTextField
+              id="pw"
+              name="pw"
+              label="PW"
+              onChange={onChange}
+              value={form.pw}
+              type="password"
+            />
+            <ErrorText>{error}</ErrorText>
             <LinkWrapper>
               <FindButtonWrapper>
                 <FindLink onClick={handleClose} to="find">

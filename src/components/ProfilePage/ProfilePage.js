@@ -10,7 +10,6 @@ import {
   Select,
   MenuItem,
   TextField,
-  DialogActions,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -115,6 +114,18 @@ const FormSelectField = styled(Select)`
   width: 128px;
 `;
 
+const ButtonWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+`;
+
+const HalfButton = styled(Button)`
+  width: 50%;
+  padding: 8px;
+  margin: 8px;
+`;
+
 const RefreshIcon = styled(FontAwesomeIcon)`
   position: absolute;
   right: -10px;
@@ -165,18 +176,16 @@ const PwChangeDialog = props => {
             onChange={pwFormChange}
             value={newPwForm.newPasswordConfirm}
           />
-        </FormField>
-        <Wrapper>
           <ErrorText>{error}</ErrorText>
-        </Wrapper>
-        <DialogActions>
-          <Button onClick={pwChangeClick} color="primary">
-            취소
-          </Button>
-          <Button onClick={pwChangeSubmit} color="primary">
-            변경하기
-          </Button>
-        </DialogActions>
+          <ButtonWrapper>
+            <HalfButton onClick={pwChangeClick} color="primary">
+              취소
+            </HalfButton>
+            <HalfButton type="submit" onClick={pwChangeSubmit} color="primary">
+              변경하기
+            </HalfButton>
+          </ButtonWrapper>
+        </FormField>
       </Dialog>
     </>
   );
@@ -218,18 +227,22 @@ const WithdrawalDialog = props => {
             onChange={withDrawalFormChange}
             value={withDrawalForm.text}
           />
+          <Wrapper>
+            <ErrorText style={{ fontSize: '16px' }}>{error}</ErrorText>
+          </Wrapper>
+          <ButtonWrapper>
+            <HalfButton onClick={withdrawalClick} color="primary">
+              취소
+            </HalfButton>
+            <HalfButton
+              type="submit"
+              onClick={withdrawalSubmit}
+              color="primary"
+            >
+              탈퇴
+            </HalfButton>
+          </ButtonWrapper>
         </FormField>
-        <Wrapper>
-          <ErrorText style={{ fontSize: '16px' }}>{error}</ErrorText>
-        </Wrapper>
-        <DialogActions>
-          <Button onClick={withdrawalClick} color="primary">
-            취소
-          </Button>
-          <Button onClick={withdrawalSubmit} color="primary">
-            탈퇴
-          </Button>
-        </DialogActions>
       </Dialog>
     </>
   );
