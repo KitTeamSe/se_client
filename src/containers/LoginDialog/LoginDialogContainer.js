@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
 import {
   changeField,
   initializeForm,
@@ -20,6 +22,7 @@ const LoginDialogContainer = () => {
     auths: auth.auth,
     authError: auth.authError
   }));
+  const history = useHistory();
 
   const handleClickOpen = () => {
     setPwChangeDialogOpen(true);
@@ -81,6 +84,9 @@ const LoginDialogContainer = () => {
       setPwChangeDialogOpen(false);
       setLogin(true);
       setError(false);
+      if (localStorage.getItem('token') !== null) {
+        history.push('/profile');
+      }
     }
   }, [auths, authError, dispatch]);
 
