@@ -1,6 +1,10 @@
 import React from 'react';
-import LoginDialogContainer from '../containers/LoginDialog/LoginDialogContainer';
+import HeaderContainer from '../containers/HeaderContainer/HeaderContainer';
 
-const MainPage = () => <LoginDialogContainer />;
+const MainPage = () => (
+  <>
+    <HeaderContainer />
+  </>
+);
 
 export default MainPage;

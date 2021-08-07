@@ -1,10 +1,10 @@
 import React from 'react';
-import LoginDialogContainer from '../containers/LoginDialog/LoginDialogContainer';
+import HeaderContainer from '../containers/HeaderContainer/HeaderContainer';
 import ProfilePageContainer from '../containers/ProfilePage/ProfilePageContainer';
 
 const ProfilePage = () => (
   <>
-    <LoginDialogContainer />
+    <HeaderContainer />
     <ProfilePageContainer />
   </>
 );
