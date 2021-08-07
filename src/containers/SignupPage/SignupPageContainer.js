@@ -6,13 +6,16 @@ import {
   changeField,
   signup,
   initializeForm,
-  initializeAuth,
   signin
 } from '../../modules/auth';
 import { questionList, typeList } from '../../DataExport';
 
 const SignupPageContainer = () => {
   const history = useHistory();
+  if (localStorage.token) {
+    history.push('/');
+  }
+
   const [error, setError] = useState(null);
   const { form, signupResponse, signupError } = useSelector(({ auth }) => ({
     form: auth.signup,
@@ -29,11 +32,18 @@ const SignupPageContainer = () => {
     }
     if (signupResponse) {
       const { id, password } = form;
+      const value = id;
+      dispatch(
+        changeField({
+          form: 'signin',
+          key: 'id',
+          value
+        })
+      );
+      // signup 은 password 로 받고 signin 은 pw 로받아서 에러가 뜸
       const pw = password;
       dispatch(signin({ id, pw }));
       dispatch(initializeForm('signup'));
-      dispatch(initializeAuth());
-      history.push('/');
     }
   }, [signupResponse, signupError]);
 

@@ -2,15 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ProfilePage from '../../components/ProfilePage/ProfilePage';
-import { myinfo, myinfoedit, changeField } from '../../modules/account';
+import {
+  myinfo,
+  myinfoedit,
+  initializeForm,
+  changeField,
+  accountdelete
+} from '../../modules/account';
 
 const ProfilePageContainer = () => {
-  const [info, setInfo] = useState({ Waitting: 'Waitting' });
-  const [editMode, setEditMode] = useState(false);
-  const [infoEdit, setInfoEdit] = useState({});
-  const [editRes, setEditRes] = useState(null);
+  const [infoObj, setInfoObj] = useState({ Waitting: 'Waitting' });
+  const [infoEditObj, setInfoEditObj] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
-  const [pwChangeDialogOpen, setOpen] = useState(false);
+  const [mode, setMode] = useState(null);
+  const [error, setError] = useState(null);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -22,94 +27,140 @@ const ProfilePageContainer = () => {
   }
 
   const {
-    myInformation,
+    myinformation,
     myinfoError,
     myinfoEditRes,
     myinfoEditError,
-    newPwForm
+    newPwForm,
+    withDrawalForm
   } = useSelector(({ account }) => ({
-    myInformation: account.myinfo,
+    myinformation: account.myinfo,
     myinfoError: account.myinfoError,
     myinfoEditRes: account.myinfoEditRes,
     myinfoEditError: account.myinfoEditError,
-    newPwForm: account.newPwForm
+    newPwForm: account.newPwForm,
+    withDrawalForm: account.withDrawalForm
   }));
 
   useEffect(() => {
     dispatch(myinfo({ token }));
   }, []);
 
+  function editFormRefresh() {
+    if (myinformation) {
+      const { data } = myinformation;
+      setInfoObj(data);
+      setInfoEditObj(data);
+    }
+  }
+
+  useEffect(() => {
+    editFormRefresh();
+  }, [myinformation]);
+
   useEffect(() => {
     if (myinfoError) {
-      setInfo({ Error: String(myinfoError) });
-    }
-    if (myInformation) {
-      const { data } = myInformation;
-      setInfo(data);
-      setInfoEdit(data);
-    }
-    if (myinfoEditRes) {
-      setEditRes(String(myinfoEditRes.message));
-      window.location.reload();
+      setInfoObj({ Error: String(myinfoError) });
+      setError(String(myinfoError));
     }
     if (myinfoEditError) {
-      setEditRes(String(myinfoEditError));
+      setError(String(myinfoEditError));
     }
-  }, [myinfoError, myInformation, myinfoEditRes, myinfoEditError, dispatch]);
+    if (myinfoEditRes) {
+      dispatch(myinfo({ token }));
+      setMode(null);
+    }
+  }, [myinfoError, myinfoEditError, myinfoEditRes]);
 
   const handleChange = e => {
     e.preventDefault();
     const { value, id } = e.target;
-    setInfoEdit({ ...infoEdit, [id]: value });
+    setInfoEditObj({ ...infoEditObj, [id]: value });
   };
 
-  const pwFormChange = e => {
+  const typeChange = e => {
     e.preventDefault();
-    const { value, id } = e.target;
-    dispatch(
-      changeField({
-        form: 'newPwForm',
-        key: id,
-        value
-      })
-    );
-  };
-
-  const editModeChangeClick = e => {
-    e.preventDefault();
-    setAnchorEl(null);
-    setEditMode(!editMode);
-    setInfoEdit(myInformation.data);
-    setOpen(false);
-  };
-
-  const pwChangeClick = e => {
-    e.preventDefault();
-    setAnchorEl(null);
-    setOpen(!pwChangeDialogOpen);
-  };
-
-  const pwChangeSubmit = e => {
-    e.preventDefault();
-    setOpen(!pwChangeDialogOpen);
-    const parameter = {};
-    parameter.password = newPwForm.newPassword;
-    parameter.id = userId;
-    dispatch(myinfoedit({ parameter, token }));
+    const { value } = e.target;
+    setInfoEditObj({ ...infoEditObj, type: value });
   };
 
   const informationOpenAgreeChange = e => {
     e.preventDefault();
-    if (infoEdit.informationOpenAgree === 'AGREE') {
-      setInfoEdit({
-        ...infoEdit,
+    if (infoEditObj.informationOpenAgree === 'AGREE') {
+      setInfoEditObj({
+        ...infoEditObj,
         informationOpenAgree: 'DISAGREE'
       });
     } else {
-      setInfoEdit({
-        ...infoEdit,
+      setInfoEditObj({
+        ...infoEditObj,
         informationOpenAgree: 'AGREE'
       });
+    }
+  };
+
+  const formChange = e => {
+    e.preventDefault();
+    const { value, id } = e.target;
+    if (['nowPassword', 'newPassword', 'newPasswordConfirm'].includes(id)) {
+      dispatch(
+        changeField({
+          form: 'newPwForm',
+          key: id,
+          value
+        })
+      );
+    }
+    if (['password', 'text'].includes(id)) {
+      dispatch(
+        changeField({
+          form: 'withDrawalForm',
+          key: id,
+          value
+        })
+      );
+    }
+  };
+
+  const modeChange = e => {
+    e.preventDefault();
+    const value = e.target.id;
+    setAnchorEl(null);
+    setError(null);
+    if (mode === value) {
+      setMode(null);
+    } else {
+      setMode(value);
+    }
+    dispatch(initializeForm('newPwForm'));
+    editFormRefresh();
+  };
+
+  const pwChangeSubmit = e => {
+    e.preventDefault();
+    const { newPassword, newPasswordConfirm } = newPwForm;
+    const parameter = {};
+    // 비밀번호 확인하는 로직 필요
+
+    if (newPassword !== newPasswordConfirm) {
+      setError('새비밀번호 확인이 맞지 않습니다');
+      return;
+    }
+    parameter.password = newPassword;
+    parameter.id = userId;
+    dispatch(myinfoedit({ parameter, token }));
+  };
+
+  const withdrawalSubmit = e => {
+    e.preventDefault();
+    const { password, text } = withDrawalForm;
+    // 비밀번호 확인하는 로직 필요
+    console.log(password);
+    if (text === '탈퇴') {
+      dispatch(accountdelete({ userId, token }));
+      setError('탈퇴가 완료되었습니다.');
+    } else {
+      setError('탈퇴를 입력하세요');
     }
   };
 
@@ -121,20 +172,19 @@ const ProfilePageContainer = () => {
     }
   };
 
-  const onMyinfoEditSubmit = e => {
+  const myinfoEditSubmit = e => {
     e.preventDefault();
-
     const parameter = {};
-    const infoEditKeys = Object.keys(infoEdit);
-    for (let i = 0; i < infoEditKeys.length; i += 1) {
-      const key = infoEditKeys[i];
-      if (info[key] !== infoEdit[key]) {
-        parameter[key] = infoEdit[key];
+    const infoEditObjKeys = Object.keys(infoEditObj);
+    for (let i = 0; i < infoEditObjKeys.length; i += 1) {
+      const key = infoEditObjKeys[i];
+      if (infoObj[key] !== infoEditObj[key]) {
+        parameter[key] = infoEditObj[key];
       }
     }
 
     if (parameter && Object.keys(parameter).length === 0) {
-      console.log('변한게 없습니다');
+      setError('수정사항이 없습니다');
       return;
     }
 
@@ -144,21 +194,23 @@ const ProfilePageContainer = () => {
 
   return (
     <ProfilePage
-      info={info}
-      editMode={editMode}
-      infoEdit={infoEdit}
-      editRes={editRes}
+      infoObj={infoObj}
+      infoEditObj={infoEditObj}
       anchorEl={anchorEl}
-      pwChangeDialogOpen={pwChangeDialogOpen}
+      mode={mode}
       newPwForm={newPwForm}
+      withDrawalForm={withDrawalForm}
+      error={error}
       handleChange={handleChange}
-      onMyinfoEditSubmit={onMyinfoEditSubmit}
-      editModeChangeClick={editModeChangeClick}
+      formChange={formChange}
+      typeChange={typeChange}
       informationOpenAgreeChange={informationOpenAgreeChange}
       menuClick={menuClick}
-      pwChangeClick={pwChangeClick}
-      pwFormChange={pwFormChange}
+      modeChange={modeChange}
+      myinfoEditSubmit={myinfoEditSubmit}
       pwChangeSubmit={pwChangeSubmit}
+      withdrawalSubmit={withdrawalSubmit}
+      editFormRefresh={editFormRefresh}
     />
   );
 };

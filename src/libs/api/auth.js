@@ -50,3 +50,10 @@ export const myinfoedit = ({ parameter, token }) => {
     throw error.response.data.message;
   });
 };
+
+export const accountdelete = ({ userId, token }) => {
+  console.log('잘가요');
+  return client.delete(`account/${userId}`, tokenHeader(token)).catch(error => {
+    throw error.response.data.message;
+  });
+};

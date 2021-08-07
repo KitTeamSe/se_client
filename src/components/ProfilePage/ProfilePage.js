@@ -7,20 +7,27 @@ import {
   TableRow,
   Button,
   Menu,
+  Select,
   MenuItem,
   TextField,
-  DialogActions,
   Dialog,
-  DialogTitle
+  DialogTitle,
+  DialogContent,
+  DialogContentText
 } from '@material-ui/core';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTools, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import {
+  faTools,
+  faTimesCircle,
+  faSyncAlt
+} from '@fortawesome/free-solid-svg-icons';
 
 import {
   accountData,
   changebleAccount,
-  informationOpenAgreeEnum
+  informationOpenAgreeEnum,
+  typeList
 } from '../../DataExport';
 
 const Wrapper = styled.div`
@@ -35,7 +42,7 @@ const InfoTableWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 540px;
+  max-width: 396px;
 `;
 
 const InfoTable = styled(TableContainer)`
@@ -52,6 +59,7 @@ const MyinfoHeader = styled.div`
   align-items: center;
   justify-content: space-around;
   width: 100%;
+  position: relative;
 `;
 
 const EditTableCell = styled.th`
@@ -91,10 +99,8 @@ const FormField = styled.form`
 `;
 
 const FormTextField = styled(TextField)`
-  margin: 12px;
-  margin-left: 32px;
-  margin-right: 32px;
-  margin="dense"
+  margin: 12px 32px 12px 32px;
+  min-width: 256px;
 `;
 
 const ErrorText = styled.div`
@@ -103,20 +109,41 @@ const ErrorText = styled.div`
   color: red;
 `;
 
+const FormSelectField = styled(Select)`
+  margin-right: 2px;
+  width: 128px;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+`;
+
+const HalfButton = styled(Button)`
+  width: 50%;
+  padding: 8px;
+  margin: 8px;
+`;
+
+const RefreshIcon = styled(FontAwesomeIcon)`
+  position: absolute;
+  right: -10px;
+  transition: 0.5s;
+  &:hover {
+    transform: rotate(180deg);
+    transition: 1s;
+  }
+`;
+
 const PwChangeDialog = props => {
-  const {
-    pwChangeDialogOpen,
-    pwChangeClick,
-    pwChangeSubmit,
-    error,
-    newPwForm,
-    pwFormChange
-  } = props;
+  const { mode, error, newPwForm, modeChange, pwChangeSubmit, formChange } =
+    props;
   return (
     <>
       <Dialog
-        open={pwChangeDialogOpen}
-        onClose={pwChangeClick}
+        open={mode === 'pwChangeMode'}
+        onClose={modeChange}
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">비밀번호 변경</DialogTitle>
@@ -126,33 +153,90 @@ const PwChangeDialog = props => {
             id="nowPassword"
             label="현재 비밀번호를 입력하세요"
             type="password"
-            onChange={pwFormChange}
+            onChange={formChange}
             value={newPwForm.nowPassword}
           />
           <FormTextField
             id="newPassword"
             label="새로운 비밀번호"
             type="password"
-            onChange={pwFormChange}
+            onChange={formChange}
             value={newPwForm.newPassword}
           />
           <FormTextField
             id="newPasswordConfirm"
             label="새로운 비밀번호 확인"
             type="password"
-            onChange={pwFormChange}
+            onChange={formChange}
             value={newPwForm.newPasswordConfirm}
           />
+          <ErrorText>{error}</ErrorText>
+          <ButtonWrapper>
+            <HalfButton onClick={modeChange} color="primary">
+              취소
+            </HalfButton>
+            <HalfButton type="submit" onClick={pwChangeSubmit} color="primary">
+              변경하기
+            </HalfButton>
+          </ButtonWrapper>
         </FormField>
-        <ErrorText>{error}</ErrorText>
-        <DialogActions>
-          <Button onClick={pwChangeClick} color="primary">
-            취소
-          </Button>
-          <Button onClick={pwChangeSubmit} color="primary">
-            변경하기
-          </Button>
-        </DialogActions>
+      </Dialog>
+    </>
+  );
+};
+
+const WithdrawalDialog = props => {
+  const {
+    mode,
+    error,
+    withDrawalForm,
+    modeChange,
+    formChange,
+    withdrawalSubmit
+  } = props;
+  return (
+    <>
+      <Dialog
+        open={mode === 'withdrawalMode'}
+        onClose={modeChange}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">회원 탈퇴</DialogTitle>
+        <DialogContent>
+          <DialogContentText> 나 탈퇴한다~~~~~~~~~</DialogContentText>
+        </DialogContent>
+        <FormField submit={withdrawalSubmit}>
+          <FormTextField
+            autoFocus
+            id="password"
+            label="비밀번호를 입력하세요"
+            type="password"
+            onChange={formChange}
+            value={withDrawalForm.password}
+          />
+          <FormTextField
+            id="text"
+            label="'탈퇴'를 입력하세요"
+            type="text"
+            onChange={formChange}
+            value={withDrawalForm.text}
+          />
+          <Wrapper>
+            <ErrorText style={{ fontSize: '16px' }}>{error}</ErrorText>
+          </Wrapper>
+          <ButtonWrapper>
+            <HalfButton onClick={modeChange} color="primary">
+              취소
+            </HalfButton>
+            <HalfButton
+              type="submit"
+              onClick={withdrawalSubmit}
+              color="primary"
+            >
+              탈퇴
+            </HalfButton>
+          </ButtonWrapper>
+        </FormField>
       </Dialog>
     </>
   );
@@ -160,20 +244,22 @@ const PwChangeDialog = props => {
 
 const ProfileHeader = props => {
   const {
-    editMode,
-    editModeChangeClick,
-    menuClick,
+    mode,
     anchorEl,
-    pwChangeDialogOpen,
-    pwChangeClick,
+    error,
     newPwForm,
-    pwFormChange,
-    pwChangeSubmit
+    withDrawalForm,
+    modeChange,
+    menuClick,
+    formChange,
+    pwChangeSubmit,
+    withdrawalSubmit,
+    editFormRefresh
   } = props;
 
   return (
     <MyinfoHeader>
-      {editMode ? (
+      {mode === 'editMode' ? (
         <>
           <div />
           <Welcome>기본정보</Welcome>
@@ -182,7 +268,13 @@ const ProfileHeader = props => {
             size="lg"
             color="#DC143C"
             style={{ cursor: 'pointer' }}
-            onClick={editModeChangeClick}
+            onClick={modeChange}
+          />
+          <RefreshIcon
+            icon={faSyncAlt}
+            size="lg"
+            style={{ cursor: 'pointer' }}
+            onClick={editFormRefresh}
           />
         </>
       ) : (
@@ -196,25 +288,40 @@ const ProfileHeader = props => {
             onClick={menuClick}
           />
           <Menu
-            id="simple-menu"
+            id="editMode"
             anchorEl={anchorEl}
             keepMounted
             open={Boolean(anchorEl)}
             onClose={menuClick}
             style={{ marginLeft: '36px' }}
           >
-            <MenuItem onClick={editModeChangeClick}>개인정보 수정</MenuItem>
-            <MenuItem onClick={pwChangeClick}>비밀번호 변경</MenuItem>
-            <MenuItem onClick={menuClick}>회원탈퇴</MenuItem>
+            <MenuItem id="editMode" onClick={modeChange}>
+              개인정보 수정
+            </MenuItem>
+            <MenuItem id="pwChangeMode" onClick={modeChange}>
+              비밀번호 변경
+            </MenuItem>
+            <MenuItem id="withdrawalMode" onClick={modeChange}>
+              회원탈퇴
+            </MenuItem>
           </Menu>
         </>
       )}
       <PwChangeDialog
-        pwChangeDialogOpen={pwChangeDialogOpen}
-        pwChangeClick={pwChangeClick}
+        mode={mode}
+        error={error}
         newPwForm={newPwForm}
-        pwFormChange={pwFormChange}
+        modeChange={modeChange}
+        formChange={formChange}
         pwChangeSubmit={pwChangeSubmit}
+      />
+      <WithdrawalDialog
+        mode={mode}
+        withDrawalForm={withDrawalForm}
+        error={error}
+        modeChange={modeChange}
+        formChange={formChange}
+        withdrawalSubmit={withdrawalSubmit}
       />
     </MyinfoHeader>
   );
@@ -240,49 +347,94 @@ const ProfileRow = props => {
   );
 };
 
+const EditRowClassifier = props => {
+  const {
+    row,
+    informationOpenAgreeChange,
+    infoEditObj,
+    handleChange,
+    typeChange
+  } = props;
+  const editRowValue = infoEditObj[row[0]];
+  if (row[0] === 'informationOpenAgree') {
+    return (
+      <EditTableCell
+        align="right"
+        onClick={informationOpenAgreeChange}
+        style={{
+          paddingRight: '16px',
+          cursor: 'pointer'
+        }}
+      >
+        {informationOpenAgreeEnum[editRowValue]}
+      </EditTableCell>
+    );
+  }
+  if (row[0] === 'type') {
+    return (
+      <EditTableCell>
+        <FormSelectField
+          name="editType"
+          id={row[0]}
+          value={editRowValue}
+          onChange={typeChange}
+        >
+          {typeList.map(type => (
+            <MenuItem value={type.userType} key={type.typeid}>
+              {type.userType}
+            </MenuItem>
+          ))}
+        </FormSelectField>
+      </EditTableCell>
+    );
+  }
+  return (
+    <EditTableCell>
+      <FormInput
+        name={accountData[row[0]]}
+        id={row[0]}
+        value={editRowValue}
+        onChange={handleChange}
+      />
+    </EditTableCell>
+  );
+};
+
 const EditRow = props => {
-  const { informationOpenAgreeChange, row, infoEdit, handleChange } = props;
+  const {
+    row,
+    infoEditObj,
+    informationOpenAgreeChange,
+    handleChange,
+    typeChange
+  } = props;
   return (
     <TableRow key={row[0]}>
       <TableCell component="th" scope="row">
         {accountData[row[0]]}
       </TableCell>
-      {row[0] === 'informationOpenAgree' ? (
-        <EditTableCell
-          align="right"
-          onClick={informationOpenAgreeChange}
-          style={{
-            paddingRight: '16px',
-            cursor: 'pointer'
-          }}
-        >
-          {informationOpenAgreeEnum[infoEdit[row[0]]]}
-        </EditTableCell>
-      ) : (
-        <EditTableCell>
-          <FormInput
-            name={accountData[row[0]]}
-            id={row[0]}
-            value={infoEdit[row[0]]}
-            onChange={handleChange}
-          />
-        </EditTableCell>
-      )}
+      <EditRowClassifier
+        row={row}
+        infoEditObj={infoEditObj}
+        informationOpenAgreeChange={informationOpenAgreeChange}
+        handleChange={handleChange}
+        typeChange={typeChange}
+      />
     </TableRow>
   );
 };
 
 const SubmitButton = props => {
-  const { editMode, onMyinfoEditSubmit } = props;
+  const { mode, myinfoEditSubmit } = props;
   return (
     <>
-      {editMode ? (
+      {mode === 'editMode' ? (
         <Button
           variant="contained"
           color="primary"
           type="submit"
           style={{ margin: '24px', cursor: 'pointer' }}
-          onClick={onMyinfoEditSubmit}
+          onClick={myinfoEditSubmit}
         >
           수정
         </Button>
@@ -295,54 +447,58 @@ const SubmitButton = props => {
 
 const PropfilePage = props => {
   const {
-    info,
-    editMode,
-    infoEdit,
-    editRes,
+    infoObj,
+    infoEditObj,
     anchorEl,
-    pwChangeDialogOpen,
-    newPwForm
+    newPwForm,
+    error,
+    withDrawalForm,
+    mode
   } = props;
 
   const {
-    editModeChangeClick,
     handleChange,
+    modeChange,
     informationOpenAgreeChange,
-    onMyinfoEditSubmit,
+    myinfoEditSubmit,
     menuClick,
-    pwChangeClick,
-    pwFormChange,
-    pwChangeSubmit
+    formChange,
+    pwChangeSubmit,
+    typeChange,
+    withdrawalSubmit,
+    editFormRefresh
   } = props;
 
-  const rows = Object.entries(info);
+  const rows = Object.entries(infoObj);
 
   return (
     <Wrapper>
       <InfoTableWrapper>
         <ProfileHeader
+          mode={mode}
+          error={error}
           anchorEl={anchorEl}
-          editMode={editMode}
-          editModeChangeClick={editModeChangeClick}
-          menuClick={menuClick}
-          pwChangeDialogOpen={pwChangeDialogOpen}
-          pwChangeClick={pwChangeClick}
           newPwForm={newPwForm}
-          pwFormChange={pwFormChange}
+          withDrawalForm={withDrawalForm}
+          formChange={formChange}
+          modeChange={modeChange}
+          menuClick={menuClick}
           pwChangeSubmit={pwChangeSubmit}
+          withdrawalSubmit={withdrawalSubmit}
+          editFormRefresh={editFormRefresh}
         />
-        {editRes}
         <InfoTable>
           <Table>
             <TableBody>
               {rows.map(row => (
                 <>
-                  {changebleAccount.includes(row[0]) && editMode ? (
+                  {changebleAccount.includes(row[0]) && mode === 'editMode' ? (
                     <EditRow
-                      informationOpenAgreeChange={informationOpenAgreeChange}
                       row={row}
-                      infoEdit={infoEdit}
+                      infoEditObj={infoEditObj}
+                      informationOpenAgreeChange={informationOpenAgreeChange}
                       handleChange={handleChange}
+                      typeChange={typeChange}
                     />
                   ) : (
                     <ProfileRow row={row} />
@@ -352,10 +508,8 @@ const PropfilePage = props => {
             </TableBody>
           </Table>
         </InfoTable>
-        <SubmitButton
-          editMode={editMode}
-          onMyinfoEditSubmit={onMyinfoEditSubmit}
-        />
+        <ErrorText>{error}</ErrorText>
+        <SubmitButton mode={mode} myinfoEditSubmit={myinfoEditSubmit} />
       </InfoTableWrapper>
     </Wrapper>
   );

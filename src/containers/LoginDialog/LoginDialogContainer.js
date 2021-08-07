@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
 import {
   changeField,
   initializeForm,
@@ -13,20 +15,21 @@ import LogoutDialog from '../../components/LoginDialog/LogoutDialog';
 const LoginDialogContainer = () => {
   const [login, setLogin] = useState(false);
   const [error, setError] = useState(null);
-  const [open, setOpen] = useState(false);
+  const [open, setPwChangeDialogOpen] = useState(false);
   const dispatch = useDispatch();
   const { form, auths, authError } = useSelector(({ auth }) => ({
     form: auth.signin,
     auths: auth.auth,
     authError: auth.authError
   }));
+  const history = useHistory();
 
   const handleClickOpen = () => {
-    setOpen(true);
+    setPwChangeDialogOpen(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setPwChangeDialogOpen(false);
     setError(null);
     dispatch(initializeForm('signin'));
   };
@@ -59,6 +62,7 @@ const LoginDialogContainer = () => {
   const onLogout = e => {
     e.preventDefault();
     localStorage.removeItem('token');
+    localStorage.removeItem('userId');
     setLogin(false);
     window.location.reload();
   };
@@ -77,9 +81,12 @@ const LoginDialogContainer = () => {
       dispatch(initializeForm('signin'));
     }
     if (localStorage.getItem('token')) {
-      setOpen(false);
+      setPwChangeDialogOpen(false);
       setLogin(true);
       setError(false);
+      if (localStorage.getItem('token') !== null) {
+        history.push('/profile');
+      }
     }
   }, [auths, authError, dispatch]);
 
