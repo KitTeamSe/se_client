@@ -5,14 +5,14 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { TextField } from '@material-ui/core';
 import LoginDialogContainer from '../../containers/LoginDialog/LoginDialogContainer';
 
-const HeaderWraper = styled.div`
+const HeaderWraper = styled.header`
   width: 100%;
   height: 96px;
   align-items: center;
   position: fixed;
   display: flex;
   justify-content: space-between;
-  background-color: skyblue;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 `;
 
 const NavigationWrapper = styled.div`
@@ -21,7 +21,6 @@ const NavigationWrapper = styled.div`
   align-items: center;
   justify-content: center;
   align-items: center;
-  font-size: 18px;
 `;
 
 const LogoWrapper = styled.div`
@@ -30,6 +29,9 @@ const LogoWrapper = styled.div`
   align-items: center;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: 700;
 `;
 
 const MenuWrapper = styled.div`
@@ -45,6 +47,7 @@ const MenuItem = styled.a`
   color: black;
   padding: 8px 12px;
   cursor: pointer;
+  font-weight: 600;
 `;
 
 const SearchBar = styled.div`
@@ -59,8 +62,9 @@ const SearchBar = styled.div`
 
 const SearchIcon = styled(FontAwesomeIcon)`
   padding: 4px;
-  marginright: 6px;
-  borderright: 1px solid gray;
+  margin-right: 6px;
+  border-right: 1px solid gray;
+  color: black;
 `;
 const Menu = () => {
   return (
@@ -77,18 +81,19 @@ const Menu = () => {
   );
 };
 
-const Header = () => {
+const Header = props => {
+  const { LogoClick } = props;
+
   return (
     <HeaderWraper>
-      <LogoWrapper>Logo</LogoWrapper>
+      <LogoWrapper onClick={LogoClick}>Logo</LogoWrapper>
       <MenuWrapper>
         <Menu />
       </MenuWrapper>
       <NavigationWrapper>
         <LoginDialogContainer />
         <SearchBar>
-          <SearchIcon icon={faSearch} size="sm" color="black" />
-
+          <SearchIcon icon={faSearch} size="sm" />
           <TextField id="text" type="text" value="검색기능 추가해야지" />
         </SearchBar>
       </NavigationWrapper>

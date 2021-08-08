@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDoorClosed } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import { Button, TextField, Dialog, DialogTitle } from '@material-ui/core';
+import { TextField, Dialog, DialogTitle } from '@material-ui/core';
 import styled from 'styled-components';
 
 const AlignCenter = styled.div`
@@ -51,13 +51,21 @@ const FindLink = styled(Link)`
   text-align: right;
 `;
 
-const LoginButton = styled(Button)`
+const LoginButton = styled.button`
   border-radius: 24px;
   font-size: 16px;
   padding: 10px 0;
   margin: 0px 24px 12px 24px;
-  background-image: linear-gradient(to left, #9980fa, #fda7df);
+  background-image: linear-gradient(to right, #00d2ff 0%, #3a7bd5 100%);
   color: white;
+  border: none;
+  cursor: pointer;
+  transition: 0.5s;
+  font-weight: 400;
+  &:hover {
+    background-position: right;
+    transition: 0.5s;
+  }
 `;
 
 const SignupLink = styled(Link)`
@@ -68,19 +76,33 @@ const SignupLink = styled(Link)`
   align-items: center;
 `;
 
+const IconWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const LoginIcon = styled(FontAwesomeIcon)`
+  cursor: pointer;
+  type="submit";
+`;
+
+const Typo = styled.p`
+  text-align: center;
+  align-items: bottom;
+  font-size: 13px;
+  margin-top: 4px;
+`;
+
 const LoginDialog = props => {
   const { onLogin, handleClickOpen, handleClose, open, onChange, form, error } =
     props;
 
   return (
-    <span>
-      <FontAwesomeIcon
-        icon={faDoorClosed}
-        size="2x"
-        type="submit"
-        onClick={handleClickOpen}
-        style={{ cursor: 'pointer' }}
-      />
+    <>
+      <IconWrapper>
+        <LoginIcon icon={faDoorClosed} onClick={handleClickOpen} size="2x" />
+        <Typo>로그인</Typo>
+      </IconWrapper>
       <Dialog open={open} onClose={handleClose}>
         <AlignCenter>
           <DialogTitle>SE 로그인</DialogTitle>
@@ -117,7 +139,7 @@ const LoginDialog = props => {
           </FormFlex>
         </AlignCenter>
       </Dialog>
-    </span>
+    </>
   );
 };
 
