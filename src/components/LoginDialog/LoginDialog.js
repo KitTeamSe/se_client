@@ -76,7 +76,7 @@ const LoginDialog = props => {
     <span>
       <FontAwesomeIcon
         icon={faDoorClosed}
-        size="3x"
+        size="2x"
         type="submit"
         onClick={handleClickOpen}
         style={{ cursor: 'pointer' }}

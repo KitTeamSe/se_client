@@ -9,7 +9,7 @@ const LogoutDialog = props => {
     <span>
       <FontAwesomeIcon
         icon={faDoorOpen}
-        size="3x"
+        size="2x"
         type="submit"
         onClick={onLogout}
         style={{ cursor: 'pointer' }}
