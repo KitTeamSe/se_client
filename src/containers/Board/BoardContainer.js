@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Board from '../../components/Board/Board';
 import { loadAccountList } from '../../modules/post';
 
 const BoardContainer = () => {
   const dispatch = useDispatch();
-  const { postList, nowPage } = useSelector(({ post }) => ({
-    postList: post.loadPostList,
+  const [postList, setPostList] = useState([]);
+  const { postListObj, nowPage } = useSelector(({ post }) => ({
+    postListObj: post.loadPostList,
     nowPage: post.nowPage
   }));
 
@@ -15,16 +16,22 @@ const BoardContainer = () => {
     dispatch(loadAccountList(parameter));
   }, []);
 
+  useEffect(() => {
+    if (postListObj !== null) {
+      setPostList(postListObj.postListItem.content);
+    }
+  }, [postListObj]);
+
   return (
     <Board
       postList={postList}
       nowPage={nowPage}
       totalPage={
-        postList && postList.postListItem.totalPages
-          ? postList.postListItem.totalPages
+        postListObj && postListObj.postListItem.totalPages
+          ? postListObj.postListItem.totalPages
           : 1
       }
-      page={postList ? postList.postListItem.number + 1 : 1}
+      page={postListObj ? postListObj.postListItem.number + 1 : 1}
     />
   );
 };
