@@ -43,11 +43,23 @@ const MenuWrapper = styled.div`
 `;
 
 const MenuItem = styled.a`
-  text-decoreation: none;
-  color: black;
+  color: gray;
   padding: 8px 12px;
   cursor: pointer;
   font-weight: 600;
+  &:link {
+    text-decoration: none;
+  }
+`;
+
+const NowMenuItem = styled.a`
+  color: black;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 800;
+  &:link {
+    text-decoration: none;
+  }
 `;
 
 const SearchBar = styled.div`
@@ -66,17 +78,37 @@ const SearchIcon = styled(FontAwesomeIcon)`
   border-right: 1px solid gray;
   color: black;
 `;
+
+const dummyMenu = {
+  free: 'FreeBoard',
+  archive: 'Archive',
+  book: '전공지식',
+  naver: '지식인',
+  pc: 'PC고장신고',
+  money: '학생회 재정 보고',
+  imac: '딥러닝 & iMac',
+  330: '330예약'
+};
+
+const menuList = Object.keys(dummyMenu);
+const path = window.location.pathname;
 const Menu = () => {
   return (
     <ul>
-      <MenuItem>FreeBoard</MenuItem>
-      <MenuItem>Archive</MenuItem>
-      <MenuItem>전공지식</MenuItem>
-      <MenuItem>지식인</MenuItem>
-      <MenuItem>PC고장신고</MenuItem>
-      <MenuItem>학생회 재정 보고</MenuItem>
-      <MenuItem>딥러닝 & iMac</MenuItem>
-      <MenuItem>330예약</MenuItem>
+      {menuList.map(menu => {
+        if (path === `/${menu}`) {
+          return (
+            <NowMenuItem key={menu} href={menu}>
+              {dummyMenu[menu]}
+            </NowMenuItem>
+          );
+        }
+        return (
+          <MenuItem key={menu} href={menu}>
+            {dummyMenu[menu]}
+          </MenuItem>
+        );
+      })}
     </ul>
   );
 };

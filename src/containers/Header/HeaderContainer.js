@@ -8,6 +8,7 @@ const HeaderContainer = () => {
   const LogoClick = () => {
     history.push('/');
   };
+
   return <Header LogoClick={LogoClick} />;
 };
 

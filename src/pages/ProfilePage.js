@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import HeaderContainer from '../containers/HeaderContainer/HeaderContainer';
+import HeaderContainer from '../containers/Header/HeaderContainer';
 import ProfilePageContainer from '../containers/ProfilePage/ProfilePageContainer';
 
 const BodyContainer = styled.body`
