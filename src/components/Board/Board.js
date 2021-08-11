@@ -1,6 +1,42 @@
 import React from 'react';
 import styled from 'styled-components';
+import {
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  TableContainer,
+  Paper
+} from '@material-ui/core';
 import { Pagination as Paginations } from '@material-ui/lab';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faCommentAlt, faLock } from '@fortawesome/free-solid-svg-icons';
+
+const NoneBorderCell = styled(TableCell)`
+  border: none;
+`;
+
+const IconMargin = styled.span`
+  display: inline-block;
+  margin: 2px;
+`;
+
+const InfoBox = styled.div`
+  font-size: 0.75rem;
+  width: 128px;
+`;
+
+const NickName = styled.span`
+  font-weight: 500;
+  width: 128px;
+  font-size: 1rem;
+`;
+
+const InfoIcon = styled(FontAwesomeIcon)`
+  margin: 1px;
+  color: gray;
+`;
 
 const PaginationStyled = styled(Paginations)`
   & ul {
@@ -9,45 +45,38 @@ const PaginationStyled = styled(Paginations)`
   }
 `;
 
-const PostContent = styled.div`
-  display: flex;
+const PostContent = styled(TableRow)`
   height: 48px;
   align-items: center;
-  margin: 8px;
-  border-bottom: 1px solid #ccc;
+  text-align: center;
 `;
 
-const TitleBox = styled.div`
-  display: flex;
-  align-items: center;
-  margin-right: 36px;
-`;
-
-const PostNumber = styled.div`
+const PostNumber = styled.span`
+  width: 8px;
+  height: 12px;
   background-color: #ccc;
-  padding: 4px 5px 4px 4px;
-  margin: 0px 12px;
-  border-radius: 100%;
+  padding: 2px 6px;
+  border-radius: 50%;
   font-size: 0.8rem;
 `;
 
-const Title = styled.div`
+const Title = styled.a`
   display: inline-block;
-  width: 240px;
+  width: 640px;
   font-size: 1rem;
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  border: none;
 `;
 
-const PreviewText = styled.div`
-  font-size: 0.9rem;
-  font-weight: 400;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 540px;
+const NoContent = styled(TableCell)`
+  font-size: 2rem;
+  margin: 12px;
+  text-align: center;
+  height: 96px;
+  vertical-align: center;
 `;
 
 const Pagination = props => {
@@ -69,39 +98,79 @@ const PostTitle = props => {
   const { createAt } = postInfo;
   const writeTime = `${createAt[0]}년${createAt[1]}월${createAt[2]}일 ${createAt[3]}:${createAt[4]}`;
   console.log(postInfo);
+
   return (
-    <li>
-      <PostContent>
-        <TitleBox>
-          <PostNumber>{postInfo.postId}</PostNumber>
-          <Title>{postInfo.title}</Title>
-        </TitleBox>
-        <PreviewText>{postInfo.previewText}</PreviewText>
-        <div>{postInfo.nickname}</div>
-        <div>
-          <div>{writeTime}</div>
-          <div>{postInfo.isSecret}</div>
-          <div>{postInfo.numReply}</div>
-          <div>{postInfo.views}</div>
-        </div>
-      </PostContent>
-    </li>
+    <PostContent>
+      <NoneBorderCell align="center">
+        <PostNumber>{postInfo.postId}</PostNumber>
+      </NoneBorderCell>
+      <NoneBorderCell>
+        <Title>{postInfo.title}</Title>
+      </NoneBorderCell>
+      <NoneBorderCell align="center">
+        <NickName>{postInfo.nickname}</NickName>
+      </NoneBorderCell>
+      <NoneBorderCell align="center">
+        <InfoBox>
+          <div>
+            <IconMargin>{writeTime}</IconMargin>
+            {postInfo.isSecret === 'NORMAL' ? (
+              <></>
+            ) : (
+              <span>
+                <InfoIcon icon={faLock} />
+              </span>
+            )}
+          </div>
+          <div>
+            <IconMargin>
+              <InfoIcon icon={faCommentAlt} />
+              {postInfo.numReply}
+            </IconMargin>
+            <IconMargin>
+              <InfoIcon icon={faEye} />
+              {postInfo.views}
+            </IconMargin>
+          </div>
+        </InfoBox>
+      </NoneBorderCell>
+    </PostContent>
   );
 };
 
 const MainTable = props => {
   const { postList } = props;
+  const tableColumns = ['번호', '제목', '닉네임', '정보'];
+
   return (
-    <ul>
-      {postList.map(postInfo => (
-        <PostTitle key={postInfo.postId} postInfo={postInfo} />
-      ))}
-    </ul>
+    <TableContainer component={Paper}>
+      {postList.length === 0 ? (
+        <NoContent>게시글이 없으면 뭔가 보여줌</NoContent>
+      ) : (
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              {tableColumns.map(column => (
+                <TableCell align="center" key={column}>
+                  {column}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {postList.map(postInfo => (
+              <PostTitle key={postInfo.postId} postInfo={postInfo} />
+            ))}
+          </TableBody>
+        </Table>
+      )}
+    </TableContainer>
   );
 };
 
 const Board = props => {
   const { totalPage, page, onChange, postList } = props;
+
   return (
     <>
       <MainTable postList={postList} />

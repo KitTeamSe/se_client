@@ -5,7 +5,31 @@ import { loadAccountList } from '../../modules/post';
 
 const BoardContainer = () => {
   const dispatch = useDispatch();
-  const [postList, setPostList] = useState([]);
+  const [postList, setPostList] = useState([
+    {
+      anonymous: {
+        anonymousNickname: '길무짱',
+        anonymousPassword: 'string'
+      },
+      nickname: '길무짱',
+      boardId: 6,
+      postId: 1132,
+      isNotice: 'NORMAL',
+      isSecret: '',
+      previewText:
+        '미리보기미리보기미리보기미리보기미리보기미리보기미리보기미리보기미리보기미리보기미리보기미리보기미리보기미리보기미리보기',
+      title:
+        '제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목',
+      tagList: [
+        {
+          tagId: 1
+        }
+      ],
+      createAt: [2021, 8, 11, 9, 24, 1500],
+      numReply: 1,
+      views: 121
+    }
+  ]);
   const { postListObj, nowPage } = useSelector(({ post }) => ({
     postListObj: post.loadPostList,
     nowPage: post.nowPage
@@ -17,7 +41,7 @@ const BoardContainer = () => {
   }, []);
 
   useEffect(() => {
-    if (postListObj !== null) {
+    if (postListObj === 'null') {
       setPostList(postListObj.postListItem.content);
     }
   }, [postListObj]);
