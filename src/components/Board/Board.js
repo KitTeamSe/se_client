@@ -17,6 +17,11 @@ const NoneBorderCell = styled(TableCell)`
   border: none;
 `;
 
+const TableHeader = styled(TableRow)`
+  height: 28px;
+  background-image: linear-gradient(to right, #fff 0%, #eee 100%);
+`;
+
 const IconMargin = styled.span`
   display: inline-block;
   margin: 2px;
@@ -25,6 +30,7 @@ const IconMargin = styled.span`
 const InfoBox = styled.div`
   font-size: 0.75rem;
   width: 128px;
+  display: inline-block;
 `;
 
 const NickName = styled.span`
@@ -47,8 +53,6 @@ const PaginationStyled = styled(Paginations)`
 
 const PostContent = styled(TableRow)`
   height: 48px;
-  align-items: center;
-  text-align: center;
 `;
 
 const PostNumber = styled.span`
@@ -69,14 +73,6 @@ const Title = styled.a`
   overflow: hidden;
   text-overflow: ellipsis;
   border: none;
-`;
-
-const NoContent = styled(TableCell)`
-  font-size: 2rem;
-  margin: 12px;
-  text-align: center;
-  height: 96px;
-  vertical-align: center;
 `;
 
 const Pagination = props => {
@@ -141,29 +137,25 @@ const PostTitle = props => {
 const MainTable = props => {
   const { postList } = props;
   const tableColumns = ['번호', '제목', '닉네임', '정보'];
-
+  console.log(postList);
   return (
     <TableContainer component={Paper}>
-      {postList.length === 0 ? (
-        <NoContent>게시글이 없으면 뭔가 보여줌</NoContent>
-      ) : (
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              {tableColumns.map(column => (
-                <TableCell align="center" key={column}>
-                  {column}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {postList.map(postInfo => (
-              <PostTitle key={postInfo.postId} postInfo={postInfo} />
+      <Table size="small">
+        <TableHead>
+          <TableHeader>
+            {tableColumns.map(column => (
+              <TableCell align="center" key={column}>
+                {column}
+              </TableCell>
             ))}
-          </TableBody>
-        </Table>
-      )}
+          </TableHeader>
+        </TableHead>
+        <TableBody>
+          {postList.map(postInfo => (
+            <PostTitle key={postInfo.postId} postInfo={postInfo} />
+          ))}
+        </TableBody>
+      </Table>
     </TableContainer>
   );
 };
