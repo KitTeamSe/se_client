@@ -151,7 +151,6 @@ const PostTitle = props => {
 
 const MainTable = props => {
   const { postList } = props;
-  console.log(postList);
   const tableColumns = ['번호', '제목', '닉네임', '정보'];
   return (
     <TableContainer component={Paper}>

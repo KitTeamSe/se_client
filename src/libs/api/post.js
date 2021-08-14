@@ -1,4 +1,4 @@
-import { client } from './client';
+import { client, tokenHeader } from './client';
 
 export const loadAccountList = async ({ boardId, direction, page, size }) => {
   const parameters = { boardId, direction, page, size };
@@ -7,12 +7,8 @@ export const loadAccountList = async ({ boardId, direction, page, size }) => {
   });
 };
 
-export const signin = ({ id, pw }) => {
-  const data = {
-    id: { id }.id,
-    pw: { pw }.pw
-  };
-  return client.post('signin', data).catch(error => {
-    throw error.response.data.message;
+export const loadMenuList = async ({ token }) => {
+  return client.get('/menu', tokenHeader(token)).catch(error => {
+    throw error.response.data;
   });
 };

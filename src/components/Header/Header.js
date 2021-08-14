@@ -114,7 +114,8 @@ const Menu = () => {
 };
 
 const Header = props => {
-  const { LogoClick } = props;
+  const { LogoClick, menuListObj } = props;
+  console.log(menuListObj);
 
   return (
     <HeaderWraper>

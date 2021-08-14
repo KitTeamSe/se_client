@@ -10,6 +10,7 @@ const BoardContainer = () => {
     postListObj: post.loadPostList,
     nowPage: post.nowPage
   }));
+  console.log(postListObj);
 
   useEffect(() => {
     const parameter = { boardId: 1, direction: 'ASC', page: 1, size: 50 };
