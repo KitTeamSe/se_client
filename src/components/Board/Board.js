@@ -13,6 +13,22 @@ import { Pagination as Paginations } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faCommentAlt, faLock } from '@fortawesome/free-solid-svg-icons';
 
+const BoardTitle = styled.div`
+  padding: 24px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: left;
+  width: 70rem;
+`;
+
+const MainWrapper = styled.div`
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 70rem;
+`;
+
 const NoneBorderCell = styled(TableCell)`
   border: none;
 `;
@@ -93,7 +109,6 @@ const PostTitle = props => {
   const { postInfo } = props;
   const { createAt } = postInfo;
   const writeTime = `${createAt[0]}년${createAt[1]}월${createAt[2]}일 ${createAt[3]}:${createAt[4]}`;
-  console.log(postInfo);
 
   return (
     <PostContent>
@@ -136,8 +151,8 @@ const PostTitle = props => {
 
 const MainTable = props => {
   const { postList } = props;
-  const tableColumns = ['번호', '제목', '닉네임', '정보'];
   console.log(postList);
+  const tableColumns = ['번호', '제목', '닉네임', '정보'];
   return (
     <TableContainer component={Paper}>
       <Table size="small">
@@ -164,10 +179,11 @@ const Board = props => {
   const { totalPage, page, onChange, postList } = props;
 
   return (
-    <>
+    <MainWrapper>
+      <BoardTitle>Free Board 입니다</BoardTitle>
       <MainTable postList={postList} />
       <Pagination totalPage={totalPage} page={page} onChange={onChange} />
-    </>
+    </MainWrapper>
   );
 };
 

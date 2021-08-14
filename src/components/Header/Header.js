@@ -82,12 +82,12 @@ const SearchIcon = styled(FontAwesomeIcon)`
 const dummyMenu = {
   free: 'FreeBoard',
   archive: 'Archive',
-  book: '전공지식',
+  knowledge: '전공지식',
   naver: '지식인',
   pc: 'PC고장신고',
   money: '학생회 재정 보고',
   imac: '딥러닝 & iMac',
-  330: '330예약'
+  reservation: '330예약'
 };
 
 const menuList = Object.keys(dummyMenu);
