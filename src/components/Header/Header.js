@@ -79,33 +79,22 @@ const SearchIcon = styled(FontAwesomeIcon)`
   color: black;
 `;
 
-const dummyMenu = {
-  free: 'FreeBoard',
-  archive: 'Archive',
-  knowledge: '전공지식',
-  naver: '지식인',
-  pc: 'PC고장신고',
-  money: '학생회 재정 보고',
-  imac: '딥러닝 & iMac',
-  reservation: '330예약'
-};
-
-const menuList = Object.keys(dummyMenu);
-const path = window.location.pathname;
-const Menu = () => {
+const Menu = props => {
+  const { menuList, path } = props;
+  console.log(menuList);
   return (
     <ul>
       {menuList.map(menu => {
-        if (path === `/${menu}`) {
+        if (path === `/${menu.url}`) {
           return (
-            <NowMenuItem key={menu} href={menu}>
-              {dummyMenu[menu]}
+            <NowMenuItem key={menu.url} href={menu.url}>
+              {menu.nameEng}
             </NowMenuItem>
           );
         }
         return (
-          <MenuItem key={menu} href={menu}>
-            {dummyMenu[menu]}
+          <MenuItem key={menu.url} href={menu.url}>
+            {menu.nameEng}
           </MenuItem>
         );
       })}
@@ -114,14 +103,13 @@ const Menu = () => {
 };
 
 const Header = props => {
-  const { LogoClick, menuListObj } = props;
-  console.log(menuListObj);
+  const { path, LogoClick, menuList } = props;
 
   return (
     <HeaderWraper>
       <LogoWrapper onClick={LogoClick}>Logo</LogoWrapper>
       <MenuWrapper>
-        <Menu />
+        <Menu menuList={menuList} path={path} />
       </MenuWrapper>
       <NavigationWrapper>
         <LoginDialogContainer />
