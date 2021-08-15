@@ -8,7 +8,6 @@ import Header from '../../components/Header/Header';
 const HeaderContainer = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const token = localStorage.getItem('token');
 
   const { menuListObj, menuError } = useSelector(({ post }) => ({
     menuListObj: post.loadMenuList,
@@ -19,7 +18,7 @@ const HeaderContainer = () => {
   const [path, setPath] = useState('/');
 
   useEffect(() => {
-    dispatch(loadMenuList({ token }));
+    dispatch(loadMenuList());
   }, []);
 
   useEffect(() => {

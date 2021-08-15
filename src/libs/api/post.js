@@ -1,4 +1,4 @@
-import { client, tokenHeader } from './client';
+import { client } from './client';
 
 export const loadAccountList = async ({ boardId, direction, page, size }) => {
   const parameters = { boardId, direction, page, size };
@@ -7,8 +7,8 @@ export const loadAccountList = async ({ boardId, direction, page, size }) => {
   });
 };
 
-export const loadMenuList = async ({ token }) => {
-  return client.get('/menu', tokenHeader(token)).catch(error => {
+export const loadMenuList = async () => {
+  return client.get('/menu').catch(error => {
     throw error.response.data;
   });
 };

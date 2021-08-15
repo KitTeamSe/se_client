@@ -23,9 +23,7 @@ export const loadAccountList = createAction(
   ({ boardId, direction, page, size }) => ({ boardId, direction, page, size })
 );
 
-export const loadMenuList = createAction(LOAD_MENU_LIST, ({ token }) => ({
-  token
-}));
+export const loadMenuList = createAction(LOAD_MENU_LIST);
 
 // Sagas
 const loadPostListSaga = createRequestSaga(LOAD_POST_LIST, api.loadAccountList);
