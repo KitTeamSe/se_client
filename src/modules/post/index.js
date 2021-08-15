@@ -15,22 +15,24 @@ const [LOAD_POST_LIST, LOAD_POST_LIST_SUCCESS, LOAD_POST_LIST_FAILURE] =
 const [LOAD_MENU_LIST, LOAD_MENU_LIST_SUCCESS, LOAD_MENU_LIST_FAILURE] =
   createRequestActionTypes('post/LOAD_MENU_LIST');
 
-const SELECT_MENU = 'post/SELECT_MENU';
+const BOARD_CHANGE = 'post/BOARD_CHANGE';
 
 // Action Creators
 export const initialize = createAction(INITIALIZE);
 
-export const loadAccountList = createAction(
+export const loadPostList = createAction(
   LOAD_POST_LIST,
   ({ boardId, direction, page, size }) => ({ boardId, direction, page, size })
 );
 
 export const loadMenuList = createAction(LOAD_MENU_LIST);
 
-export const selectMenu = createAction(SELECT_MENU);
+export const boardChange = createAction(BOARD_CHANGE, ({ value }) => ({
+  value
+}));
 
 // Sagas
-const loadPostListSaga = createRequestSaga(LOAD_POST_LIST, api.loadAccountList);
+const loadPostListSaga = createRequestSaga(LOAD_POST_LIST, api.loadPostList);
 const loadMenuListSage = createRequestSaga(LOAD_MENU_LIST, api.loadMenuList);
 
 export function* postSaga() {
@@ -45,12 +47,24 @@ const initialState = {
   loadPostError: null,
   loadMenuList: null,
   loadMenuListError: null,
-  selectMenu: null
+  selectBoard: { value: {} }
 };
 
 export default handleActions(
   {
-    [INITIALIZE]: () => initialState,
+    [INITIALIZE]: () => state => ({
+      ...state,
+      nowPage: 1,
+      loadPostList: null,
+      loadPostError: null,
+      loadMenuListError: null,
+      selectBoard: initialState.selectBoard
+    }),
+    [BOARD_CHANGE]: (state, { payload: value }) => ({
+      ...state,
+      selectBoard: value,
+      loadPostList: null
+    }),
     [LOAD_POST_LIST_SUCCESS]: (state, { payload: response }) => ({
       ...state,
       loadPostList: response.data,
@@ -70,8 +84,7 @@ export default handleActions(
       ...state,
       loadMenuListError: error,
       menuLloadMenuListist: null
-    }),
-    [SELECT_MENU]: () => initialState
+    })
   },
   initialState
 );

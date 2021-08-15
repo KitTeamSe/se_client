@@ -1,48 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Board from '../../components/Board/Board';
-import { loadAccountList } from '../../modules/post';
+import { loadPostList } from '../../modules/post';
 
 const BoardContainer = () => {
   const dispatch = useDispatch();
-  const [postList, setPostList] = useState([]);
-  const { postListObj, nowPage } = useSelector(({ post }) => ({
+  const [path, setPath] = useState('/');
+  const { postListObj, nowPage, nowBoard } = useSelector(({ post }) => ({
     postListObj: post.loadPostList,
-    nowPage: post.nowPage
+    nowPage: post.nowPage,
+    nowBoard: post.selectBoard
   }));
-  console.log(postListObj);
+  const nowUrl = window.location.pathname;
+  if (path !== nowUrl) {
+    setPath(nowUrl);
+  }
 
   useEffect(() => {
-    const parameter = { boardId: 1, direction: 'ASC', page: 1, size: 50 };
-    dispatch(loadAccountList(parameter));
-  }, []);
-
-  useEffect(() => {
-    if (postListObj !== null) {
-      const { content } = postListObj.postListItem;
-      if (content.length === 0) {
-        const noPost = {
-          nickname: '시스템',
-          boardId: 0,
-          postId: 0,
-          isNotice: 'NORMAL',
-          isSecret: 'NORMAL',
-          previewText: '텍스트트트트트트',
-          title: '게시판에 글이 하나도 없습니다',
-          createAt: [2021, 8, 12, 12, 6, 1000],
-          numReply: 0,
-          views: 0
-        };
-        setPostList([noPost]);
-        return;
-      }
-      setPostList(postListObj.postListItem.content);
+    if (Object.keys(nowBoard.value).length !== 0) {
+      const { boardId } = nowBoard.value;
+      const parameter = {
+        boardId,
+        direction: 'ASC',
+        page: 1,
+        size: 50
+      };
+      dispatch(loadPostList(parameter));
     }
-  }, [postListObj]);
+  }, [nowBoard]);
 
   return (
     <Board
-      postList={postList}
+      postListObj={postListObj}
       nowPage={nowPage}
       totalPage={
         postListObj && postListObj.postListItem.totalPages
@@ -50,6 +39,7 @@ const BoardContainer = () => {
           : 1
       }
       page={postListObj ? postListObj.postListItem.number + 1 : 1}
+      nowBoard={nowBoard.value}
     />
   );
 };

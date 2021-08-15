@@ -81,7 +81,6 @@ const SearchIcon = styled(FontAwesomeIcon)`
 
 const Menu = props => {
   const { menuList, path, MenuClick } = props;
-  console.log(menuList);
   return (
     <ul>
       {menuList.map(menu => {

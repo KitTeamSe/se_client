@@ -1,6 +1,6 @@
 import { client } from './client';
 
-export const loadAccountList = async ({ boardId, direction, page, size }) => {
+export const loadPostList = async ({ boardId, direction, page, size }) => {
   const parameters = { boardId, direction, page, size };
   return client.get('/post', { params: parameters }).catch(error => {
     throw error.response.data;

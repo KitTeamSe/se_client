@@ -91,6 +91,14 @@ const Title = styled.a`
   border: none;
 `;
 
+const NoBoardBox = styled.div`
+  width: 100%;
+  height: 100%;
+  font-size: 2rem;
+  text-align: center;
+  margin-top: 196px;
+`;
+
 const Pagination = props => {
   const { totalPage, page, onChange } = props;
   return (
@@ -149,9 +157,25 @@ const PostTitle = props => {
   );
 };
 
+const NoBoard = () => {
+  return <NoBoardBox>게시판이 아직 만들어지지 않았어요 😅</NoBoardBox>;
+};
+
 const MainTable = props => {
-  const { postList } = props;
+  const { postListObj } = props;
   const tableColumns = ['번호', '제목', '닉네임', '정보'];
+  const noPost = {
+    nickname: '시스템',
+    boardId: 0,
+    postId: 0,
+    isNotice: 'NORMAL',
+    isSecret: 'NORMAL',
+    previewText: '텍스트트트트트트',
+    title: '게시판에 글이 하나도 없습니다',
+    createAt: [0, 0, 0, 0, 0, 0],
+    numReply: 0,
+    views: 0
+  };
   return (
     <TableContainer component={Paper}>
       <Table size="small">
@@ -165,9 +189,14 @@ const MainTable = props => {
           </TableHeader>
         </TableHead>
         <TableBody>
-          {postList.map(postInfo => (
-            <PostTitle key={postInfo.postId} postInfo={postInfo} />
-          ))}
+          {postListObj !== null &&
+          postListObj.postListItem.content.length !== 0 ? (
+            postListObj.postListItem.content.map(postInfo => (
+              <PostTitle key={postInfo.postId} postInfo={postInfo} />
+            ))
+          ) : (
+            <PostTitle key={0} postInfo={noPost} />
+          )}
         </TableBody>
       </Table>
     </TableContainer>
@@ -175,13 +204,18 @@ const MainTable = props => {
 };
 
 const Board = props => {
-  const { totalPage, page, onChange, postList } = props;
-
+  const { totalPage, page, onChange, postListObj, nowBoard } = props;
   return (
     <MainWrapper>
-      <BoardTitle>Free Board 입니다</BoardTitle>
-      <MainTable postList={postList} />
-      <Pagination totalPage={totalPage} page={page} onChange={onChange} />
+      {Object.keys(nowBoard).length !== 0 ? (
+        <>
+          <BoardTitle>{nowBoard.description}</BoardTitle>
+          <MainTable postListObj={postListObj} />
+          <Pagination totalPage={totalPage} page={page} onChange={onChange} />
+        </>
+      ) : (
+        <NoBoard />
+      )}
     </MainWrapper>
   );
 };
