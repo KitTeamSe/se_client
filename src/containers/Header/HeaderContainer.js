@@ -22,7 +22,8 @@ const HeaderContainer = () => {
   }, []);
 
   useEffect(() => {
-    setPath(window.location.pathname);
+    const nowUrl = window.location.pathname;
+    setPath(nowUrl);
     if (menuError !== null) {
       console.log('error');
     }
@@ -74,7 +75,21 @@ const HeaderContainer = () => {
     setPath('/');
   };
 
-  return <Header path={path} LogoClick={LogoClick} menuList={menuList} />;
+  const MenuClick = e => {
+    e.preventDefault();
+    const url = e.currentTarget.getAttribute('href');
+    history.push(`/${url}`);
+    setPath(`/${url}`);
+  };
+
+  return (
+    <Header
+      path={path}
+      LogoClick={LogoClick}
+      menuList={menuList}
+      MenuClick={MenuClick}
+    />
+  );
 };
 
 export default HeaderContainer;

@@ -42,7 +42,7 @@ const MenuWrapper = styled.div`
   align-items: center;
 `;
 
-const MenuItem = styled.a`
+const MenuItem = styled.div`
   color: gray;
   padding: 8px 12px;
   cursor: pointer;
@@ -52,7 +52,7 @@ const MenuItem = styled.a`
   }
 `;
 
-const NowMenuItem = styled.a`
+const NowMenuItem = styled.div`
   color: black;
   padding: 8px 12px;
   cursor: pointer;
@@ -80,11 +80,11 @@ const SearchIcon = styled(FontAwesomeIcon)`
 `;
 
 const Menu = props => {
-  const { menuList, path } = props;
-  console.log(menuList);
+  const { menuList, path, MenuClick } = props;
   return (
     <ul>
       {menuList.map(menu => {
+        console.log(path, menu.url);
         if (path === `/${menu.url}`) {
           return (
             <NowMenuItem key={menu.url} href={menu.url}>
@@ -93,7 +93,7 @@ const Menu = props => {
           );
         }
         return (
-          <MenuItem key={menu.url} href={menu.url}>
+          <MenuItem onClick={MenuClick} key={menu.url} href={menu.url}>
             {menu.nameEng}
           </MenuItem>
         );
@@ -103,13 +103,13 @@ const Menu = props => {
 };
 
 const Header = props => {
-  const { path, LogoClick, menuList } = props;
+  const { path, LogoClick, menuList, MenuClick } = props;
 
   return (
     <HeaderWraper>
       <LogoWrapper onClick={LogoClick}>Logo</LogoWrapper>
       <MenuWrapper>
-        <Menu menuList={menuList} path={path} />
+        <Menu menuList={menuList} path={path} MenuClick={MenuClick} />
       </MenuWrapper>
       <NavigationWrapper>
         <LoginDialogContainer />
