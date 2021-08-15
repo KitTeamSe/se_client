@@ -38,6 +38,17 @@ export const changebleAccount = [
 ];
 
 export const informationOpenAgreeEnum = {
-  AGREE: '🟢',
-  DISAGREE: '🔴'
+  AGREE: '🟢AGREE',
+  DISAGREE: '❌DISAGREE'
 };
+
+export const menuList = [
+  { name: 'freeboard', url: 'freeboard' },
+  { name: 'archive', url: 'archive' },
+  { name: '전공지식', url: 'tip' },
+  { name: '지식인', url: 'naver' },
+  { name: 'PC고장신고', url: 'pc' },
+  { name: '학생회 재정 보고', url: 'council_info' },
+  { name: '딥러닝 & iMac', url: 'imac' },
+  { name: '330예약', url: 'book' }
+];

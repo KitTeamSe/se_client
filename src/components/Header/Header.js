@@ -42,7 +42,7 @@ const MenuWrapper = styled.div`
   align-items: center;
 `;
 
-const MenuItem = styled.div`
+const MenuItem = styled.span`
   color: gray;
   padding: 8px 12px;
   cursor: pointer;
@@ -52,7 +52,7 @@ const MenuItem = styled.div`
   }
 `;
 
-const NowMenuItem = styled.div`
+const NowMenuItem = styled.span`
   color: black;
   padding: 8px 12px;
   cursor: pointer;
@@ -81,20 +81,20 @@ const SearchIcon = styled(FontAwesomeIcon)`
 
 const Menu = props => {
   const { menuList, path, MenuClick } = props;
+  console.log(menuList);
   return (
     <ul>
       {menuList.map(menu => {
-        console.log(path, menu.url);
         if (path === `/${menu.url}`) {
           return (
             <NowMenuItem key={menu.url} href={menu.url}>
-              {menu.nameEng}
+              {menu.name}
             </NowMenuItem>
           );
         }
         return (
           <MenuItem onClick={MenuClick} key={menu.url} href={menu.url}>
-            {menu.nameEng}
+            {menu.name}
           </MenuItem>
         );
       })}

@@ -15,6 +15,8 @@ const [LOAD_POST_LIST, LOAD_POST_LIST_SUCCESS, LOAD_POST_LIST_FAILURE] =
 const [LOAD_MENU_LIST, LOAD_MENU_LIST_SUCCESS, LOAD_MENU_LIST_FAILURE] =
   createRequestActionTypes('post/LOAD_MENU_LIST');
 
+const SELECT_MENU = 'post/SELECT_MENU';
+
 // Action Creators
 export const initialize = createAction(INITIALIZE);
 
@@ -24,6 +26,8 @@ export const loadAccountList = createAction(
 );
 
 export const loadMenuList = createAction(LOAD_MENU_LIST);
+
+export const selectMenu = createAction(SELECT_MENU);
 
 // Sagas
 const loadPostListSaga = createRequestSaga(LOAD_POST_LIST, api.loadAccountList);
@@ -40,7 +44,8 @@ const initialState = {
   loadPostList: null,
   loadPostError: null,
   loadMenuList: null,
-  loadMenuListError: null
+  loadMenuListError: null,
+  selectMenu: null
 };
 
 export default handleActions(
@@ -65,7 +70,8 @@ export default handleActions(
       ...state,
       loadMenuListError: error,
       menuLloadMenuListist: null
-    })
+    }),
+    [SELECT_MENU]: () => initialState
   },
   initialState
 );
