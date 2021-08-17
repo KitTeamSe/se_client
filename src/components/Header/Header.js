@@ -31,7 +31,7 @@ const LogoWrapper = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 1.75rem;
   font-weight: 700;
 `;
 
@@ -48,6 +48,7 @@ const MenuItem = styled.a`
   padding: 8px 12px;
   cursor: pointer;
   font-weight: 600;
+  font-size: 1rem;
   &:link {
     text-decoration: none;
   }

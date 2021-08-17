@@ -52,7 +52,7 @@ const InfoBox = styled.div`
 const NickName = styled.span`
   font-weight: 500;
   width: 128px;
-  font-size: 1rem;
+  font-size: 0.85rem;
 `;
 
 const InfoIcon = styled(FontAwesomeIcon)`
@@ -81,12 +81,11 @@ const PostNumber = styled.span`
 const Title = styled.a`
   display: inline-block;
   width: 640px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  border: none;
 `;
 
 const NoBoardBox = styled.div`
