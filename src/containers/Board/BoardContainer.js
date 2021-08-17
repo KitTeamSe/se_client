@@ -23,7 +23,7 @@ const BoardContainer = () => {
         boardId,
         direction: 'ASC',
         page: 1,
-        size: 50
+        size: 20
       };
       dispatch(loadPostList(parameter));
     }

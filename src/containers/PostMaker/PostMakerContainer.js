@@ -18,7 +18,10 @@ const makePost = async () => {
     }
   };
   const formData = new FormData();
-  formData.append('key', new Blob([JSON.stringify(data)]));
+  formData.append(
+    'key',
+    new Blob([JSON.stringify(data)], { type: 'application/json' })
+  );
   attachedFiles.forEach(({ file }) => {
     formData.append('files', file);
   });

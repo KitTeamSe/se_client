@@ -68,15 +68,13 @@ const PaginationStyled = styled(Paginations)`
 `;
 
 const PostContent = styled(TableRow)`
-  height: 48px;
+  height: 36px;
+  border-bottom: 1px solid #ddd;
 `;
 
 const PostNumber = styled.span`
   width: 8px;
   height: 12px;
-  background-color: #ccc;
-  padding: 2px 6px;
-  border-radius: 50%;
   font-size: 0.8rem;
 `;
 
