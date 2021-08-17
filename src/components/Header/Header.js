@@ -13,6 +13,7 @@ const HeaderWraper = styled.header`
   display: flex;
   justify-content: space-between;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  background-color: white;
 `;
 
 const NavigationWrapper = styled.div`
@@ -34,7 +35,7 @@ const LogoWrapper = styled.div`
   font-weight: 700;
 `;
 
-const MenuWrapper = styled.div`
+const MenuWrapper = styled.nav`
   width: auto;
   display: flex;
   align-items: center;
@@ -42,7 +43,7 @@ const MenuWrapper = styled.div`
   align-items: center;
 `;
 
-const MenuItem = styled.span`
+const MenuItem = styled.a`
   color: gray;
   padding: 8px 12px;
   cursor: pointer;
@@ -82,7 +83,7 @@ const SearchIcon = styled(FontAwesomeIcon)`
 const Menu = props => {
   const { menuList, path, MenuClick } = props;
   return (
-    <ul>
+    <>
       {menuList.map(menu => {
         if (path === `/${menu.url}`) {
           return (
@@ -97,7 +98,7 @@ const Menu = props => {
           </MenuItem>
         );
       })}
-    </ul>
+    </>
   );
 };
 
