@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import {
   changeField,
@@ -12,6 +13,7 @@ import LoginDialog from '../../components/LoginDialog/LoginDialog';
 import LogoutDialog from '../../components/LoginDialog/LogoutDialog';
 
 const LoginDialogContainer = () => {
+  const history = useHistory();
   const [login, setLogin] = useState(false);
   const [error, setError] = useState(null);
   const [open, setPwChangeDialogOpen] = useState(false);
@@ -65,6 +67,10 @@ const LoginDialogContainer = () => {
     window.location.reload();
   };
 
+  const ProfileClick = () => {
+    history.push('/profile');
+  };
+
   useEffect(() => {
     if (authError) {
       setError(String(authError));
@@ -88,7 +94,7 @@ const LoginDialogContainer = () => {
   return (
     <>
       {login ? (
-        <LogoutDialog onLogout={onLogout} />
+        <LogoutDialog onLogout={onLogout} ProfileClick={ProfileClick} />
       ) : (
         <>
           <LoginDialog
