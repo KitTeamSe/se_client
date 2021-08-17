@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { faEye, faCommentAlt, faLock } from '@fortawesome/free-solid-svg-icons';
 import {
   Table,
   TableHead,
@@ -11,7 +12,6 @@ import {
 } from '@material-ui/core';
 import { Pagination as Paginations } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faCommentAlt, faLock } from '@fortawesome/free-solid-svg-icons';
 
 const BoardTitle = styled.div`
   padding: 24px;
