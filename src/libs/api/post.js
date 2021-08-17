@@ -12,3 +12,9 @@ export const loadMenuList = async () => {
     throw error.response.data;
   });
 };
+
+export const makeSomePost = async ({ formData }) => {
+  return client.post('/post', formData).catch(error => {
+    throw error.response.data;
+  });
+};

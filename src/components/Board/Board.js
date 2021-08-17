@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { faEye, faCommentAlt, faLock } from '@fortawesome/free-solid-svg-icons';
 import {
   Table,
   TableHead,
@@ -11,7 +12,6 @@ import {
 } from '@material-ui/core';
 import { Pagination as Paginations } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faCommentAlt, faLock } from '@fortawesome/free-solid-svg-icons';
 
 const BoardTitle = styled.div`
   padding: 24px;
@@ -52,7 +52,7 @@ const InfoBox = styled.div`
 const NickName = styled.span`
   font-weight: 500;
   width: 128px;
-  font-size: 1rem;
+  font-size: 0.85rem;
 `;
 
 const InfoIcon = styled(FontAwesomeIcon)`
@@ -68,27 +68,24 @@ const PaginationStyled = styled(Paginations)`
 `;
 
 const PostContent = styled(TableRow)`
-  height: 48px;
+  height: 36px;
+  border-bottom: 1px solid #ddd;
 `;
 
 const PostNumber = styled.span`
   width: 8px;
   height: 12px;
-  background-color: #ccc;
-  padding: 2px 6px;
-  border-radius: 50%;
   font-size: 0.8rem;
 `;
 
 const Title = styled.a`
   display: inline-block;
   width: 640px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  border: none;
 `;
 
 const NoBoardBox = styled.div`

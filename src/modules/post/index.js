@@ -58,7 +58,7 @@ export default handleActions(
       loadPostList: null,
       loadPostError: null,
       loadMenuListError: null,
-      selectBoard: initialState.selectBoard
+      selectBoard: { value: {} }
     }),
     [BOARD_CHANGE]: (state, { payload: value }) => ({
       ...state,
