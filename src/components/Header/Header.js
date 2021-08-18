@@ -18,6 +18,7 @@ const HeaderWraper = styled.header`
 
 const NavigationWrapper = styled.div`
   width: auto;
+  margin-right: 24px;
   display: flex;
   align-items: center;
   justify-content: center;

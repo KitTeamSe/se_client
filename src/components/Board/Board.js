@@ -87,6 +87,10 @@ const Title = styled.a`
   text-overflow: ellipsis;
   vertical-align: middle;
   margin-right: 8px;
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0.5rem;
 `;
 
 const NoBoardBox = styled.div`
@@ -122,15 +126,9 @@ const PostTitle = props => {
         <PostNumber>{postInfo.postId}</PostNumber>
       </NoneBorderCell>
       <NoneBorderCell>
-        <Title>{postInfo.title}</Title>
+        <Title href={`post/${postInfo.postId}`}>{postInfo.title}</Title>
         <IconMargin>
-          {postInfo.isSecret === 'NORMAL' ? (
-            <></>
-          ) : (
-            <span>
-              <InfoIcon icon={faLock} />
-            </span>
-          )}
+          {postInfo.isSecret === 'NORMAL' ? <></> : <InfoIcon icon={faLock} />}
         </IconMargin>
       </NoneBorderCell>
       <NoneBorderCell align="center">
@@ -138,19 +136,15 @@ const PostTitle = props => {
       </NoneBorderCell>
       <NoneBorderCell align="center">
         <InfoBox>
-          <div>
-            <IconMargin>{writeTime}</IconMargin>
-          </div>
-          <div>
-            <IconMargin>
-              <InfoIcon icon={faCommentAlt} />
-              {postInfo.numReply}
-            </IconMargin>
-            <IconMargin>
-              <InfoIcon icon={faEye} />
-              {postInfo.views}
-            </IconMargin>
-          </div>
+          <IconMargin>{writeTime}</IconMargin>
+          <IconMargin>
+            <InfoIcon icon={faCommentAlt} />
+            {postInfo.numReply}
+          </IconMargin>
+          <IconMargin>
+            <InfoIcon icon={faEye} />
+            {postInfo.views}
+          </IconMargin>
         </InfoBox>
       </NoneBorderCell>
     </PostContent>

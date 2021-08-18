@@ -6,6 +6,7 @@ import { loadPostList } from '../../modules/post';
 const BoardContainer = () => {
   const dispatch = useDispatch();
   const [path, setPath] = useState('/');
+  const [pageNumber, setPageNumber] = useState(5);
   const { postListObj, nowPage, nowBoard } = useSelector(({ post }) => ({
     postListObj: post.loadPostList,
     nowPage: post.nowPage,
@@ -22,12 +23,20 @@ const BoardContainer = () => {
       const parameter = {
         boardId,
         direction: 'DESC',
-        page: 1,
+        page: pageNumber,
         size: 20
       };
       dispatch(loadPostList(parameter));
     }
-  }, [nowBoard]);
+  }, [nowBoard, pageNumber]);
+
+  const onChange = e => {
+    e.preventDefault();
+    console.log(e);
+    if (e.target === null) {
+      setPageNumber(Number(e.target.outerText));
+    }
+  };
 
   return (
     <Board
@@ -40,6 +49,7 @@ const BoardContainer = () => {
       }
       page={postListObj ? postListObj.postListItem.number + 1 : 1}
       nowBoard={nowBoard.value}
+      onChange={onChange}
     />
   );
 };
