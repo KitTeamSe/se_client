@@ -80,12 +80,13 @@ const PostNumber = styled.span`
 
 const Title = styled.a`
   display: inline-block;
-  width: 640px;
   font-size: 0.9rem;
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  vertical-align: middle;
+  margin-right: 8px;
 `;
 
 const NoBoardBox = styled.div`
@@ -122,6 +123,15 @@ const PostTitle = props => {
       </NoneBorderCell>
       <NoneBorderCell>
         <Title>{postInfo.title}</Title>
+        <IconMargin>
+          {postInfo.isSecret === 'NORMAL' ? (
+            <></>
+          ) : (
+            <span>
+              <InfoIcon icon={faLock} />
+            </span>
+          )}
+        </IconMargin>
       </NoneBorderCell>
       <NoneBorderCell align="center">
         <NickName>{postInfo.nickname}</NickName>
@@ -130,13 +140,6 @@ const PostTitle = props => {
         <InfoBox>
           <div>
             <IconMargin>{writeTime}</IconMargin>
-            {postInfo.isSecret === 'NORMAL' ? (
-              <></>
-            ) : (
-              <span>
-                <InfoIcon icon={faLock} />
-              </span>
-            )}
           </div>
           <div>
             <IconMargin>

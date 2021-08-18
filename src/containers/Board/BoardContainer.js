@@ -21,7 +21,7 @@ const BoardContainer = () => {
       const { boardId } = nowBoard.value;
       const parameter = {
         boardId,
-        direction: 'ASC',
+        direction: 'DESC',
         page: 1,
         size: 20
       };

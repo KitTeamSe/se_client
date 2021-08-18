@@ -14,9 +14,14 @@ const makePost = async () => {
     isSecret: 'NORMAL',
     postContent: {
       text: 'ㅇㅁ니럼ㄴ아럼ㄴ이ㅏ럼ㄴ이ㅏ럼나ㅣㅓ라ㅣㄴㅇ멀',
-      title: '제목미너ㅏㅇ래ㅏ멃재ㅑㅓㅁ니ㅏㅓㅎ리ㅏㅁㄴ헐비밀번호1234'
+      title:
+        '제목이길면 어떻게 어떻제목이길면 어?제목어떻게 될까?제목이길면 어떻게 될까?제목이길면???'
     }
   };
+  if (data.postContent.title.length > 50) {
+    console.log('제목수는 50자를 초과할수 없습니다');
+    return;
+  }
   const formData = new FormData();
   formData.append(
     'key',
