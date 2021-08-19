@@ -52,3 +52,13 @@ export const menuList = [
   { name: '딥러닝 & iMac', url: 'imac' },
   { name: '330예약', url: 'book' }
 ];
+
+export const postSearchTypeList = [
+  { type: 'TITLE_TEXT', name: '제목+내용' },
+  { type: 'TITLE', name: '제목' },
+  { type: 'TEXT', name: '내용' },
+  { type: 'REPLY', name: '댓글' },
+  { type: 'NICKNAME', name: '닉네임' },
+  { type: 'USERID', name: '사용자 ID' },
+  { type: 'TAG', name: '태그' }
+];

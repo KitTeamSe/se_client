@@ -7,6 +7,7 @@ const BoardContainer = () => {
   const dispatch = useDispatch();
   const [path, setPath] = useState('/');
   const [keyword, setKeyword] = useState('');
+  const [postSearchType, setPostSearchType] = useState('TITLE_TEXT');
   const [pageNumber, setPageNumber] = useState(1);
   const { postListObj, nowPage, nowBoard } = useSelector(({ post }) => ({
     postListObj: post.loadPostList,
@@ -42,8 +43,15 @@ const BoardContainer = () => {
     }
   };
 
+  const onPostSearchTypeChange = e => {
+    e.preventDefault();
+    const { value } = e.target;
+    setPostSearchType(value);
+  };
+
   const onSearch = e => {
     e.preventDefault();
+    console.log('search');
     if (keyword.length === 0) {
       console.log('한글자 이상 입력하세요');
       return;
@@ -57,7 +65,6 @@ const BoardContainer = () => {
       page: 1,
       size: 20
     };
-    const postSearchType = 'NICKNAME';
     if (nowBoard.value.boardId !== null) {
       const { boardId } = nowBoard.value;
       const postSearchRequest = {
@@ -86,6 +93,8 @@ const BoardContainer = () => {
       onChange={onChange}
       onSearch={onSearch}
       keyword={keyword}
+      onPostSearchTypeChange={onPostSearchTypeChange}
+      postSearchType={postSearchType}
     />
   );
 };

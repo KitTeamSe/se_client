@@ -9,10 +9,13 @@ import {
   TableCell,
   TableContainer,
   Paper,
-  TextField
+  TextField,
+  Select,
+  MenuItem
 } from '@material-ui/core';
 import { Pagination as Paginations } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { postSearchTypeList } from '../../DataExport';
 
 const BoardTitle = styled.div`
   padding: 24px;
@@ -109,10 +112,19 @@ const SearchBar = styled.form`
   align-items: center;
 `;
 
-const BoardHeader = styled.div`
+const BoardHead = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+`;
+
+const FormSelectField = styled(Select)`
+  margin-right: 2px;
+  width: auto;
+`;
+
+const BoardHeadRight = styled.div`
+  display: flex;
 `;
 
 const Pagination = props => {
@@ -211,6 +223,46 @@ const MainTable = props => {
   );
 };
 
+const BoardHeader = props => {
+  const {
+    nowBoard,
+    postSearchType,
+    onPostSearchTypeChange,
+    keyword,
+    onChange,
+    onSearch
+  } = props;
+  return (
+    <BoardHead>
+      <BoardTitle>{nowBoard.description}</BoardTitle>
+      <BoardHeadRight>
+        <FormSelectField
+          margin="dense"
+          value={postSearchType}
+          onChange={onPostSearchTypeChange}
+        >
+          {postSearchTypeList.map(type => (
+            <MenuItem value={type.type} key={type.type}>
+              {type.name}
+            </MenuItem>
+          ))}
+        </FormSelectField>
+        <SearchBar onSubmit={onSearch}>
+          <TextField
+            id="text"
+            type="text"
+            margin="dense"
+            variant="outlined"
+            value={keyword}
+            label="검색"
+            onChange={onChange}
+          />
+        </SearchBar>
+      </BoardHeadRight>
+    </BoardHead>
+  );
+};
+
 const Board = props => {
   const {
     totalPage,
@@ -219,26 +271,22 @@ const Board = props => {
     postListObj,
     nowBoard,
     keyword,
-    onSearch
+    onSearch,
+    onPostSearchTypeChange,
+    postSearchType
   } = props;
   return (
     <MainWrapper>
       {Object.keys(nowBoard).length !== 0 ? (
         <>
-          <BoardHeader>
-            <BoardTitle>{nowBoard.description}</BoardTitle>
-            <SearchBar onSubmit={onSearch}>
-              <TextField
-                id="text"
-                type="text"
-                margin="dense"
-                variant="outlined"
-                value={keyword}
-                label="검색"
-                onChange={onChange}
-              />
-            </SearchBar>
-          </BoardHeader>
+          <BoardHeader
+            nowBoard={nowBoard}
+            postSearchType={postSearchType}
+            onPostSearchTypeChange={onPostSearchTypeChange}
+            keyword={keyword}
+            onChange={onChange}
+            onSearch={onSearch}
+          />
           <MainTable postListObj={postListObj} />
           <Pagination totalPage={totalPage} page={page} onChange={onChange} />
         </>
