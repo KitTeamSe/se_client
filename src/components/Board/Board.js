@@ -8,7 +8,8 @@ import {
   TableRow,
   TableCell,
   TableContainer,
-  Paper
+  Paper,
+  TextField
 } from '@material-ui/core';
 import { Pagination as Paginations } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -18,7 +19,7 @@ const BoardTitle = styled.div`
   font-size: 1.5rem;
   font-weight: 600;
   text-align: left;
-  width: 70rem;
+  width: auto;
 `;
 
 const MainWrapper = styled.div`
@@ -99,6 +100,19 @@ const NoBoardBox = styled.div`
   font-size: 2rem;
   text-align: center;
   margin-top: 196px;
+`;
+
+const SearchBar = styled.form`
+  width: 196px;
+  padding: 4px;
+  margin: 8px;
+  align-items: center;
+`;
+
+const BoardHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 const Pagination = props => {
@@ -198,12 +212,33 @@ const MainTable = props => {
 };
 
 const Board = props => {
-  const { totalPage, page, onChange, postListObj, nowBoard } = props;
+  const {
+    totalPage,
+    page,
+    onChange,
+    postListObj,
+    nowBoard,
+    keyword,
+    onSearch
+  } = props;
   return (
     <MainWrapper>
       {Object.keys(nowBoard).length !== 0 ? (
         <>
-          <BoardTitle>{nowBoard.description}</BoardTitle>
+          <BoardHeader>
+            <BoardTitle>{nowBoard.description}</BoardTitle>
+            <SearchBar onSubmit={onSearch}>
+              <TextField
+                id="text"
+                type="text"
+                margin="dense"
+                variant="outlined"
+                value={keyword}
+                label="검색"
+                onChange={onChange}
+              />
+            </SearchBar>
+          </BoardHeader>
           <MainTable postListObj={postListObj} />
           <Pagination totalPage={totalPage} page={page} onChange={onChange} />
         </>

@@ -1,8 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { TextField } from '@material-ui/core';
 import LoginDialogContainer from '../../containers/LoginDialog/LoginDialogContainer';
 
 const HeaderWraper = styled.header`
@@ -18,7 +15,7 @@ const HeaderWraper = styled.header`
 
 const NavigationWrapper = styled.div`
   width: auto;
-  margin-right: 24px;
+  margin-right: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,7 +23,6 @@ const NavigationWrapper = styled.div`
 `;
 
 const LogoWrapper = styled.div`
-  width: 196px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,6 +30,7 @@ const LogoWrapper = styled.div`
   cursor: pointer;
   font-size: 1.75rem;
   font-weight: 700;
+  margin-left: 4rem;
 `;
 
 const MenuWrapper = styled.nav`
@@ -65,23 +62,6 @@ const NowMenuItem = styled.span`
   }
 `;
 
-const SearchBar = styled.form`
-  width: 196px;
-  border: 1px solid black;
-  display: flex;
-  padding: 4px;
-  margin: 8px;
-  border-radius: 12px;
-  align-items: center;
-`;
-
-const SearchIcon = styled(FontAwesomeIcon)`
-  padding: 4px;
-  margin-right: 6px;
-  border-right: 1px solid gray;
-  color: black;
-`;
-
 const Menu = props => {
   const { menuList, path, MenuClick } = props;
   return (
@@ -105,8 +85,7 @@ const Menu = props => {
 };
 
 const Header = props => {
-  const { path, LogoClick, menuList, MenuClick, onChange, keyword, onSearch } =
-    props;
+  const { path, LogoClick, menuList, MenuClick } = props;
 
   return (
     <HeaderWraper>
@@ -116,15 +95,6 @@ const Header = props => {
       </MenuWrapper>
       <NavigationWrapper>
         <LoginDialogContainer />
-        <SearchBar onSubmit={onSearch}>
-          <SearchIcon onClick={onSearch} icon={faSearch} size="sm" />
-          <TextField
-            onChange={onChange}
-            id="text"
-            type="text"
-            value={keyword}
-          />
-        </SearchBar>
       </NavigationWrapper>
     </HeaderWraper>
   );

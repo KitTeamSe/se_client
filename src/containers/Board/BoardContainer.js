@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Board from '../../components/Board/Board';
-import { loadPostList } from '../../modules/post';
+import { loadPostList, searchPost } from '../../modules/post';
 
 const BoardContainer = () => {
   const dispatch = useDispatch();
   const [path, setPath] = useState('/');
+  const [keyword, setKeyword] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
   const { postListObj, nowPage, nowBoard } = useSelector(({ post }) => ({
     postListObj: post.loadPostList,
@@ -35,6 +36,40 @@ const BoardContainer = () => {
     if (e.target.outerText !== undefined) {
       setPageNumber(Number(e.target.outerText));
     }
+    if (e.target.value !== undefined) {
+      const { value } = e.target;
+      setKeyword(value);
+    }
+  };
+
+  const onSearch = e => {
+    e.preventDefault();
+    if (keyword.length === 0) {
+      console.log('한글자 이상 입력하세요');
+      return;
+    }
+    if (keyword.length > 50) {
+      console.log('최대 50자 까지만 입력 가능합니다');
+      return;
+    }
+    const pageRequest = {
+      direction: 'DESC',
+      page: 1,
+      size: 20
+    };
+    const postSearchType = 'NICKNAME';
+    if (nowBoard.value.boardId !== null) {
+      const { boardId } = nowBoard.value;
+      const postSearchRequest = {
+        boardId,
+        keyword,
+        pageRequest,
+        postSearchType
+      };
+      dispatch(searchPost({ postSearchRequest }));
+    } else {
+      console.log('선택된 게시판이 없습니다.');
+    }
   };
 
   return (
@@ -49,6 +84,8 @@ const BoardContainer = () => {
       page={postListObj ? postListObj.postListItem.number + 1 : 1}
       nowBoard={nowBoard.value}
       onChange={onChange}
+      onSearch={onSearch}
+      keyword={keyword}
     />
   );
 };
