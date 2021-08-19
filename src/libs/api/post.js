@@ -7,6 +7,12 @@ export const loadPostList = async ({ boardId, direction, page, size }) => {
   });
 };
 
+export const searchPost = async ({ postSearchRequest }) => {
+  return client.post('/post/search', postSearchRequest).catch(error => {
+    throw error.response.data;
+  });
+};
+
 export const loadMenuList = async () => {
   return client.get('/menu').catch(error => {
     throw error.response.data;

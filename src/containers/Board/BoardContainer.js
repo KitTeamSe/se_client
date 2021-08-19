@@ -6,7 +6,7 @@ import { loadPostList } from '../../modules/post';
 const BoardContainer = () => {
   const dispatch = useDispatch();
   const [path, setPath] = useState('/');
-  const [pageNumber, setPageNumber] = useState(5);
+  const [pageNumber, setPageNumber] = useState(1);
   const { postListObj, nowPage, nowBoard } = useSelector(({ post }) => ({
     postListObj: post.loadPostList,
     nowPage: post.nowPage,
@@ -32,8 +32,7 @@ const BoardContainer = () => {
 
   const onChange = e => {
     e.preventDefault();
-    console.log(e);
-    if (e.target === null) {
+    if (e.target.outerText !== undefined) {
       setPageNumber(Number(e.target.outerText));
     }
   };

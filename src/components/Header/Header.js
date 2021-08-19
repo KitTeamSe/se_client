@@ -65,7 +65,7 @@ const NowMenuItem = styled.span`
   }
 `;
 
-const SearchBar = styled.div`
+const SearchBar = styled.form`
   width: 196px;
   border: 1px solid black;
   display: flex;
@@ -105,7 +105,8 @@ const Menu = props => {
 };
 
 const Header = props => {
-  const { path, LogoClick, menuList, MenuClick } = props;
+  const { path, LogoClick, menuList, MenuClick, onChange, keyword, onSearch } =
+    props;
 
   return (
     <HeaderWraper>
@@ -115,9 +116,14 @@ const Header = props => {
       </MenuWrapper>
       <NavigationWrapper>
         <LoginDialogContainer />
-        <SearchBar>
-          <SearchIcon icon={faSearch} size="sm" />
-          <TextField id="text" type="text" value="검색기능 추가해야지" />
+        <SearchBar onSubmit={onSearch}>
+          <SearchIcon onClick={onSearch} icon={faSearch} size="sm" />
+          <TextField
+            onChange={onChange}
+            id="text"
+            type="text"
+            value={keyword}
+          />
         </SearchBar>
       </NavigationWrapper>
     </HeaderWraper>
