@@ -54,7 +54,6 @@ export function* postSaga() {
 
 // reducer (handleActions => switch문 대체)
 const initialState = {
-  nowPage: 1,
   loadPostList: null,
   loadPostError: null,
   loadMenuList: null,
@@ -66,7 +65,6 @@ export default handleActions(
   {
     [INITIALIZE]: () => state => ({
       ...state,
-      nowPage: 1,
       loadPostList: null,
       loadPostError: null,
       loadMenuListError: null,

@@ -331,7 +331,7 @@ const ProfileRow = props => {
   const { row } = props;
   return (
     <>
-      <TableRow key={row[0]}>
+      <TableRow>
         <TableCell component="th" scope="row">
           {accountData[row[0]]}
         </TableCell>
@@ -380,7 +380,7 @@ const EditRowClassifier = props => {
           onChange={typeChange}
         >
           {typeList.map(type => (
-            <MenuItem value={type.userType} key={type.typeid}>
+            <MenuItem value={type.userType} key={type.userType}>
               {type.userType}
             </MenuItem>
           ))}
@@ -409,7 +409,7 @@ const EditRow = props => {
     typeChange
   } = props;
   return (
-    <TableRow key={row[0]}>
+    <TableRow>
       <TableCell component="th" scope="row">
         {accountData[row[0]]}
       </TableCell>
@@ -499,9 +499,10 @@ const PropfilePage = props => {
                       informationOpenAgreeChange={informationOpenAgreeChange}
                       handleChange={handleChange}
                       typeChange={typeChange}
+                      key={`${row[0]}editRow`}
                     />
                   ) : (
-                    <ProfileRow row={row} />
+                    <ProfileRow row={row} key={`${row[0]}profileRow`} />
                   )}
                 </>
               ))}

@@ -43,7 +43,7 @@ export const informationOpenAgreeEnum = {
 };
 
 export const menuList = [
-  { name: 'freeboard', url: 'freeboard' },
+  { name: 'freeboard', url: '' },
   { name: 'archive', url: 'archive' },
   { name: '전공지식', url: 'tip' },
   { name: '지식인', url: 'naver' },
