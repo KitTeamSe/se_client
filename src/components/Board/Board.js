@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { faEye, faCommentAlt, faLock } from '@fortawesome/free-solid-svg-icons';
 import {
+  CircularProgress,
   Table,
   TableHead,
   TableBody,
@@ -16,6 +17,11 @@ import {
 import { Pagination as Paginations } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { postSearchTypeList } from '../../DataExport';
+
+const LoadingCircle = styled(CircularProgress)`
+  position: absolute;
+  bottom: 50vh;
+`;
 
 const BoardTitle = styled.div`
   padding: 24px;
@@ -128,7 +134,9 @@ const BoardHeadRight = styled.div`
 `;
 
 const Pagination = props => {
-  const { totalPage, page, onChange } = props;
+  const { data, onChange } = props;
+  const totalPage = data.postListItem.totalPages;
+  const page = data.postListItem.number;
   return (
     <PaginationStyled
       component="div"
@@ -182,7 +190,7 @@ const NoBoard = () => {
 };
 
 const MainTable = props => {
-  const { postListObj } = props;
+  const { data } = props;
   const tableColumns = ['번호', '제목', '닉네임', '정보'];
   const noPost = {
     nickname: '시스템',
@@ -209,9 +217,8 @@ const MainTable = props => {
           </TableHeader>
         </TableHead>
         <TableBody>
-          {postListObj !== null &&
-          postListObj.postListItem.content.length !== 0 ? (
-            postListObj.postListItem.content.map(postInfo => (
+          {data !== null && data.postListItem.content.length !== 0 ? (
+            data.postListItem.content.map(postInfo => (
               <PostTitle key={postInfo.postId} postInfo={postInfo} />
             ))
           ) : (
@@ -265,16 +272,25 @@ const BoardHeader = props => {
 
 const Board = props => {
   const {
-    totalPage,
-    page,
     onChange,
-    postListObj,
+    data,
+    loading,
+    error,
     nowBoard,
     keyword,
     onSearch,
     onPostSearchTypeChange,
     postSearchType
   } = props;
+  console.log(error);
+  if (loading === false) {
+    return (
+      <MainWrapper>
+        <LoadingCircle />
+      </MainWrapper>
+    );
+  }
+
   return (
     <MainWrapper>
       {Object.keys(nowBoard).length !== 0 ? (
@@ -287,8 +303,8 @@ const Board = props => {
             onChange={onChange}
             onSearch={onSearch}
           />
-          <MainTable postListObj={postListObj} />
-          <Pagination totalPage={totalPage} page={page} onChange={onChange} />
+          <MainTable data={data} />
+          <Pagination data={data} onChange={onChange} />
         </>
       ) : (
         <NoBoard />

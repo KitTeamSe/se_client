@@ -22,7 +22,6 @@ const HeaderContainer = () => {
   useEffect(() => {
     if (loadedMenu !== null) {
       for (let i = 0; i < loadedMenu.length; i += 1) {
-        // defalut board 가 생기면 삭제
         if (
           loadedMenu[i].url === path.substring(1) ||
           path.substring(1) === ''

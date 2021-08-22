@@ -9,8 +9,10 @@ const BoardContainer = () => {
   const [keyword, setKeyword] = useState('');
   const [postSearchType, setPostSearchType] = useState('TITLE_TEXT');
   const [pageNumber, setPageNumber] = useState(0);
-  const { postListObj, nowBoard } = useSelector(({ post }) => ({
-    postListObj: post.loadPostList,
+  const { data, loading, error, nowBoard } = useSelector(({ post }) => ({
+    data: post.loadPostList.data,
+    loading: post.loadPostList.loading,
+    error: post.loadPostList.error,
     nowBoard: post.selectBoard
   }));
   const nowUrl = window.location.pathname;
@@ -80,13 +82,9 @@ const BoardContainer = () => {
 
   return (
     <Board
-      postListObj={postListObj}
-      totalPage={
-        postListObj && postListObj.postListItem.totalPages
-          ? postListObj.postListItem.totalPages
-          : 1
-      }
-      page={postListObj ? postListObj.postListItem.number : 1}
+      data={data}
+      loading={loading}
+      error={error}
       nowBoard={nowBoard.value}
       onChange={onChange}
       onSearch={onSearch}
