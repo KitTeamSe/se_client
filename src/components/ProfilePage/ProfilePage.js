@@ -445,6 +445,45 @@ const SubmitButton = props => {
   );
 };
 
+const ProfileBody = props => {
+  const {
+    rows,
+    infoEditObj,
+    informationOpenAgreeChange,
+    handleChange,
+    typeChange,
+    mode,
+    myinfoEditSubmit
+  } = props;
+  return (
+    <>
+      <InfoTable>
+        <Table>
+          <TableBody>
+            {rows.map(row => (
+              <>
+                {changebleAccount.includes(row[0]) && mode === 'editMode' ? (
+                  <EditRow
+                    row={row}
+                    infoEditObj={infoEditObj}
+                    informationOpenAgreeChange={informationOpenAgreeChange}
+                    handleChange={handleChange}
+                    typeChange={typeChange}
+                    key={`${row[0]}editRow`}
+                  />
+                ) : (
+                  <ProfileRow row={row} key={`${row[0]}profileRow`} />
+                )}
+              </>
+            ))}
+          </TableBody>
+        </Table>
+      </InfoTable>
+      <SubmitButton mode={mode} myinfoEditSubmit={myinfoEditSubmit} />
+    </>
+  );
+};
+
 const PropfilePage = props => {
   const {
     infoObj,
@@ -487,30 +526,16 @@ const PropfilePage = props => {
           withdrawalSubmit={withdrawalSubmit}
           editFormRefresh={editFormRefresh}
         />
-        <InfoTable>
-          <Table>
-            <TableBody>
-              {rows.map(row => (
-                <>
-                  {changebleAccount.includes(row[0]) && mode === 'editMode' ? (
-                    <EditRow
-                      row={row}
-                      infoEditObj={infoEditObj}
-                      informationOpenAgreeChange={informationOpenAgreeChange}
-                      handleChange={handleChange}
-                      typeChange={typeChange}
-                      key={`${row[0]}editRow`}
-                    />
-                  ) : (
-                    <ProfileRow row={row} key={`${row[0]}profileRow`} />
-                  )}
-                </>
-              ))}
-            </TableBody>
-          </Table>
-        </InfoTable>
+        <ProfileBody
+          rows={rows}
+          infoEditObj={infoEditObj}
+          informationOpenAgreeChange={informationOpenAgreeChange}
+          handleChange={handleChange}
+          typeChange={typeChange}
+          mode={mode}
+          myinfoEditSubmit={myinfoEditSubmit}
+        />
         <ErrorText>{error}</ErrorText>
-        <SubmitButton mode={mode} myinfoEditSubmit={myinfoEditSubmit} />
       </InfoTableWrapper>
     </Wrapper>
   );
