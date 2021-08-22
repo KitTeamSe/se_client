@@ -6,6 +6,7 @@ import {
   createRequestSaga,
   createRequestActionTypes
 } from '../../libs/createRequestSaga';
+import reducerUtils from '../../libs/reducerUtils';
 
 // Actions
 const CHANGE_FIELD = 'auth/CHANGE_FIELD';
@@ -84,10 +85,8 @@ const initialState = {
     id: '',
     pw: ''
   },
-  auth: null,
-  authError: null,
-  signupResponse: null,
-  signupError: null
+  auth: reducerUtils.initial(),
+  signupResponse: reducerUtils.initial()
 };
 
 export default handleActions(
@@ -99,34 +98,36 @@ export default handleActions(
     [INITIALIZE_FORM]: (state, { payload: form }) => ({
       ...state,
       [form]: initialState[form],
-      authError: null
+      auth: reducerUtils.initial()
     }),
     [INITIALIZE_AUTH]: state => ({
       ...state,
-      auth: null,
-      authError: null,
-      signupResponse: null,
-      signupError: null,
-      myInfo: null,
-      myinfoError: null
+      auth: reducerUtils.initial(),
+      signupResponse: reducerUtils.initial()
+    }),
+    [SIGNUP]: state => ({
+      ...state,
+      signupResponse: reducerUtils.loading(state.signupResponse.data)
     }),
     [SIGNUP_SUCCESS]: (state, { payload: signupResponse }) => ({
       ...state,
-      signupError: null,
-      signupResponse
+      signupResponse: reducerUtils.success(signupResponse)
     }),
     [SIGNUP_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      signupError: error
+      signupResponse: reducerUtils.error(error)
+    }),
+    [SIGNIN]: state => ({
+      ...state,
+      auth: reducerUtils.loading(state.auth.data)
     }),
     [SIGNIN_SUCCESS]: (state, { payload: auth }) => ({
       ...state,
-      authError: null,
-      auth
+      auth: reducerUtils.success(auth)
     }),
     [SIGNIN_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      authError: error
+      auth: reducerUtils.error(error)
     })
   },
   initialState

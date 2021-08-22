@@ -282,7 +282,9 @@ const Board = props => {
     onPostSearchTypeChange,
     postSearchType
   } = props;
-  console.log(error);
+  if (error === 1) {
+    console.log(error);
+  }
   if (loading === false) {
     return (
       <MainWrapper>
