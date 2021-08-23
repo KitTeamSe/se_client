@@ -45,16 +45,21 @@ const SecretToggle = props => {
 };
 
 const ReplyAdd = props => {
-  const { handleChange, handleSecret, handleContentText, onSubmit } = props;
+  const {
+    addForm,
+    handleChange,
+    handleSecret,
+    handleContentText,
+    onFocus,
+    onSubmit
+  } = props;
 
   return (
     <form onSubmit={onSubmit}>
       <Editor
-        onChange={(event, editor) => {
-          const data = editor.getData();
-          handleContentText(data);
-        }}
-        id="content"
+        onChange={handleContentText}
+        onFocus={onFocus}
+        data={addForm.text}
         type="reply"
       />
       <Wrapper>
@@ -65,12 +70,14 @@ const ReplyAdd = props => {
                 placeholder="글쓴이"
                 id="anonymousNickname"
                 size="small"
+                value={addForm.anonymousNickname}
                 onChange={handleChange}
               />
               <InputStyled
                 placeholder="비밀번호"
                 id="anonymousPassword"
                 type="password"
+                value={addForm.anonymousPassword}
                 onChange={handleChange}
               />
             </>

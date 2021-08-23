@@ -321,23 +321,15 @@ const replyConfiguration = {
 };
 
 const Editor = props => {
-  const { onChange, type } = props;
+  const { onChange, onFocus, data, type } = props;
 
   return (
     <CKEditor
       editor={ClassicEditor}
       config={type === 'reply' ? replyConfiguration : boardConfiguration}
-      onInit={editor => {
-        // You can store the "editor" and use when it is needed.
-        console.log('Editor is ready to use!', editor);
-      }}
       onChange={onChange}
-      onBlur={(event, editor) => {
-        console.log('Blur.', editor);
-      }}
-      onFocus={(event, editor) => {
-        console.log('Focus.', editor);
-      }}
+      onFocus={onFocus}
+      data={data}
     />
   );
 };
