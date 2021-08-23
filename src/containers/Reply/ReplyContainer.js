@@ -1,7 +1,7 @@
 import React from 'react';
-import Reply from '../../components/Reply/Reply';
+import ReplyTestPage from '../../components/Reply/ReplyTestPage';
 
 const ReplyContainer = () => {
-  return <Reply />;
+  return <ReplyTestPage />;
 };
 export default ReplyContainer;

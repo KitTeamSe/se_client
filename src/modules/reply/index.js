@@ -71,9 +71,15 @@ export const removeReplyAnony = createAction(
   REMOVE_REPLY_ANONY,
   ({ password, replyId }) => ({ password, replyId })
 );
-export const loadReplyList = createAction(LOAD_REPLY_LIST, ({ postId }) => ({
-  postId
-}));
+export const loadReplyList = createAction(
+  LOAD_REPLY_LIST,
+  ({ postId, direction, page, size }) => ({
+    postId,
+    direction,
+    page,
+    size
+  })
+);
 
 // Sagas
 const addReplySaga = createRequestSaga(ADD_REPLY, api.addReply);
@@ -123,9 +129,15 @@ export default handleActions(
     [INITIALIZE]: () => initialState,
     [INITIALIZE_FIELD]: state => ({
       ...state,
-      reply: {
+      addForm: {
         anonymousNickname: '',
         anonymousPassword: '',
+        isSecret: 'NORMAL',
+        text: '',
+        files: []
+      },
+      updateForm: {
+        password: '',
         isSecret: '',
         parentId: null,
         postId: null,

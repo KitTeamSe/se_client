@@ -79,15 +79,15 @@ export const getReplyById = ({ replyId }) =>
     throw error.response.data;
   });
 
-export const getReplyList = ({ direction, page, size }) => {
+export const getReplyList = ({ postId, direction, page, size }) => {
   const queryString = qs.stringify({ direction, page, size });
 
-  return client.get(`${URL}?${queryString}`).catch(error => {
+  return client.get(`${URL}/post/${postId}?${queryString}`).catch(error => {
     if (error.response.data.code === 'GE05') {
       localStorage.clear();
       window.location.reload(true);
     }
-    throw error;
+    throw error.response.data;
   });
 };
 
@@ -103,12 +103,3 @@ export const removeReplyAnony = ({ password, replyId }) => {
       throw error.response.data;
     });
 };
-
-export const getReplyReplyList = ({ postId }) =>
-  client.get(`${URL}/post/${postId}`).catch(error => {
-    if (error.response.data.code === 'GE05') {
-      localStorage.clear();
-      window.location.reload(true);
-    }
-    throw error;
-  });
