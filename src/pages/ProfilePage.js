@@ -1,11 +1,18 @@
 import React from 'react';
-import LoginDialogContainer from '../containers/LoginDialog/LoginDialogContainer';
+import styled from 'styled-components';
+import HeaderContainer from '../containers/Header/HeaderContainer';
 import ProfilePageContainer from '../containers/ProfilePage/ProfilePageContainer';
+
+const BodyContainer = styled.body`
+  padding-top: 96px;
+`;
 
 const ProfilePage = () => (
   <>
-    <LoginDialogContainer />
-    <ProfilePageContainer />
+    <HeaderContainer />
+    <BodyContainer>
+      <ProfilePageContainer />
+    </BodyContainer>
   </>
 );
 export default ProfilePage;
