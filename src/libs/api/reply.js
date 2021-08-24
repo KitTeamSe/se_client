@@ -81,14 +81,17 @@ export const getReplyById = ({ replyId }) =>
 
 export const getReplyList = ({ postId, direction, page, size }) => {
   const queryString = qs.stringify({ direction, page, size });
+  const token = localStorage.getItem('token');
 
-  return client.get(`${URL}/post/${postId}?${queryString}`).catch(error => {
-    if (error.response.data.code === 'GE05') {
-      localStorage.clear();
-      window.location.reload(true);
-    }
-    throw error.response.data;
-  });
+  return client
+    .get(`${URL}/post/${postId}?${queryString}`, tokenHeader(token))
+    .catch(error => {
+      if (error.response.data.code === 'GE05') {
+        localStorage.clear();
+        window.location.reload(true);
+      }
+      throw error.response.data;
+    });
 };
 
 export const removeReplyAnony = ({ password, replyId }) => {
