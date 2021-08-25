@@ -128,21 +128,21 @@ const ReplyAction = props => {
   const { accountId, anonymousNickname, replyId } = props;
   return (
     <ActionWrapper>
-      <ActionButton onClick={console.log(replyId)}>댓글</ActionButton>
+      <ActionButton onClick={() => console.log(replyId)}>댓글</ActionButton>
       {localStorage.getItem('token') &&
       localStorage.getItem('userId') &&
       accountId === localStorage.getItem('userId') ? (
         <>
-          <ActionButton onClick={console.log(replyId)}>수정</ActionButton>
-          <ActionButton onClick={console.log(replyId)}>삭제</ActionButton>
+          <ActionButton onClick={() => console.log(replyId)}>수정</ActionButton>
+          <ActionButton onClick={() => console.log(replyId)}>삭제</ActionButton>
         </>
       ) : null}
       {!localStorage.getItem('token') &&
       !localStorage.getItem('userId') &&
       anonymousNickname ? (
         <>
-          <ActionButton onClick={console.log(replyId)}>수정</ActionButton>
-          <ActionButton onClick={console.log(replyId)}>삭제</ActionButton>
+          <ActionButton onClick={() => console.log(replyId)}>수정</ActionButton>
+          <ActionButton onClick={() => console.log(replyId)}>삭제</ActionButton>
         </>
       ) : null}
     </ActionWrapper>
