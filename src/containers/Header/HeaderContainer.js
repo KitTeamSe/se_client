@@ -10,7 +10,7 @@ const HeaderContainer = () => {
   const dispatch = useDispatch();
   const [path, setPath] = useState('/');
   const { loadedMenu } = useSelector(({ post }) => ({
-    loadedMenu: post.loadMenuList
+    loadedMenu: post.loadedMenuList.data
   }));
 
   useEffect(() => {
@@ -21,12 +21,13 @@ const HeaderContainer = () => {
 
   useEffect(() => {
     if (loadedMenu !== null) {
-      for (let i = 0; i < loadedMenu.length; i += 1) {
+      for (let i = 0; i < loadedMenu.data.length; i += 1) {
         if (
-          loadedMenu[i].url === path.substring(1) ||
+          loadedMenu.data[i].url === path.substring(1) ||
           path.substring(1) === ''
         ) {
-          dispatch(boardChange({ value: loadedMenu[i] }));
+          const boardValue = loadedMenu.data[i];
+          dispatch(boardChange({ value: boardValue }));
         } else {
           dispatch(boardChange({ value: {} }));
         }

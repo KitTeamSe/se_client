@@ -8,12 +8,12 @@ const BoardContainer = () => {
   const [path, setPath] = useState('/');
   const [keyword, setKeyword] = useState('');
   const [postSearchType, setPostSearchType] = useState('TITLE_TEXT');
-  const [pageNumber, setPageNumber] = useState(0);
+  const [pageNumber, setPageNumber] = useState(1);
   const { data, loading, error, nowBoard } = useSelector(({ post }) => ({
-    data: post.loadPostList.data,
-    loading: post.loadPostList.loading,
-    error: post.loadPostList.error,
-    nowBoard: post.selectBoard
+    data: post.loadedPostList.data,
+    loading: post.loadedPostList.loading,
+    error: post.loadedPostList.error,
+    nowBoard: post.selectBoard.value
   }));
   const nowUrl = window.location.pathname;
   if (path !== nowUrl) {
@@ -21,12 +21,12 @@ const BoardContainer = () => {
   }
 
   useEffect(() => {
-    if (Object.keys(nowBoard.value).length !== 0) {
-      const { boardId } = nowBoard.value;
+    if (Object.keys(nowBoard).length !== 0) {
+      const { boardId } = nowBoard;
       const parameter = {
         boardId,
         direction: 'DESC',
-        page: pageNumber,
+        page: pageNumber - 1,
         size: 20
       };
       dispatch(loadPostList(parameter));
@@ -52,7 +52,6 @@ const BoardContainer = () => {
 
   const onSearch = e => {
     e.preventDefault();
-    console.log('search');
     if (keyword.length === 0) {
       console.log('한글자 이상 입력하세요');
       return;
@@ -85,7 +84,7 @@ const BoardContainer = () => {
       data={data}
       loading={loading}
       error={error}
-      nowBoard={nowBoard.value}
+      nowBoard={nowBoard}
       onChange={onChange}
       onSearch={onSearch}
       keyword={keyword}

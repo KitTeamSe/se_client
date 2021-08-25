@@ -55,8 +55,8 @@ export function* postSaga() {
 
 // reducer (handleActions => switch문 대체)
 const initialState = {
-  loadPostList: reducerUtils.initial(),
-  loadMenuList: reducerUtils.initial(),
+  loadedPostList: reducerUtils.initial(),
+  loadedMenuList: reducerUtils.initial(),
   selectBoard: { value: {} }
 };
 
@@ -66,43 +66,43 @@ export default handleActions(
     [BOARD_CHANGE]: (state, { payload: value }) => ({
       ...state,
       selectBoard: value,
-      loadPostList: null
+      loadedPostList: reducerUtils.initial()
     }),
     [LOAD_POST_LIST]: state => ({
       ...state,
-      loadPostList: reducerUtils.loading(state.loadPostList.data)
+      loadedPostList: reducerUtils.loading(state.loadedPostList.data)
     }),
     [LOAD_POST_LIST_SUCCESS]: (state, { payload: response }) => ({
       ...state,
-      loadPostList: reducerUtils.success(response)
+      loadedPostList: reducerUtils.success(response)
     }),
     [LOAD_POST_LIST_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      loadPostList: reducerUtils.error(error)
+      loadedPostList: reducerUtils.error(error)
     }),
     [LOAD_MENU_LIST]: state => ({
       ...state,
-      loadMenuList: reducerUtils.loading(state.loadMenuList.data)
+      loadedMenuList: reducerUtils.loading(state.loadedMenuList.data)
     }),
     [LOAD_MENU_LIST_SUCCESS]: (state, { payload: response }) => ({
       ...state,
-      loadMenuList: reducerUtils.success(response)
+      loadedMenuList: reducerUtils.success(response)
     }),
     [LOAD_MENU_LIST_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      menuLloadMenuListist: reducerUtils.error(error)
+      loadedMenuList: reducerUtils.error(error)
     }),
     [SEARCH_POST]: state => ({
       ...state,
-      loadPostList: reducerUtils.loading(state.loadPostList.data)
+      loadedPostList: reducerUtils.loading(state.loadedPostList.data)
     }),
     [SEARCH_POST_SUCCESS]: (state, { payload: response }) => ({
       ...state,
-      loadPostList: reducerUtils.success(response)
+      loadedPostList: reducerUtils.success(response)
     }),
     [SEARCH_POST_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      loadPostList: reducerUtils.error(error)
+      loadedPostList: reducerUtils.error(error)
     })
   },
   initialState

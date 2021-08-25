@@ -134,9 +134,9 @@ const BoardHeadRight = styled.div`
 `;
 
 const Pagination = props => {
-  const { data, onChange } = props;
-  const totalPage = data.postListItem.totalPages;
-  const page = data.postListItem.number;
+  const { res, onChange } = props;
+  const totalPage = res.postListItem.totalPages;
+  const page = Number(res.postListItem.number) + 1;
   return (
     <PaginationStyled
       component="div"
@@ -190,7 +190,7 @@ const NoBoard = () => {
 };
 
 const MainTable = props => {
-  const { data } = props;
+  const { res } = props;
   const tableColumns = ['번호', '제목', '닉네임', '정보'];
   const noPost = {
     nickname: '시스템',
@@ -217,8 +217,8 @@ const MainTable = props => {
           </TableHeader>
         </TableHead>
         <TableBody>
-          {data !== null && data.postListItem.content.length !== 0 ? (
-            data.postListItem.content.map(postInfo => (
+          {res !== null && res.postListItem.content.length !== 0 ? (
+            res.postListItem.content.map(postInfo => (
               <PostTitle key={postInfo.postId} postInfo={postInfo} />
             ))
           ) : (
@@ -285,13 +285,15 @@ const Board = props => {
   if (error === 1) {
     console.log(error);
   }
-  if (loading === false) {
+
+  if (data === null || loading) {
     return (
       <MainWrapper>
         <LoadingCircle />
       </MainWrapper>
     );
   }
+  const res = data.data;
 
   return (
     <MainWrapper>
@@ -305,8 +307,8 @@ const Board = props => {
             onChange={onChange}
             onSearch={onSearch}
           />
-          <MainTable data={data} />
-          <Pagination data={data} onChange={onChange} />
+          <MainTable res={res} />
+          <Pagination res={res} onChange={onChange} />
         </>
       ) : (
         <NoBoard />
