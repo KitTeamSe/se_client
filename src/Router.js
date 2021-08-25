@@ -8,7 +8,7 @@ import SignupPage from './pages/SignupPage';
 
 const Routes = () => (
   <Switch>
-    <Route path="/board/:postId">
+    <Route path="/board/:board/:postId">
       <ReplyTestPage />
     </Route>
     <Route path="/profile">
