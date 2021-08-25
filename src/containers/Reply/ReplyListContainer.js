@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from 'react';
 import qs from 'qs';
-import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ReplyList from '../../components/Reply/ReplyList';
@@ -15,20 +15,41 @@ const ReplyListContainer = props => {
     add: reply.addReply.data,
     update: reply.updateReply.data
   }));
+  const [myReplyPage, setMyReplyPage] = useState(1);
 
-  useEffect(() => {
+  const handleReplyList = () => {
     const {
-      size = 20,
-      page = 0,
+      size = 10,
+      replyPage = 1,
       direction = 'ASC'
     } = qs.parse(location.search, {
       ignoreQueryPrefix: true
     });
     const { postId } = match.params;
-    dispatch(loadReplyList({ postId, direction, size, page }));
-    dispatch(initializeField());
-  }, [dispatch, location.search, add, update]);
 
-  return <ReplyList data={data && data.data} loading={loading} error={error} />;
+    setMyReplyPage(replyPage);
+    dispatch(loadReplyList({ postId, direction, size, page: replyPage - 1 }));
+  };
+
+  useEffect(() => {
+    handleReplyList();
+  }, [location.search]);
+
+  useEffect(() => {
+    handleReplyList();
+    dispatch(initializeField());
+  }, [dispatch, add, update]);
+
+  return (
+    <ReplyList
+      data={data && data.data}
+      loading={loading}
+      error={error}
+      totalPage={data && data.totalPage}
+      page={myReplyPage}
+      boardId={match.params.boardId}
+      postId={match.params.postId}
+    />
+  );
 };
 export default withRouter(ReplyListContainer);
