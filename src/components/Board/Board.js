@@ -190,13 +190,20 @@ const Unauthorized = () => {
   return <NoBoardBox>게시판 접근 권한이 없습니다 😅</NoBoardBox>;
 };
 
-const NoPost = () => {
-  return <NoBoardBox>게시판에 글이 하나도 없습니다 😅</NoBoardBox>;
+const NoPost = props => {
+  const { keyword } = props;
+  if (keyword === '') {
+    return <NoBoardBox>게시판에 아직 글이 없습니다 😅</NoBoardBox>;
+  }
+  return (
+    <NoBoardBox>
+      <div>{`${keyword}의 검색결과가 하나도 없습니다 😅`}</div>
+    </NoBoardBox>
+  );
 };
 
 const MainTable = props => {
   const { res } = props;
-  console.log(res);
   const tableColumns = ['번호', '제목', '닉네임', '정보'];
 
   return (
@@ -288,10 +295,6 @@ const Board = props => {
       </MainWrapper>
     );
   }
-
-  if (data.data.postListItem.content.length === 0) {
-    return <NoPost />;
-  }
   const res = data.data;
   return (
     <MainWrapper>
@@ -303,8 +306,14 @@ const Board = props => {
         onSearch={onSearch}
         onSearchChange={onSearchChange}
       />
-      <MainTable res={res} />
-      <Paginations res={res} onChange={onChange} />
+      {res.postListItem.content.length === 0 ? (
+        <NoPost keyword={keyword} />
+      ) : (
+        <>
+          <MainTable res={res} />
+          <Paginations res={res} onChange={onChange} />
+        </>
+      )}
     </MainWrapper>
   );
 };
