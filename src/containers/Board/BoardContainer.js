@@ -39,10 +39,11 @@ const BoardContainer = () => {
     if (e.target.outerText !== undefined) {
       setPageNumber(Number(e.target.outerText));
     }
-    if (e.target.id === 'text') {
-      const { value } = e.target;
-      setKeyword(value);
-    }
+  };
+
+  const onSearchChange = e => {
+    const { value } = e.target;
+    setKeyword(value);
   };
 
   const onPostSearchTypeChange = e => {
@@ -88,6 +89,7 @@ const BoardContainer = () => {
       error={error}
       nowBoard={nowBoard}
       onChange={onChange}
+      onSearchChange={onSearchChange}
       onSearch={onSearch}
       keyword={keyword}
       onPostSearchTypeChange={onPostSearchTypeChange}

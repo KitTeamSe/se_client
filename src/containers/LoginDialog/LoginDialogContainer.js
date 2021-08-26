@@ -92,7 +92,7 @@ const LoginDialogContainer = () => {
 
   return (
     <>
-      {data ? (
+      {localStorage.getItem('token') ? (
         <LogoutDialog onLogout={onLogout} ProfileClick={ProfileClick} />
       ) : (
         <>

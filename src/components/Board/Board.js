@@ -120,10 +120,12 @@ const BoardHead = styled.div`
 const FormSelectField = styled(Select)`
   margin-right: 2px;
   width: auto;
+  height: 2rem;
 `;
 
 const BoardHeadRight = styled.div`
   display: flex;
+  align-items: center;
 `;
 
 const Paginations = props => {
@@ -153,7 +155,7 @@ const PostTitle = props => {
       <NoneBorderCell>
         <Title href={`post/${postInfo.postId}`}>{postInfo.title}</Title>
         <IconMargin>
-          {postInfo.isSecret === 'NORMAL' ? <InfoIcon icon={faLock} /> : <></>}
+          {postInfo.isSecret === 'NORMAL' ? <></> : <InfoIcon icon={faLock} />}
         </IconMargin>
       </NoneBorderCell>
       <NoneBorderCell align="center">
@@ -188,7 +190,7 @@ const MainTable = props => {
     boardId: 0,
     postId: 0,
     isNotice: 'NORMAL',
-    isSecret: 'isSecret',
+    isSecret: 'SECRET',
     previewText: '텍스트트트트트트',
     title: '게시판에 글이 하나도 없습니다',
     createAt: [0, 0, 0, 0, 0, 0],
@@ -227,8 +229,8 @@ const BoardHeader = props => {
     postSearchType,
     onPostSearchTypeChange,
     keyword,
-    onChange,
-    onSearch
+    onSearch,
+    onSearchChange
   } = props;
   return (
     <BoardHead>
@@ -253,7 +255,7 @@ const BoardHeader = props => {
             variant="outlined"
             value={keyword}
             label="검색"
-            onChange={onChange}
+            onChange={onSearchChange}
           />
         </SearchBar>
       </BoardHeadRight>
@@ -264,6 +266,7 @@ const BoardHeader = props => {
 const Board = props => {
   const {
     onChange,
+    onSearchChange,
     data,
     loading,
     error,
@@ -294,8 +297,8 @@ const Board = props => {
             postSearchType={postSearchType}
             onPostSearchTypeChange={onPostSearchTypeChange}
             keyword={keyword}
-            onChange={onChange}
             onSearch={onSearch}
+            onSearchChange={onSearchChange}
           />
           <MainTable res={res} />
           <Paginations res={res} onChange={onChange} />

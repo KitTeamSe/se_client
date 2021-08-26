@@ -11,7 +11,7 @@ const makePost = async () => {
     },
     boardId: 1,
     isNotice: 'NORMAL',
-    isSecret: 'SECRET',
+    isSecret: 'NORMAL',
     postContent: {
       text: 'ㅇㅁ니럼ㄴ아럼ㄴ이ㅏ럼ㄴ이ㅏ럼나ㅣㅓ라ㅣㄴㅇ멀',
       title:
