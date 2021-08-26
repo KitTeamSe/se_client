@@ -19,8 +19,6 @@ const [LOAD_MENU_LIST, LOAD_MENU_LIST_SUCCESS, LOAD_MENU_LIST_FAILURE] =
 const [SEARCH_POST, SEARCH_POST_SUCCESS, SEARCH_POST_FAILURE] =
   createRequestActionTypes('post/SEARCH_POST');
 
-const BOARD_CHANGE = 'post/BOARD_CHANGE';
-
 // Action Creators
 export const initialize = createAction(INITIALIZE);
 
@@ -38,10 +36,6 @@ export const searchPost = createAction(
   })
 );
 
-export const boardChange = createAction(BOARD_CHANGE, ({ value }) => ({
-  value
-}));
-
 // Sagas
 const loadPostListSaga = createRequestSaga(LOAD_POST_LIST, api.loadPostList);
 const loadMenuListSage = createRequestSaga(LOAD_MENU_LIST, api.loadMenuList);
@@ -56,18 +50,12 @@ export function* postSaga() {
 // reducer (handleActions => switch문 대체)
 const initialState = {
   loadedPostList: reducerUtils.initial(),
-  loadedMenuList: reducerUtils.initial(),
-  selectBoard: { value: {} }
+  loadedMenuList: reducerUtils.initial()
 };
 
 export default handleActions(
   {
     [INITIALIZE]: () => initialState,
-    [BOARD_CHANGE]: (state, { payload: value }) => ({
-      ...state,
-      selectBoard: value,
-      loadedPostList: reducerUtils.initial()
-    }),
     [LOAD_POST_LIST]: state => ({
       ...state,
       loadedPostList: reducerUtils.loading(state.loadedPostList.data)

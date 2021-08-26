@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { CircularProgress } from '@material-ui/core';
 import LoginDialogContainer from '../../containers/LoginDialog/LoginDialogContainer';
 
 const HeaderWraper = styled.header`
@@ -51,18 +52,24 @@ const MenuItem = styled.a`
   text-decoration: none;
 `;
 
+const LoadingCircle = styled(CircularProgress)`
+  position: fixed;
+  top: 45vh;
+  right: 50vw;
+`;
+
 const Menu = props => {
-  const { menuList, path, MenuClick } = props;
+  const { data, path, MenuClick } = props;
   return (
     <>
-      {menuList.map(menu => (
+      {data.data.map(menu => (
         <MenuItem
           onClick={MenuClick}
           key={menu.url}
-          href={menu.url}
-          style={{ color: path === `/${menu.url}` ? 'black' : 'gray' }}
+          href={menu.boardId}
+          style={{ color: path === `/${menu.boardId}` ? 'black' : 'gray' }}
         >
-          {menu.name}
+          {menu.nameKor}
         </MenuItem>
       ))}
     </>
@@ -70,13 +77,16 @@ const Menu = props => {
 };
 
 const Header = props => {
-  const { path, LogoClick, menuList, MenuClick } = props;
-
+  const { path, LogoClick, MenuClick, data, loading, error } = props;
+  console.log(data, loading, error);
+  if (data === null || loading) {
+    return <LoadingCircle />;
+  }
   return (
     <HeaderWraper>
       <LogoWrapper onClick={LogoClick}>Logo</LogoWrapper>
       <MenuWrapper>
-        <Menu menuList={menuList} path={path} MenuClick={MenuClick} />
+        <Menu path={path} MenuClick={MenuClick} data={data} />
       </MenuWrapper>
       <NavigationWrapper>
         <LoginDialogContainer />
