@@ -128,12 +128,16 @@ const BoardHeadRight = styled.div`
   align-items: center;
 `;
 
+const PaginationStyled = styled(Pagination)`
+  margin: 8px;
+`;
+
 const Paginations = props => {
   const { res, onChange } = props;
   const totalPage = res.postListItem.totalPages;
   const page = Number(res.postListItem.number) + 1;
   return (
-    <Pagination
+    <PaginationStyled
       component="div"
       count={totalPage}
       page={page}
@@ -180,6 +184,10 @@ const PostTitle = props => {
 
 const NoBoard = () => {
   return <NoBoardBox>게시판이 아직 만들어지지 않았어요 😅</NoBoardBox>;
+};
+
+const Unauthorized = () => {
+  return <NoBoardBox>게시판 접근 권한이 없습니다 😅</NoBoardBox>;
 };
 
 const MainTable = props => {
@@ -278,6 +286,9 @@ const Board = props => {
   } = props;
 
   if (error) {
+    if (error.status === 403) {
+      return <Unauthorized />;
+    }
     return <NoBoard />;
   }
   if (data === null || loading) {
