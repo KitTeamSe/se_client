@@ -62,3 +62,9 @@ export const postSearchTypeList = [
   { type: 'USERID', name: '사용자 ID' },
   { type: 'TAG', name: '태그' }
 ];
+
+export const tagList = {
+  1: { name: '1학년', color1: '74f2ce', color2: '7cffcb' },
+  2: { name: '2학년', color1: '83eaf1', color2: '63a4ff' },
+  3: { name: '3학년', color1: 'f6f0c4', color2: 'd99ec9' }
+};

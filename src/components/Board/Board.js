@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { postSearchTypeList } from '../../DataExport';
+import { postSearchTypeList, tagList } from '../../DataExport';
 
 const LoadingCircle = styled(CircularProgress)`
   position: absolute;
@@ -51,6 +51,18 @@ const TableHeader = styled(TableRow)`
 const IconMargin = styled.span`
   display: inline-block;
   margin: 2px;
+`;
+
+const TagIcon = styled.span`
+  padding: 0px 4px;
+  margin: 2px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  background-image: linear-gradient(
+    to right,
+    #${props => props.color1} 0%,
+    #${props => props.color2} 100%
+  );
 `;
 
 const InfoBox = styled.div`
@@ -148,33 +160,46 @@ const Paginations = props => {
 
 const PostTitle = props => {
   const { postInfo } = props;
-  const { createAt } = postInfo;
+  const { postId, title, isSecret, nickname, numReply, views, tags, createAt } =
+    postInfo;
   const writeTime = `${createAt[0]}년${createAt[1]}월${createAt[2]}일 ${createAt[3]}:${createAt[4]}`;
-
+  console.log(tagList);
   return (
     <PostContent>
       <NoneBorderCell align="center">
-        <PostNumber>{postInfo.postId}</PostNumber>
+        <PostNumber>{postId}</PostNumber>
       </NoneBorderCell>
       <NoneBorderCell>
-        <Title href={`post/${postInfo.postId}`}>{postInfo.title}</Title>
+        <Title href={`post/${postId}`}>{title}</Title>
         <IconMargin>
-          {postInfo.isSecret === 'NORMAL' ? <></> : <InfoIcon icon={faLock} />}
+          {isSecret === 'NORMAL' ? <></> : <InfoIcon icon={faLock} />}
         </IconMargin>
+        {tags.length === 0 ? (
+          <></>
+        ) : (
+          tags.map(tag => (
+            <TagIcon
+              color1={tagList[tag.tagId].color1}
+              color2={tagList[tag.tagId].color2}
+            >
+              {tagList[tag.tagId].name}
+            </TagIcon>
+          ))
+        )}
       </NoneBorderCell>
       <NoneBorderCell align="center">
-        <NickName>{postInfo.nickname}</NickName>
+        <NickName>{nickname}</NickName>
       </NoneBorderCell>
       <NoneBorderCell align="center">
         <InfoBox>
           <IconMargin>{writeTime}</IconMargin>
           <IconMargin>
             <InfoIcon icon={faCommentAlt} />
-            {postInfo.numReply}
+            {numReply}
           </IconMargin>
           <IconMargin>
             <InfoIcon icon={faEye} />
-            {postInfo.views}
+            {views}
           </IconMargin>
         </InfoBox>
       </NoneBorderCell>
