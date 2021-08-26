@@ -163,7 +163,6 @@ const PostTitle = props => {
   const { postId, title, isSecret, nickname, numReply, views, tags, createAt } =
     postInfo;
   const writeTime = `${createAt[0]}년${createAt[1]}월${createAt[2]}일 ${createAt[3]}:${createAt[4]}`;
-  console.log(tagList);
   return (
     <PostContent>
       <NoneBorderCell align="center">
@@ -181,6 +180,7 @@ const PostTitle = props => {
             <TagIcon
               color1={tagList[tag.tagId].color1}
               color2={tagList[tag.tagId].color2}
+              key={tag.tagId}
             >
               {tagList[tag.tagId].name}
             </TagIcon>
