@@ -14,7 +14,7 @@ import {
   Select,
   MenuItem
 } from '@material-ui/core';
-import { Pagination as Paginations } from '@material-ui/lab';
+import { Pagination } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { postSearchTypeList } from '../../DataExport';
 
@@ -68,13 +68,6 @@ const NickName = styled.span`
 const InfoIcon = styled(FontAwesomeIcon)`
   margin: 1px;
   color: gray;
-`;
-
-const PaginationStyled = styled(Paginations)`
-  & ul {
-    justify-content: center;
-    padding: 10px;
-  }
 `;
 
 const PostContent = styled(TableRow)`
@@ -133,18 +126,16 @@ const BoardHeadRight = styled.div`
   display: flex;
 `;
 
-const Pagination = props => {
+const Paginations = props => {
   const { res, onChange } = props;
   const totalPage = res.postListItem.totalPages;
   const page = Number(res.postListItem.number) + 1;
   return (
-    <PaginationStyled
+    <Pagination
       component="div"
       count={totalPage}
-      page={parseInt(page, 10)}
+      page={page}
       onChange={onChange}
-      showFirstButton
-      showLastButton
     />
   );
 };
@@ -162,7 +153,7 @@ const PostTitle = props => {
       <NoneBorderCell>
         <Title href={`post/${postInfo.postId}`}>{postInfo.title}</Title>
         <IconMargin>
-          {postInfo.isSecret === 'NORMAL' ? <></> : <InfoIcon icon={faLock} />}
+          {postInfo.isSecret === 'NORMAL' ? <InfoIcon icon={faLock} /> : <></>}
         </IconMargin>
       </NoneBorderCell>
       <NoneBorderCell align="center">
@@ -197,7 +188,7 @@ const MainTable = props => {
     boardId: 0,
     postId: 0,
     isNotice: 'NORMAL',
-    isSecret: 'NORMAL',
+    isSecret: 'isSecret',
     previewText: '텍스트트트트트트',
     title: '게시판에 글이 하나도 없습니다',
     createAt: [0, 0, 0, 0, 0, 0],
@@ -282,10 +273,10 @@ const Board = props => {
     onPostSearchTypeChange,
     postSearchType
   } = props;
-  if (error === 1) {
-    console.log(error);
-  }
 
+  if (error) {
+    return <NoBoard />;
+  }
   if (data === null || loading) {
     return (
       <MainWrapper>
@@ -294,10 +285,9 @@ const Board = props => {
     );
   }
   const res = data.data;
-
   return (
     <MainWrapper>
-      {Object.keys(nowBoard).length !== 0 ? (
+      {error === null ? (
         <>
           <BoardHeader
             nowBoard={nowBoard}
@@ -308,7 +298,7 @@ const Board = props => {
             onSearch={onSearch}
           />
           <MainTable res={res} />
-          <Pagination res={res} onChange={onChange} />
+          <Paginations res={res} onChange={onChange} />
         </>
       ) : (
         <NoBoard />

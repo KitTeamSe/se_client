@@ -11,6 +11,7 @@ const HeaderWraper = styled.header`
   justify-content: space-between;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   background-color: white;
+  z-index: 10;
 `;
 
 const NavigationWrapper = styled.div`
@@ -47,39 +48,23 @@ const MenuItem = styled.a`
   cursor: pointer;
   font-weight: 600;
   font-size: 1rem;
-  &:link {
-    text-decoration: none;
-  }
-`;
-
-const NowMenuItem = styled.span`
-  color: black;
-  padding: 8px 12px;
-  cursor: pointer;
-  font-weight: 800;
-  &:link {
-    text-decoration: none;
-  }
+  text-decoration: none;
 `;
 
 const Menu = props => {
   const { menuList, path, MenuClick } = props;
   return (
     <>
-      {menuList.map(menu => {
-        if (path === `/${menu.url}`) {
-          return (
-            <NowMenuItem key={menu.url} href={menu.url}>
-              {menu.name}
-            </NowMenuItem>
-          );
-        }
-        return (
-          <MenuItem onClick={MenuClick} key={menu.url} href={menu.url}>
-            {menu.name}
-          </MenuItem>
-        );
-      })}
+      {menuList.map(menu => (
+        <MenuItem
+          onClick={MenuClick}
+          key={menu.url}
+          href={menu.url}
+          style={{ color: path === `/${menu.url}` ? 'black' : 'gray' }}
+        >
+          {menu.name}
+        </MenuItem>
+      ))}
     </>
   );
 };

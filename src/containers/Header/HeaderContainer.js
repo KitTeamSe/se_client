@@ -29,7 +29,7 @@ const HeaderContainer = () => {
           const boardValue = loadedMenu.data[i];
           dispatch(boardChange({ value: boardValue }));
         } else {
-          dispatch(boardChange({ value: {} }));
+          dispatch(boardChange({ value: { boardId: 0 } }));
         }
       }
     }

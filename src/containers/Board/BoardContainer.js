@@ -15,6 +15,7 @@ const BoardContainer = () => {
     error: post.loadedPostList.error,
     nowBoard: post.selectBoard.value
   }));
+
   const nowUrl = window.location.pathname;
   if (path !== nowUrl) {
     setPath(nowUrl);
@@ -38,7 +39,7 @@ const BoardContainer = () => {
     if (e.target.outerText !== undefined) {
       setPageNumber(Number(e.target.outerText));
     }
-    if (e.target.value !== undefined) {
+    if (e.target.id === 'text') {
       const { value } = e.target;
       setKeyword(value);
     }
@@ -65,8 +66,9 @@ const BoardContainer = () => {
       page: 1,
       size: 20
     };
-    if (nowBoard.value.boardId !== null) {
-      const { boardId } = nowBoard.value;
+    console.log(nowBoard);
+    if (nowBoard.boardId !== null) {
+      const { boardId } = nowBoard;
       const postSearchRequest = {
         boardId,
         keyword,
