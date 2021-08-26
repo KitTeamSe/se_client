@@ -190,21 +190,15 @@ const Unauthorized = () => {
   return <NoBoardBox>게시판 접근 권한이 없습니다 😅</NoBoardBox>;
 };
 
+const NoPost = () => {
+  return <NoBoardBox>게시판에 글이 하나도 없습니다 😅</NoBoardBox>;
+};
+
 const MainTable = props => {
   const { res } = props;
+  console.log(res);
   const tableColumns = ['번호', '제목', '닉네임', '정보'];
-  const noPost = {
-    nickname: '시스템',
-    boardId: 0,
-    postId: 0,
-    isNotice: 'NORMAL',
-    isSecret: 'SECRET',
-    previewText: '텍스트트트트트트',
-    title: '게시판에 글이 하나도 없습니다',
-    createAt: [0, 0, 0, 0, 0, 0],
-    numReply: 0,
-    views: 0
-  };
+
   return (
     <TableContainer component={Paper}>
       <Table size="small">
@@ -218,13 +212,9 @@ const MainTable = props => {
           </TableHeader>
         </TableHead>
         <TableBody>
-          {res !== null && res.postListItem.content.length !== 0 ? (
-            res.postListItem.content.map(postInfo => (
-              <PostTitle key={postInfo.postId} postInfo={postInfo} />
-            ))
-          ) : (
-            <PostTitle key={0} postInfo={noPost} />
-          )}
+          {res.postListItem.content.map(postInfo => (
+            <PostTitle key={postInfo.postId} postInfo={postInfo} />
+          ))}
         </TableBody>
       </Table>
     </TableContainer>
@@ -298,25 +288,23 @@ const Board = props => {
       </MainWrapper>
     );
   }
+
+  if (data.data.postListItem.content.length === 0) {
+    return <NoPost />;
+  }
   const res = data.data;
   return (
     <MainWrapper>
-      {error === null ? (
-        <>
-          <BoardHeader
-            nowBoard={nowBoard}
-            postSearchType={postSearchType}
-            onPostSearchTypeChange={onPostSearchTypeChange}
-            keyword={keyword}
-            onSearch={onSearch}
-            onSearchChange={onSearchChange}
-          />
-          <MainTable res={res} />
-          <Paginations res={res} onChange={onChange} />
-        </>
-      ) : (
-        <NoBoard />
-      )}
+      <BoardHeader
+        nowBoard={nowBoard}
+        postSearchType={postSearchType}
+        onPostSearchTypeChange={onPostSearchTypeChange}
+        keyword={keyword}
+        onSearch={onSearch}
+        onSearchChange={onSearchChange}
+      />
+      <MainTable res={res} />
+      <Paginations res={res} onChange={onChange} />
     </MainWrapper>
   );
 };

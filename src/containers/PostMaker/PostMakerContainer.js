@@ -5,10 +5,14 @@ import { makeSomePost } from '../../libs/api/post';
 const makePost = async () => {
   const attachedFiles = [];
   const data = {
-    anonymous: {
-      anonymousNickname: '길무짱',
-      anonymousPassword: '1234'
-    },
+    tagList: [
+      {
+        tagId: 2
+      },
+      {
+        tagId: 3
+      }
+    ],
     boardId: 1,
     isNotice: 'NORMAL',
     isSecret: 'NORMAL',
