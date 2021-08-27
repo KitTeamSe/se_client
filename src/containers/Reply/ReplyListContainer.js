@@ -8,13 +8,16 @@ import { initializeField, loadReplyList } from '../../modules/reply';
 const ReplyListContainer = props => {
   const { location, match } = props;
   const dispatch = useDispatch();
-  const { data, loading, error, add, update } = useSelector(({ reply }) => ({
-    data: reply.loadReplyList.data,
-    loading: reply.loadReplyList.loading,
-    error: reply.loadReplyList.error,
-    add: reply.addReply.data,
-    update: reply.updateReply.data
-  }));
+  const { data, loading, error, add, update, remove } = useSelector(
+    ({ reply }) => ({
+      data: reply.loadReplyList.data,
+      loading: reply.loadReplyList.loading,
+      error: reply.loadReplyList.error,
+      add: reply.addReply.data,
+      update: reply.updateReply.data,
+      remove: reply.removeReply.data
+    })
+  );
   const [myReplyPage, setMyReplyPage] = useState(1);
 
   const handleReplyList = () => {
@@ -33,7 +36,7 @@ const ReplyListContainer = props => {
 
   useEffect(() => {
     handleReplyList();
-  }, [location.search]);
+  }, [location.search, remove]);
 
   useEffect(() => {
     handleReplyList();
