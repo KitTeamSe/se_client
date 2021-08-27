@@ -86,7 +86,7 @@ const Header = props => {
   }
   return (
     <HeaderWraper>
-      <LogoWrapper to="/">SE Board</LogoWrapper>
+      <LogoWrapper to="/1">SE Board</LogoWrapper>
       <MenuWrapper>
         <Menu path={path} data={data} />
       </MenuWrapper>

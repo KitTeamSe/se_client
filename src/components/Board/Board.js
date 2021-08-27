@@ -259,11 +259,12 @@ const BoardHeader = props => {
     onPostSearchTypeChange,
     keyword,
     onSearch,
-    onSearchChange
+    onSearchChange,
+    nowBoard
   } = props;
   return (
     <BoardHead>
-      <BoardTitle>{keyword}</BoardTitle>
+      <BoardTitle>{nowBoard !== null && nowBoard.description}</BoardTitle>
       <BoardHeadRight>
         <FormSelectField
           margin="dense"
@@ -302,7 +303,8 @@ const Board = props => {
     keyword,
     onSearch,
     onPostSearchTypeChange,
-    postSearchType
+    postSearchType,
+    nowBoard
   } = props;
 
   if (error) {
@@ -322,6 +324,7 @@ const Board = props => {
   return (
     <MainWrapper>
       <BoardHeader
+        nowBoard={nowBoard}
         postSearchType={postSearchType}
         onPostSearchTypeChange={onPostSearchTypeChange}
         keyword={keyword}

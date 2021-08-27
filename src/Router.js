@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
 import MainPage from './pages/MainPage';
 import ProfilePage from './pages/ProfilePage';
@@ -13,8 +13,11 @@ const Routes = () => (
     <Route path="/signup">
       <SignupPage />
     </Route>
-    <Route path="/">
+    <Route path="/:boardId">
       <MainPage />
+    </Route>
+    <Route path="/">
+      <Redirect to="/1" />
     </Route>
   </Switch>
 );

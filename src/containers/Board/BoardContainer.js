@@ -2,18 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Board from '../../components/Board/Board';
-import { loadPostList } from '../../modules/post';
+import { loadPostList, searchPost } from '../../modules/post';
 
 const BoardContainer = props => {
   const { location } = props;
   const dispatch = useDispatch();
   const [keyword, setKeyword] = useState('');
+  const [nowBoard, setNowBoard] = useState(null);
   const [postSearchType, setPostSearchType] = useState('TITLE_TEXT');
   const [pageNumber, setPageNumber] = useState(1);
-  const { data, loading, error } = useSelector(({ post }) => ({
+  const { data, loading, error, menuList } = useSelector(({ post }) => ({
     data: post.loadedPostList.data,
     loading: post.loadedPostList.loading,
-    error: post.loadedPostList.error
+    error: post.loadedPostList.error,
+    menuList: post.loadedMenuList.data
   }));
   const boardId = location.pathname.substring(1);
 
@@ -25,7 +27,17 @@ const BoardContainer = props => {
       size: 20
     };
     dispatch(loadPostList(parameter));
-  }, [pageNumber]);
+  }, [location]);
+
+  useEffect(() => {
+    if (menuList !== null) {
+      for (let i = 0; i < menuList.data.length; i += 1) {
+        if (menuList.data[i].boardId === Number(boardId)) {
+          setNowBoard(menuList.data[i]);
+        }
+      }
+    }
+  }, [menuList]);
 
   const onChange = e => {
     e.preventDefault();
@@ -45,35 +57,29 @@ const BoardContainer = props => {
     setPostSearchType(value);
   };
 
-  // const onSearch = e => {
-  //   e.preventDefault();
-  //   if (keyword.length === 0) {
-  //     console.log('한글자 이상 입력하세요');
-  //     return;
-  //   }
-  //   if (keyword.length > 50) {
-  //     console.log('최대 50자 까지만 입력 가능합니다');
-  //     return;
-  //   }
-  //   const pageRequest = {
-  //     direction: 'DESC',
-  //     page: 1,
-  //     size: 20
-  //   };
-  //   console.log(nowBoard);
-  //   if (nowBoard.boardId !== null) {
-  //     const { boardId } = nowBoard;
-  //     const postSearchRequest = {
-  //       boardId,
-  //       keyword,
-  //       pageRequest,
-  //       postSearchType
-  //     };
-  //     dispatch(searchPost({ postSearchRequest }));
-  //   } else {
-  //     console.log('선택된 게시판이 없습니다.');
-  //   }
-  // };
+  const onSearch = e => {
+    e.preventDefault();
+    if (keyword.length === 0) {
+      console.log('한글자 이상 입력하세요');
+      return;
+    }
+    if (keyword.length > 50) {
+      console.log('최대 50자 까지만 입력 가능합니다');
+      return;
+    }
+    const pageRequest = {
+      direction: 'DESC',
+      page: 1,
+      size: 20
+    };
+    const postSearchRequest = {
+      boardId,
+      keyword,
+      pageRequest,
+      postSearchType
+    };
+    dispatch(searchPost({ postSearchRequest }));
+  };
 
   return (
     <Board
@@ -82,10 +88,12 @@ const BoardContainer = props => {
       error={error}
       onChange={onChange}
       onSearchChange={onSearchChange}
-      // onSearch={onSearch}
+      onSearch={onSearch}
       keyword={keyword}
       onPostSearchTypeChange={onPostSearchTypeChange}
       postSearchType={postSearchType}
+      menuList={menuList}
+      nowBoard={nowBoard}
     />
   );
 };
