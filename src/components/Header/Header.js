@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { CircularProgress } from '@material-ui/core';
 import LoginDialogContainer from '../../containers/LoginDialog/LoginDialogContainer';
 
@@ -24,7 +25,7 @@ const NavigationWrapper = styled.div`
   align-items: center;
 `;
 
-const LogoWrapper = styled.div`
+const LogoWrapper = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -33,6 +34,8 @@ const LogoWrapper = styled.div`
   font-size: 1.75rem;
   font-weight: 700;
   margin-left: 4rem;
+  text-decoration: none;
+  color: #57bee1;
 `;
 
 const MenuWrapper = styled.nav`
@@ -43,7 +46,7 @@ const MenuWrapper = styled.nav`
   align-items: center;
 `;
 
-const MenuItem = styled.a`
+const MenuItem = styled(Link)`
   color: gray;
   padding: 8px 12px;
   cursor: pointer;
@@ -59,34 +62,33 @@ const LoadingCircle = styled(CircularProgress)`
 `;
 
 const Menu = props => {
-  const { data, path, MenuClick } = props;
+  const { data, path } = props;
   return (
-    <>
+    <ul>
       {data.data.map(menu => (
-        <MenuItem
-          onClick={MenuClick}
-          key={menu.url}
-          href={menu.boardId}
-          style={{ color: path === `/${menu.boardId}` ? 'black' : 'gray' }}
-        >
-          {menu.nameKor}
-        </MenuItem>
+        <li key={menu.boardId}>
+          <MenuItem
+            to={`/${menu.boardId}`}
+            style={{ color: path === `/${menu.boardId}` ? 'black' : 'gray' }}
+          >
+            {menu.nameKor}
+          </MenuItem>
+        </li>
       ))}
-    </>
+    </ul>
   );
 };
 
 const Header = props => {
-  const { path, LogoClick, MenuClick, data, loading, error } = props;
-  console.log(data, loading, error);
+  const { path, data, loading } = props;
   if (data === null || loading) {
     return <LoadingCircle />;
   }
   return (
     <HeaderWraper>
-      <LogoWrapper onClick={LogoClick}>Logo</LogoWrapper>
+      <LogoWrapper to="/">SE Board</LogoWrapper>
       <MenuWrapper>
-        <Menu path={path} MenuClick={MenuClick} data={data} />
+        <Menu path={path} data={data} />
       </MenuWrapper>
       <NavigationWrapper>
         <LoginDialogContainer />

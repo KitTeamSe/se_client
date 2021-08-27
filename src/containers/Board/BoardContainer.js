@@ -10,12 +10,12 @@ const BoardContainer = props => {
   const [keyword, setKeyword] = useState('');
   const [postSearchType, setPostSearchType] = useState('TITLE_TEXT');
   const [pageNumber, setPageNumber] = useState(1);
-  const { data, loading, error, nowBoard } = useSelector(({ post }) => ({
+  const { data, loading, error } = useSelector(({ post }) => ({
     data: post.loadedPostList.data,
     loading: post.loadedPostList.loading,
     error: post.loadedPostList.error
   }));
-  const boardId = location.pathname;
+  const boardId = location.pathname.substring(1);
 
   useEffect(() => {
     const parameter = {
@@ -25,7 +25,7 @@ const BoardContainer = props => {
       size: 20
     };
     dispatch(loadPostList(parameter));
-  }, [nowBoard, pageNumber]);
+  }, [pageNumber]);
 
   const onChange = e => {
     e.preventDefault();
@@ -80,7 +80,6 @@ const BoardContainer = props => {
       data={data}
       loading={loading}
       error={error}
-      nowBoard={nowBoard}
       onChange={onChange}
       onSearchChange={onSearchChange}
       // onSearch={onSearch}

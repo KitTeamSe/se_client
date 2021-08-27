@@ -255,7 +255,6 @@ const MainTable = props => {
 
 const BoardHeader = props => {
   const {
-    nowBoard,
     postSearchType,
     onPostSearchTypeChange,
     keyword,
@@ -264,7 +263,7 @@ const BoardHeader = props => {
   } = props;
   return (
     <BoardHead>
-      <BoardTitle>{nowBoard.description}</BoardTitle>
+      <BoardTitle>{keyword}</BoardTitle>
       <BoardHeadRight>
         <FormSelectField
           margin="dense"
@@ -300,7 +299,6 @@ const Board = props => {
     data,
     loading,
     error,
-    nowBoard,
     keyword,
     onSearch,
     onPostSearchTypeChange,
@@ -324,7 +322,6 @@ const Board = props => {
   return (
     <MainWrapper>
       <BoardHeader
-        nowBoard={nowBoard}
         postSearchType={postSearchType}
         onPostSearchTypeChange={onPostSearchTypeChange}
         keyword={keyword}
