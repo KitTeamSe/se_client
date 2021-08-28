@@ -62,14 +62,16 @@ const LoadingCircle = styled(CircularProgress)`
 `;
 
 const Menu = props => {
-  const { data, path } = props;
+  const { data, boardId } = props;
   return (
     <ul>
       {data.data.map(menu => (
         <li key={menu.boardId}>
           <MenuItem
             to={`/${menu.boardId}`}
-            style={{ color: path === `/${menu.boardId}` ? 'black' : 'gray' }}
+            style={{
+              color: Number(boardId) === menu.boardId ? 'black' : 'gray'
+            }}
           >
             {menu.nameKor}
           </MenuItem>
@@ -80,7 +82,7 @@ const Menu = props => {
 };
 
 const Header = props => {
-  const { path, data, loading } = props;
+  const { boardId, path, data, loading } = props;
   if (data === null || loading) {
     return <LoadingCircle />;
   }
@@ -88,7 +90,7 @@ const Header = props => {
     <HeaderWraper>
       <LogoWrapper to="/1">SE Board</LogoWrapper>
       <MenuWrapper>
-        <Menu path={path} data={data} />
+        <Menu boardId={boardId} path={path} data={data} />
       </MenuWrapper>
       <NavigationWrapper>
         <LoginDialogContainer />

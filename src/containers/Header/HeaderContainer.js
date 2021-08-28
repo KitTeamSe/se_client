@@ -5,7 +5,7 @@ import { loadMenuList } from '../../modules/post';
 import Header from '../../components/Header/Header';
 
 const HeaderContainer = props => {
-  const { location } = props;
+  const { location, match } = props;
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector(({ post }) => ({
     data: post.loadedMenuList.data,
@@ -13,12 +13,21 @@ const HeaderContainer = props => {
     error: post.loadedMenuList.error
   }));
   const path = location.pathname;
+  const { boardId } = match.params;
 
   useEffect(() => {
     dispatch(loadMenuList());
   }, []);
 
-  return <Header path={path} data={data} loading={loading} error={error} />;
+  return (
+    <Header
+      boardId={boardId}
+      path={path}
+      data={data}
+      loading={loading}
+      error={error}
+    />
+  );
 };
 
 export default withRouter(HeaderContainer);

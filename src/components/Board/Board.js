@@ -14,7 +14,7 @@ import {
   Select,
   MenuItem
 } from '@material-ui/core';
-import { Pagination } from '@material-ui/lab';
+import { Pagination, PaginationItem } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { postSearchTypeList, tagList } from '../../DataExport';
@@ -144,19 +144,31 @@ const BoardHeadRight = styled.div`
 `;
 
 const PaginationStyled = styled(Pagination)`
-  margin: 8px;
+  & ul {
+    justify-content: center;
+    padding: 10px;
+    & li {
+      padding: 4px;
+    }
+  }
 `;
 
 const Paginations = props => {
-  const { res, onChange } = props;
+  const { res, boardId, boardPage } = props;
   const totalPage = res.postListItem.totalPages;
-  const page = Number(res.postListItem.number) + 1;
   return (
     <PaginationStyled
       component="div"
+      size="small"
       count={totalPage}
-      page={page}
-      onChange={onChange}
+      page={boardPage ? parseInt(boardPage, 10) : 1}
+      renderItem={item => (
+        <PaginationItem
+          component={Link}
+          to={`/board/${boardId}?page=${item.page}`}
+          {...item}
+        />
+      )}
     />
   );
 };
@@ -270,7 +282,7 @@ const BoardHeader = props => {
       {nowBoard === null ? (
         <LoadingCircle />
       ) : (
-        <BoardTitle to={`/${nowBoard.boardId}`}>
+        <BoardTitle to={`/board${nowBoard.boardId}`}>
           {nowBoard.description}
         </BoardTitle>
       )}
@@ -314,7 +326,9 @@ const Board = props => {
     onSearch,
     onPostSearchTypeChange,
     postSearchType,
-    nowBoard
+    nowBoard,
+    boardId,
+    boardPage
   } = props;
 
   if (error) {
@@ -346,7 +360,12 @@ const Board = props => {
       ) : (
         <>
           <MainTable res={res} />
-          <Paginations res={res} onChange={onChange} />
+          <Paginations
+            res={res}
+            onChange={onChange}
+            boardId={boardId}
+            boardPage={boardPage}
+          />
         </>
       )}
     </MainWrapper>

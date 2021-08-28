@@ -1,33 +1,43 @@
 import React, { useEffect, useState } from 'react';
+import qs from 'qs';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Board from '../../components/Board/Board';
 import { loadPostList, searchPost } from '../../modules/post';
 
 const BoardContainer = props => {
-  const { location } = props;
+  const { location, match } = props;
   const dispatch = useDispatch();
   const [keyword, setKeyword] = useState('');
+  const [boardPage, setBoardPage] = useState(1);
   const [nowBoard, setNowBoard] = useState(null);
   const [postSearchType, setPostSearchType] = useState('TITLE_TEXT');
-  const [pageNumber, setPageNumber] = useState(1);
   const { data, loading, error, menuListObj } = useSelector(({ post }) => ({
     data: post.loadedPostList.data,
     loading: post.loadedPostList.loading,
     error: post.loadedPostList.error,
     menuListObj: post.loadedMenuList
   }));
-  const boardId = location.pathname.substring(1);
 
+  const { boardId } = match.params;
   useEffect(() => {
+    const {
+      size = 20,
+      page,
+      direction = 'DESC'
+    } = qs.parse(location.search, {
+      ignoreQueryPrefix: true
+    });
     const parameter = {
       boardId,
-      direction: 'DESC',
-      page: pageNumber - 1,
-      size: 20
+      direction,
+      page: page - 1,
+      size
     };
     dispatch(loadPostList(parameter));
-  }, [location, pageNumber]);
+    setBoardPage(page);
+  }, [location.search]);
+
   useEffect(() => {
     if (menuListObj.data !== null) {
       for (let i = 0; i < menuListObj.data.data.length; i += 1) {
@@ -40,9 +50,6 @@ const BoardContainer = props => {
 
   const onChange = e => {
     e.preventDefault();
-    if (e.target.outerText !== undefined) {
-      setPageNumber(Number(e.target.outerText));
-    }
   };
 
   const onSearchChange = e => {
@@ -93,6 +100,8 @@ const BoardContainer = props => {
       postSearchType={postSearchType}
       menuListObj={menuListObj}
       nowBoard={nowBoard}
+      boardId={boardId}
+      boardPage={boardPage}
     />
   );
 };

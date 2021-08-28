@@ -13,11 +13,11 @@ const Routes = () => (
     <Route path="/signup">
       <SignupPage />
     </Route>
-    <Route path="/:boardId">
+    <Route path="/board/:boardId">
       <MainPage />
     </Route>
     <Route path="/">
-      <Redirect to="/1" />
+      <Redirect to="/board/1?page=1" />
     </Route>
   </Switch>
 );
