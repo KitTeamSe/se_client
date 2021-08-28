@@ -43,11 +43,7 @@ const ReplyDelete = props => {
   return (
     <>
       <ButtonStyled onClick={handleOpen}>삭제</ButtonStyled>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="delete-dialog-title"
-      >
+      <Dialog open={open} aria-labelledby="delete-dialog-title">
         <DialogTitle id="delete-dialog-title">
           댓글을 삭제하시겠습니까?
         </DialogTitle>

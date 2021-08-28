@@ -3,7 +3,11 @@ import qs from 'qs';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ReplyList from '../../components/Reply/ReplyList';
-import { initializeField, loadReplyList } from '../../modules/reply';
+import {
+  initializeField,
+  initializeRemove,
+  loadReplyList
+} from '../../modules/reply';
 
 const ReplyListContainer = props => {
   const { location, match } = props;
@@ -36,12 +40,23 @@ const ReplyListContainer = props => {
 
   useEffect(() => {
     handleReplyList();
-  }, [location.search, remove]);
+  }, [location.search]);
 
   useEffect(() => {
-    handleReplyList();
-    dispatch(initializeField());
-  }, [dispatch, add, update]);
+    if (add) {
+      handleReplyList();
+      dispatch(initializeField());
+    }
+    if (update) {
+      handleReplyList();
+      dispatch(initializeField());
+    }
+    if (remove) {
+      handleReplyList();
+      dispatch(initializeField());
+      dispatch(initializeRemove());
+    }
+  }, [dispatch, add, update, remove]);
 
   return (
     <ReplyList
