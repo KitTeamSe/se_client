@@ -16,6 +16,7 @@ import {
 } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
 import { postSearchTypeList, tagList } from '../../DataExport';
 
 const LoadingCircle = styled(CircularProgress)`
@@ -23,12 +24,14 @@ const LoadingCircle = styled(CircularProgress)`
   bottom: 50vh;
 `;
 
-const BoardTitle = styled.div`
+const BoardTitle = styled(Link)`
   padding: 24px;
   font-size: 1.5rem;
   font-weight: 600;
   text-align: left;
   width: auto;
+  text-decoration: none;
+  color: black;
 `;
 
 const MainWrapper = styled.div`
@@ -93,7 +96,7 @@ const PostNumber = styled.span`
   font-size: 0.8rem;
 `;
 
-const Title = styled.a`
+const Title = styled(Link)`
   display: inline-block;
   font-size: 0.9rem;
   font-weight: 500;
@@ -169,7 +172,7 @@ const PostTitle = props => {
         <PostNumber>{postId}</PostNumber>
       </NoneBorderCell>
       <NoneBorderCell>
-        <Title href={`post/${postId}`}>{title}</Title>
+        <Title to={`post/${postId}`}>{title}</Title>
         <IconMargin>
           {isSecret === 'NORMAL' ? <></> : <InfoIcon icon={faLock} />}
         </IconMargin>
@@ -264,7 +267,14 @@ const BoardHeader = props => {
   } = props;
   return (
     <BoardHead>
-      <BoardTitle>{nowBoard !== null && nowBoard.description}</BoardTitle>
+      {nowBoard === null ? (
+        <LoadingCircle />
+      ) : (
+        <BoardTitle to={`/${nowBoard.boardId}`}>
+          {nowBoard.description}
+        </BoardTitle>
+      )}
+
       <BoardHeadRight>
         <FormSelectField
           margin="dense"

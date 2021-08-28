@@ -11,11 +11,11 @@ const BoardContainer = props => {
   const [nowBoard, setNowBoard] = useState(null);
   const [postSearchType, setPostSearchType] = useState('TITLE_TEXT');
   const [pageNumber, setPageNumber] = useState(1);
-  const { data, loading, error, menuList } = useSelector(({ post }) => ({
+  const { data, loading, error, menuListObj } = useSelector(({ post }) => ({
     data: post.loadedPostList.data,
     loading: post.loadedPostList.loading,
     error: post.loadedPostList.error,
-    menuList: post.loadedMenuList.data
+    menuListObj: post.loadedMenuList
   }));
   const boardId = location.pathname.substring(1);
 
@@ -27,17 +27,16 @@ const BoardContainer = props => {
       size: 20
     };
     dispatch(loadPostList(parameter));
-  }, [location]);
-
+  }, [location, pageNumber]);
   useEffect(() => {
-    if (menuList !== null) {
-      for (let i = 0; i < menuList.data.length; i += 1) {
-        if (menuList.data[i].boardId === Number(boardId)) {
-          setNowBoard(menuList.data[i]);
+    if (menuListObj.data !== null) {
+      for (let i = 0; i < menuListObj.data.data.length; i += 1) {
+        if (menuListObj.data.data[i].boardId === Number(boardId)) {
+          setNowBoard(menuListObj.data.data[i]);
         }
       }
     }
-  }, [menuList]);
+  }, [menuListObj]);
 
   const onChange = e => {
     e.preventDefault();
@@ -92,7 +91,7 @@ const BoardContainer = props => {
       keyword={keyword}
       onPostSearchTypeChange={onPostSearchTypeChange}
       postSearchType={postSearchType}
-      menuList={menuList}
+      menuListObj={menuListObj}
       nowBoard={nowBoard}
     />
   );
