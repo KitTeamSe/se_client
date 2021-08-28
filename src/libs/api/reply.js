@@ -99,8 +99,10 @@ export const getReplyList = ({ postId, direction, page, size }) => {
 
 export const removeReplyAnony = ({ password, replyId }) => {
   const anonymousReplyDeleteRequest = { password, replyId };
+  const token = localStorage.getItem('token');
+
   return client
-    .delete(`${URL}/anonymous`, anonymousReplyDeleteRequest)
+    .post(`${URL}/anonymous`, anonymousReplyDeleteRequest, tokenHeader(token))
     .catch(error => {
       if (error.response.data.code === 'GE05') {
         localStorage.clear();

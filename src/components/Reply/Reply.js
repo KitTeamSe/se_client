@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Avatar as AnonyAvatar, Typography } from '@material-ui/core';
 import { getFormatDate, getFormatTime } from '../../utils/format';
 import ReplyDeleteContainer from '../../containers/Reply/ReplyDeleteContainer';
+import ReplyAnonyDeleteContainer from '../../containers/Reply/ReplyAnonyDeleteContainer';
 
 const AvatarDiameter = `40px`;
 
@@ -149,7 +150,7 @@ const ReplyAction = props => {
       {anonymousNickname ? (
         <>
           <ActionButton onClick={() => console.log(replyId)}>수정</ActionButton>
-          <ActionButton onClick={() => console.log(replyId)}>삭제</ActionButton>
+          <ReplyAnonyDeleteContainer replyId={replyId} />
         </>
       ) : null}
     </ActionWrapper>

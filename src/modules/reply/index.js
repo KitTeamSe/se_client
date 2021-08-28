@@ -119,6 +119,9 @@ const initialState = {
     postId: null,
     text: ''
   },
+  removeForm: {
+    password: ''
+  },
   addReply: reducerUtils.initial(),
   updateReply: reducerUtils.initial(),
   removeReply: reducerUtils.initial(),
@@ -144,6 +147,9 @@ export default handleActions(
         parentId: null,
         postId: null,
         text: ''
+      },
+      removeForm: {
+        password: ''
       }
     }),
     [INITIALIZE_DELETE]: state => ({
