@@ -17,18 +17,10 @@ const Routes = () => (
     <HeaderContainer />
     <BodyContainer>
       <Switch>
-        <Route path="/profile">
-          <ProfilePageContainer />
-        </Route>
-        <Route path="/signup">
-          <SignupPageContainer />
-        </Route>
-        <Route path="/board/:boardId">
-          <BoardContainer />
-        </Route>
-        <Route path="/post/:boardId/:postId">
-          <PostContainer />
-        </Route>
+        <Route path="/profile" component={ProfilePageContainer} />
+        <Route path="/signup" component={SignupPageContainer} />
+        <Route path="/board/:boardId" component={BoardContainer} />
+        <Route path="/post/:boardId/:postId" component={PostContainer} />
         <Route path="/">
           <Redirect to="/board/1?page=1" />
         </Route>
