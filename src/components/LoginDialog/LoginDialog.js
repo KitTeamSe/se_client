@@ -152,7 +152,7 @@ const LoginDialog = props => {
                 </FindLink>
               </FindButtonWrapper>
               <LoginButton type="submit">로그인</LoginButton>
-              <SignupLink onClick={handleClose} to="signup">
+              <SignupLink onClick={handleClose} to="/signup">
                 회원가입
               </SignupLink>
             </LinkWrapper>
