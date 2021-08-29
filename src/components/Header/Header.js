@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { CircularProgress } from '@material-ui/core';
 import LoginDialogContainer from '../../containers/LoginDialog/LoginDialogContainer';
 
@@ -46,7 +46,7 @@ const MenuWrapper = styled.nav`
   align-items: center;
 `;
 
-const MenuItem = styled(Link)`
+const MenuItem = styled(NavLink)`
   color: gray;
   padding: 8px 12px;
   cursor: pointer;
@@ -62,16 +62,14 @@ const LoadingCircle = styled(CircularProgress)`
 `;
 
 const Menu = props => {
-  const { data, boardId } = props;
+  const { data } = props;
   return (
     <ul>
       {data.data.map(menu => (
         <li key={menu.boardId}>
           <MenuItem
-            to={`/${menu.boardId}`}
-            style={{
-              color: Number(boardId) === menu.boardId ? 'black' : 'gray'
-            }}
+            to={`/board/${menu.boardId}`}
+            activeStyle={{ color: 'black' }}
           >
             {menu.nameKor}
           </MenuItem>

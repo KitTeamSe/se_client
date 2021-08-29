@@ -19,15 +19,30 @@ const BoardContainer = props => {
     menuListObj: post.loadedMenuList
   }));
 
+  const pageSize = 20;
+
   const { boardId } = match.params;
   useEffect(() => {
     const {
-      size = 20,
       page,
+      size = pageSize,
       direction = 'DESC'
     } = qs.parse(location.search, {
       ignoreQueryPrefix: true
     });
+
+    if (page === undefined) {
+      const parameter = {
+        boardId,
+        direction,
+        page: 0,
+        size
+      };
+      dispatch(loadPostList(parameter));
+      setBoardPage(1);
+      return;
+    }
+
     const parameter = {
       boardId,
       direction,
@@ -76,7 +91,7 @@ const BoardContainer = props => {
     const pageRequest = {
       direction: 'DESC',
       page: 1,
-      size: 20
+      size: pageSize
     };
     const postSearchRequest = {
       boardId,
