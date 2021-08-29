@@ -174,7 +174,7 @@ const Paginations = props => {
 };
 
 const PostTitle = props => {
-  const { postInfo } = props;
+  const { postInfo, boardId } = props;
   const { postId, title, isSecret, nickname, numReply, views, tags, createAt } =
     postInfo;
   const writeTime = `${createAt[0]}년${createAt[1]}월${createAt[2]}일 ${createAt[3]}:${createAt[4]}`;
@@ -184,7 +184,7 @@ const PostTitle = props => {
         <PostNumber>{postId}</PostNumber>
       </NoneBorderCell>
       <NoneBorderCell>
-        <Title to={`post/${postId}`}>{title}</Title>
+        <Title to={`/post/${boardId}/${postId}`}>{title}</Title>
         <IconMargin>
           {isSecret === 'NORMAL' ? <></> : <InfoIcon icon={faLock} />}
         </IconMargin>
@@ -243,7 +243,7 @@ const NoPost = props => {
 };
 
 const MainTable = props => {
-  const { res } = props;
+  const { res, boardId } = props;
   const tableColumns = ['번호', '제목', '닉네임', '정보'];
 
   return (
@@ -260,7 +260,11 @@ const MainTable = props => {
         </TableHead>
         <TableBody>
           {res.postListItem.content.map(postInfo => (
-            <PostTitle key={postInfo.postId} postInfo={postInfo} />
+            <PostTitle
+              key={postInfo.postId}
+              postInfo={postInfo}
+              boardId={boardId}
+            />
           ))}
         </TableBody>
       </Table>
@@ -359,7 +363,7 @@ const Board = props => {
         <NoPost keyword={keyword} />
       ) : (
         <>
-          <MainTable res={res} />
+          <MainTable res={res} boardId={boardId} />
           <Paginations
             res={res}
             onChange={onChange}

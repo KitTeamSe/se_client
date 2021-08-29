@@ -82,7 +82,7 @@ const Menu = props => {
 };
 
 const Header = props => {
-  const { boardId, path, data, loading } = props;
+  const { boardId, data, loading } = props;
   if (data === null || loading) {
     return <LoadingCircle />;
   }
@@ -90,7 +90,7 @@ const Header = props => {
     <HeaderWraper>
       <LogoWrapper to="/1">SE Board</LogoWrapper>
       <MenuWrapper>
-        <Menu boardId={boardId} path={path} data={data} />
+        <Menu boardId={boardId} data={data} />
       </MenuWrapper>
       <NavigationWrapper>
         <LoginDialogContainer />
