@@ -3,11 +3,14 @@ import styled from 'styled-components';
 
 import { Avatar as AnonyAvatar, Typography } from '@material-ui/core';
 import { getFormatDate, getFormatTime } from '../../utils/format';
+import ReplyDeleteContainer from '../../containers/Reply/ReplyDeleteContainer';
+import ReplyAnonyDeleteContainer from '../../containers/Reply/ReplyAnonyDeleteContainer';
 
 const AvatarDiameter = `40px`;
 
 const Comment = styled.div`
   padding: 0 10px;
+  font-size: 0.875rem;
 `;
 
 const Wrapper = styled.div`
@@ -19,6 +22,7 @@ const ReplyWrapper = styled.div`
   display: flex;
   padding: 10px 0 20px 10px;
   border-bottom: 1px solid #e9e9e9;
+  background: ${props => props.isDelete === 'DELETED' && '#eeeeee'};
 `;
 
 const ChildWrapper = styled(ReplyWrapper)`
@@ -58,6 +62,8 @@ const AnonyNickName = styled(Typography)`
 const NickName = styled(AnonyNickName)`
   font-weight: 500;
   cursor: pointer;
+  color: ${props =>
+    props.children === localStorage.getItem('userId') && '#1976d2'};
 `;
 
 const DateText = styled(Typography)`
@@ -88,11 +94,13 @@ const ButtonStyled = styled.button`
 
 const ActionButton = props => {
   const { children, onClick } = props;
+
   return <ButtonStyled onClick={onClick}>{children}</ButtonStyled>;
 };
 
 const ReplyInfo = props => {
   const { accountId, anonymousNickname, createAt } = props;
+
   return (
     <>
       <AvatarWrapper>
@@ -114,6 +122,7 @@ const ReplyInfo = props => {
 
 const ReplyComment = props => {
   const { content } = props;
+
   return (
     <CommentWrapper>
       <Comment
@@ -126,23 +135,22 @@ const ReplyComment = props => {
 
 const ReplyAction = props => {
   const { accountId, anonymousNickname, replyId } = props;
+
   return (
     <ActionWrapper>
       <ActionButton onClick={() => console.log(replyId)}>댓글</ActionButton>
       {localStorage.getItem('token') &&
       localStorage.getItem('userId') &&
-      accountId === localStorage.getItem('userId') ? (
+      accountId ? (
         <>
           <ActionButton onClick={() => console.log(replyId)}>수정</ActionButton>
-          <ActionButton onClick={() => console.log(replyId)}>삭제</ActionButton>
+          <ReplyDeleteContainer replyId={replyId} />
         </>
       ) : null}
-      {!localStorage.getItem('token') &&
-      !localStorage.getItem('userId') &&
-      anonymousNickname ? (
+      {anonymousNickname ? (
         <>
           <ActionButton onClick={() => console.log(replyId)}>수정</ActionButton>
-          <ActionButton onClick={() => console.log(replyId)}>삭제</ActionButton>
+          <ReplyAnonyDeleteContainer replyId={replyId} />
         </>
       ) : null}
     </ActionWrapper>
@@ -173,6 +181,7 @@ const ReplyContents = props => {
 
 const ChildReply = props => {
   const { replyId, accountId, anonymousNickname, content, createAt } = props;
+
   return (
     <ChildWrapper id={replyId}>
       <ReplyContents
@@ -187,11 +196,19 @@ const ChildReply = props => {
 };
 
 const Reply = props => {
-  const { replyId, accountId, anonymousNickname, content, createAt, child } =
-    props;
+  const {
+    replyId,
+    accountId,
+    anonymousNickname,
+    content,
+    createAt,
+    child,
+    isDelete
+  } = props;
+
   return (
     <>
-      <ReplyWrapper id={replyId}>
+      <ReplyWrapper id={replyId} isDelete={isDelete}>
         <ReplyContents
           replyId={replyId}
           accountId={accountId}
@@ -208,6 +225,7 @@ const Reply = props => {
               anonymousNickname={e.anonymousNickname}
               content={e.text}
               createAt={e.createAt}
+              isDelete={e.isDelete}
             />
           ))
         : null}

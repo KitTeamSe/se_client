@@ -11,6 +11,7 @@ import reducerUtils from '../../libs/reducerUtils';
 // Actions
 const INITIALIZE = 'reply/INITIALIZE';
 const INITIALIZE_FIELD = 'reply/INITIALIZE_FIELD';
+const INITIALIZE_DELETE = 'reply/INITIALIZE_DELETE';
 const CHANGE_FIELD = 'reply/CHANGE_FIELD';
 const [ADD_REPLY, ADD_REPLY_SUCCESS, ADD_REPLY_FAILURE] =
   createRequestActionTypes('reply/ADD_REPLY');
@@ -39,6 +40,7 @@ export const changeField = createAction(
     value
   })
 );
+export const initializeRemove = createAction(INITIALIZE_DELETE);
 export const addReply = createAction(
   ADD_REPLY,
   ({ anonymous, isSecret, parentId, postId, text, files }) => ({
@@ -117,6 +119,9 @@ const initialState = {
     postId: null,
     text: ''
   },
+  removeForm: {
+    password: ''
+  },
   addReply: reducerUtils.initial(),
   updateReply: reducerUtils.initial(),
   removeReply: reducerUtils.initial(),
@@ -142,7 +147,14 @@ export default handleActions(
         parentId: null,
         postId: null,
         text: ''
+      },
+      removeForm: {
+        password: ''
       }
+    }),
+    [INITIALIZE_DELETE]: state => ({
+      ...state,
+      removeReply: reducerUtils.initial()
     }),
     [CHANGE_FIELD]: (state, { payload: { key, form, value } }) =>
       produce(state, draft => {

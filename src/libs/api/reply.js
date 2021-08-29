@@ -61,14 +61,17 @@ export const updateReply = ({
   });
 };
 
-export const removeReply = ({ id }) =>
-  client.delete(`${URL}/${id}`).catch(error => {
+export const removeReply = ({ id }) => {
+  const token = localStorage.getItem('token');
+
+  return client.delete(`${URL}/${id}`, tokenHeader(token)).catch(error => {
     if (error.response.data.code === 'GE05') {
       localStorage.clear();
       window.location.reload(true);
     }
     throw error.response.data;
   });
+};
 
 export const getReplyById = ({ replyId }) =>
   client.get(`${URL}/${replyId}`).catch(error => {
@@ -96,8 +99,10 @@ export const getReplyList = ({ postId, direction, page, size }) => {
 
 export const removeReplyAnony = ({ password, replyId }) => {
   const anonymousReplyDeleteRequest = { password, replyId };
+  const token = localStorage.getItem('token');
+
   return client
-    .delete(`${URL}/anonymous`, anonymousReplyDeleteRequest)
+    .post(`${URL}/anonymous`, anonymousReplyDeleteRequest, tokenHeader(token))
     .catch(error => {
       if (error.response.data.code === 'GE05') {
         localStorage.clear();

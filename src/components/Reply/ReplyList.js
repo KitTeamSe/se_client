@@ -40,20 +40,20 @@ const ReplyList = props => {
 
   return (
     <>
-      {!loading && data && data.length ? (
-        data.map(e => (
-          <Reply
-            replyId={e.replyId}
-            accountId={e.accountId}
-            anonymousNickname={e.anonymousNickname}
-            content={e.text}
-            createAt={e.createAt}
-            child={e.child}
-          />
-        ))
-      ) : (
-        <div>댓글이 없습니다.</div>
-      )}
+      {!loading && data
+        ? data.map(e => (
+            <Reply
+              replyId={e.replyId}
+              accountId={e.accountId}
+              anonymousNickname={e.anonymousNickname}
+              content={e.text}
+              createAt={e.createAt}
+              child={e.child}
+              isDelete={e.isDelete}
+            />
+          ))
+        : null}
+      {data && !data.length && <div>작성된 댓글이 없습니다.</div>}
       {loading && <div>데이터를 불러오는 중입니다.</div>}
       {!loading && error ? (
         <div>
