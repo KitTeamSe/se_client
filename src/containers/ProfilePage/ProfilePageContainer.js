@@ -28,16 +28,20 @@ const ProfilePageContainer = () => {
 
   const {
     myinformation,
+    myinformationLoading,
     myinfoError,
     myinfoEditRes,
+    myinfoEditLoading,
     myinfoEditError,
     newPwForm,
     withDrawalForm
   } = useSelector(({ account }) => ({
-    myinformation: account.myinfo,
-    myinfoError: account.myinfoError,
-    myinfoEditRes: account.myinfoEditRes,
-    myinfoEditError: account.myinfoEditError,
+    myinformation: account.myinfo.data,
+    myinformationLoading: account.myinfo.loading,
+    myinfoError: account.myinfo.error,
+    myinfoEditRes: account.myinfoEditRes.data,
+    myinfoEditLoading: account.myinfoEditRes.loading,
+    myinfoEditError: account.myinfoEditRes.error,
     newPwForm: account.newPwForm,
     withDrawalForm: account.withDrawalForm
   }));
@@ -211,6 +215,8 @@ const ProfilePageContainer = () => {
       pwChangeSubmit={pwChangeSubmit}
       withdrawalSubmit={withdrawalSubmit}
       editFormRefresh={editFormRefresh}
+      myinformationLoading={myinformationLoading}
+      myinfoEditLoading={myinfoEditLoading}
     />
   );
 };

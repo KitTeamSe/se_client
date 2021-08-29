@@ -2,23 +2,36 @@ import React from 'react';
 import styled from 'styled-components';
 import { faEye, faCommentAlt, faLock } from '@fortawesome/free-solid-svg-icons';
 import {
+  CircularProgress,
   Table,
   TableHead,
   TableBody,
   TableRow,
   TableCell,
   TableContainer,
-  Paper
+  Paper,
+  TextField,
+  Select,
+  MenuItem
 } from '@material-ui/core';
-import { Pagination as Paginations } from '@material-ui/lab';
+import { Pagination, PaginationItem } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
+import { postSearchTypeList, tagList } from '../../DataExport';
 
-const BoardTitle = styled.div`
+const LoadingCircle = styled(CircularProgress)`
+  position: absolute;
+  bottom: 50vh;
+`;
+
+const BoardTitle = styled(Link)`
   padding: 24px;
   font-size: 1.5rem;
   font-weight: 600;
   text-align: left;
-  width: 70rem;
+  width: auto;
+  text-decoration: none;
+  color: black;
 `;
 
 const MainWrapper = styled.div`
@@ -43,6 +56,18 @@ const IconMargin = styled.span`
   margin: 2px;
 `;
 
+const TagIcon = styled.span`
+  padding: 0px 4px;
+  margin: 2px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  background-image: linear-gradient(
+    to right,
+    #${props => props.color1} 0%,
+    #${props => props.color2} 100%
+  );
+`;
+
 const InfoBox = styled.div`
   font-size: 0.75rem;
   width: 128px;
@@ -60,13 +85,6 @@ const InfoIcon = styled(FontAwesomeIcon)`
   color: gray;
 `;
 
-const PaginationStyled = styled(Paginations)`
-  & ul {
-    justify-content: center;
-    padding: 10px;
-  }
-`;
-
 const PostContent = styled(TableRow)`
   height: 36px;
   border-bottom: 1px solid #ddd;
@@ -78,14 +96,19 @@ const PostNumber = styled.span`
   font-size: 0.8rem;
 `;
 
-const Title = styled.a`
+const Title = styled(Link)`
   display: inline-block;
-  width: 640px;
   font-size: 0.9rem;
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  vertical-align: middle;
+  margin-right: 8px;
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0.5rem;
 `;
 
 const NoBoardBox = styled.div`
@@ -96,58 +119,103 @@ const NoBoardBox = styled.div`
   margin-top: 196px;
 `;
 
-const Pagination = props => {
-  const { totalPage, page, onChange } = props;
+const SearchBar = styled.form`
+  width: 196px;
+  padding: 4px;
+  margin: 8px;
+  align-items: center;
+`;
+
+const BoardHead = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+const FormSelectField = styled(Select)`
+  margin-right: 2px;
+  width: auto;
+  height: 2rem;
+`;
+
+const BoardHeadRight = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const PaginationStyled = styled(Pagination)`
+  & ul {
+    justify-content: center;
+    padding: 10px;
+    & li {
+      padding: 4px;
+    }
+  }
+`;
+
+const Paginations = props => {
+  const { res, boardId, boardPage } = props;
+  const totalPage = res.postListItem.totalPages;
   return (
     <PaginationStyled
       component="div"
+      size="small"
       count={totalPage}
-      page={parseInt(page, 10)}
-      onChange={onChange}
-      showFirstButton
-      showLastButton
+      page={boardPage ? parseInt(boardPage, 10) : 1}
+      renderItem={item => (
+        <PaginationItem
+          component={Link}
+          to={`/board/${boardId}?page=${item.page}`}
+          {...item}
+        />
+      )}
     />
   );
 };
 
 const PostTitle = props => {
   const { postInfo } = props;
-  const { createAt } = postInfo;
+  const { postId, title, isSecret, nickname, numReply, views, tags, createAt } =
+    postInfo;
   const writeTime = `${createAt[0]}년${createAt[1]}월${createAt[2]}일 ${createAt[3]}:${createAt[4]}`;
-
   return (
     <PostContent>
       <NoneBorderCell align="center">
-        <PostNumber>{postInfo.postId}</PostNumber>
+        <PostNumber>{postId}</PostNumber>
       </NoneBorderCell>
       <NoneBorderCell>
-        <Title>{postInfo.title}</Title>
+        <Title to={`post/${postId}`}>{title}</Title>
+        <IconMargin>
+          {isSecret === 'NORMAL' ? <></> : <InfoIcon icon={faLock} />}
+        </IconMargin>
+        {tags.length === 0 ? (
+          <></>
+        ) : (
+          tags.map(tag => (
+            <TagIcon
+              color1={tagList[tag.tagId].color1}
+              color2={tagList[tag.tagId].color2}
+              key={tag.tagId}
+            >
+              {tagList[tag.tagId].name}
+            </TagIcon>
+          ))
+        )}
       </NoneBorderCell>
       <NoneBorderCell align="center">
-        <NickName>{postInfo.nickname}</NickName>
+        <NickName>{nickname}</NickName>
       </NoneBorderCell>
       <NoneBorderCell align="center">
         <InfoBox>
-          <div>
-            <IconMargin>{writeTime}</IconMargin>
-            {postInfo.isSecret === 'NORMAL' ? (
-              <></>
-            ) : (
-              <span>
-                <InfoIcon icon={faLock} />
-              </span>
-            )}
-          </div>
-          <div>
-            <IconMargin>
-              <InfoIcon icon={faCommentAlt} />
-              {postInfo.numReply}
-            </IconMargin>
-            <IconMargin>
-              <InfoIcon icon={faEye} />
-              {postInfo.views}
-            </IconMargin>
-          </div>
+          <IconMargin>{writeTime}</IconMargin>
+          <IconMargin>
+            <InfoIcon icon={faCommentAlt} />
+            {numReply}
+          </IconMargin>
+          <IconMargin>
+            <InfoIcon icon={faEye} />
+            {views}
+          </IconMargin>
         </InfoBox>
       </NoneBorderCell>
     </PostContent>
@@ -158,21 +226,26 @@ const NoBoard = () => {
   return <NoBoardBox>게시판이 아직 만들어지지 않았어요 😅</NoBoardBox>;
 };
 
+const Unauthorized = () => {
+  return <NoBoardBox>게시판 접근 권한이 없습니다 😅</NoBoardBox>;
+};
+
+const NoPost = props => {
+  const { keyword } = props;
+  if (keyword === '') {
+    return <NoBoardBox>게시판에 아직 글이 없습니다 😅</NoBoardBox>;
+  }
+  return (
+    <NoBoardBox>
+      <div>{`${keyword}의 검색결과가 하나도 없습니다 😅`}</div>
+    </NoBoardBox>
+  );
+};
+
 const MainTable = props => {
-  const { postListObj } = props;
+  const { res } = props;
   const tableColumns = ['번호', '제목', '닉네임', '정보'];
-  const noPost = {
-    nickname: '시스템',
-    boardId: 0,
-    postId: 0,
-    isNotice: 'NORMAL',
-    isSecret: 'NORMAL',
-    previewText: '텍스트트트트트트',
-    title: '게시판에 글이 하나도 없습니다',
-    createAt: [0, 0, 0, 0, 0, 0],
-    numReply: 0,
-    views: 0
-  };
+
   return (
     <TableContainer component={Paper}>
       <Table size="small">
@@ -186,32 +259,114 @@ const MainTable = props => {
           </TableHeader>
         </TableHead>
         <TableBody>
-          {postListObj !== null &&
-          postListObj.postListItem.content.length !== 0 ? (
-            postListObj.postListItem.content.map(postInfo => (
-              <PostTitle key={postInfo.postId} postInfo={postInfo} />
-            ))
-          ) : (
-            <PostTitle key={0} postInfo={noPost} />
-          )}
+          {res.postListItem.content.map(postInfo => (
+            <PostTitle key={postInfo.postId} postInfo={postInfo} />
+          ))}
         </TableBody>
       </Table>
     </TableContainer>
   );
 };
 
+const BoardHeader = props => {
+  const {
+    postSearchType,
+    onPostSearchTypeChange,
+    keyword,
+    onSearch,
+    onSearchChange,
+    nowBoard
+  } = props;
+  return (
+    <BoardHead>
+      {nowBoard === null ? (
+        <LoadingCircle />
+      ) : (
+        <BoardTitle to={`/board${nowBoard.boardId}`}>
+          {nowBoard.description}
+        </BoardTitle>
+      )}
+
+      <BoardHeadRight>
+        <FormSelectField
+          margin="dense"
+          value={postSearchType}
+          onChange={onPostSearchTypeChange}
+        >
+          {postSearchTypeList.map(type => (
+            <MenuItem value={type.type} key={type.type}>
+              {type.name}
+            </MenuItem>
+          ))}
+        </FormSelectField>
+        <SearchBar onSubmit={onSearch}>
+          <TextField
+            id="text"
+            type="text"
+            margin="dense"
+            variant="outlined"
+            value={keyword}
+            label="검색"
+            onChange={onSearchChange}
+          />
+        </SearchBar>
+      </BoardHeadRight>
+    </BoardHead>
+  );
+};
+
 const Board = props => {
-  const { totalPage, page, onChange, postListObj, nowBoard } = props;
+  const {
+    onChange,
+    onSearchChange,
+    data,
+    loading,
+    error,
+    keyword,
+    onSearch,
+    onPostSearchTypeChange,
+    postSearchType,
+    nowBoard,
+    boardId,
+    boardPage
+  } = props;
+
+  if (error) {
+    if (error.status === 403) {
+      return <Unauthorized />;
+    }
+    return <NoBoard />;
+  }
+  if (data === null || loading) {
+    return (
+      <MainWrapper>
+        <LoadingCircle />
+      </MainWrapper>
+    );
+  }
+  const res = data.data;
   return (
     <MainWrapper>
-      {Object.keys(nowBoard).length !== 0 ? (
-        <>
-          <BoardTitle>{nowBoard.description}</BoardTitle>
-          <MainTable postListObj={postListObj} />
-          <Pagination totalPage={totalPage} page={page} onChange={onChange} />
-        </>
+      <BoardHeader
+        nowBoard={nowBoard}
+        postSearchType={postSearchType}
+        onPostSearchTypeChange={onPostSearchTypeChange}
+        keyword={keyword}
+        onSearch={onSearch}
+        onSearchChange={onSearchChange}
+      />
+      {res.postListItem.content.length === 0 ? (
+        <NoPost keyword={keyword} />
       ) : (
-        <NoBoard />
+        <>
+          <MainTable res={res} />
+          <Paginations
+            res={res}
+            onChange={onChange}
+            boardId={boardId}
+            boardPage={boardPage}
+          />
+        </>
       )}
     </MainWrapper>
   );

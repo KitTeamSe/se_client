@@ -1,47 +1,109 @@
 import React, { useEffect, useState } from 'react';
+import qs from 'qs';
 import { useDispatch, useSelector } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import Board from '../../components/Board/Board';
-import { loadPostList } from '../../modules/post';
+import { loadPostList, searchPost } from '../../modules/post';
 
-const BoardContainer = () => {
+const BoardContainer = props => {
+  const { location, match } = props;
   const dispatch = useDispatch();
-  const [path, setPath] = useState('/');
-  const { postListObj, nowPage, nowBoard } = useSelector(({ post }) => ({
-    postListObj: post.loadPostList,
-    nowPage: post.nowPage,
-    nowBoard: post.selectBoard
+  const [keyword, setKeyword] = useState('');
+  const [boardPage, setBoardPage] = useState(1);
+  const [nowBoard, setNowBoard] = useState(null);
+  const [postSearchType, setPostSearchType] = useState('TITLE_TEXT');
+  const { data, loading, error, menuListObj } = useSelector(({ post }) => ({
+    data: post.loadedPostList.data,
+    loading: post.loadedPostList.loading,
+    error: post.loadedPostList.error,
+    menuListObj: post.loadedMenuList
   }));
-  const nowUrl = window.location.pathname;
-  if (path !== nowUrl) {
-    setPath(nowUrl);
-  }
+
+  const { boardId } = match.params;
+  useEffect(() => {
+    const {
+      size = 20,
+      page,
+      direction = 'DESC'
+    } = qs.parse(location.search, {
+      ignoreQueryPrefix: true
+    });
+    const parameter = {
+      boardId,
+      direction,
+      page: page - 1,
+      size
+    };
+    dispatch(loadPostList(parameter));
+    setBoardPage(page);
+  }, [location.search]);
 
   useEffect(() => {
-    if (Object.keys(nowBoard.value).length !== 0) {
-      const { boardId } = nowBoard.value;
-      const parameter = {
-        boardId,
-        direction: 'ASC',
-        page: 1,
-        size: 20
-      };
-      dispatch(loadPostList(parameter));
+    if (menuListObj.data !== null) {
+      for (let i = 0; i < menuListObj.data.data.length; i += 1) {
+        if (menuListObj.data.data[i].boardId === Number(boardId)) {
+          setNowBoard(menuListObj.data.data[i]);
+        }
+      }
     }
-  }, [nowBoard]);
+  }, [menuListObj]);
+
+  const onChange = e => {
+    e.preventDefault();
+  };
+
+  const onSearchChange = e => {
+    const { value } = e.target;
+    setKeyword(value);
+  };
+
+  const onPostSearchTypeChange = e => {
+    e.preventDefault();
+    const { value } = e.target;
+    setPostSearchType(value);
+  };
+
+  const onSearch = e => {
+    e.preventDefault();
+    if (keyword.length === 0) {
+      console.log('한글자 이상 입력하세요');
+      return;
+    }
+    if (keyword.length > 50) {
+      console.log('최대 50자 까지만 입력 가능합니다');
+      return;
+    }
+    const pageRequest = {
+      direction: 'DESC',
+      page: 1,
+      size: 20
+    };
+    const postSearchRequest = {
+      boardId,
+      keyword,
+      pageRequest,
+      postSearchType
+    };
+    dispatch(searchPost({ postSearchRequest }));
+  };
 
   return (
     <Board
-      postListObj={postListObj}
-      nowPage={nowPage}
-      totalPage={
-        postListObj && postListObj.postListItem.totalPages
-          ? postListObj.postListItem.totalPages
-          : 1
-      }
-      page={postListObj ? postListObj.postListItem.number + 1 : 1}
-      nowBoard={nowBoard.value}
+      data={data}
+      loading={loading}
+      error={error}
+      onChange={onChange}
+      onSearchChange={onSearchChange}
+      onSearch={onSearch}
+      keyword={keyword}
+      onPostSearchTypeChange={onPostSearchTypeChange}
+      postSearchType={postSearchType}
+      menuListObj={menuListObj}
+      nowBoard={nowBoard}
+      boardId={boardId}
+      boardPage={boardPage}
     />
   );
 };
 
-export default BoardContainer;
+export default withRouter(BoardContainer);

@@ -43,12 +43,28 @@ export const informationOpenAgreeEnum = {
 };
 
 export const menuList = [
-  { name: 'freeboard', url: 'freeboard' },
-  { name: 'archive', url: 'archive' },
-  { name: '전공지식', url: 'tip' },
-  { name: '지식인', url: 'naver' },
-  { name: 'PC고장신고', url: 'pc' },
-  { name: '학생회 재정 보고', url: 'council_info' },
-  { name: '딥러닝 & iMac', url: 'imac' },
-  { name: '330예약', url: 'book' }
+  { name: 'freeboard', url: 'freeboard', boardId: 1 },
+  { name: 'archive', url: 'archive', boardId: 2 },
+  { name: '전공지식', url: 'tip', boardId: 3 },
+  { name: '지식인', url: 'naver', boardId: 4 },
+  { name: 'PC고장신고', url: 'pc', boardId: 5 },
+  { name: '학생회 재정 보고', url: 'council_info', boardId: 6 },
+  { name: '딥러닝 & iMac', url: 'imac', boardId: 7 },
+  { name: '330예약', url: 'book', boardId: 8 }
 ];
+
+export const postSearchTypeList = [
+  { type: 'TITLE_TEXT', name: '제목+내용' },
+  { type: 'TITLE', name: '제목' },
+  { type: 'TEXT', name: '내용' },
+  { type: 'REPLY', name: '댓글' },
+  { type: 'NICKNAME', name: '닉네임' },
+  { type: 'USERID', name: '사용자 ID' },
+  { type: 'TAG', name: '태그' }
+];
+
+export const tagList = {
+  1: { name: '1학년', color1: '74f2ce', color2: '7cffcb' },
+  2: { name: '2학년', color1: '83eaf1', color2: '63a4ff' },
+  3: { name: '3학년', color1: 'f6f0c4', color2: 'd99ec9' }
+};

@@ -6,7 +6,7 @@ import styled from 'styled-components';
 const IconWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 2px;
+  margin: 4px;
   padding: 2px;
   align-items: center;
 `;

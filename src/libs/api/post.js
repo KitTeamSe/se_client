@@ -1,8 +1,14 @@
-import { client } from './client';
+import { client, tokenHeader } from './client';
 
 export const loadPostList = async ({ boardId, direction, page, size }) => {
   const parameters = { boardId, direction, page, size };
   return client.get('/post', { params: parameters }).catch(error => {
+    throw error.response.data;
+  });
+};
+
+export const searchPost = async ({ postSearchRequest }) => {
+  return client.post('/post/search', postSearchRequest).catch(error => {
     throw error.response.data;
   });
 };
@@ -14,7 +20,8 @@ export const loadMenuList = async () => {
 };
 
 export const makeSomePost = async ({ formData }) => {
-  return client.post('/post', formData).catch(error => {
+  const token = localStorage.getItem('token');
+  return client.post('/post', formData, tokenHeader(token)).catch(error => {
     throw error.response.data;
   });
 };

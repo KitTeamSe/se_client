@@ -2,7 +2,12 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDoorClosed } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import { TextField, Dialog, DialogTitle } from '@material-ui/core';
+import {
+  CircularProgress,
+  TextField,
+  Dialog,
+  DialogTitle
+} from '@material-ui/core';
 import styled from 'styled-components';
 
 const AlignCenter = styled.div`
@@ -93,9 +98,23 @@ const Typo = styled.p`
   margin-top: 4px;
 `;
 
+const LoadingCircle = styled(CircularProgress)`
+  position: fixed;
+  top: 45vh;
+  right: 50vw;
+`;
+
 const LoginDialog = props => {
-  const { onLogin, handleClickOpen, handleClose, open, onChange, form, error } =
-    props;
+  const {
+    onLogin,
+    handleClickOpen,
+    handleClose,
+    open,
+    onChange,
+    form,
+    error,
+    loading
+  } = props;
 
   return (
     <>
@@ -105,6 +124,7 @@ const LoginDialog = props => {
       </IconWrapper>
       <Dialog open={open} onClose={handleClose}>
         <AlignCenter>
+          {loading === true && <LoadingCircle />}
           <DialogTitle>SE 로그인</DialogTitle>
           <FormFlex onSubmit={onLogin}>
             <FormTextField
