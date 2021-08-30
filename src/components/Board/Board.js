@@ -39,7 +39,7 @@ const MainWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 70rem;
+  width: 70vw;
 `;
 
 const NoneBorderCell = styled(TableCell)`
@@ -70,13 +70,13 @@ const TagIcon = styled.span`
 
 const InfoBox = styled.div`
   font-size: 0.75rem;
-  width: 128px;
+  width: 8rem;
   display: inline-block;
 `;
 
 const NickName = styled.span`
   font-weight: 500;
-  width: 128px;
+  width: 6rem;
   font-size: 0.85rem;
 `;
 
@@ -86,29 +86,22 @@ const InfoIcon = styled(FontAwesomeIcon)`
 `;
 
 const PostContent = styled(TableRow)`
-  height: 36px;
   border-bottom: 1px solid #ddd;
 `;
 
 const PostNumber = styled.span`
-  width: 8px;
-  height: 12px;
+  width: 1rem;
   font-size: 0.8rem;
 `;
 
 const Title = styled(Link)`
-  display: inline-block;
   font-size: 0.9rem;
   font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: middle;
-  margin-right: 8px;
   color: black;
   text-decoration: none;
   cursor: pointer;
-  padding: 0.5rem;
 `;
 
 const NoBoardBox = styled.div`
@@ -120,7 +113,7 @@ const NoBoardBox = styled.div`
 `;
 
 const SearchBar = styled.form`
-  width: 196px;
+  width: 8rem;
   padding: 4px;
   margin: 8px;
   align-items: center;
@@ -153,6 +146,10 @@ const PaginationStyled = styled(Pagination)`
   }
 `;
 
+const Tag = styled.span`
+  display: inline-block;
+`;
+
 const Paginations = props => {
   const { res, boardId, boardPage } = props;
   const totalPage = res.postListItem.totalPages;
@@ -180,32 +177,36 @@ const PostTitle = props => {
   const writeTime = `${createAt[0]}년${createAt[1]}월${createAt[2]}일 ${createAt[3]}:${createAt[4]}`;
   return (
     <PostContent>
-      <NoneBorderCell align="center">
+      <NoneBorderCell nowrap="true" align="center" width="5%">
         <PostNumber>{postId}</PostNumber>
       </NoneBorderCell>
-      <NoneBorderCell>
-        <Title to={`/board/${boardId}/${postId}`}>{title}</Title>
-        <IconMargin>
-          {isSecret === 'NORMAL' ? <></> : <InfoIcon icon={faLock} />}
-        </IconMargin>
-        {tags.length === 0 ? (
-          <></>
-        ) : (
-          tags.map(tag => (
-            <TagIcon
-              color1={tagList[tag.tagId].color1}
-              color2={tagList[tag.tagId].color2}
-              key={tag.tagId}
-            >
-              {tagList[tag.tagId].name}
-            </TagIcon>
-          ))
-        )}
+      <NoneBorderCell width="70%">
+        <Title to={`/board/${boardId}/${postId}`}>
+          {title}
+          <IconMargin>
+            {isSecret === 'NORMAL' ? <></> : <InfoIcon icon={faLock} />}
+          </IconMargin>
+          {tags.length === 0 ? (
+            <></>
+          ) : (
+            <Tag>
+              {tags.map(tag => (
+                <TagIcon
+                  color1={tagList[tag.tagId].color1}
+                  color2={tagList[tag.tagId].color2}
+                  key={tag.tagId}
+                >
+                  {tagList[tag.tagId].name}
+                </TagIcon>
+              ))}
+            </Tag>
+          )}
+        </Title>
       </NoneBorderCell>
-      <NoneBorderCell align="center">
+      <NoneBorderCell nowrap="true" width="10%" align="center">
         <NickName>{nickname}</NickName>
       </NoneBorderCell>
-      <NoneBorderCell align="center">
+      <NoneBorderCell width="15%" align="center">
         <InfoBox>
           <IconMargin>{writeTime}</IconMargin>
           <IconMargin>
@@ -249,7 +250,7 @@ const MainTable = props => {
         <TableHead>
           <TableHeader>
             {tableColumns.map(column => (
-              <TableCell align="center" key={column}>
+              <TableCell nowrap="true" align="center" key={column}>
                 {column}
               </TableCell>
             ))}
