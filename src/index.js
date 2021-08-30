@@ -5,10 +5,12 @@ import { applyMiddleware, compose, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { StylesProvider } from '@material-ui/core/styles';
+import { ThemeProvider } from 'styled-components';
 import createSagaMiddleware from 'redux-saga';
 import './styles/reset.css';
 import App from './App';
 import rootReducer, { rootSaga } from './modules';
+import theme from './styles/theme';
 import reportWebVitals from './reportWebVitals';
 
 const sagaMiddleware = createSagaMiddleware();
@@ -27,9 +29,11 @@ sagaMiddleware.run(rootSaga);
 ReactDOM.render(
   <StylesProvider injectFirst>
     <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ThemeProvider>
     </Provider>
   </StylesProvider>,
   document.getElementById('root')
