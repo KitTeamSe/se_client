@@ -5,6 +5,7 @@ import { Avatar as AnonyAvatar, Typography } from '@material-ui/core';
 import { getFormatDate, getFormatTime } from '../../utils/format';
 import ReplyDeleteContainer from '../../containers/Reply/ReplyDeleteContainer';
 import ReplyAnonyDeleteContainer from '../../containers/Reply/ReplyAnonyDeleteContainer';
+import ReplyChildAddContainer from '../../containers/Reply/ReplyChildAddContainer';
 
 const AvatarDiameter = `40px`;
 
@@ -45,6 +46,7 @@ const InfoWrapper = styled.div`
 
 const CommentWrapper = styled.div`
   width: 100%;
+  margin-bottom: 10px;
 `;
 
 const ActionWrapper = styled(CommentWrapper)`
@@ -134,11 +136,25 @@ const ReplyComment = props => {
 };
 
 const ReplyAction = props => {
-  const { accountId, anonymousNickname, replyId } = props;
+  const {
+    parentId,
+    accountId,
+    anonymousNickname,
+    replyId,
+    handleAddReplyChild
+  } = props;
 
   return (
     <ActionWrapper>
-      <ActionButton onClick={() => console.log(replyId)}>댓글</ActionButton>
+      {parentId ? (
+        <ActionButton onClick={() => handleAddReplyChild(parentId)}>
+          댓글
+        </ActionButton>
+      ) : (
+        <ActionButton onClick={() => handleAddReplyChild(replyId)}>
+          댓글
+        </ActionButton>
+      )}
       {localStorage.getItem('token') &&
       localStorage.getItem('userId') &&
       accountId ? (
@@ -158,7 +174,16 @@ const ReplyAction = props => {
 };
 
 const ReplyContents = props => {
-  const { replyId, accountId, anonymousNickname, content, createAt } = props;
+  const {
+    parentId,
+    replyId,
+    accountId,
+    anonymousNickname,
+    content,
+    createAt,
+    isDelete,
+    handleAddReplyChild
+  } = props;
 
   return (
     <>
@@ -169,27 +194,43 @@ const ReplyContents = props => {
       />
       <Wrapper>
         <ReplyComment content={content} />
-        <ReplyAction
-          accountId={accountId}
-          anonymousNickname={anonymousNickname}
-          replyId={replyId}
-        />
+        {isDelete === 'NORMAL' && (
+          <ReplyAction
+            parentId={parentId}
+            accountId={accountId}
+            anonymousNickname={anonymousNickname}
+            replyId={replyId}
+            handleAddReplyChild={handleAddReplyChild}
+          />
+        )}
       </Wrapper>
     </>
   );
 };
 
 const ChildReply = props => {
-  const { replyId, accountId, anonymousNickname, content, createAt } = props;
+  const {
+    parentId,
+    replyId,
+    accountId,
+    anonymousNickname,
+    content,
+    createAt,
+    isDelete,
+    handleAddReplyChild
+  } = props;
 
   return (
-    <ChildWrapper id={replyId}>
+    <ChildWrapper isDelete={isDelete}>
       <ReplyContents
+        parentId={parentId}
         replyId={replyId}
         accountId={accountId}
         anonymousNickname={anonymousNickname}
         content={content}
         createAt={createAt}
+        isDelete={isDelete}
+        handleAddReplyChild={handleAddReplyChild}
       />
     </ChildWrapper>
   );
@@ -203,32 +244,41 @@ const Reply = props => {
     content,
     createAt,
     child,
-    isDelete
+    isDelete,
+    handleAddReplyChild
   } = props;
 
   return (
     <>
-      <ReplyWrapper id={replyId} isDelete={isDelete}>
-        <ReplyContents
-          replyId={replyId}
-          accountId={accountId}
-          anonymousNickname={anonymousNickname}
-          content={content}
-          createAt={createAt}
-        />
-      </ReplyWrapper>
+      {replyId && (
+        <ReplyWrapper isDelete={isDelete}>
+          <ReplyContents
+            replyId={replyId}
+            accountId={accountId}
+            anonymousNickname={anonymousNickname}
+            content={content}
+            createAt={createAt}
+            isDelete={isDelete}
+            handleAddReplyChild={handleAddReplyChild}
+          />
+        </ReplyWrapper>
+      )}
+
       {child && child.length
         ? child.map(e => (
             <ChildReply
+              parentId={replyId}
               replyId={e.replyId}
               accountId={e.accountId}
               anonymousNickname={e.anonymousNickname}
               content={e.text}
               createAt={e.createAt}
               isDelete={e.isDelete}
+              handleAddReplyChild={handleAddReplyChild}
             />
           ))
         : null}
+      {replyId && <ReplyChildAddContainer parentId={replyId} />}
     </>
   );
 };

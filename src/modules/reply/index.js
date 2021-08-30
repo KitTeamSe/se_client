@@ -112,6 +112,14 @@ const initialState = {
     text: '',
     files: []
   },
+  addChildForm: {
+    parentId: '',
+    anonymousNickname: '',
+    anonymousPassword: '',
+    isSecret: 'NORMAL',
+    text: '',
+    files: []
+  },
   updateForm: {
     password: '',
     isSecret: '',
@@ -135,6 +143,14 @@ export default handleActions(
     [INITIALIZE_FIELD]: state => ({
       ...state,
       addForm: {
+        anonymousNickname: '',
+        anonymousPassword: '',
+        isSecret: 'NORMAL',
+        text: '',
+        files: []
+      },
+      addChildForm: {
+        parentId: '',
         anonymousNickname: '',
         anonymousPassword: '',
         isSecret: 'NORMAL',

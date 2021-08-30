@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { Typography } from '@material-ui/core';
 import { Pagination, PaginationItem } from '@material-ui/lab';
 import Reply from './Reply';
 
@@ -10,6 +11,20 @@ const PaginationStyled = styled(Pagination)`
     padding: 10px;
   }
 `;
+
+const ReplyHeaderWrapper = styled.div`
+  border-top: 1px solid #ddd;
+  padding: 10px 10px;
+`;
+
+const ReplyHeader = props => {
+  const { totalData } = props;
+  return (
+    <ReplyHeaderWrapper>
+      <Typography variant="h6">{totalData} 개의 댓글</Typography>
+    </ReplyHeaderWrapper>
+  );
+};
 
 const ReplyPagination = props => {
   const { totalPage, page, boardId, postId } = props;
@@ -36,10 +51,21 @@ const ReplyPagination = props => {
 };
 
 const ReplyList = props => {
-  const { data, totalPage, loading, error, page, boardId, postId } = props;
+  const {
+    data,
+    totalPage,
+    totalData,
+    loading,
+    error,
+    page,
+    boardId,
+    postId,
+    handleAddReplyChild
+  } = props;
 
   return (
     <>
+      <ReplyHeader totalData={totalData} />
       {!loading && data
         ? data.map(e => (
             <Reply
@@ -50,6 +76,7 @@ const ReplyList = props => {
               createAt={e.createAt}
               child={e.child}
               isDelete={e.isDelete}
+              handleAddReplyChild={handleAddReplyChild}
             />
           ))
         : null}

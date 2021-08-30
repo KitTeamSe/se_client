@@ -6,6 +6,7 @@ import ReplyList from '../../components/Reply/ReplyList';
 import {
   initializeField,
   initializeRemove,
+  changeField,
   loadReplyList
 } from '../../modules/reply';
 
@@ -38,6 +39,16 @@ const ReplyListContainer = props => {
     dispatch(loadReplyList({ postId, direction, size, page: replyPage - 1 }));
   };
 
+  const handleAddReplyChild = parentId => {
+    dispatch(
+      changeField({
+        form: 'addChildForm',
+        key: 'parentId',
+        value: parentId
+      })
+    );
+  };
+
   useEffect(() => {
     handleReplyList();
   }, [location.search]);
@@ -64,9 +75,11 @@ const ReplyListContainer = props => {
       loading={loading}
       error={error}
       totalPage={data && data.totalPage}
+      totalData={data && data.totalData}
       page={myReplyPage}
       boardId={match.params.boardId}
       postId={match.params.postId}
+      handleAddReplyChild={handleAddReplyChild}
     />
   );
 };
