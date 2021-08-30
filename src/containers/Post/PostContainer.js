@@ -16,7 +16,7 @@ const PostContainer = props => {
   useEffect(() => {
     const id = match.params.postId;
     dispatch(loadPost({ id }));
-  }, [location.serarch]);
+  }, [location]);
 
   const reportFunction = () => {
     console.log('report logic');
@@ -38,7 +38,6 @@ const PostContainer = props => {
   };
 
   const menuClick = e => {
-    console.log(anchorEl);
     if (anchorEl) {
       setAnchorEl(null);
     } else {

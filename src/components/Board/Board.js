@@ -1,4 +1,5 @@
 import React from 'react';
+import { Route, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { faEye, faCommentAlt, faLock } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -16,8 +17,8 @@ import {
 } from '@material-ui/core';
 import { Pagination, PaginationItem } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from 'react-router-dom';
 import { postSearchTypeList, tagList } from '../../DataExport';
+import PostContainer from '../../containers/Post/PostContainer';
 
 const LoadingCircle = styled(CircularProgress)`
   position: absolute;
@@ -350,27 +351,30 @@ const Board = props => {
   const res = data.data;
   return (
     <MainWrapper>
-      <BoardHeader
-        nowBoard={nowBoard}
-        postSearchType={postSearchType}
-        onPostSearchTypeChange={onPostSearchTypeChange}
-        keyword={keyword}
-        onSearch={onSearch}
-        onSearchChange={onSearchChange}
-      />
-      {res.postListItem.content.length === 0 ? (
-        <NoPost searchKeyword={searchKeyword} />
-      ) : (
-        <>
-          <MainTable res={res} boardId={boardId} />
-          <Paginations
-            res={res}
-            onChange={onChange}
-            boardId={boardId}
-            boardPage={boardPage}
-          />
-        </>
-      )}
+      <Route exact path="/board/:boardId/:postId" component={PostContainer} />
+      <Route path="/board/:boardId">
+        <BoardHeader
+          nowBoard={nowBoard}
+          postSearchType={postSearchType}
+          onPostSearchTypeChange={onPostSearchTypeChange}
+          keyword={keyword}
+          onSearch={onSearch}
+          onSearchChange={onSearchChange}
+        />
+        {res.postListItem.content.length === 0 ? (
+          <NoPost searchKeyword={searchKeyword} />
+        ) : (
+          <>
+            <MainTable res={res} boardId={boardId} />
+            <Paginations
+              res={res}
+              onChange={onChange}
+              boardId={boardId}
+              boardPage={boardPage}
+            />
+          </>
+        )}
+      </Route>
     </MainWrapper>
   );
 };

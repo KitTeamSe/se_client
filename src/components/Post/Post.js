@@ -18,11 +18,11 @@ const LoadingCircle = styled(CircularProgress)`
 
 const MainWrapper = styled.div`
   margin: auto;
+  width: 100%;
   margin-top: 2rem;
   padding: 2rem;
   flex-direction: column;
   align-items: center;
-  width: 70vw;
   background-color: #ffffff;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 `;
