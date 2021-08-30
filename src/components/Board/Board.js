@@ -184,7 +184,7 @@ const PostTitle = props => {
         <PostNumber>{postId}</PostNumber>
       </NoneBorderCell>
       <NoneBorderCell>
-        <Title to={`/post/${boardId}/${postId}`}>{title}</Title>
+        <Title to={`/board/${boardId}/${postId}`}>{title}</Title>
         <IconMargin>
           {isSecret === 'NORMAL' ? <></> : <InfoIcon icon={faLock} />}
         </IconMargin>

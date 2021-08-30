@@ -19,8 +19,8 @@ const Routes = () => (
       <Switch>
         <Route exact path="/profile" component={ProfilePageContainer} />
         <Route exact path="/signup" component={SignupPageContainer} />
+        <Route path="/board/:boardId/:postId" component={PostContainer} />
         <Route path="/board/:boardId" component={BoardContainer} />
-        <Route path="/post/:boardId/:postId" component={PostContainer} />
         <Route path="/">
           <Redirect to="/board/1" />
         </Route>

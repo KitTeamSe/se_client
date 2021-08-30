@@ -25,3 +25,10 @@ export const makeSomePost = async ({ formData }) => {
     throw error.response.data;
   });
 };
+
+export const loadPost = async ({ id }) => {
+  const token = localStorage.getItem('token');
+  return client.get(`/post/${id}`, tokenHeader(token)).catch(error => {
+    throw error.response.data;
+  });
+};
