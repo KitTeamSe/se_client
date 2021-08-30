@@ -27,8 +27,7 @@ export const makeSomePost = async ({ formData }) => {
 };
 
 export const loadPost = async ({ id }) => {
-  const token = localStorage.getItem('token');
-  return client.get(`/post/${id}`, tokenHeader(token)).catch(error => {
+  return client.get(`/post/${id}`).catch(error => {
     throw error.response.data;
   });
 };

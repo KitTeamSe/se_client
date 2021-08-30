@@ -15,11 +15,10 @@ const makePost = async () => {
     ],
     boardId: 1,
     isNotice: 'NORMAL',
-    isSecret: 'NORMAL',
+    isSecret: 'SECRET',
     postContent: {
-      text: 'ㅇㅁ니럼ㄴ아럼ㄴ이ㅏ럼ㄴ이ㅏ럼나ㅣㅓ라ㅣㄴㅇ멀',
-      title:
-        '제목이길면 어떻게 제목이길면 어?제목어떻게 될까?제목이길면 어떻게 될까?제목이길면???'
+      text: 'ㄴㅁㅇㄹㄻㄷㅈㄻㄴㄷ',
+      title: '테스트'
     }
   };
   if (data.postContent.title.length > 50) {
