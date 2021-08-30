@@ -9,6 +9,7 @@ const BoardContainer = props => {
   const { location, match } = props;
   const dispatch = useDispatch();
   const [keyword, setKeyword] = useState('');
+  const [searchKeyword, setSearchKeyword] = useState('');
   const [boardPage, setBoardPage] = useState(1);
   const [nowBoard, setNowBoard] = useState(null);
   const [postSearchType, setPostSearchType] = useState('TITLE_TEXT');
@@ -80,6 +81,7 @@ const BoardContainer = props => {
 
   const onSearch = e => {
     e.preventDefault();
+    setSearchKeyword(keyword);
     if (keyword.length === 0) {
       console.log('한글자 이상 입력하세요');
       return;
@@ -111,6 +113,7 @@ const BoardContainer = props => {
       onSearchChange={onSearchChange}
       onSearch={onSearch}
       keyword={keyword}
+      searchKeyword={searchKeyword}
       onPostSearchTypeChange={onPostSearchTypeChange}
       postSearchType={postSearchType}
       menuListObj={menuListObj}

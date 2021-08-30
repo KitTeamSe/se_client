@@ -231,13 +231,10 @@ const Unauthorized = () => {
 };
 
 const NoPost = props => {
-  const { keyword } = props;
-  if (keyword === '') {
-    return <NoBoardBox>게시판에 아직 글이 없습니다 😅</NoBoardBox>;
-  }
+  const { searchKeyword } = props;
   return (
     <NoBoardBox>
-      <div>{`${keyword}의 검색결과가 하나도 없습니다 😅`}</div>
+      <div>{`${searchKeyword}의 검색결과가 하나도 없습니다 😅`}</div>
     </NoBoardBox>
   );
 };
@@ -327,6 +324,7 @@ const Board = props => {
     loading,
     error,
     keyword,
+    searchKeyword,
     onSearch,
     onPostSearchTypeChange,
     postSearchType,
@@ -360,7 +358,7 @@ const Board = props => {
         onSearchChange={onSearchChange}
       />
       {res.postListItem.content.length === 0 ? (
-        <NoPost keyword={keyword} />
+        <NoPost searchKeyword={searchKeyword} />
       ) : (
         <>
           <MainTable res={res} boardId={boardId} />
