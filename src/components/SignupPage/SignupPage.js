@@ -5,8 +5,14 @@ import {
   Select,
   InputLabel,
   MenuItem,
-  Button
+  Button,
+  CircularProgress
 } from '@material-ui/core';
+
+const LoadingCircle = styled(CircularProgress)`
+  position: absolute;
+  bottom: 50vh;
+`;
 
 const FormField = styled.form`
   display: flex;
@@ -39,6 +45,7 @@ const ErrorText = styled.div`
 
 const SignupPage = props => {
   const {
+    loading,
     error,
     signupSubmit,
     handleChange,
@@ -53,65 +60,80 @@ const SignupPage = props => {
     <>
       <FormField autoComplete="on" onSubmit={signupSubmit}>
         <Welcome>회원가입</Welcome>
-        <FormTextField id="id" label="ID" onChange={handleChange} />
-        <FormTextField
-          id="password"
-          label="Password"
-          type="password"
-          onChange={handleChange}
-        />
-        <FormTextField
-          id="passwordCheck"
-          label="PasswordCheck"
-          type="password"
-          onChange={handleChange}
-        />
-        <FormTextField id="email" label="email" onChange={handleChange} />
-        <FormTextField id="name" label="이름" onChange={handleChange} />
-        <FormTextField id="nickname" label="닉네임" onChange={handleChange} />
-        <FormTextField
-          id="phoneNumber"
-          label="전화번호"
-          helperText="-를 빼고 입력하세요"
-          type="number"
-          onChange={handleChange}
-        />
-        <FormTextField
-          id="studentId"
-          label="학번"
-          onChange={handleChange}
-          type="number"
-        />
-        <InputLabel id="demo-simple-select-label">나만의 질문</InputLabel>
-        <FormSelectField
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={inputs.questionId}
-          displayEmpty
-          onChange={questionChange}
-        >
-          {questionList.map(question => (
-            <MenuItem value={question.questionid} key={question.questionid}>
-              {question.question}
-            </MenuItem>
-          ))}
-        </FormSelectField>
-        <FormTextField id="answer" label="질문 답" onChange={handleChange} />
-        <InputLabel shrink id="demo-simple-select-placeholder-label-label">
-          신분
-        </InputLabel>
-        <FormSelectField
-          id="type"
-          value={inputs.type}
-          onChange={classChange}
-          displayEmpty
-        >
-          {typeList.map(type => (
-            <MenuItem value={type.userType} key={type.typeid}>
-              {type.userType}
-            </MenuItem>
-          ))}
-        </FormSelectField>
+        {loading ? (
+          <LoadingCircle />
+        ) : (
+          <>
+            <FormTextField id="id" label="ID" onChange={handleChange} />
+            <FormTextField
+              id="password"
+              label="Password"
+              type="password"
+              onChange={handleChange}
+            />
+            <FormTextField
+              id="passwordCheck"
+              label="PasswordCheck"
+              type="password"
+              onChange={handleChange}
+            />
+            <FormTextField id="email" label="email" onChange={handleChange} />
+            <FormTextField id="name" label="이름" onChange={handleChange} />
+            <FormTextField
+              id="nickname"
+              label="닉네임"
+              onChange={handleChange}
+            />
+            <FormTextField
+              id="phoneNumber"
+              label="전화번호"
+              helperText="-를 빼고 입력하세요"
+              type="number"
+              onChange={handleChange}
+            />
+            <FormTextField
+              id="studentId"
+              label="학번"
+              onChange={handleChange}
+              type="number"
+            />
+            <InputLabel id="demo-simple-select-label">나만의 질문</InputLabel>
+            <FormSelectField
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={inputs.questionId}
+              displayEmpty
+              onChange={questionChange}
+            >
+              {questionList.map(question => (
+                <MenuItem value={question.questionid} key={question.questionid}>
+                  {question.question}
+                </MenuItem>
+              ))}
+            </FormSelectField>
+            <FormTextField
+              id="answer"
+              label="질문 답"
+              onChange={handleChange}
+            />
+            <InputLabel shrink id="demo-simple-select-placeholder-label-label">
+              신분
+            </InputLabel>
+            <FormSelectField
+              id="type"
+              value={inputs.type}
+              onChange={classChange}
+              displayEmpty
+            >
+              {typeList.map(type => (
+                <MenuItem value={type.userType} key={type.typeid}>
+                  {type.userType}
+                </MenuItem>
+              ))}
+            </FormSelectField>
+          </>
+        )}
+
         <ErrorText>{error}</ErrorText>
         <Button variant="contained" color="primary" type="submit">
           회원가입

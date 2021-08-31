@@ -9,8 +9,8 @@ const BoardContainer = props => {
   const { location, match } = props;
   const dispatch = useDispatch();
   const [keyword, setKeyword] = useState('');
+  const [searchKeyword, setSearchKeyword] = useState('');
   const [boardPage, setBoardPage] = useState(1);
-  const [nowBoard, setNowBoard] = useState(null);
   const [postSearchType, setPostSearchType] = useState('TITLE_TEXT');
   const { data, loading, error, menuListObj } = useSelector(({ post }) => ({
     data: post.loadedPostList.data,
@@ -19,15 +19,30 @@ const BoardContainer = props => {
     menuListObj: post.loadedMenuList
   }));
 
+  const pageSize = 20;
+
   const { boardId } = match.params;
   useEffect(() => {
     const {
-      size = 20,
       page,
+      size = pageSize,
       direction = 'DESC'
     } = qs.parse(location.search, {
       ignoreQueryPrefix: true
     });
+
+    if (page === undefined) {
+      const parameter = {
+        boardId,
+        direction,
+        page: 0,
+        size
+      };
+      dispatch(loadPostList(parameter));
+      setBoardPage(1);
+      return;
+    }
+
     const parameter = {
       boardId,
       direction,
@@ -37,16 +52,6 @@ const BoardContainer = props => {
     dispatch(loadPostList(parameter));
     setBoardPage(page);
   }, [location.search]);
-
-  useEffect(() => {
-    if (menuListObj.data !== null) {
-      for (let i = 0; i < menuListObj.data.data.length; i += 1) {
-        if (menuListObj.data.data[i].boardId === Number(boardId)) {
-          setNowBoard(menuListObj.data.data[i]);
-        }
-      }
-    }
-  }, [menuListObj]);
 
   const onChange = e => {
     e.preventDefault();
@@ -65,6 +70,7 @@ const BoardContainer = props => {
 
   const onSearch = e => {
     e.preventDefault();
+    setSearchKeyword(keyword);
     if (keyword.length === 0) {
       console.log('한글자 이상 입력하세요');
       return;
@@ -76,7 +82,7 @@ const BoardContainer = props => {
     const pageRequest = {
       direction: 'DESC',
       page: 1,
-      size: 20
+      size: pageSize
     };
     const postSearchRequest = {
       boardId,
@@ -96,10 +102,10 @@ const BoardContainer = props => {
       onSearchChange={onSearchChange}
       onSearch={onSearch}
       keyword={keyword}
+      searchKeyword={searchKeyword}
       onPostSearchTypeChange={onPostSearchTypeChange}
       postSearchType={postSearchType}
       menuListObj={menuListObj}
-      nowBoard={nowBoard}
       boardId={boardId}
       boardPage={boardPage}
     />

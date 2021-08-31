@@ -19,6 +19,12 @@ const [LOAD_MENU_LIST, LOAD_MENU_LIST_SUCCESS, LOAD_MENU_LIST_FAILURE] =
 const [SEARCH_POST, SEARCH_POST_SUCCESS, SEARCH_POST_FAILURE] =
   createRequestActionTypes('post/SEARCH_POST');
 
+const [LOAD_POST, LOAD_POST_SUCCESS, LOAD_POST_FAILURE] =
+  createRequestActionTypes('post/LOAD_POST');
+
+const [LOAD_SECRET_POST, LOAD_SECRET_POST_SUCCESS, LOAD_SECRET_POST_FAILURE] =
+  createRequestActionTypes('post/LOAD_SECRET_POST');
+
 // Action Creators
 export const initialize = createAction(INITIALIZE);
 
@@ -36,21 +42,41 @@ export const searchPost = createAction(
   })
 );
 
+export const loadPost = createAction(LOAD_POST, ({ id }) => ({
+  id
+}));
+
+export const loadSecretPost = createAction(
+  LOAD_SECRET_POST,
+  ({ postId, password }) => ({
+    postId,
+    password
+  })
+);
+
 // Sagas
 const loadPostListSaga = createRequestSaga(LOAD_POST_LIST, api.loadPostList);
 const loadMenuListSage = createRequestSaga(LOAD_MENU_LIST, api.loadMenuList);
 const searchPostSaga = createRequestSaga(SEARCH_POST, api.searchPost);
+const loadPostSaga = createRequestSaga(LOAD_POST, api.loadPost);
+const loadSecretPostSaga = createRequestSaga(
+  LOAD_SECRET_POST,
+  api.loadSecretPost
+);
 
 export function* postSaga() {
   yield takeLatest(LOAD_POST_LIST, loadPostListSaga);
   yield takeLatest(LOAD_MENU_LIST, loadMenuListSage);
   yield takeLatest(SEARCH_POST, searchPostSaga);
+  yield takeLatest(LOAD_POST, loadPostSaga);
+  yield takeLatest(LOAD_SECRET_POST, loadSecretPostSaga);
 }
 
 // reducer (handleActions => switch문 대체)
 const initialState = {
   loadedPostList: reducerUtils.initial(),
-  loadedMenuList: reducerUtils.initial()
+  loadedMenuList: reducerUtils.initial(),
+  loadedPost: reducerUtils.initial()
 };
 
 export default handleActions(
@@ -91,6 +117,30 @@ export default handleActions(
     [SEARCH_POST_FAILURE]: (state, { payload: error }) => ({
       ...state,
       loadedPostList: reducerUtils.error(error)
+    }),
+    [LOAD_POST]: state => ({
+      ...state,
+      loadedPost: reducerUtils.loading(state.loadedPost.data)
+    }),
+    [LOAD_POST_SUCCESS]: (state, { payload: response }) => ({
+      ...state,
+      loadedPost: reducerUtils.success(response)
+    }),
+    [LOAD_POST_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      loadedPost: reducerUtils.error(error)
+    }),
+    [LOAD_SECRET_POST]: state => ({
+      ...state,
+      loadedPost: reducerUtils.loading(state.loadedPost.data)
+    }),
+    [LOAD_SECRET_POST_SUCCESS]: (state, { payload: response }) => ({
+      ...state,
+      loadedPost: reducerUtils.success(response)
+    }),
+    [LOAD_SECRET_POST_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      loadedPost: reducerUtils.error(error)
     })
   },
   initialState

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Route, Link, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 import { faEye, faCommentAlt, faLock } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -16,22 +17,13 @@ import {
 } from '@material-ui/core';
 import { Pagination, PaginationItem } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from 'react-router-dom';
 import { postSearchTypeList, tagList } from '../../DataExport';
+import PostContainer from '../../containers/Post/PostContainer';
+import SecretPostContainer from '../../containers/Post/SecretPostContainer';
 
 const LoadingCircle = styled(CircularProgress)`
   position: absolute;
   bottom: 50vh;
-`;
-
-const BoardTitle = styled(Link)`
-  padding: 24px;
-  font-size: 1.5rem;
-  font-weight: 600;
-  text-align: left;
-  width: auto;
-  text-decoration: none;
-  color: black;
 `;
 
 const MainWrapper = styled.div`
@@ -39,7 +31,7 @@ const MainWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 70rem;
+  width: 70vw;
 `;
 
 const NoneBorderCell = styled(TableCell)`
@@ -70,13 +62,13 @@ const TagIcon = styled.span`
 
 const InfoBox = styled.div`
   font-size: 0.75rem;
-  width: 128px;
+  width: 8rem;
   display: inline-block;
 `;
 
 const NickName = styled.span`
   font-weight: 500;
-  width: 128px;
+  width: 6rem;
   font-size: 0.85rem;
 `;
 
@@ -86,29 +78,22 @@ const InfoIcon = styled(FontAwesomeIcon)`
 `;
 
 const PostContent = styled(TableRow)`
-  height: 36px;
   border-bottom: 1px solid #ddd;
 `;
 
 const PostNumber = styled.span`
-  width: 8px;
-  height: 12px;
+  width: 1rem;
   font-size: 0.8rem;
 `;
 
 const Title = styled(Link)`
-  display: inline-block;
   font-size: 0.9rem;
   font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: middle;
-  margin-right: 8px;
   color: black;
   text-decoration: none;
   cursor: pointer;
-  padding: 0.5rem;
 `;
 
 const NoBoardBox = styled.div`
@@ -120,7 +105,7 @@ const NoBoardBox = styled.div`
 `;
 
 const SearchBar = styled.form`
-  width: 196px;
+  width: 12rem;
   padding: 4px;
   margin: 8px;
   align-items: center;
@@ -153,6 +138,10 @@ const PaginationStyled = styled(Pagination)`
   }
 `;
 
+const Tag = styled.span`
+  display: inline-block;
+`;
+
 const Paginations = props => {
   const { res, boardId, boardPage } = props;
   const totalPage = res.postListItem.totalPages;
@@ -174,38 +163,48 @@ const Paginations = props => {
 };
 
 const PostTitle = props => {
-  const { postInfo } = props;
+  const { postInfo, boardId } = props;
   const { postId, title, isSecret, nickname, numReply, views, tags, createAt } =
     postInfo;
   const writeTime = `${createAt[0]}년${createAt[1]}월${createAt[2]}일 ${createAt[3]}:${createAt[4]}`;
   return (
     <PostContent>
-      <NoneBorderCell align="center">
+      <NoneBorderCell nowrap="true" align="center" width="5%">
         <PostNumber>{postId}</PostNumber>
       </NoneBorderCell>
-      <NoneBorderCell>
-        <Title to={`post/${postId}`}>{title}</Title>
-        <IconMargin>
-          {isSecret === 'NORMAL' ? <></> : <InfoIcon icon={faLock} />}
-        </IconMargin>
-        {tags.length === 0 ? (
-          <></>
-        ) : (
-          tags.map(tag => (
-            <TagIcon
-              color1={tagList[tag.tagId].color1}
-              color2={tagList[tag.tagId].color2}
-              key={tag.tagId}
-            >
-              {tagList[tag.tagId].name}
-            </TagIcon>
-          ))
-        )}
+      <NoneBorderCell width="70%">
+        <Title
+          to={
+            isSecret === 'NORMAL'
+              ? `/board/${boardId}/${postId}`
+              : `/board/${boardId}/secret/${postId}`
+          }
+        >
+          {title}
+          <IconMargin>
+            {isSecret === 'NORMAL' ? <></> : <InfoIcon icon={faLock} />}
+          </IconMargin>
+          {tags.length === 0 ? (
+            <></>
+          ) : (
+            <Tag>
+              {tags.map(tag => (
+                <TagIcon
+                  color1={tagList[tag.tagId].color1}
+                  color2={tagList[tag.tagId].color2}
+                  key={tag.tagId}
+                >
+                  {tagList[tag.tagId].name}
+                </TagIcon>
+              ))}
+            </Tag>
+          )}
+        </Title>
       </NoneBorderCell>
-      <NoneBorderCell align="center">
+      <NoneBorderCell nowrap="true" width="10%" align="center">
         <NickName>{nickname}</NickName>
       </NoneBorderCell>
-      <NoneBorderCell align="center">
+      <NoneBorderCell width="15%" align="center">
         <InfoBox>
           <IconMargin>{writeTime}</IconMargin>
           <IconMargin>
@@ -231,19 +230,16 @@ const Unauthorized = () => {
 };
 
 const NoPost = props => {
-  const { keyword } = props;
-  if (keyword === '') {
-    return <NoBoardBox>게시판에 아직 글이 없습니다 😅</NoBoardBox>;
-  }
+  const { searchKeyword } = props;
   return (
     <NoBoardBox>
-      <div>{`${keyword}의 검색결과가 하나도 없습니다 😅`}</div>
+      <div>{`${searchKeyword}의 검색결과가 하나도 없습니다 😅`}</div>
     </NoBoardBox>
   );
 };
 
 const MainTable = props => {
-  const { res } = props;
+  const { res, boardId } = props;
   const tableColumns = ['번호', '제목', '닉네임', '정보'];
 
   return (
@@ -252,7 +248,7 @@ const MainTable = props => {
         <TableHead>
           <TableHeader>
             {tableColumns.map(column => (
-              <TableCell align="center" key={column}>
+              <TableCell nowrap="true" align="center" key={column}>
                 {column}
               </TableCell>
             ))}
@@ -260,7 +256,11 @@ const MainTable = props => {
         </TableHead>
         <TableBody>
           {res.postListItem.content.map(postInfo => (
-            <PostTitle key={postInfo.postId} postInfo={postInfo} />
+            <PostTitle
+              key={postInfo.postId}
+              postInfo={postInfo}
+              boardId={boardId}
+            />
           ))}
         </TableBody>
       </Table>
@@ -274,19 +274,11 @@ const BoardHeader = props => {
     onPostSearchTypeChange,
     keyword,
     onSearch,
-    onSearchChange,
-    nowBoard
+    onSearchChange
   } = props;
   return (
     <BoardHead>
-      {nowBoard === null ? (
-        <LoadingCircle />
-      ) : (
-        <BoardTitle to={`/board${nowBoard.boardId}`}>
-          {nowBoard.description}
-        </BoardTitle>
-      )}
-
+      <div />
       <BoardHeadRight>
         <FormSelectField
           margin="dense"
@@ -323,10 +315,10 @@ const Board = props => {
     loading,
     error,
     keyword,
+    searchKeyword,
     onSearch,
     onPostSearchTypeChange,
     postSearchType,
-    nowBoard,
     boardId,
     boardPage
   } = props;
@@ -347,27 +339,36 @@ const Board = props => {
   const res = data.data;
   return (
     <MainWrapper>
-      <BoardHeader
-        nowBoard={nowBoard}
-        postSearchType={postSearchType}
-        onPostSearchTypeChange={onPostSearchTypeChange}
-        keyword={keyword}
-        onSearch={onSearch}
-        onSearchChange={onSearchChange}
-      />
-      {res.postListItem.content.length === 0 ? (
-        <NoPost keyword={keyword} />
-      ) : (
-        <>
-          <MainTable res={res} />
-          <Paginations
-            res={res}
-            onChange={onChange}
-            boardId={boardId}
-            boardPage={boardPage}
-          />
-        </>
-      )}
+      <Switch>
+        <Route exact path="/board/:boardId/:postId" component={PostContainer} />
+        <Route
+          exact
+          path="/board/:boardId/secret/:postId"
+          component={SecretPostContainer}
+        />
+      </Switch>
+      <Route path="/board/:boardId">
+        <BoardHeader
+          postSearchType={postSearchType}
+          onPostSearchTypeChange={onPostSearchTypeChange}
+          keyword={keyword}
+          onSearch={onSearch}
+          onSearchChange={onSearchChange}
+        />
+        {res.postListItem.content.length === 0 ? (
+          <NoPost searchKeyword={searchKeyword} />
+        ) : (
+          <>
+            <MainTable res={res} boardId={boardId} />
+            <Paginations
+              res={res}
+              onChange={onChange}
+              boardId={boardId}
+              boardPage={boardPage}
+            />
+          </>
+        )}
+      </Route>
     </MainWrapper>
   );
 };

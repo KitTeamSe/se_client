@@ -5,21 +5,17 @@ import { makeSomePost } from '../../libs/api/post';
 const makePost = async () => {
   const attachedFiles = [];
   const data = {
-    tagList: [
-      {
-        tagId: 2
-      },
-      {
-        tagId: 3
-      }
-    ],
+    anonymous: {
+      anonymousNickname: '익명사용자',
+      anonymousPassword: 'asdf1234'
+    },
+
     boardId: 1,
     isNotice: 'NORMAL',
-    isSecret: 'NORMAL',
+    isSecret: 'SECRET',
     postContent: {
-      text: 'ㅇㅁ니럼ㄴ아럼ㄴ이ㅏ럼ㄴ이ㅏ럼나ㅣㅓ라ㅣㄴㅇ멀',
-      title:
-        '제목이길면 어떻게 제목이길면 어?제목어떻게 될까?제목이길면 어떻게 될까?제목이길면???'
+      text: 'ㅅㄷㄴㅅㄷ나미섬니ㅏㅓㅣㅏㅁ',
+      title: '익명사용자비밀번호는asdf1234'
     }
   };
   if (data.postContent.title.length > 50) {
