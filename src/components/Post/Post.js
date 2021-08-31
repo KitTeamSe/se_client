@@ -10,6 +10,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { tagList } from '../../DataExport';
+import ReplyTestPage from '../Reply/ReplyTestPage';
 
 const LoadingCircle = styled(CircularProgress)`
   position: absolute;
@@ -96,12 +97,6 @@ const Icon = styled(FontAwesomeIcon)`
 
 const MoreButton = styled(FontAwesomeIcon)`
   cursor: pointer;
-`;
-
-const ReplyDiv = styled.div`
-  width: 100%;
-  padding: 2rem 0;
-  border-bottom: 1px solid #cccccc;
 `;
 
 const FormField = styled.form`
@@ -260,14 +255,6 @@ const SecretPostPassword = props => {
   );
 };
 
-const Reply = () => {
-  return (
-    <ReplyDiv>
-      <div>댓글</div>
-    </ReplyDiv>
-  );
-};
-
 const Post = props => {
   const {
     data,
@@ -312,7 +299,7 @@ const Post = props => {
         functionExcute={functionExcute}
       />
       <PostMain res={res} />
-      <Reply />
+      <ReplyTestPage />
     </MainWrapper>
   );
 };
