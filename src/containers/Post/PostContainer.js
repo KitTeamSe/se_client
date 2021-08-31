@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import qs from 'qs';
 import Post from '../../components/Post/Post';
-import { loadPost } from '../../modules/post';
+import { loadPost, loadSecretPost, initialize } from '../../modules/post';
 
 const PostContainer = props => {
   const { location, match } = props;
   const [moremenuEl, setMoremenuEl] = useState(null);
   const [writerEl, setWriterEl] = useState(null);
+  const [secretPost, setSecretPost] = useState(false);
+  const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector(({ post }) => ({
     data: post.loadedPost.data,
@@ -16,9 +19,30 @@ const PostContainer = props => {
   }));
 
   useEffect(() => {
-    const id = match.params.postId;
-    dispatch(loadPost({ id }));
-  }, [location]);
+    setPassword('');
+    const { secret } = qs.parse(location.search, {
+      ignoreQueryPrefix: true
+    });
+    setSecretPost(Boolean(secret));
+    const id = Number(match.params.postId);
+    if (!secret) {
+      dispatch(loadPost({ id }));
+    } else {
+      dispatch(initialize('loadedPost'));
+    }
+  }, [match.params.postId]);
+
+  const PasswordSubmit = e => {
+    e.preventDefault();
+    const postId = Number(match.params.postId);
+    dispatch(loadSecretPost({ postId, password }));
+  };
+
+  const onChange = e => {
+    e.preventDefault();
+    const { value } = e.target;
+    setPassword(value);
+  };
 
   const reportFunction = () => {
     console.log('report logic');
@@ -90,8 +114,12 @@ const PostContainer = props => {
       error={error}
       moremenuEl={moremenuEl}
       writerEl={writerEl}
+      secretPost={secretPost}
       functionExcute={functionExcute}
       menuClick={menuClick}
+      PasswordSubmit={PasswordSubmit}
+      password={password}
+      onChange={onChange}
     />
   );
 };
