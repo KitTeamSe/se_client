@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 import { faEye, faCommentAlt, faLock } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -19,6 +19,7 @@ import { Pagination, PaginationItem } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { postSearchTypeList, tagList } from '../../DataExport';
 import PostContainer from '../../containers/Post/PostContainer';
+import SecretPostContainer from '../../containers/Post/SecretPostContainer';
 
 const LoadingCircle = styled(CircularProgress)`
   position: absolute;
@@ -172,7 +173,13 @@ const PostTitle = props => {
         <PostNumber>{postId}</PostNumber>
       </NoneBorderCell>
       <NoneBorderCell width="70%">
-        <Title to={`/board/${boardId}/${postId}`}>
+        <Title
+          to={
+            isSecret === 'NORMAL'
+              ? `/board/${boardId}/${postId}`
+              : `/board/${boardId}/secret/${postId}`
+          }
+        >
           {title}
           <IconMargin>
             {isSecret === 'NORMAL' ? <></> : <InfoIcon icon={faLock} />}
@@ -332,7 +339,14 @@ const Board = props => {
   const res = data.data;
   return (
     <MainWrapper>
-      <Route exact path="/board/:boardId/:postId" component={PostContainer} />
+      <Switch>
+        <Route exact path="/board/:boardId/:postId" component={PostContainer} />
+        <Route
+          exact
+          path="/board/:boardId/secret/:postId"
+          component={SecretPostContainer}
+        />
+      </Switch>
       <Route path="/board/:boardId">
         <BoardHeader
           postSearchType={postSearchType}

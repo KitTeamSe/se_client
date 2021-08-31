@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Post from '../../components/Post/Post';
 import { loadPost } from '../../modules/post';
 
-const PostContainer = props => {
+const SecretPostContainer = props => {
   const { location, match } = props;
   const [moremenuEl, setMoremenuEl] = useState(null);
   const [writerEl, setWriterEl] = useState(null);
@@ -19,6 +19,8 @@ const PostContainer = props => {
     const id = match.params.postId;
     dispatch(loadPost({ id }));
   }, [location]);
+  console.log('location', location);
+  console.log('match', match);
 
   const reportFunction = () => {
     console.log('report logic');
@@ -96,4 +98,4 @@ const PostContainer = props => {
   );
 };
 
-export default withRouter(PostContainer);
+export default withRouter(SecretPostContainer);

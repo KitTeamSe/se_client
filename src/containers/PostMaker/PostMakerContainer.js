@@ -5,20 +5,17 @@ import { makeSomePost } from '../../libs/api/post';
 const makePost = async () => {
   const attachedFiles = [];
   const data = {
-    tagList: [
-      {
-        tagId: 2
-      },
-      {
-        tagId: 3
-      }
-    ],
+    anonymous: {
+      anonymousNickname: '익명사용자비밀번호는asdf1234',
+      anonymousPassword: 'asdf1234'
+    },
+
     boardId: 1,
     isNotice: 'NORMAL',
     isSecret: 'SECRET',
     postContent: {
-      text: 'ㄴㅁㅇㄹㄻㄷㅈㄻㄴㄷ',
-      title: '테스트'
+      text: 'ㅅㄷㄴㅅㄷ나미섬니ㅏㅓㅣㅏㅁ',
+      title: '익명사용자비밀번호는asdf1234'
     }
   };
   if (data.postContent.title.length > 50) {
