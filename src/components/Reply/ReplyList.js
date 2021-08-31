@@ -75,6 +75,7 @@ const ReplyList = props => {
               content={e.text}
               createAt={e.createAt}
               child={e.child}
+              isSecret={e.isSecret}
               isDelete={e.isDelete}
               handleAddReplyChild={handleAddReplyChild}
             />

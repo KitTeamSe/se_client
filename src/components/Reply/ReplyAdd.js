@@ -1,18 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Switch, FormControlLabel, Input, Button } from '@material-ui/core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faReply } from '@fortawesome/free-solid-svg-icons';
 import Editor from '../Editor/Editor';
 
 const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media ${props => props.theme.mobile} {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`;
+
+const InputWrapper = styled.div`
+  display: flex;
 `;
 
 const InputStyled = styled(Input)`
-  width: 160px;
+  width: 120px;
   height: 32px;
   margin-right: 5px;
   & input {
@@ -22,13 +28,25 @@ const InputStyled = styled(Input)`
 `;
 
 const FormControlLabelStyled = styled(FormControlLabel)`
-  & span {
-    font-size: 0.875rem;
+  span {
+    font-size: 0.75rem;
+  }
+`;
+
+const ButtonWrapper = styled.div`
+  @media ${props => props.theme.mobile} {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
   }
 `;
 
 const ButtonStyled = styled(Button)`
-  border-radius: 50px;
+  font-weight: 500;
+  line-height: 1.5;
+  padding: 6px 12px;
+  border-radius: 100px;
+  margin-left: 10px;
 `;
 
 const SecretToggle = props => {
@@ -63,7 +81,7 @@ const ReplyAdd = props => {
         type="reply"
       />
       <Wrapper>
-        <div>
+        <InputWrapper>
           {!localStorage.getItem('token') || !localStorage.getItem('userId') ? (
             <>
               <InputStyled
@@ -83,18 +101,17 @@ const ReplyAdd = props => {
             </>
           ) : null}
           <SecretToggle onChange={handleSecret} />
-        </div>
-        <div>
+        </InputWrapper>
+        <ButtonWrapper>
           <ButtonStyled
             variant="contained"
             color="default"
             size="small"
             type="submit"
-            endIcon={<FontAwesomeIcon icon={faReply} />}
           >
-            댓글 작성
+            작성
           </ButtonStyled>
-        </div>
+        </ButtonWrapper>
       </Wrapper>
     </form>
   );

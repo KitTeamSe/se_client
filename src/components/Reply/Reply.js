@@ -1,24 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Avatar as AnonyAvatar, Typography } from '@material-ui/core';
+import { Avatar, Typography } from '@material-ui/core';
 import { getFormatDate, getFormatTime } from '../../utils/format';
 import ReplyDeleteContainer from '../../containers/Reply/ReplyDeleteContainer';
 import ReplyAnonyDeleteContainer from '../../containers/Reply/ReplyAnonyDeleteContainer';
 import ReplyChildAddContainer from '../../containers/Reply/ReplyChildAddContainer';
 
-const AvatarDiameter = `40px`;
-
 const Comment = styled.div`
-  padding: 0 10px;
   font-size: 0.875rem;
 `;
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: calc(100% - 180px);
+  width: 100%;
 `;
+
 const ReplyWrapper = styled.div`
   display: flex;
   padding: 10px 0 20px 10px;
@@ -28,12 +26,29 @@ const ReplyWrapper = styled.div`
 
 const ChildWrapper = styled(ReplyWrapper)`
   padding-left: 30px;
+  @media ${props => props.theme.mobile} {
+    padding-left: 20px;
+  }
 `;
 
 const AvatarWrapper = styled.div`
-  width: ${AvatarDiameter};
-  height: ${AvatarDiameter};
+  width: 40px;
+  height: 40px;
   margin-right: 10px;
+  @media ${props => props.theme.mobile} {
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+  }
+`;
+
+const AnonyAvatar = styled(Avatar)`
+  width: 40px;
+  height: 40px;
+  @media ${props => props.theme.mobile} {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 const UserAvatar = styled(AnonyAvatar)`
@@ -41,12 +56,26 @@ const UserAvatar = styled(AnonyAvatar)`
 `;
 
 const InfoWrapper = styled.div`
-  width: 130px;
+  display: flex;
+  width: 180px;
+  min-width: 180px;
+  @media ${props => props.theme.mobile} {
+    width: 180px;
+    min-width: 130px;
+  }
+`;
+
+const ReplyInfoWrapper = styled.div`
+  width: 100%;
 `;
 
 const CommentWrapper = styled.div`
+  display: flex;
   width: 100%;
-  margin-bottom: 10px;
+  margin: 0 10px 10px 10px;
+  @media ${props => props.theme.mobile} {
+    margin: 0 0 10px 0;
+  }
 `;
 
 const ActionWrapper = styled(CommentWrapper)`
@@ -104,11 +133,11 @@ const ReplyInfo = props => {
   const { accountId, anonymousNickname, createAt } = props;
 
   return (
-    <>
+    <InfoWrapper>
       <AvatarWrapper>
         {accountId ? <UserAvatar /> : <AnonyAvatar />}
       </AvatarWrapper>
-      <InfoWrapper>
+      <ReplyInfoWrapper>
         {accountId ? (
           <NickName>{accountId}</NickName>
         ) : (
@@ -117,19 +146,24 @@ const ReplyInfo = props => {
 
         <DateText>{getFormatDate(createAt)}</DateText>
         <TimeText>{getFormatTime(createAt)}</TimeText>
-      </InfoWrapper>
-    </>
+      </ReplyInfoWrapper>
+    </InfoWrapper>
   );
 };
 
 const ReplyComment = props => {
-  const { content } = props;
+  const { content, isDelete, isSecret } = props;
+  const handleContent = () => {
+    if (isSecret === 'SECRET') return { __html: `🔒 ${content}` };
+    if (isDelete === 'DELETED') return { __html: `❌ ${content}` };
+    return { __html: content };
+  };
 
   return (
     <CommentWrapper>
       <Comment
         className="ck-content"
-        dangerouslySetInnerHTML={{ __html: content }}
+        dangerouslySetInnerHTML={handleContent()}
       />
     </CommentWrapper>
   );
@@ -141,20 +175,26 @@ const ReplyAction = props => {
     accountId,
     anonymousNickname,
     replyId,
+    isSecret,
     handleAddReplyChild
   } = props;
 
   return (
     <ActionWrapper>
-      {parentId ? (
-        <ActionButton onClick={() => handleAddReplyChild(parentId)}>
-          댓글
-        </ActionButton>
-      ) : (
-        <ActionButton onClick={() => handleAddReplyChild(replyId)}>
-          댓글
+      {isSecret === 'SECRET' && (
+        <ActionButton onClick={() => console.log(replyId)}>
+          비밀글확인
         </ActionButton>
       )}
+      <ActionButton
+        onClick={() =>
+          parentId
+            ? handleAddReplyChild(parentId)
+            : handleAddReplyChild(replyId)
+        }
+      >
+        댓글
+      </ActionButton>
       {localStorage.getItem('token') &&
       localStorage.getItem('userId') &&
       accountId ? (
@@ -181,6 +221,7 @@ const ReplyContents = props => {
     anonymousNickname,
     content,
     createAt,
+    isSecret,
     isDelete,
     handleAddReplyChild
   } = props;
@@ -193,13 +234,18 @@ const ReplyContents = props => {
         createAt={createAt}
       />
       <Wrapper>
-        <ReplyComment content={content} />
+        <ReplyComment
+          content={content}
+          isDelete={isDelete}
+          isSecret={isSecret}
+        />
         {isDelete === 'NORMAL' && (
           <ReplyAction
             parentId={parentId}
             accountId={accountId}
             anonymousNickname={anonymousNickname}
             replyId={replyId}
+            isSecret={isSecret}
             handleAddReplyChild={handleAddReplyChild}
           />
         )}
@@ -216,6 +262,7 @@ const ChildReply = props => {
     anonymousNickname,
     content,
     createAt,
+    isSecret,
     isDelete,
     handleAddReplyChild
   } = props;
@@ -229,6 +276,7 @@ const ChildReply = props => {
         anonymousNickname={anonymousNickname}
         content={content}
         createAt={createAt}
+        isSecret={isSecret}
         isDelete={isDelete}
         handleAddReplyChild={handleAddReplyChild}
       />
@@ -244,6 +292,7 @@ const Reply = props => {
     content,
     createAt,
     child,
+    isSecret,
     isDelete,
     handleAddReplyChild
   } = props;
@@ -258,6 +307,7 @@ const Reply = props => {
             anonymousNickname={anonymousNickname}
             content={content}
             createAt={createAt}
+            isSecret={isSecret}
             isDelete={isDelete}
             handleAddReplyChild={handleAddReplyChild}
           />
@@ -273,6 +323,7 @@ const Reply = props => {
               anonymousNickname={e.anonymousNickname}
               content={e.text}
               createAt={e.createAt}
+              isSecret={e.isSecret}
               isDelete={e.isDelete}
               handleAddReplyChild={handleAddReplyChild}
             />
