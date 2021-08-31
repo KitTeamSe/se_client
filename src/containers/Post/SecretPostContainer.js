@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Post from '../../components/Post/Post';
-import { loadPost } from '../../modules/post';
+import { loadSecretPost } from '../../modules/post';
+import SecretPostPassword from '../../components/Post/SecretPostPassword';
 
 const SecretPostContainer = props => {
-  const { location, match } = props;
+  const { match } = props;
   const [moremenuEl, setMoremenuEl] = useState(null);
   const [writerEl, setWriterEl] = useState(null);
+  const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector(({ post }) => ({
     data: post.loadedPost.data,
@@ -15,15 +17,15 @@ const SecretPostContainer = props => {
     error: post.loadedPost.error
   }));
 
-  useEffect(() => {
-    const id = match.params.postId;
-    dispatch(loadPost({ id }));
-  }, [location]);
-  console.log('location', location);
-  console.log('match', match);
+  const PasswordSubmit = e => {
+    e.preventDefault();
+    const postId = Number(match.params.postId);
+    dispatch(loadSecretPost({ postId, password }));
+  };
 
   const reportFunction = () => {
     console.log('report logic');
+    setPassword('asdf1234');
   };
 
   const banFunction = () => {
@@ -86,15 +88,24 @@ const SecretPostContainer = props => {
   };
 
   return (
-    <Post
-      data={data}
-      loading={loading}
-      error={error}
-      moremenuEl={moremenuEl}
-      writerEl={writerEl}
-      functionExcute={functionExcute}
-      menuClick={menuClick}
-    />
+    <>
+      {data ? (
+        <Post
+          data={data}
+          loading={loading}
+          error={error}
+          moremenuEl={moremenuEl}
+          writerEl={writerEl}
+          functionExcute={functionExcute}
+          menuClick={menuClick}
+        />
+      ) : (
+        <SecretPostPassword
+          password={password}
+          PasswordSubmit={PasswordSubmit}
+        />
+      )}
+    </>
   );
 };
 

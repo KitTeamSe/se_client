@@ -17,9 +17,8 @@ const LoadingCircle = styled(CircularProgress)`
 `;
 
 const MainWrapper = styled.div`
-  margin: auto;
-  width: 100%;
-  margin-top: 2rem;
+  margin-top: 3rem;
+  width: calc(100% - 4rem);
   padding: 2rem;
   flex-direction: column;
   align-items: center;
@@ -78,8 +77,7 @@ const Tag = styled.span`
 `;
 
 const PostText = styled.div`
-  width: 100%;
-  padding: 3rem 0px;
+  padding: 3rem 2rem;
   font-size: 1rem;
   border-top: 1px solid #cccccc;
   border-bottom: 1px solid #cccccc;
@@ -168,9 +166,9 @@ const PostHeader = props => {
           {isSecret === 'NORMAL' ? (
             <></>
           ) : (
-            <PostHeadInfo>
+            <PostHeadInfoComponent>
               <Icon icon={faLock} />
-            </PostHeadInfo>
+            </PostHeadInfoComponent>
           )}
         </div>
         <PostHeadInfoComponent>

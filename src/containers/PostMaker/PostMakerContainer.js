@@ -6,7 +6,7 @@ const makePost = async () => {
   const attachedFiles = [];
   const data = {
     anonymous: {
-      anonymousNickname: '익명사용자비밀번호는asdf1234',
+      anonymousNickname: '익명사용자',
       anonymousPassword: 'asdf1234'
     },
 
