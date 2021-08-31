@@ -56,6 +56,11 @@ const PostHeadInfoComponent = styled.span`
   margin: 0px 0.3rem;
 `;
 
+const WriterIcon = styled.span`
+  margin: 0px 0.3rem;
+  cursor: pointer;
+`;
+
 const TagIcon = styled.span`
   padding: 0 0.3rem;
   margin-left: 0.5rem;
@@ -97,7 +102,7 @@ const ReplyDiv = styled.div`
 `;
 
 const PostHeader = props => {
-  const { res, anchorEl, menuClick, modeChange } = props;
+  const { res, moremenuEl, writerEl, menuClick, functionExcute } = props;
   const { createdAt, isNotice, isSecret, nickname, tags, views, postContent } =
     res;
   const writeTime = `${createdAt[0]}년${createdAt[1]}월${createdAt[2]}일 ${createdAt[3]}:${createdAt[4]}`;
@@ -124,10 +129,30 @@ const PostHeader = props => {
       </PostHeadTitle>
       <PostHeadInfo>
         <div>
-          <PostHeadInfoComponent>
+          <WriterIcon onClick={menuClick} id="writer">
             <Icon icon={faUser} />
             {nickname}
-          </PostHeadInfoComponent>
+          </WriterIcon>
+          <Menu
+            anchorEl={writerEl}
+            keepMounted
+            open={Boolean(writerEl)}
+            onClose={menuClick}
+            style={{ marginLeft: '4rem' }}
+          >
+            <MenuItem id="message" onClick={functionExcute}>
+              쪽지 보내기
+            </MenuItem>
+            <MenuItem id="profile" onClick={functionExcute}>
+              회원정보 보기
+            </MenuItem>
+            <MenuItem id="mail" onClick={functionExcute}>
+              메일 보내기
+            </MenuItem>
+            <MenuItem id="post" onClick={functionExcute}>
+              작성 글 보기
+            </MenuItem>
+          </Menu>
           <PostHeadInfoComponent>{writeTime}</PostHeadInfoComponent>
           <PostHeadInfoComponent>
             <Icon icon={faEye} />
@@ -149,19 +174,23 @@ const PostHeader = props => {
           )}
         </div>
         <PostHeadInfoComponent>
-          <MoreButton icon={faEllipsisH} size="lg" onClick={menuClick} />
+          <MoreButton
+            icon={faEllipsisH}
+            size="lg"
+            onClick={menuClick}
+            id="more"
+          />
           <Menu
-            id="moreButton"
-            anchorEl={anchorEl}
+            anchorEl={moremenuEl}
             keepMounted
-            open={Boolean(anchorEl)}
+            open={Boolean(moremenuEl)}
             onClose={menuClick}
-            style={{ marginLeft: '36px' }}
+            style={{ marginLeft: '1.75rem' }}
           >
-            <MenuItem id="ban" onClick={modeChange}>
+            <MenuItem id="ban" onClick={functionExcute}>
               작성자 차단
             </MenuItem>
-            <MenuItem id="report" onClick={modeChange}>
+            <MenuItem id="report" onClick={functionExcute}>
               신고
             </MenuItem>
           </Menu>
@@ -190,7 +219,15 @@ const Reply = () => {
 };
 
 const Post = props => {
-  const { data, loading, error, anchorEl, menuClick, modeChange } = props;
+  const {
+    data,
+    loading,
+    error,
+    moremenuEl,
+    writerEl,
+    menuClick,
+    functionExcute
+  } = props;
   if (error) {
     return <NoBoardBox>{error.message} 😅</NoBoardBox>;
   }
@@ -204,9 +241,10 @@ const Post = props => {
     <MainWrapper>
       <PostHeader
         res={res}
-        anchorEl={anchorEl}
+        moremenuEl={moremenuEl}
+        writerEl={writerEl}
         menuClick={menuClick}
-        modeChange={modeChange}
+        functionExcute={functionExcute}
       />
       <PostMain res={res} />
       <Reply />

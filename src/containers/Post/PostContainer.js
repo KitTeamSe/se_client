@@ -6,7 +6,8 @@ import { loadPost } from '../../modules/post';
 
 const PostContainer = props => {
   const { location, match } = props;
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [moremenuEl, setMoremenuEl] = useState(null);
+  const [writerEl, setWriterEl] = useState(null);
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector(({ post }) => ({
     data: post.loadedPost.data,
@@ -26,22 +27,61 @@ const PostContainer = props => {
     console.log('ban logic');
   };
 
-  const modeChange = e => {
+  const messageFunction = () => {
+    console.log('message logic');
+  };
+
+  const profileFunction = () => {
+    console.log('profile logic');
+  };
+  const mailFunction = () => {
+    console.log('mail logic');
+  };
+  const postFunction = () => {
+    console.log('post logic');
+  };
+
+  const functionExcute = e => {
     e.preventDefault();
     const value = e.target.id;
-    if (value === 'ban') {
-      banFunction();
-    } else if (value === 'report') {
-      reportFunction();
+    switch (value) {
+      case 'ban':
+        banFunction();
+        break;
+      case 'report':
+        reportFunction();
+        break;
+      case 'message':
+        messageFunction();
+        break;
+      case 'profile':
+        profileFunction();
+        break;
+      case 'mail':
+        mailFunction();
+        break;
+      case 'post':
+        postFunction();
+        break;
+      default:
+        console.log('not selected');
     }
-    setAnchorEl(null);
+    setWriterEl(null);
+    setMoremenuEl(null);
   };
 
   const menuClick = e => {
-    if (anchorEl) {
-      setAnchorEl(null);
+    const target = e.currentTarget;
+    if (moremenuEl || writerEl) {
+      setMoremenuEl(null);
+      setWriterEl(null);
     } else {
-      setAnchorEl(e.currentTarget);
+      console.log(target.id);
+      if (target.id === 'writer') {
+        setWriterEl(target);
+      } else if (target.id === 'more') {
+        setMoremenuEl(target);
+      }
     }
   };
 
@@ -50,8 +90,9 @@ const PostContainer = props => {
       data={data}
       loading={loading}
       error={error}
-      anchorEl={anchorEl}
-      modeChange={modeChange}
+      moremenuEl={moremenuEl}
+      writerEl={writerEl}
+      functionExcute={functionExcute}
       menuClick={menuClick}
     />
   );
