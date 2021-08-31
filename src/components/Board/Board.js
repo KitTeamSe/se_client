@@ -25,16 +25,6 @@ const LoadingCircle = styled(CircularProgress)`
   bottom: 50vh;
 `;
 
-const BoardTitle = styled(Link)`
-  padding: 24px;
-  font-size: 1.5rem;
-  font-weight: 600;
-  text-align: left;
-  width: auto;
-  text-decoration: none;
-  color: black;
-`;
-
 const MainWrapper = styled.div`
   margin: auto;
   display: flex;
@@ -114,7 +104,7 @@ const NoBoardBox = styled.div`
 `;
 
 const SearchBar = styled.form`
-  width: 8rem;
+  width: 12rem;
   padding: 4px;
   margin: 8px;
   align-items: center;
@@ -277,19 +267,11 @@ const BoardHeader = props => {
     onPostSearchTypeChange,
     keyword,
     onSearch,
-    onSearchChange,
-    nowBoard
+    onSearchChange
   } = props;
   return (
     <BoardHead>
-      {nowBoard === null ? (
-        <LoadingCircle />
-      ) : (
-        <BoardTitle to={`/board${nowBoard.boardId}`}>
-          {nowBoard.description}
-        </BoardTitle>
-      )}
-
+      <div />
       <BoardHeadRight>
         <FormSelectField
           margin="dense"
@@ -330,7 +312,6 @@ const Board = props => {
     onSearch,
     onPostSearchTypeChange,
     postSearchType,
-    nowBoard,
     boardId,
     boardPage
   } = props;
@@ -354,7 +335,6 @@ const Board = props => {
       <Route exact path="/board/:boardId/:postId" component={PostContainer} />
       <Route path="/board/:boardId">
         <BoardHeader
-          nowBoard={nowBoard}
           postSearchType={postSearchType}
           onPostSearchTypeChange={onPostSearchTypeChange}
           keyword={keyword}
