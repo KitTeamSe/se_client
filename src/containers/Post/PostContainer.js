@@ -22,6 +22,7 @@ const PostContainer = props => {
   const userId = localStorage.getItem('userId');
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     setPassword('');
     const { secret } = qs.parse(location.search, {
       ignoreQueryPrefix: true

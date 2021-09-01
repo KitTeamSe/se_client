@@ -124,14 +124,176 @@ const SubmitButton = styled.button`
   }
 `;
 
+const PostHeaderInfo = props => {
+  const {
+    menuClick,
+    nickname,
+    writerEl,
+    functionExcute,
+    writeTime,
+    views,
+    isNotice,
+    isSecret,
+    moremenuEl,
+    userId,
+    accountIdString
+  } = props;
+
+  return (
+    <>
+      {userId === accountIdString ? (
+        <PostHeadInfo>
+          <PostHeadInfoComponent>
+            <WriterIcon onClick={menuClick} id="writer">
+              <Icon icon={faUser} />
+              {nickname}
+            </WriterIcon>
+            <Menu
+              anchorEl={writerEl}
+              keepMounted
+              open={Boolean(writerEl)}
+              onClose={menuClick}
+              style={{ marginLeft: '4rem' }}
+            >
+              <MenuItem id="profile" onClick={functionExcute}>
+                회원정보 보기
+              </MenuItem>
+              <MenuItem id="post" onClick={functionExcute}>
+                작성 글 보기
+              </MenuItem>
+            </Menu>
+            <PostHeadInfoComponent>{writeTime}</PostHeadInfoComponent>
+            <PostHeadInfoComponent>
+              <Icon icon={faEye} />
+              {views}
+            </PostHeadInfoComponent>
+            {isNotice === 'NORMAL' ? (
+              <></>
+            ) : (
+              <PostHeadInfoComponent>
+                <Icon icon={faFlag} />
+              </PostHeadInfoComponent>
+            )}
+            {isSecret === 'NORMAL' ? (
+              <></>
+            ) : (
+              <PostHeadInfoComponent>
+                <Icon icon={faLock} />
+              </PostHeadInfoComponent>
+            )}
+          </PostHeadInfoComponent>
+          <PostHeadInfoComponent>
+            <MoreButton
+              icon={faEllipsisH}
+              size="lg"
+              onClick={menuClick}
+              id="more"
+            />
+            <Menu
+              anchorEl={moremenuEl}
+              keepMounted
+              open={Boolean(moremenuEl)}
+              onClose={menuClick}
+              style={{ marginLeft: '1.75rem' }}
+            >
+              <MenuItem id="fix" onClick={functionExcute}>
+                게시글 수정
+              </MenuItem>
+              <MenuItem id="delete" onClick={functionExcute}>
+                게시글 삭제
+              </MenuItem>
+            </Menu>
+          </PostHeadInfoComponent>
+        </PostHeadInfo>
+      ) : (
+        <PostHeadInfo>
+          <PostHeadInfoComponent>
+            <WriterIcon onClick={menuClick} id="writer">
+              <Icon icon={faUser} />
+              {nickname}
+            </WriterIcon>
+            <Menu
+              anchorEl={writerEl}
+              keepMounted
+              open={Boolean(writerEl)}
+              onClose={menuClick}
+              style={{ marginLeft: '4rem' }}
+            >
+              <MenuItem id="message" onClick={functionExcute}>
+                쪽지 보내기
+              </MenuItem>
+              <MenuItem id="profile" onClick={functionExcute}>
+                회원정보 보기
+              </MenuItem>
+              <MenuItem id="mail" onClick={functionExcute}>
+                메일 보내기
+              </MenuItem>
+              <MenuItem id="post" onClick={functionExcute}>
+                작성 글 보기
+              </MenuItem>
+              <MenuItem id="ban" onClick={functionExcute}>
+                작성자 차단
+              </MenuItem>
+            </Menu>
+            <PostHeadInfoComponent>{writeTime}</PostHeadInfoComponent>
+            <PostHeadInfoComponent>
+              <Icon icon={faEye} />
+              {views}
+            </PostHeadInfoComponent>
+            {isNotice === 'NORMAL' ? (
+              <></>
+            ) : (
+              <PostHeadInfoComponent>
+                <Icon icon={faFlag} />
+              </PostHeadInfoComponent>
+            )}
+            {isSecret === 'NORMAL' ? (
+              <></>
+            ) : (
+              <PostHeadInfoComponent>
+                <Icon icon={faLock} />
+              </PostHeadInfoComponent>
+            )}
+          </PostHeadInfoComponent>
+          <PostHeadInfoComponent>
+            <MoreButton
+              icon={faEllipsisH}
+              size="lg"
+              onClick={menuClick}
+              id="more"
+            />
+            <Menu
+              anchorEl={moremenuEl}
+              keepMounted
+              open={Boolean(moremenuEl)}
+              onClose={menuClick}
+              style={{ marginLeft: '1.75rem' }}
+            >
+              <MenuItem id="report" onClick={functionExcute}>
+                게시글 신고
+              </MenuItem>
+            </Menu>
+          </PostHeadInfoComponent>
+        </PostHeadInfo>
+      )}
+    </>
+  );
+};
+
 const PostHeader = props => {
   const { res, moremenuEl, writerEl, menuClick, functionExcute, userId } =
     props;
-  const { createdAt, isNotice, isSecret, nickname, tags, views, postContent } =
-    res;
+  const {
+    createdAt,
+    isNotice,
+    isSecret,
+    nickname,
+    tags,
+    views,
+    postContent,
+    accountIdString
+  } = res;
   const writeTime = `${createdAt[0]}년${createdAt[1]}월${createdAt[2]}일 ${createdAt[3]}:${createdAt[4]}`;
-
-  console.log(userId);
   return (
     <PostHead>
       <PostHeadTitle>
@@ -152,75 +314,19 @@ const PostHeader = props => {
           </Tag>
         )}
       </PostHeadTitle>
-      <PostHeadInfo>
-        <div>
-          <WriterIcon onClick={menuClick} id="writer">
-            <Icon icon={faUser} />
-            {nickname}
-          </WriterIcon>
-          <Menu
-            anchorEl={writerEl}
-            keepMounted
-            open={Boolean(writerEl)}
-            onClose={menuClick}
-            style={{ marginLeft: '4rem' }}
-          >
-            <MenuItem id="message" onClick={functionExcute}>
-              쪽지 보내기
-            </MenuItem>
-            <MenuItem id="profile" onClick={functionExcute}>
-              회원정보 보기
-            </MenuItem>
-            <MenuItem id="mail" onClick={functionExcute}>
-              메일 보내기
-            </MenuItem>
-            <MenuItem id="post" onClick={functionExcute}>
-              작성 글 보기
-            </MenuItem>
-            <MenuItem id="ban" onClick={functionExcute}>
-              작성자 차단
-            </MenuItem>
-          </Menu>
-          <PostHeadInfoComponent>{writeTime}</PostHeadInfoComponent>
-          <PostHeadInfoComponent>
-            <Icon icon={faEye} />
-            {views}
-          </PostHeadInfoComponent>
-          {isNotice === 'NORMAL' ? (
-            <></>
-          ) : (
-            <PostHeadInfoComponent>
-              <Icon icon={faFlag} />
-            </PostHeadInfoComponent>
-          )}
-          {isSecret === 'NORMAL' ? (
-            <></>
-          ) : (
-            <PostHeadInfoComponent>
-              <Icon icon={faLock} />
-            </PostHeadInfoComponent>
-          )}
-        </div>
-        <PostHeadInfoComponent>
-          <MoreButton
-            icon={faEllipsisH}
-            size="lg"
-            onClick={menuClick}
-            id="more"
-          />
-          <Menu
-            anchorEl={moremenuEl}
-            keepMounted
-            open={Boolean(moremenuEl)}
-            onClose={menuClick}
-            style={{ marginLeft: '1.75rem' }}
-          >
-            <MenuItem id="report" onClick={functionExcute}>
-              게시글 신고
-            </MenuItem>
-          </Menu>
-        </PostHeadInfoComponent>
-      </PostHeadInfo>
+      <PostHeaderInfo
+        userId={userId}
+        accountIdString={accountIdString}
+        writeTime={writeTime}
+        isNotice={isNotice}
+        isSecret={isSecret}
+        nickname={nickname}
+        views={views}
+        moremenuEl={moremenuEl}
+        writerEl={writerEl}
+        menuClick={menuClick}
+        functionExcute={functionExcute}
+      />
     </PostHead>
   );
 };
