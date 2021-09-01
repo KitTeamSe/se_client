@@ -26,7 +26,7 @@ const [LOAD_SECRET_POST, LOAD_SECRET_POST_SUCCESS, LOAD_SECRET_POST_FAILURE] =
   createRequestActionTypes('post/LOAD_SECRET_POST');
 
 // Action Creators
-export const initialize = createAction(INITIALIZE);
+export const initialize = createAction(INITIALIZE, form => form);
 
 export const loadPostList = createAction(
   LOAD_POST_LIST,
@@ -81,7 +81,10 @@ const initialState = {
 
 export default handleActions(
   {
-    [INITIALIZE]: () => initialState,
+    [INITIALIZE]: (state, { payload: form }) => ({
+      ...state,
+      [form]: initialState[form]
+    }),
     [LOAD_POST_LIST]: state => ({
       ...state,
       loadedPostList: reducerUtils.loading(state.loadedPostList.data)

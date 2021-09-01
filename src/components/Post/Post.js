@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { CircularProgress, Menu, MenuItem } from '@material-ui/core';
+import { CircularProgress, Menu, MenuItem, TextField } from '@material-ui/core';
 import {
   faLock,
   faEye,
@@ -10,10 +10,16 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { tagList } from '../../DataExport';
+import ReplyTestPage from '../Reply/ReplyTestPage';
 
 const LoadingCircle = styled(CircularProgress)`
   position: absolute;
   bottom: 50vh;
+`;
+
+const FormTextField = styled(TextField)`
+  margin: 12px 32px 12px 32px;
+  min-width: 256px;
 `;
 
 const MainWrapper = styled.div`
@@ -93,10 +99,29 @@ const MoreButton = styled(FontAwesomeIcon)`
   cursor: pointer;
 `;
 
-const ReplyDiv = styled.div`
+const FormField = styled.form`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
   width: 100%;
-  padding: 2rem 0;
-  border-bottom: 1px solid #cccccc;
+  align-items: center;
+`;
+
+const SubmitButton = styled.button`
+  border-radius: 24px;
+  font-size: 16px;
+  padding: 0.5rem 3rem;
+  margin: 2rem;
+  background-image: linear-gradient(to right, #00d2ff 0%, #3a7bd5 100%);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: 0.5s;
+  font-weight: 400;
+  &:hover {
+    background-position: right;
+    transition: 0.5s;
+  }
 `;
 
 const PostHeader = props => {
@@ -208,11 +233,25 @@ const PostMain = props => {
   );
 };
 
-const Reply = () => {
+const SecretPostPassword = props => {
+  const { password, PasswordSubmit, onChange } = props;
+
   return (
-    <ReplyDiv>
-      <div>댓글</div>
-    </ReplyDiv>
+    <MainWrapper>
+      <FormField onSubmit={PasswordSubmit}>
+        <FormTextField
+          autoFocus
+          id="nowPassword"
+          label="비밀번호를 입력하세요"
+          type="password"
+          onChange={onChange}
+          value={password}
+        />
+        <SubmitButton type="submit" onClick={PasswordSubmit} color="primary">
+          확인
+        </SubmitButton>
+      </FormField>
+    </MainWrapper>
   );
 };
 
@@ -224,10 +263,25 @@ const Post = props => {
     moremenuEl,
     writerEl,
     menuClick,
-    functionExcute
+    functionExcute,
+    secretPost,
+    onChange,
+    password,
+    PasswordSubmit
   } = props;
+
   if (error) {
     return <NoBoardBox>{error.message} 😅</NoBoardBox>;
+  }
+
+  if (secretPost && data == null) {
+    return (
+      <SecretPostPassword
+        password={password}
+        PasswordSubmit={PasswordSubmit}
+        onChange={onChange}
+      />
+    );
   }
   if (data === null || loading) {
     return <LoadingCircle />;
@@ -245,7 +299,7 @@ const Post = props => {
         functionExcute={functionExcute}
       />
       <PostMain res={res} />
-      <Reply />
+      <ReplyTestPage />
     </MainWrapper>
   );
 };
