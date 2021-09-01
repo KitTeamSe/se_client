@@ -125,11 +125,13 @@ const SubmitButton = styled.button`
 `;
 
 const PostHeader = props => {
-  const { res, moremenuEl, writerEl, menuClick, functionExcute } = props;
+  const { res, moremenuEl, writerEl, menuClick, functionExcute, userId } =
+    props;
   const { createdAt, isNotice, isSecret, nickname, tags, views, postContent } =
     res;
   const writeTime = `${createdAt[0]}년${createdAt[1]}월${createdAt[2]}일 ${createdAt[3]}:${createdAt[4]}`;
 
+  console.log(userId);
   return (
     <PostHead>
       <PostHeadTitle>
@@ -175,6 +177,9 @@ const PostHeader = props => {
             <MenuItem id="post" onClick={functionExcute}>
               작성 글 보기
             </MenuItem>
+            <MenuItem id="ban" onClick={functionExcute}>
+              작성자 차단
+            </MenuItem>
           </Menu>
           <PostHeadInfoComponent>{writeTime}</PostHeadInfoComponent>
           <PostHeadInfoComponent>
@@ -210,11 +215,8 @@ const PostHeader = props => {
             onClose={menuClick}
             style={{ marginLeft: '1.75rem' }}
           >
-            <MenuItem id="ban" onClick={functionExcute}>
-              작성자 차단
-            </MenuItem>
             <MenuItem id="report" onClick={functionExcute}>
-              신고
+              게시글 신고
             </MenuItem>
           </Menu>
         </PostHeadInfoComponent>
@@ -267,7 +269,8 @@ const Post = props => {
     secretPost,
     onChange,
     password,
-    PasswordSubmit
+    PasswordSubmit,
+    userId
   } = props;
 
   if (error) {
@@ -288,6 +291,7 @@ const Post = props => {
   }
 
   const res = data.data;
+  console.log(res);
 
   return (
     <MainWrapper>
@@ -297,6 +301,7 @@ const Post = props => {
         writerEl={writerEl}
         menuClick={menuClick}
         functionExcute={functionExcute}
+        userId={userId}
       />
       <PostMain res={res} />
       <ReplyTestPage />

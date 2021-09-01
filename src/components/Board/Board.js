@@ -220,12 +220,9 @@ const PostTitle = props => {
   );
 };
 
-const NoBoard = () => {
-  return <NoBoardBox>게시판이 아직 만들어지지 않았어요 😅</NoBoardBox>;
-};
-
-const Unauthorized = () => {
-  return <NoBoardBox>게시판 접근 권한이 없습니다 😅</NoBoardBox>;
+const ErrorBoard = props => {
+  const { error } = props;
+  return <NoBoardBox>{error.message}</NoBoardBox>;
 };
 
 const NoPost = props => {
@@ -323,11 +320,9 @@ const Board = props => {
   } = props;
 
   if (error) {
-    if (error.status === 403) {
-      return <Unauthorized />;
-    }
-    return <NoBoard />;
+    return <ErrorBoard error={error} />;
   }
+
   if (data === null || loading) {
     return (
       <MainWrapper>

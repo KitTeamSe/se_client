@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import qs from 'qs';
 import Post from '../../components/Post/Post';
 import { loadPost, loadSecretPost, initialize } from '../../modules/post';
+import { postDelete } from '../../libs/api/post';
 
 const PostContainer = props => {
   const { location, match } = props;
@@ -17,6 +18,8 @@ const PostContainer = props => {
     loading: post.loadedPost.loading,
     error: post.loadedPost.error
   }));
+
+  const userId = localStorage.getItem('userId');
 
   useEffect(() => {
     setPassword('');
@@ -46,6 +49,13 @@ const PostContainer = props => {
 
   const reportFunction = () => {
     console.log('report logic');
+  };
+
+  const deleteFunction = () => {
+    console.log('delete logic');
+    const id = match.params.postId;
+    console.log(id);
+    postDelete({ id });
   };
 
   const banFunction = () => {
@@ -88,6 +98,9 @@ const PostContainer = props => {
       case 'post':
         postFunction();
         break;
+      case 'delete':
+        deleteFunction();
+        break;
       default:
         console.log('not selected');
     }
@@ -120,6 +133,7 @@ const PostContainer = props => {
       PasswordSubmit={PasswordSubmit}
       password={password}
       onChange={onChange}
+      userId={userId}
     />
   );
 };
