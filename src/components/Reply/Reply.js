@@ -6,6 +6,7 @@ import { getFormatDate, getFormatTime } from '../../utils/format';
 import ReplyDeleteContainer from '../../containers/Reply/ReplyDeleteContainer';
 import ReplyAnonyDeleteContainer from '../../containers/Reply/ReplyAnonyDeleteContainer';
 import ReplyChildAddContainer from '../../containers/Reply/ReplyChildAddContainer';
+import SecretReplyContainer from '../../containers/Reply/SecretReplyContainer';
 
 const Comment = styled.div`
   font-size: 0.875rem;
@@ -154,8 +155,8 @@ const ReplyInfo = props => {
 const ReplyComment = props => {
   const { content, isDelete, isSecret } = props;
   const handleContent = () => {
-    if (isSecret === 'SECRET') return { __html: `🔒 ${content}` };
     if (isDelete === 'DELETED') return { __html: `❌ ${content}` };
+    if (isSecret === 'SECRET') return { __html: `🔒 ${content}` };
     return { __html: content };
   };
 
@@ -172,7 +173,9 @@ const ReplyComment = props => {
 const ReplyAction = props => {
   const {
     parentId,
+    parentIndex,
     accountId,
+    replyIndex,
     anonymousNickname,
     replyId,
     isSecret,
@@ -182,9 +185,11 @@ const ReplyAction = props => {
   return (
     <ActionWrapper>
       {isSecret === 'SECRET' && (
-        <ActionButton onClick={() => console.log(replyId)}>
-          비밀글확인
-        </ActionButton>
+        <SecretReplyContainer
+          replyId={replyId}
+          parentIndex={parentIndex}
+          replyIndex={replyIndex}
+        />
       )}
       <ActionButton
         onClick={() =>
@@ -216,7 +221,9 @@ const ReplyAction = props => {
 const ReplyContents = props => {
   const {
     parentId,
+    parentIndex,
     replyId,
+    replyIndex,
     accountId,
     anonymousNickname,
     content,
@@ -242,7 +249,9 @@ const ReplyContents = props => {
         {isDelete === 'NORMAL' && (
           <ReplyAction
             parentId={parentId}
+            parentIndex={parentIndex}
             accountId={accountId}
+            replyIndex={replyIndex}
             anonymousNickname={anonymousNickname}
             replyId={replyId}
             isSecret={isSecret}
@@ -257,7 +266,9 @@ const ReplyContents = props => {
 const ChildReply = props => {
   const {
     parentId,
+    parentIndex,
     replyId,
+    replyIndex,
     accountId,
     anonymousNickname,
     content,
@@ -271,7 +282,9 @@ const ChildReply = props => {
     <ChildWrapper isDelete={isDelete}>
       <ReplyContents
         parentId={parentId}
+        parentIndex={parentIndex}
         replyId={replyId}
+        replyIndex={replyIndex}
         accountId={accountId}
         anonymousNickname={anonymousNickname}
         content={content}
@@ -287,6 +300,7 @@ const ChildReply = props => {
 const Reply = props => {
   const {
     replyId,
+    replyIndex,
     accountId,
     anonymousNickname,
     content,
@@ -303,6 +317,7 @@ const Reply = props => {
         <ReplyWrapper isDelete={isDelete}>
           <ReplyContents
             replyId={replyId}
+            replyIndex={replyIndex}
             accountId={accountId}
             anonymousNickname={anonymousNickname}
             content={content}
@@ -315,10 +330,12 @@ const Reply = props => {
       )}
 
       {child && child.length
-        ? child.map(e => (
+        ? child.map((e, index) => (
             <ChildReply
               parentId={replyId}
+              parentIndex={replyIndex}
               replyId={e.replyId}
+              replyIndex={index}
               accountId={e.accountId}
               anonymousNickname={e.anonymousNickname}
               content={e.text}

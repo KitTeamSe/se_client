@@ -67,9 +67,10 @@ const ReplyList = props => {
     <>
       <ReplyHeader totalData={totalData} />
       {!loading && data
-        ? data.map(e => (
+        ? data.map((e, index) => (
             <Reply
               replyId={e.replyId}
+              replyIndex={index}
               accountId={e.accountId}
               anonymousNickname={e.anonymousNickname}
               content={e.text}

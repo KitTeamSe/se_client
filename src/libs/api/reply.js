@@ -112,12 +112,12 @@ export const removeReplyAnony = ({ password, replyId }) => {
     });
 };
 
-export const getReplySecret = ({ password, replyId }) => {
+export const getSecretReply = ({ password, replyId }) => {
   const queryString = qs.stringify({ password, replyId });
   const token = localStorage.getItem('token');
 
   return client
-    .post(`${URL}/secret?${queryString}`, tokenHeader(token))
+    .get(`${URL}/secret?${queryString}`, tokenHeader(token))
     .catch(error => {
       if (error.response.data.code === 'GE05') {
         localStorage.clear();
