@@ -25,6 +25,9 @@ const [LOAD_POST, LOAD_POST_SUCCESS, LOAD_POST_FAILURE] =
 const [LOAD_SECRET_POST, LOAD_SECRET_POST_SUCCESS, LOAD_SECRET_POST_FAILURE] =
   createRequestActionTypes('post/LOAD_SECRET_POST');
 
+const [POST_DELETE, POST_DELETE_SUCCESS, POST_DELETE_FAILURE] =
+  createRequestActionTypes('post/POST_DELETE');
+
 // Action Creators
 export const initialize = createAction(INITIALIZE, form => form);
 
@@ -54,6 +57,10 @@ export const loadSecretPost = createAction(
   })
 );
 
+export const postDelete = createAction(POST_DELETE, ({ id }) => ({
+  id
+}));
+
 // Sagas
 const loadPostListSaga = createRequestSaga(LOAD_POST_LIST, api.loadPostList);
 const loadMenuListSage = createRequestSaga(LOAD_MENU_LIST, api.loadMenuList);
@@ -63,6 +70,7 @@ const loadSecretPostSaga = createRequestSaga(
   LOAD_SECRET_POST,
   api.loadSecretPost
 );
+const postDeleteSaga = createRequestSaga(POST_DELETE, api.postDelete);
 
 export function* postSaga() {
   yield takeLatest(LOAD_POST_LIST, loadPostListSaga);
@@ -70,13 +78,15 @@ export function* postSaga() {
   yield takeLatest(SEARCH_POST, searchPostSaga);
   yield takeLatest(LOAD_POST, loadPostSaga);
   yield takeLatest(LOAD_SECRET_POST, loadSecretPostSaga);
+  yield takeLatest(POST_DELETE, postDeleteSaga);
 }
 
 // reducer (handleActions => switch문 대체)
 const initialState = {
   loadedPostList: reducerUtils.initial(),
   loadedMenuList: reducerUtils.initial(),
-  loadedPost: reducerUtils.initial()
+  loadedPost: reducerUtils.initial(),
+  postDeleteRes: reducerUtils.initial()
 };
 
 export default handleActions(
@@ -144,6 +154,18 @@ export default handleActions(
     [LOAD_SECRET_POST_FAILURE]: (state, { payload: error }) => ({
       ...state,
       loadedPost: reducerUtils.error(error)
+    }),
+    [POST_DELETE]: state => ({
+      ...state,
+      postDeleteRes: reducerUtils.loading(state.postDeleteRes.data)
+    }),
+    [POST_DELETE_SUCCESS]: (state, { payload: response }) => ({
+      ...state,
+      postDeleteRes: reducerUtils.success(response)
+    }),
+    [POST_DELETE_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      postDeleteRes: reducerUtils.error(error)
     })
   },
   initialState

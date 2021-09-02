@@ -1,4 +1,4 @@
-import { client } from './client';
+import { client, tokenHeader } from './client';
 
 export const loadPostList = async ({ boardId, direction, page, size }) => {
   const parameters = { boardId, direction, page, size };
@@ -20,7 +20,8 @@ export const loadMenuList = async () => {
 };
 
 export const makeSomePost = async ({ formData }) => {
-  return client.post('/post', formData).catch(error => {
+  const token = localStorage.getItem('token');
+  return client.post('/post', formData, tokenHeader(token)).catch(error => {
     throw error.response.data;
   });
 };
@@ -34,6 +35,13 @@ export const loadPost = async ({ id }) => {
 export const loadSecretPost = async ({ postId, password }) => {
   const parameters = { postId, password };
   return client.get(`/post/secret`, { params: parameters }).catch(error => {
+    throw error.response.data;
+  });
+};
+
+export const postDelete = async ({ id }) => {
+  const token = localStorage.getItem('token');
+  return client.delete(`/post/${id}`, tokenHeader(token)).catch(error => {
     throw error.response.data;
   });
 };

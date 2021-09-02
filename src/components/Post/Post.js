@@ -1,6 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
-import { CircularProgress, Menu, MenuItem, TextField } from '@material-ui/core';
+import {
+  CircularProgress,
+  Menu,
+  MenuItem,
+  TextField,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
+} from '@material-ui/core';
+
 import {
   faLock,
   faEye,
@@ -124,12 +136,204 @@ const SubmitButton = styled.button`
   }
 `;
 
-const PostHeader = props => {
-  const { res, moremenuEl, writerEl, menuClick, functionExcute } = props;
-  const { createdAt, isNotice, isSecret, nickname, tags, views, postContent } =
-    res;
-  const writeTime = `${createdAt[0]}년${createdAt[1]}월${createdAt[2]}일 ${createdAt[3]}:${createdAt[4]}`;
+const AlertDialog = props => {
+  const { deleteBoxOpen, deleteBoxHandle, deleteFunction } = props;
 
+  return (
+    <Dialog
+      open={deleteBoxOpen}
+      onClose={deleteBoxHandle}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">삭제</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          게시글을 삭제하시겠습니까? 복구되지 않습니다
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={deleteBoxHandle} color="primary">
+          취소
+        </Button>
+        <Button onClick={deleteFunction} color="secondary">
+          삭제
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+const PostHeaderInfo = props => {
+  const {
+    menuClick,
+    nickname,
+    writerEl,
+    functionExcute,
+    writeTime,
+    views,
+    isNotice,
+    isSecret,
+    moremenuEl,
+    userId,
+    accountIdString
+  } = props;
+
+  return (
+    <>
+      {userId && userId === accountIdString ? (
+        <PostHeadInfo>
+          <PostHeadInfoComponent>
+            <WriterIcon onClick={menuClick} id="writer">
+              <Icon icon={faUser} />
+              {nickname}
+            </WriterIcon>
+            <Menu
+              anchorEl={writerEl}
+              keepMounted
+              open={Boolean(writerEl)}
+              onClose={menuClick}
+              style={{ marginLeft: '4rem' }}
+            >
+              <MenuItem id="profile" onClick={functionExcute}>
+                회원정보 보기
+              </MenuItem>
+              <MenuItem id="post" onClick={functionExcute}>
+                작성 글 보기
+              </MenuItem>
+            </Menu>
+            <PostHeadInfoComponent>{writeTime}</PostHeadInfoComponent>
+            <PostHeadInfoComponent>
+              <Icon icon={faEye} />
+              {views}
+            </PostHeadInfoComponent>
+            {isNotice === 'NORMAL' ? (
+              <></>
+            ) : (
+              <PostHeadInfoComponent>
+                <Icon icon={faFlag} />
+              </PostHeadInfoComponent>
+            )}
+            {isSecret === 'NORMAL' ? (
+              <></>
+            ) : (
+              <PostHeadInfoComponent>
+                <Icon icon={faLock} />
+              </PostHeadInfoComponent>
+            )}
+          </PostHeadInfoComponent>
+          <PostHeadInfoComponent>
+            <MoreButton
+              icon={faEllipsisH}
+              size="lg"
+              onClick={menuClick}
+              id="more"
+            />
+            <Menu
+              anchorEl={moremenuEl}
+              keepMounted
+              open={Boolean(moremenuEl)}
+              onClose={menuClick}
+              style={{ marginLeft: '1.75rem' }}
+            >
+              <MenuItem id="fix" onClick={functionExcute}>
+                게시글 수정
+              </MenuItem>
+              <MenuItem id="delete" onClick={functionExcute}>
+                게시글 삭제
+              </MenuItem>
+            </Menu>
+          </PostHeadInfoComponent>
+        </PostHeadInfo>
+      ) : (
+        <PostHeadInfo>
+          <PostHeadInfoComponent>
+            <WriterIcon onClick={menuClick} id="writer">
+              <Icon icon={faUser} />
+              {nickname}
+            </WriterIcon>
+            <Menu
+              anchorEl={writerEl}
+              keepMounted
+              open={Boolean(writerEl)}
+              onClose={menuClick}
+              style={{ marginLeft: '4rem' }}
+            >
+              <MenuItem id="message" onClick={functionExcute}>
+                쪽지 보내기
+              </MenuItem>
+              <MenuItem id="profile" onClick={functionExcute}>
+                회원정보 보기
+              </MenuItem>
+              <MenuItem id="mail" onClick={functionExcute}>
+                메일 보내기
+              </MenuItem>
+              <MenuItem id="post" onClick={functionExcute}>
+                작성 글 보기
+              </MenuItem>
+              <MenuItem id="ban" onClick={functionExcute}>
+                작성자 차단
+              </MenuItem>
+            </Menu>
+            <PostHeadInfoComponent>{writeTime}</PostHeadInfoComponent>
+            <PostHeadInfoComponent>
+              <Icon icon={faEye} />
+              {views}
+            </PostHeadInfoComponent>
+            {isNotice === 'NORMAL' ? (
+              <></>
+            ) : (
+              <PostHeadInfoComponent>
+                <Icon icon={faFlag} />
+              </PostHeadInfoComponent>
+            )}
+            {isSecret === 'NORMAL' ? (
+              <></>
+            ) : (
+              <PostHeadInfoComponent>
+                <Icon icon={faLock} />
+              </PostHeadInfoComponent>
+            )}
+          </PostHeadInfoComponent>
+          <PostHeadInfoComponent>
+            <MoreButton
+              icon={faEllipsisH}
+              size="lg"
+              onClick={menuClick}
+              id="more"
+            />
+            <Menu
+              anchorEl={moremenuEl}
+              keepMounted
+              open={Boolean(moremenuEl)}
+              onClose={menuClick}
+              style={{ marginLeft: '1.75rem' }}
+            >
+              <MenuItem id="report" onClick={functionExcute}>
+                게시글 신고
+              </MenuItem>
+            </Menu>
+          </PostHeadInfoComponent>
+        </PostHeadInfo>
+      )}
+    </>
+  );
+};
+
+const PostHeader = props => {
+  const { res, moremenuEl, writerEl, menuClick, functionExcute, userId } =
+    props;
+  const {
+    createdAt,
+    isNotice,
+    isSecret,
+    nickname,
+    tags,
+    views,
+    postContent,
+    accountIdString
+  } = res;
+  const writeTime = `${createdAt[0]}년${createdAt[1]}월${createdAt[2]}일 ${createdAt[3]}:${createdAt[4]}`;
   return (
     <PostHead>
       <PostHeadTitle>
@@ -150,75 +354,19 @@ const PostHeader = props => {
           </Tag>
         )}
       </PostHeadTitle>
-      <PostHeadInfo>
-        <div>
-          <WriterIcon onClick={menuClick} id="writer">
-            <Icon icon={faUser} />
-            {nickname}
-          </WriterIcon>
-          <Menu
-            anchorEl={writerEl}
-            keepMounted
-            open={Boolean(writerEl)}
-            onClose={menuClick}
-            style={{ marginLeft: '4rem' }}
-          >
-            <MenuItem id="message" onClick={functionExcute}>
-              쪽지 보내기
-            </MenuItem>
-            <MenuItem id="profile" onClick={functionExcute}>
-              회원정보 보기
-            </MenuItem>
-            <MenuItem id="mail" onClick={functionExcute}>
-              메일 보내기
-            </MenuItem>
-            <MenuItem id="post" onClick={functionExcute}>
-              작성 글 보기
-            </MenuItem>
-          </Menu>
-          <PostHeadInfoComponent>{writeTime}</PostHeadInfoComponent>
-          <PostHeadInfoComponent>
-            <Icon icon={faEye} />
-            {views}
-          </PostHeadInfoComponent>
-          {isNotice === 'NORMAL' ? (
-            <></>
-          ) : (
-            <PostHeadInfoComponent>
-              <Icon icon={faFlag} />
-            </PostHeadInfoComponent>
-          )}
-          {isSecret === 'NORMAL' ? (
-            <></>
-          ) : (
-            <PostHeadInfoComponent>
-              <Icon icon={faLock} />
-            </PostHeadInfoComponent>
-          )}
-        </div>
-        <PostHeadInfoComponent>
-          <MoreButton
-            icon={faEllipsisH}
-            size="lg"
-            onClick={menuClick}
-            id="more"
-          />
-          <Menu
-            anchorEl={moremenuEl}
-            keepMounted
-            open={Boolean(moremenuEl)}
-            onClose={menuClick}
-            style={{ marginLeft: '1.75rem' }}
-          >
-            <MenuItem id="ban" onClick={functionExcute}>
-              작성자 차단
-            </MenuItem>
-            <MenuItem id="report" onClick={functionExcute}>
-              신고
-            </MenuItem>
-          </Menu>
-        </PostHeadInfoComponent>
-      </PostHeadInfo>
+      <PostHeaderInfo
+        userId={userId}
+        accountIdString={accountIdString}
+        writeTime={writeTime}
+        isNotice={isNotice}
+        isSecret={isSecret}
+        nickname={nickname}
+        views={views}
+        moremenuEl={moremenuEl}
+        writerEl={writerEl}
+        menuClick={menuClick}
+        functionExcute={functionExcute}
+      />
     </PostHead>
   );
 };
@@ -267,11 +415,26 @@ const Post = props => {
     secretPost,
     onChange,
     password,
-    PasswordSubmit
+    PasswordSubmit,
+    userId,
+    deleteBoxOpen,
+    deleteBoxHandle,
+    deleteFunction,
+    postDeleteData,
+    postDeleteLoading,
+    postDeleteError
   } = props;
 
   if (error) {
     return <NoBoardBox>{error.message} 😅</NoBoardBox>;
+  }
+
+  if (postDeleteError) {
+    return <NoBoardBox>{postDeleteError.message} 😅</NoBoardBox>;
+  }
+
+  if (postDeleteData) {
+    return <NoBoardBox>{postDeleteData.message} 😋</NoBoardBox>;
   }
 
   if (secretPost && data == null) {
@@ -283,7 +446,7 @@ const Post = props => {
       />
     );
   }
-  if (data === null || loading) {
+  if (data === null || loading || postDeleteLoading) {
     return <LoadingCircle />;
   }
 
@@ -291,12 +454,18 @@ const Post = props => {
 
   return (
     <MainWrapper>
+      <AlertDialog
+        deleteBoxOpen={deleteBoxOpen}
+        deleteBoxHandle={deleteBoxHandle}
+        deleteFunction={deleteFunction}
+      />
       <PostHeader
         res={res}
         moremenuEl={moremenuEl}
         writerEl={writerEl}
         menuClick={menuClick}
         functionExcute={functionExcute}
+        userId={userId}
       />
       <PostMain res={res} />
       <ReplyTestPage />

@@ -3,7 +3,12 @@ import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import qs from 'qs';
 import Post from '../../components/Post/Post';
-import { loadPost, loadSecretPost, initialize } from '../../modules/post';
+import {
+  loadPost,
+  loadSecretPost,
+  postDelete,
+  initialize
+} from '../../modules/post';
 
 const PostContainer = props => {
   const { location, match } = props;
@@ -12,13 +17,26 @@ const PostContainer = props => {
   const [secretPost, setSecretPost] = useState(false);
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
-  const { data, loading, error } = useSelector(({ post }) => ({
+  const {
+    data,
+    loading,
+    error,
+    postDeleteData,
+    postDeleteLoading,
+    postDeleteError
+  } = useSelector(({ post }) => ({
     data: post.loadedPost.data,
     loading: post.loadedPost.loading,
-    error: post.loadedPost.error
+    error: post.loadedPost.error,
+    postDeleteData: post.postDeleteRes.data,
+    postDeleteLoading: post.postDeleteRes.loading,
+    postDeleteError: post.postDeleteRes.error
   }));
+  const [deleteBoxOpen, setDeleteBoxOpen] = useState(false);
+  const userId = localStorage.getItem('userId');
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     setPassword('');
     const { secret } = qs.parse(location.search, {
       ignoreQueryPrefix: true
@@ -46,6 +64,17 @@ const PostContainer = props => {
 
   const reportFunction = () => {
     console.log('report logic');
+  };
+
+  const deleteBoxHandle = () => {
+    setDeleteBoxOpen(!deleteBoxOpen);
+  };
+
+  const deleteFunction = () => {
+    console.log('delete logic');
+    setDeleteBoxOpen(false);
+    const id = match.params.postId;
+    dispatch(postDelete({ id }));
   };
 
   const banFunction = () => {
@@ -88,6 +117,9 @@ const PostContainer = props => {
       case 'post':
         postFunction();
         break;
+      case 'delete':
+        deleteBoxHandle();
+        break;
       default:
         console.log('not selected');
     }
@@ -115,11 +147,18 @@ const PostContainer = props => {
       moremenuEl={moremenuEl}
       writerEl={writerEl}
       secretPost={secretPost}
+      password={password}
+      userId={userId}
+      deleteBoxOpen={deleteBoxOpen}
+      postDeleteData={postDeleteData}
+      postDeleteLoading={postDeleteLoading}
+      postDeleteError={postDeleteError}
+      onChange={onChange}
       functionExcute={functionExcute}
       menuClick={menuClick}
       PasswordSubmit={PasswordSubmit}
-      password={password}
-      onChange={onChange}
+      deleteBoxHandle={deleteBoxHandle}
+      deleteFunction={deleteFunction}
     />
   );
 };
