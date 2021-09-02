@@ -6,6 +6,7 @@ import {
   createRequestActionTypes,
   createRequestSaga
 } from '../../libs/createRequestSaga';
+import reducerUtils from '../../libs/reducerUtils';
 
 // Actions
 const INITIALIZE_FORM = 'account/INITIALIZE_FORM';
@@ -64,54 +65,56 @@ const initialState = {
     password: '',
     text: ''
   },
-  myinfo: null,
-  myinfoError: null,
-  myinfoEditRes: null,
-  myinfoEditError: null,
-  accountDeleteRes: null,
-  accountDeleteError: null
+  myinfo: reducerUtils.initial(),
+  myinfoEditRes: reducerUtils.initial(),
+  accountDeleteRes: reducerUtils.initial()
 };
 
 export default handleActions(
   {
     [INITIALIZE_FORM]: (state, { payload: form }) => ({
       ...state,
-      [form]: initialState[form],
-      authError: null
+      [form]: initialState[form]
     }),
     [CHANGE_FIELD]: (state, { payload: { form, key, value } }) =>
       produce(state, draft => {
         draft[form][key] = value;
       }),
-    [MYINFO_SUCCESS]: (state, { payload: myInfo }) => ({
+    [MYINFO]: state => ({
       ...state,
-      myinfo: myInfo,
-      myinfoError: null
+      myinfo: reducerUtils.loading(state.myinfo.data)
+    }),
+    [MYINFO_SUCCESS]: (state, { payload: response }) => ({
+      ...state,
+      myinfo: reducerUtils.success(response)
     }),
     [MYINFO_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      myinfo: null,
-      myinfoError: error
+      myinfo: reducerUtils.error(error)
     }),
-    [MYINFOEDIT_SUCCESS]: (state, { payload: myinfoEditRes }) => ({
+    [MYINFOEDIT]: state => ({
       ...state,
-      myinfoEditRes,
-      myinfoEditError: null
+      myinfoEditRes: reducerUtils.loading(state.myinfoEditRes.data)
+    }),
+    [MYINFOEDIT_SUCCESS]: (state, { payload: response }) => ({
+      ...state,
+      myinfoEditRes: reducerUtils.success(response)
     }),
     [MYINFOEDIT_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      myinfoEditRes: null,
-      myinfoEditError: error
+      myinfoEditRes: reducerUtils.error(error)
     }),
-    [ACCOUNTDELETE_SUCCESS]: (state, { payload: accountDeleteRes }) => ({
+    [ACCOUNTDELETE]: state => ({
       ...state,
-      accountDeleteRes,
-      myinfoEditError: null
+      accountDeleteRes: reducerUtils.loading(state.accountDeleteRes.data)
+    }),
+    [ACCOUNTDELETE_SUCCESS]: (state, { payload: response }) => ({
+      ...state,
+      accountDeleteRes: reducerUtils.success(response)
     }),
     [ACCOUNTDELETE_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      accountDeleteRes: null,
-      accountDeleteError: error
+      accountDeleteRes: reducerUtils.error(error)
     })
   },
   initialState

@@ -17,11 +17,14 @@ const SignupPageContainer = () => {
   }
 
   const [error, setError] = useState(null);
-  const { form, signupResponse, signupError } = useSelector(({ auth }) => ({
-    form: auth.signup,
-    signupResponse: auth.signupResponse,
-    signupError: auth.signupError
-  }));
+  const { form, signupResponse, signupError, loading } = useSelector(
+    ({ auth }) => ({
+      form: auth.signup,
+      signupResponse: auth.signupResponse.data,
+      signupError: auth.signupResponse.error,
+      loading: auth.signupResponse.loading
+    })
+  );
 
   const dispatch = useDispatch();
 
@@ -127,6 +130,7 @@ const SignupPageContainer = () => {
       handleChange={handleChange}
       questionChange={questionChange}
       signupSubmit={signupSubmit}
+      loading={loading}
       inputs={form}
       error={error}
       questionList={questionList}

@@ -6,17 +6,23 @@ const makePost = async () => {
   const attachedFiles = [];
   const data = {
     anonymous: {
-      anonymousNickname: '길무짱',
-      anonymousPassword: '1234'
+      anonymousNickname: '익명사용자',
+      anonymousPassword: 'asdf1234'
     },
+
     boardId: 1,
     isNotice: 'NORMAL',
     isSecret: 'NORMAL',
     postContent: {
-      text: 'ㅇㅁ니럼ㄴ아럼ㄴ이ㅏ럼ㄴ이ㅏ럼나ㅣㅓ라ㅣㄴㅇ멀',
-      title: '제목미너ㅏㅇ래ㅏ멃재ㅑㅓㅁ니ㅏㅓㅎ리ㅏㅁㄴ헐비밀번호1234'
+      text: 'ㅅㄷㄴㅅㄷ나미섬니ㅏㅓㅣㅏㅁ',
+      title: '익명사용자비밀번호는asdf1234'
     }
+    // tagList: [{ tagId: 1 }]
   };
+  if (data.postContent.title.length > 50) {
+    console.log('제목수는 50자를 초과할수 없습니다');
+    return;
+  }
   const formData = new FormData();
   formData.append(
     'key',

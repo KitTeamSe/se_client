@@ -14,14 +14,14 @@ import LogoutDialog from '../../components/LoginDialog/LogoutDialog';
 
 const LoginDialogContainer = () => {
   const history = useHistory();
-  const [login, setLogin] = useState(false);
   const [error, setError] = useState(null);
   const [open, setPwChangeDialogOpen] = useState(false);
   const dispatch = useDispatch();
-  const { form, auths, authError } = useSelector(({ auth }) => ({
+  const { form, data, authError, loading } = useSelector(({ auth }) => ({
     form: auth.signin,
-    auths: auth.auth,
-    authError: auth.authError
+    data: auth.auth.data,
+    authError: auth.auth.error,
+    loading: auth.auth.loading
   }));
 
   const handleClickOpen = () => {
@@ -63,7 +63,7 @@ const LoginDialogContainer = () => {
     e.preventDefault();
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
-    setLogin(false);
+    dispatch(initializeAuth());
     window.location.reload();
   };
 
@@ -73,12 +73,12 @@ const LoginDialogContainer = () => {
 
   useEffect(() => {
     if (authError) {
-      setError(String(authError));
+      setError(String(error));
     }
-    if (auths) {
+    if (data) {
       localStorage.setItem(
         'token',
-        JSON.stringify(auths.data.token).replaceAll('"', '')
+        JSON.stringify(data.data.token).replaceAll('"', '')
       );
       localStorage.setItem('userId', form.id);
       dispatch(initializeAuth());
@@ -86,14 +86,13 @@ const LoginDialogContainer = () => {
     }
     if (localStorage.getItem('token')) {
       setPwChangeDialogOpen(false);
-      setLogin(true);
-      setError(false);
+      setError(null);
     }
-  }, [auths, authError, dispatch]);
+  }, [data, authError, dispatch, loading]);
 
   return (
     <>
-      {login ? (
+      {localStorage.getItem('token') ? (
         <LogoutDialog onLogout={onLogout} ProfileClick={ProfileClick} />
       ) : (
         <>
@@ -105,6 +104,7 @@ const LoginDialogContainer = () => {
             onChange={onChange}
             form={form}
             error={error}
+            loading={loading}
           />
         </>
       )}

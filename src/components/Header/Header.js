@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { TextField } from '@material-ui/core';
+import { Link, NavLink } from 'react-router-dom';
+import { CircularProgress } from '@material-ui/core';
 import LoginDialogContainer from '../../containers/LoginDialog/LoginDialogContainer';
 
 const HeaderWraper = styled.header`
@@ -14,18 +13,19 @@ const HeaderWraper = styled.header`
   justify-content: space-between;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   background-color: white;
+  z-index: 10;
 `;
 
 const NavigationWrapper = styled.div`
   width: auto;
+  margin-right: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;
   align-items: center;
 `;
 
-const LogoWrapper = styled.div`
-  width: 196px;
+const LogoWrapper = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -33,6 +33,9 @@ const LogoWrapper = styled.div`
   cursor: pointer;
   font-size: 1.75rem;
   font-weight: 700;
+  margin-left: 4rem;
+  text-decoration: none;
+  color: #57bee1;
 `;
 
 const MenuWrapper = styled.nav`
@@ -43,81 +46,52 @@ const MenuWrapper = styled.nav`
   align-items: center;
 `;
 
-const MenuItem = styled.a`
+const MenuItem = styled(NavLink)`
   color: gray;
   padding: 8px 12px;
   cursor: pointer;
   font-weight: 600;
   font-size: 1rem;
-  &:link {
-    text-decoration: none;
-  }
+  text-decoration: none;
 `;
 
-const NowMenuItem = styled.span`
-  color: black;
-  padding: 8px 12px;
-  cursor: pointer;
-  font-weight: 800;
-  &:link {
-    text-decoration: none;
-  }
-`;
-
-const SearchBar = styled.div`
-  width: 196px;
-  border: 1px solid black;
-  display: flex;
-  padding: 4px;
-  margin: 8px;
-  border-radius: 12px;
-  align-items: center;
-`;
-
-const SearchIcon = styled(FontAwesomeIcon)`
-  padding: 4px;
-  margin-right: 6px;
-  border-right: 1px solid gray;
-  color: black;
+const LoadingCircle = styled(CircularProgress)`
+  position: fixed;
+  top: 45vh;
+  right: 50vw;
 `;
 
 const Menu = props => {
-  const { menuList, path, MenuClick } = props;
+  const { data } = props;
   return (
-    <>
-      {menuList.map(menu => {
-        if (path === `/${menu.url}`) {
-          return (
-            <NowMenuItem key={menu.url} href={menu.url}>
-              {menu.name}
-            </NowMenuItem>
-          );
-        }
-        return (
-          <MenuItem onClick={MenuClick} key={menu.url} href={menu.url}>
-            {menu.name}
+    <ul>
+      {data.data.map(menu => (
+        <li key={menu.boardId}>
+          <MenuItem
+            to={`/board/${menu.boardId}`}
+            activeStyle={{ color: 'black' }}
+          >
+            {menu.nameKor}
           </MenuItem>
-        );
-      })}
-    </>
+        </li>
+      ))}
+    </ul>
   );
 };
 
 const Header = props => {
-  const { path, LogoClick, menuList, MenuClick } = props;
-
+  const { boardId, data, loading } = props;
+  if (data === null || loading) {
+    return <LoadingCircle />;
+  }
   return (
     <HeaderWraper>
-      <LogoWrapper onClick={LogoClick}>Logo</LogoWrapper>
+      <LogoWrapper to="/1">SE Board</LogoWrapper>
       <MenuWrapper>
-        <Menu menuList={menuList} path={path} MenuClick={MenuClick} />
+        <Menu boardId={boardId} data={data} />
       </MenuWrapper>
       <NavigationWrapper>
         <LoginDialogContainer />
-        <SearchBar>
-          <SearchIcon icon={faSearch} size="sm" />
-          <TextField id="text" type="text" value="검색기능 추가해야지" />
-        </SearchBar>
       </NavigationWrapper>
     </HeaderWraper>
   );

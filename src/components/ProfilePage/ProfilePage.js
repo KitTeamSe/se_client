@@ -331,7 +331,7 @@ const ProfileRow = props => {
   const { row } = props;
   return (
     <>
-      <TableRow key={row[0]}>
+      <TableRow>
         <TableCell component="th" scope="row">
           {accountData[row[0]]}
         </TableCell>
@@ -380,7 +380,7 @@ const EditRowClassifier = props => {
           onChange={typeChange}
         >
           {typeList.map(type => (
-            <MenuItem value={type.userType} key={type.typeid}>
+            <MenuItem value={type.userType} key={type.userType}>
               {type.userType}
             </MenuItem>
           ))}
@@ -409,7 +409,7 @@ const EditRow = props => {
     typeChange
   } = props;
   return (
-    <TableRow key={row[0]}>
+    <TableRow>
       <TableCell component="th" scope="row">
         {accountData[row[0]]}
       </TableCell>
@@ -441,6 +441,45 @@ const SubmitButton = props => {
       ) : (
         <></>
       )}
+    </>
+  );
+};
+
+const ProfileBody = props => {
+  const {
+    rows,
+    infoEditObj,
+    informationOpenAgreeChange,
+    handleChange,
+    typeChange,
+    mode,
+    myinfoEditSubmit
+  } = props;
+  return (
+    <>
+      <InfoTable>
+        <Table>
+          <TableBody>
+            {rows.map(row => (
+              <>
+                {changebleAccount.includes(row[0]) && mode === 'editMode' ? (
+                  <EditRow
+                    row={row}
+                    infoEditObj={infoEditObj}
+                    informationOpenAgreeChange={informationOpenAgreeChange}
+                    handleChange={handleChange}
+                    typeChange={typeChange}
+                    key={`${row[0]}editRow`}
+                  />
+                ) : (
+                  <ProfileRow row={row} key={`${row[0]}profileRow`} />
+                )}
+              </>
+            ))}
+          </TableBody>
+        </Table>
+      </InfoTable>
+      <SubmitButton mode={mode} myinfoEditSubmit={myinfoEditSubmit} />
     </>
   );
 };
@@ -487,29 +526,16 @@ const PropfilePage = props => {
           withdrawalSubmit={withdrawalSubmit}
           editFormRefresh={editFormRefresh}
         />
-        <InfoTable>
-          <Table>
-            <TableBody>
-              {rows.map(row => (
-                <>
-                  {changebleAccount.includes(row[0]) && mode === 'editMode' ? (
-                    <EditRow
-                      row={row}
-                      infoEditObj={infoEditObj}
-                      informationOpenAgreeChange={informationOpenAgreeChange}
-                      handleChange={handleChange}
-                      typeChange={typeChange}
-                    />
-                  ) : (
-                    <ProfileRow row={row} />
-                  )}
-                </>
-              ))}
-            </TableBody>
-          </Table>
-        </InfoTable>
+        <ProfileBody
+          rows={rows}
+          infoEditObj={infoEditObj}
+          informationOpenAgreeChange={informationOpenAgreeChange}
+          handleChange={handleChange}
+          typeChange={typeChange}
+          mode={mode}
+          myinfoEditSubmit={myinfoEditSubmit}
+        />
         <ErrorText>{error}</ErrorText>
-        <SubmitButton mode={mode} myinfoEditSubmit={myinfoEditSubmit} />
       </InfoTableWrapper>
     </Wrapper>
   );
