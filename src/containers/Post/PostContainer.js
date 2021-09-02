@@ -3,8 +3,12 @@ import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import qs from 'qs';
 import Post from '../../components/Post/Post';
-import { loadPost, loadSecretPost, initialize } from '../../modules/post';
-import { postDelete } from '../../libs/api/post';
+import {
+  loadPost,
+  loadSecretPost,
+  postDelete,
+  initialize
+} from '../../modules/post';
 
 const PostContainer = props => {
   const { location, match } = props;
@@ -13,12 +17,22 @@ const PostContainer = props => {
   const [secretPost, setSecretPost] = useState(false);
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
-  const { data, loading, error } = useSelector(({ post }) => ({
+  const {
+    data,
+    loading,
+    error,
+    postDeleteData,
+    postDeleteLoading,
+    postDeleteError
+  } = useSelector(({ post }) => ({
     data: post.loadedPost.data,
     loading: post.loadedPost.loading,
-    error: post.loadedPost.error
+    error: post.loadedPost.error,
+    postDeleteData: post.postDeleteRes.data,
+    postDeleteLoading: post.postDeleteRes.loading,
+    postDeleteError: post.postDeleteRes.error
   }));
-
+  const [deleteBoxOpen, setDeleteBoxOpen] = useState(false);
   const userId = localStorage.getItem('userId');
 
   useEffect(() => {
@@ -52,11 +66,15 @@ const PostContainer = props => {
     console.log('report logic');
   };
 
+  const deleteBoxHandle = () => {
+    setDeleteBoxOpen(!deleteBoxOpen);
+  };
+
   const deleteFunction = () => {
     console.log('delete logic');
+    setDeleteBoxOpen(false);
     const id = match.params.postId;
-    console.log(id);
-    postDelete({ id });
+    dispatch(postDelete({ id }));
   };
 
   const banFunction = () => {
@@ -100,7 +118,7 @@ const PostContainer = props => {
         postFunction();
         break;
       case 'delete':
-        deleteFunction();
+        deleteBoxHandle();
         break;
       default:
         console.log('not selected');
@@ -129,12 +147,18 @@ const PostContainer = props => {
       moremenuEl={moremenuEl}
       writerEl={writerEl}
       secretPost={secretPost}
+      password={password}
+      userId={userId}
+      deleteBoxOpen={deleteBoxOpen}
+      postDeleteData={postDeleteData}
+      postDeleteLoading={postDeleteLoading}
+      postDeleteError={postDeleteError}
+      onChange={onChange}
       functionExcute={functionExcute}
       menuClick={menuClick}
       PasswordSubmit={PasswordSubmit}
-      password={password}
-      onChange={onChange}
-      userId={userId}
+      deleteBoxHandle={deleteBoxHandle}
+      deleteFunction={deleteFunction}
     />
   );
 };

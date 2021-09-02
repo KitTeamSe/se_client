@@ -20,7 +20,8 @@ export const loadMenuList = async () => {
 };
 
 export const makeSomePost = async ({ formData }) => {
-  return client.post('/post', formData).catch(error => {
+  const token = localStorage.getItem('token');
+  return client.post('/post', formData, tokenHeader(token)).catch(error => {
     throw error.response.data;
   });
 };

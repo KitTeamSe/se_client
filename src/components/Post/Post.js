@@ -1,6 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
-import { CircularProgress, Menu, MenuItem, TextField } from '@material-ui/core';
+import {
+  CircularProgress,
+  Menu,
+  MenuItem,
+  TextField,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
+} from '@material-ui/core';
+
 import {
   faLock,
   faEye,
@@ -124,6 +136,34 @@ const SubmitButton = styled.button`
   }
 `;
 
+const AlertDialog = props => {
+  const { deleteBoxOpen, deleteBoxHandle, deleteFunction } = props;
+
+  return (
+    <Dialog
+      open={deleteBoxOpen}
+      onClose={deleteBoxHandle}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">삭제</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          게시글을 삭제하시겠습니까? 복구되지 않습니다
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={deleteBoxHandle} color="primary">
+          취소
+        </Button>
+        <Button onClick={deleteFunction} color="secondary">
+          삭제
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
 const PostHeaderInfo = props => {
   const {
     menuClick,
@@ -141,7 +181,7 @@ const PostHeaderInfo = props => {
 
   return (
     <>
-      {userId === accountIdString ? (
+      {userId && userId === accountIdString ? (
         <PostHeadInfo>
           <PostHeadInfoComponent>
             <WriterIcon onClick={menuClick} id="writer">
@@ -376,11 +416,25 @@ const Post = props => {
     onChange,
     password,
     PasswordSubmit,
-    userId
+    userId,
+    deleteBoxOpen,
+    deleteBoxHandle,
+    deleteFunction,
+    postDeleteData,
+    postDeleteLoading,
+    postDeleteError
   } = props;
 
   if (error) {
     return <NoBoardBox>{error.message} 😅</NoBoardBox>;
+  }
+
+  if (postDeleteError) {
+    return <NoBoardBox>{postDeleteError.message} 😅</NoBoardBox>;
+  }
+
+  if (postDeleteData) {
+    return <NoBoardBox>{postDeleteData.message} 😋</NoBoardBox>;
   }
 
   if (secretPost && data == null) {
@@ -392,15 +446,19 @@ const Post = props => {
       />
     );
   }
-  if (data === null || loading) {
+  if (data === null || loading || postDeleteLoading) {
     return <LoadingCircle />;
   }
 
   const res = data.data;
-  console.log(res);
 
   return (
     <MainWrapper>
+      <AlertDialog
+        deleteBoxOpen={deleteBoxOpen}
+        deleteBoxHandle={deleteBoxHandle}
+        deleteFunction={deleteFunction}
+      />
       <PostHeader
         res={res}
         moremenuEl={moremenuEl}

@@ -12,11 +12,12 @@ const makePost = async () => {
 
     boardId: 1,
     isNotice: 'NORMAL',
-    isSecret: 'SECRET',
+    isSecret: 'NORMAL',
     postContent: {
       text: 'ㅅㄷㄴㅅㄷ나미섬니ㅏㅓㅣㅏㅁ',
       title: '익명사용자비밀번호는asdf1234'
     }
+    // tagList: [{ tagId: 1 }]
   };
   if (data.postContent.title.length > 50) {
     console.log('제목수는 50자를 초과할수 없습니다');
