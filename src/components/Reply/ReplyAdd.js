@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Switch, FormControlLabel, Input, Button } from '@material-ui/core';
 import Editor from '../Editor/Editor';
+import FileAttachDropZone from '../FileAttachDropZone/FileAttachDropZone';
 
 const Wrapper = styled.div`
   display: flex;
@@ -49,6 +50,54 @@ const ButtonStyled = styled(Button)`
   margin-left: 10px;
 `;
 
+const ImageListWrapper = styled.div`
+  display: block;
+  padding: 0 5px 0 10px; 
+`;
+
+const ListWrapper = styled.div`
+  max-height: 160px;
+  overflow-y: scroll;
+  margin: 0 -5px;
+  padding: 5px 0;
+  border-bottom: 1px solid #e6e6e6;
+`;
+
+const ImageList = styled.li`
+  position: relative;
+  display: inline-block;
+  margin: 5px;
+  width: 80px;
+  height: 80px;
+  border: 2px solid #ddd;
+`;
+
+const Image = styled.img`
+  width: 100%;
+  height: 100%;
+`;
+
+const AttachFileList = props => {
+  const { attachList } = props;
+  return (
+    <ImageListWrapper>
+      <ListWrapper>
+        <ol>
+          {attachList.length
+            ? attachList.map(e => (
+                <span>
+                  <ImageList>
+                    <Image src={e.downloadUrl} alt={e.fileName} />
+                  </ImageList>
+                </span>
+              ))
+            : null}
+        </ol>
+      </ListWrapper>
+    </ImageListWrapper>
+  );
+};
+
 const SecretToggle = props => {
   const { onChange } = props;
   return (
@@ -64,22 +113,29 @@ const SecretToggle = props => {
 
 const ReplyAdd = props => {
   const {
+    attachList,
     addForm,
     handleChange,
     handleSecret,
     handleContentText,
-    onFocus,
-    onSubmit
+    onSubmit,
+    loading,
+    error,
+    handleAttachFiles
   } = props;
 
   return (
     <form onSubmit={onSubmit}>
-      <Editor
-        onChange={handleContentText}
-        onFocus={onFocus}
-        data={addForm.text}
-        type="reply"
+      <Editor onChange={handleContentText} data={addForm.text} type="reply" />
+
+      <AttachFileList attachList={attachList} />
+
+      <FileAttachDropZone
+        loading={loading}
+        error={error}
+        handleAttachFiles={handleAttachFiles}
       />
+
       <Wrapper>
         <InputWrapper>
           {!localStorage.getItem('token') || !localStorage.getItem('userId') ? (

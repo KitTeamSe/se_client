@@ -1,16 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ReplyAdd from '../../components/Reply/ReplyAdd';
 
 import { changeField, addReply } from '../../modules/reply';
+import { addAttachList, initializeAdd } from '../../modules/attach';
 
 const ReplyAddContainer = props => {
   const { match } = props;
   const dispatch = useDispatch();
-  const { addForm } = useSelector(({ reply }) => ({
-    addForm: reply.addForm
-  }));
+  const { addForm, addAttachData, loading, error, attachList } = useSelector(
+    ({ reply, attach }) => ({
+      addForm: reply.addForm,
+      addAttachData: attach.addAttach.data,
+      loading: attach.addAttach.loading,
+      error: attach.addAttach.error,
+      attachList: attach.attachList
+    })
+  );
 
   const handleChange = e => {
     const { id, value } = e.target;
@@ -49,8 +56,8 @@ const ReplyAddContainer = props => {
     );
   };
 
-  const onFocus = (e, editor) => {
-    editor.setData(addForm.text);
+  const handleAttachFiles = files => {
+    dispatch(addAttachList({ multipartFile: files }));
   };
 
   const onSubmit = e => {
@@ -63,15 +70,49 @@ const ReplyAddContainer = props => {
     dispatch(addReply({ anonymous, isSecret, text, postId, parentId, files }));
   };
 
+  const handleEditorImg = ({ downloadUrl, fileName }) =>
+    `<p><img src="${downloadUrl}" alt="${fileName}"></p>`;
+
+  useEffect(() => {
+    if (addAttachData) {
+      const text = `${addForm.text}${addAttachData.data
+        .map(e => handleEditorImg(e))
+        .join('')}`;
+      const attachId = addAttachData.data.map(e => e.attachId);
+
+      dispatch(
+        changeField({
+          form: 'addForm',
+          key: 'text',
+          value: text
+        })
+      );
+
+      dispatch(
+        changeField({
+          form: 'addForm',
+          key: 'files',
+          value: attachId
+        })
+      );
+      dispatch(initializeAdd());
+    }
+  }, [addAttachData]);
+
   return (
-    <ReplyAdd
-      addForm={addForm}
-      handleChange={handleChange}
-      handleSecret={handleSecret}
-      handleContentText={handleContentText}
-      onFocus={onFocus}
-      onSubmit={onSubmit}
-    />
+    <>
+      <ReplyAdd
+        attachList={attachList}
+        addForm={addForm}
+        handleChange={handleChange}
+        handleSecret={handleSecret}
+        handleContentText={handleContentText}
+        onSubmit={onSubmit}
+        loading={loading}
+        error={error}
+        handleAttachFiles={handleAttachFiles}
+      />
+    </>
   );
 };
 
