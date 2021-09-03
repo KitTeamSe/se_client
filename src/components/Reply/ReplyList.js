@@ -27,7 +27,7 @@ const ReplyHeader = props => {
 };
 
 const ReplyPagination = props => {
-  const { totalPage, page, boardId, postId } = props;
+  const { totalPage, page, baseUrl } = props;
 
   return (
     <PaginationStyled
@@ -42,7 +42,7 @@ const ReplyPagination = props => {
       renderItem={item => (
         <PaginationItem
           component={Link}
-          to={`/board/${boardId}/${postId}?replyPage=${item.page}`}
+          to={`${baseUrl}?replyPage=${item.page}`}
           {...item}
         />
       )}
@@ -58,8 +58,7 @@ const ReplyList = props => {
     loading,
     error,
     page,
-    boardId,
-    postId,
+    baseUrl,
     handleAddReplyChild
   } = props;
 
@@ -89,12 +88,7 @@ const ReplyList = props => {
           데이터를 불러올 수 없습니다. 새로고침을 하거나 관리자에게 문의하세요.
         </div>
       ) : null}
-      <ReplyPagination
-        totalPage={totalPage}
-        page={page}
-        boardId={boardId}
-        postId={postId}
-      />
+      <ReplyPagination totalPage={totalPage} page={page} baseUrl={baseUrl} />
     </>
   );
 };

@@ -14,7 +14,6 @@ import AutoLink from '@ckeditor/ckeditor5-link/src/autolink';
 import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave';
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
-import CKFinderUploadAdapter from '@ckeditor/ckeditor5-adapter-ckfinder/src/uploadadapter';
 import Code from '@ckeditor/ckeditor5-basic-styles/src/code';
 import CodeBlock from '@ckeditor/ckeditor5-code-block/src/codeblock';
 import DataFilter from '@ckeditor/ckeditor5-html-support/src/datafilter';
@@ -73,7 +72,6 @@ import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformatio
 import TodoList from '@ckeditor/ckeditor5-list/src/todolist';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
 import WordCount from '@ckeditor/ckeditor5-word-count/src/wordcount';
-// import Markdown from '@ckeditor/ckeditor5-markdown-gfm/src/markdown';
 
 const plugins = [
   Alignment,
@@ -83,7 +81,6 @@ const plugins = [
   Autosave,
   BlockQuote,
   Bold,
-  CKFinderUploadAdapter,
   Code,
   CodeBlock,
   DataFilter,
@@ -114,7 +111,6 @@ const plugins = [
   LinkImage,
   List,
   ListStyle,
-  // Markdown,
   MediaEmbed,
   MediaEmbedToolbar,
   Mention,
@@ -145,7 +141,7 @@ const plugins = [
   WordCount
 ];
 
-const toolbarItems = [
+const items = [
   'undo',
   'redo',
   '|',
@@ -153,7 +149,6 @@ const toolbarItems = [
   '|',
   'link',
   '|',
-  'imageUpload',
   'insertTable',
   'pageBreak',
   'horizontalLine',
@@ -187,7 +182,6 @@ const toolbarItems = [
   'highlight',
   '|',
   'specialCharacters',
-  'imageInsert',
   'mediaEmbed',
   'htmlEmbed',
   '|',
@@ -195,6 +189,16 @@ const toolbarItems = [
   'codeBlock'
   // 'sourceEditing'
 ];
+
+const boardToolbar = {
+  items,
+  shouldNotGroupWhenFull: true
+};
+
+const replyToolbar = {
+  items,
+  shouldNotGroupWhenFull: true
+};
 
 const heading = {
   options: [
@@ -268,7 +272,8 @@ const image = {
     'imageTextAlternative',
     'linkImage'
   ],
-  styles: ['full', 'alignLeft', 'alignRight']
+  styles: ['full', 'alignLeft', 'alignRight'],
+  type: ['JPEG', 'JPG', 'GIF', 'PNG']
 };
 const typing = {
   transformations: {
@@ -284,12 +289,26 @@ const typing = {
   }
 };
 
+const ckfinder = {
+  // The URL that the images are uploaded to.
+  uploadUrl: `${process.env.REACT_APP_API_URL}/attach/`,
+
+  // Enable the XMLHttpRequest.withCredentials property.
+  withCredentials: true,
+
+  // Headers sent along with the XMLHttpRequest to the upload server.
+  headers: {
+    'X-CSRF-TOKEN': 'CSFR-Token',
+    Accept: '*/*'
+  },
+  options: {
+    resourceType: 'Images'
+  }
+};
+
 const boardConfiguration = {
   plugins,
-  toolbar: {
-    items: toolbarItems,
-    shouldNotGroupWhenFull: true
-  },
+  toolbar: boardToolbar,
   heading,
   fontSize,
   alignment,
@@ -299,15 +318,13 @@ const boardConfiguration = {
   mediaEmbed: {
     previewsInData: true
   },
-  placeholder: '글을 입력하세요.'
+  placeholder: '글을 입력하세요.',
+  ckfinder
 };
 
 const replyConfiguration = {
   plugins,
-  toolbar: {
-    items: toolbarItems,
-    shouldNotGroupWhenFull: false
-  },
+  toolbar: replyToolbar,
   heading,
   fontSize,
   alignment,
@@ -317,18 +334,18 @@ const replyConfiguration = {
   mediaEmbed: {
     previewsInData: true
   },
-  placeholder: '댓글을 입력하세요.'
+  placeholder: '댓글을 입력하세요.',
+  ckfinder
 };
 
 const Editor = props => {
-  const { onChange, onFocus, data, type } = props;
+  const { onChange, data, type } = props;
 
   return (
     <CKEditor
       editor={ClassicEditor}
       config={type === 'reply' ? replyConfiguration : boardConfiguration}
       onChange={onChange}
-      onFocus={onFocus}
       data={data}
     />
   );

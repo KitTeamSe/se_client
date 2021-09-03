@@ -96,8 +96,7 @@ const ReplyListContainer = props => {
       totalPage={data && data.totalPage}
       totalData={data && data.totalData}
       page={myReplyPage}
-      boardId={match.params.boardId}
-      postId={match.params.postId}
+      baseUrl={match.url}
       handleAddReplyChild={handleAddReplyChild}
     />
   );

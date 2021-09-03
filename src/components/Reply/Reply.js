@@ -35,11 +35,11 @@ const ChildWrapper = styled(ReplyWrapper)`
 const AvatarWrapper = styled.div`
   width: 40px;
   height: 40px;
-  margin-right: 10px;
+  padding-right: 10px;
   @media ${props => props.theme.mobile} {
     width: 30px;
     height: 30px;
-    margin-right: 5px;
+    padding-right: 5px;
   }
 `;
 
@@ -73,10 +73,6 @@ const ReplyInfoWrapper = styled.div`
 const CommentWrapper = styled.div`
   display: flex;
   width: 100%;
-  margin: 0 10px 10px 10px;
-  @media ${props => props.theme.mobile} {
-    margin: 0 0 10px 0;
-  }
 `;
 
 const ActionWrapper = styled(CommentWrapper)`

@@ -37,6 +37,9 @@
     margin-block-start: 0.5em;
     margin-block-end: 0.375em;
 }
+.ck-content img {
+    max-width: 400px;
+}
 .ck-content h1 {
     font-size: 1.625rem;
     line-height: 1.5;
@@ -292,7 +295,7 @@
 }
 /* ckeditor5-table/theme/table.css */
 .ck-content .table {
-    margin: 0.9em auto;
+    margin: 0.5em 0;
     display: table;
 }
 /* ckeditor5-table/theme/table.css */
@@ -302,6 +305,7 @@
     width: 100%;
     height: 100%;
     border: 1px double hsl(0, 0%, 70%);
+    font-size: 0.75rem;
 }
 /* ckeditor5-table/theme/table.css */
 .ck-content .table table td,
