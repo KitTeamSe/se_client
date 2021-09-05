@@ -14,14 +14,22 @@ const PaginationStyled = styled(Pagination)`
 
 const ReplyHeaderWrapper = styled.div`
   border-top: 1px solid #ddd;
-  padding: 10px 10px;
+  padding: 10px;
+`;
+
+const CommentWrapper = styled.div`
+  padding: 10px;
 `;
 
 const ReplyHeader = props => {
   const { totalData } = props;
   return (
     <ReplyHeaderWrapper>
-      <Typography variant="h6">{totalData} 개의 댓글</Typography>
+      {totalData > -1 ? (
+        <Typography variant="h6">{totalData} 개의 댓글</Typography>
+      ) : (
+        <Typography variant="h6">댓글 없음</Typography>
+      )}
     </ReplyHeaderWrapper>
   );
 };
@@ -81,12 +89,14 @@ const ReplyList = props => {
             />
           ))
         : null}
-      {data && !data.length && <div>작성된 댓글이 없습니다.</div>}
-      {loading && <div>데이터를 불러오는 중입니다.</div>}
+      {data && !data.length && (
+        <CommentWrapper>작성된 댓글이 없습니다.</CommentWrapper>
+      )}
+      {loading && <CommentWrapper>데이터를 불러오는 중입니다.</CommentWrapper>}
       {!loading && error ? (
-        <div>
+        <CommentWrapper>
           데이터를 불러올 수 없습니다. 새로고침을 하거나 관리자에게 문의하세요.
-        </div>
+        </CommentWrapper>
       ) : null}
       <ReplyPagination totalPage={totalPage} page={page} baseUrl={baseUrl} />
     </>

@@ -31,6 +31,9 @@ const MainWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   width: 70vw;
+  @media ${props => props.theme.mobile} {
+    width: 100vw;
+  }
 `;
 
 const NoneBorderCell = styled(TableCell)`

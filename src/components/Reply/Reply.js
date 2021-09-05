@@ -10,6 +10,10 @@ import SecretReplyContainer from '../../containers/Reply/SecretReplyContainer';
 
 const Comment = styled.div`
   font-size: 0.875rem;
+  width: 100%;
+  @media ${props => props.theme.mobile} {
+    font-size: 1rem;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -23,6 +27,9 @@ const ReplyWrapper = styled.div`
   padding: 10px 0 20px 10px;
   border-bottom: 1px solid #e9e9e9;
   background: ${props => props.isDelete === 'DELETED' && '#eeeeee'};
+  @media ${props => props.theme.mobile} {
+    flex-direction: column;
+  }
 `;
 
 const ChildWrapper = styled(ReplyWrapper)`
@@ -37,9 +44,8 @@ const AvatarWrapper = styled.div`
   height: 40px;
   padding-right: 10px;
   @media ${props => props.theme.mobile} {
-    width: 30px;
-    height: 30px;
-    padding-right: 5px;
+    width: 35px;
+    height: 35px;
   }
 `;
 
@@ -47,8 +53,8 @@ const AnonyAvatar = styled(Avatar)`
   width: 40px;
   height: 40px;
   @media ${props => props.theme.mobile} {
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
   }
 `;
 
@@ -84,14 +90,18 @@ const AnonyNickName = styled(Typography)`
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 0.875rem;
-  font-weight: 400;
 `;
 
 const NickName = styled(AnonyNickName)`
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  color: ${props =>
-    props.children === localStorage.getItem('userId') && '#1976d2'};
+`;
+
+const DateWrapper = styled.div`
+  @media ${props => props.theme.mobile} {
+    display: flex;
+    margin-bottom: 10px;
+  }
 `;
 
 const DateText = styled(Typography)`
@@ -136,13 +146,14 @@ const ReplyInfo = props => {
       </AvatarWrapper>
       <ReplyInfoWrapper>
         {accountId ? (
-          <NickName>{accountId}</NickName>
+          <NickName>{`${accountId}`}</NickName>
         ) : (
           <AnonyNickName>{anonymousNickname}</AnonyNickName>
         )}
-
-        <DateText>{getFormatDate(createAt)}</DateText>
-        <TimeText>{getFormatTime(createAt)}</TimeText>
+        <DateWrapper>
+          <DateText>{getFormatDate(createAt)}</DateText>
+          <TimeText>{getFormatTime(createAt)}</TimeText>
+        </DateWrapper>
       </ReplyInfoWrapper>
     </InfoWrapper>
   );

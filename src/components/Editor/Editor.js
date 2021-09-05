@@ -154,6 +154,8 @@ const items = [
   'horizontalLine',
   '|',
   'restrictedEditingException',
+  'code',
+  'codeBlock',
   '-',
   'bold',
   'italic',
@@ -183,19 +185,11 @@ const items = [
   '|',
   'specialCharacters',
   'mediaEmbed',
-  'htmlEmbed',
-  '|',
-  'code',
-  'codeBlock'
+  'htmlEmbed'
   // 'sourceEditing'
 ];
 
-const boardToolbar = {
-  items,
-  shouldNotGroupWhenFull: true
-};
-
-const replyToolbar = {
+const toolbar = {
   items,
   shouldNotGroupWhenFull: true
 };
@@ -259,6 +253,7 @@ const table = {
     'tableProperties'
   ]
 };
+
 const image = {
   resizeUnit: 'px',
   toolbar: [
@@ -275,6 +270,7 @@ const image = {
   styles: ['full', 'alignLeft', 'alignRight'],
   type: ['JPEG', 'JPG', 'GIF', 'PNG']
 };
+
 const typing = {
   transformations: {
     remove: [
@@ -289,62 +285,30 @@ const typing = {
   }
 };
 
-const ckfinder = {
-  // The URL that the images are uploaded to.
-  uploadUrl: `${process.env.REACT_APP_API_URL}/attach/`,
-
-  // Enable the XMLHttpRequest.withCredentials property.
-  withCredentials: true,
-
-  // Headers sent along with the XMLHttpRequest to the upload server.
-  headers: {
-    'X-CSRF-TOKEN': 'CSFR-Token',
-    Accept: '*/*'
-  },
-  options: {
-    resourceType: 'Images'
-  }
+const mediaEmbed = {
+  previewsInData: false
 };
 
-const boardConfiguration = {
+const config = placeholder => ({
   plugins,
-  toolbar: boardToolbar,
+  toolbar,
   heading,
   fontSize,
   alignment,
   table,
   image,
   typing,
-  mediaEmbed: {
-    previewsInData: true
-  },
-  placeholder: '글을 입력하세요.',
-  ckfinder
-};
-
-const replyConfiguration = {
-  plugins,
-  toolbar: replyToolbar,
-  heading,
-  fontSize,
-  alignment,
-  table,
-  image,
-  typing,
-  mediaEmbed: {
-    previewsInData: true
-  },
-  placeholder: '댓글을 입력하세요.',
-  ckfinder
-};
+  mediaEmbed,
+  placeholder
+});
 
 const Editor = props => {
-  const { onChange, data, type } = props;
+  const { onChange, data, placeholder } = props;
 
   return (
     <CKEditor
       editor={ClassicEditor}
-      config={type === 'reply' ? replyConfiguration : boardConfiguration}
+      config={config(placeholder)}
       onChange={onChange}
       data={data}
     />

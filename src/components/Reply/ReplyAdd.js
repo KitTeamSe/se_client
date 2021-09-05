@@ -16,6 +16,8 @@ const Wrapper = styled.div`
 
 const InputWrapper = styled.div`
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 `;
 
 const InputStyled = styled(Input)`
@@ -52,7 +54,7 @@ const ButtonStyled = styled(Button)`
 
 const ImageListWrapper = styled.div`
   display: block;
-  padding: 0 5px 0 10px; 
+  padding: 0 5px 0 10px;
 `;
 
 const ListWrapper = styled.div`
@@ -126,7 +128,11 @@ const ReplyAdd = props => {
 
   return (
     <form onSubmit={onSubmit}>
-      <Editor onChange={handleContentText} data={addForm.text} type="reply" />
+      <Editor
+        onChange={handleContentText}
+        data={addForm.text}
+        placeholder="댓글을 입력하세요"
+      />
 
       <AttachFileList attachList={attachList} />
 
