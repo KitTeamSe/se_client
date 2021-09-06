@@ -59,13 +59,13 @@ export const initializeUpdate = createAction(INITIALIZE_UPDATE);
 export const initializeSecret = createAction(INITIALIZE_SECRET);
 export const addReply = createAction(
   ADD_REPLY,
-  ({ anonymous, isSecret, parentId, postId, text, files }) => ({
+  ({ anonymous, isSecret, parentId, postId, text, attachmentList }) => ({
     anonymous,
     isSecret,
     parentId,
     postId,
     text,
-    files
+    attachmentList
   })
 );
 export const updateReply = createAction(
@@ -138,7 +138,7 @@ const initialState = {
     anonymousPassword: '',
     isSecret: 'NORMAL',
     text: '',
-    files: []
+    attachmentList: []
   },
   addChildForm: {
     parentId: '',
@@ -181,7 +181,7 @@ export default handleActions(
         anonymousPassword: '',
         isSecret: 'NORMAL',
         text: '',
-        files: []
+        attachmentList: []
       },
       addChildForm: {
         parentId: '',

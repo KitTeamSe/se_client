@@ -62,7 +62,6 @@ const DropZone = props => {
     isDragAccept,
     isDragReject
   } = useDropzone({
-    accept: 'image/*',
     disabled: loading
   });
 

@@ -79,20 +79,23 @@ const Image = styled.img`
   height: 100%;
 `;
 
-const AttachFileList = props => {
-  const { attachList } = props;
+const AttachImageList = props => {
+  const { attachImgList } = props;
   return (
     <ImageListWrapper>
       <ListWrapper>
         <ol>
-          {attachList.length
-            ? attachList.map(e => (
-                <span>
-                  <ImageList>
-                    <Image src={e.downloadUrl} alt={e.fileName} />
-                  </ImageList>
-                </span>
-              ))
+          {attachImgList.length
+            ? attachImgList.map(
+                e =>
+                  e.fileName && (
+                    <span>
+                      <ImageList>
+                        <Image src={e.downloadUrl} alt={e.fileName} />
+                      </ImageList>
+                    </span>
+                  )
+              )
             : null}
         </ol>
       </ListWrapper>
@@ -115,7 +118,8 @@ const SecretToggle = props => {
 
 const ReplyAdd = props => {
   const {
-    attachList,
+    // attachList,
+    attachImgList,
     addForm,
     handleChange,
     handleSecret,
@@ -134,13 +138,13 @@ const ReplyAdd = props => {
         placeholder="댓글을 입력하세요"
       />
 
-      <AttachFileList attachList={attachList} />
-
       <FileAttachDropZone
         loading={loading}
         error={error}
         handleAttachFiles={handleAttachFiles}
       />
+
+      <AttachImageList attachImgList={attachImgList} />
 
       <Wrapper>
         <InputWrapper>

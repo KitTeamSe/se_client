@@ -16,29 +16,29 @@ export const getAttach = ({ id }) =>
     throw error;
   });
 
-export const addAttach = ({ multipartFile }) => {
+export const addAttach = ({ files }) => {
   const config = {
     headers: {
       'Content-Type': 'multipart/form-data'
     }
   };
   const formData = new FormData();
-  formData.append(`multipartFile`, multipartFile);
+  formData.append(`files`, files);
 
   return client.post(`${URL}`, formData, config).catch(error => {
     throw error.response.data;
   });
 };
 
-export const addAttachList = ({ multipartFile }) => {
+export const addAttachList = ({ files }) => {
   const config = {
     headers: {
       'Content-Type': 'multipart/form-data'
     }
   };
   const formData = new FormData();
-  for (let i = 0; i < multipartFile.length; i += 1) {
-    formData.append(`multipartFile`, multipartFile[i]);
+  for (let i = 0; i < files.length; i += 1) {
+    formData.append(`files`, files[i]);
   }
 
   return client.post(`${URL}`, formData, config).catch(error => {

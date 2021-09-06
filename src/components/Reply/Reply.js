@@ -2,19 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Avatar, Typography } from '@material-ui/core';
-import { getFormatDate, getFormatTime } from '../../utils/format';
+import {
+  getEncodeHTML,
+  getFormatDate,
+  getFormatTime
+} from '../../utils/format';
 import ReplyDeleteContainer from '../../containers/Reply/ReplyDeleteContainer';
 import ReplyAnonyDeleteContainer from '../../containers/Reply/ReplyAnonyDeleteContainer';
 import ReplyChildAddContainer from '../../containers/Reply/ReplyChildAddContainer';
 import SecretReplyContainer from '../../containers/Reply/SecretReplyContainer';
-
-const Comment = styled.div`
-  font-size: 0.875rem;
-  width: 100%;
-  @media ${props => props.theme.mobile} {
-    font-size: 1rem;
-  }
-`;
+import EditorOutput from '../Editor/EditorOutput';
 
 const Wrapper = styled.div`
   display: flex;
@@ -164,15 +161,12 @@ const ReplyComment = props => {
   const handleContent = () => {
     if (isDelete === 'DELETED') return { __html: `❌ ${content}` };
     if (isSecret === 'SECRET') return { __html: `🔒 ${content}` };
-    return { __html: content };
+    return { __html: getEncodeHTML(content) };
   };
 
   return (
     <CommentWrapper>
-      <Comment
-        className="ck-content"
-        dangerouslySetInnerHTML={handleContent()}
-      />
+      <EditorOutput content={handleContent()} />
     </CommentWrapper>
   );
 };

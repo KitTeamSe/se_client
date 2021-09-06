@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ReplyAdd from '../../components/Reply/ReplyAdd';
 
 import { changeField, addReply } from '../../modules/reply';
 import { addAttachList, initializeAdd } from '../../modules/attach';
+import confirmFileExtension from '../../utils/confirmFileExtension';
+import { getDecodeHTML } from '../../utils/format';
 
 const ReplyAddContainer = props => {
   const { match } = props;
@@ -18,6 +20,7 @@ const ReplyAddContainer = props => {
       attachList: attach.attachList
     })
   );
+  const [attachImgList, setAttachImgList] = useState([]);
 
   const handleChange = e => {
     const { id, value } = e.target;
@@ -57,17 +60,32 @@ const ReplyAddContainer = props => {
   };
 
   const handleAttachFiles = files => {
-    dispatch(addAttachList({ multipartFile: files }));
+    dispatch(addAttachList({ files }));
   };
 
   const onSubmit = e => {
     e.preventDefault();
-    const { anonymousNickname, anonymousPassword, isSecret, text, files } =
-      addForm;
+    const {
+      anonymousNickname,
+      anonymousPassword,
+      isSecret,
+      text,
+      attachmentList
+    } = addForm;
     const anonymous = { anonymousNickname, anonymousPassword };
     const { postId } = match.params;
     const parentId = null;
-    dispatch(addReply({ anonymous, isSecret, text, postId, parentId, files }));
+    const replaceText = getDecodeHTML(text);
+    dispatch(
+      addReply({
+        anonymous,
+        isSecret,
+        text: replaceText,
+        postId,
+        parentId,
+        attachmentList
+      })
+    );
   };
 
   const handleEditorImg = ({ downloadUrl, fileName }) =>
@@ -75,10 +93,16 @@ const ReplyAddContainer = props => {
 
   useEffect(() => {
     if (addAttachData) {
+      console.log(attachList);
+      const attachIamges = attachList.filter(e =>
+        confirmFileExtension(e.fileName)
+      );
       const text = `${addForm.text}${addAttachData.data
+        .filter(e => confirmFileExtension(e.fileName))
         .map(e => handleEditorImg(e))
         .join('')}`;
-      const attachId = addAttachData.data.map(e => e.attachId);
+      const attachId = addAttachData.data.map(e => ({ attachId: e.attachId }));
+      setAttachImgList(attachIamges);
 
       dispatch(
         changeField({
@@ -91,7 +115,7 @@ const ReplyAddContainer = props => {
       dispatch(
         changeField({
           form: 'addForm',
-          key: 'files',
+          key: 'attachmentList',
           value: attachId
         })
       );
@@ -103,6 +127,7 @@ const ReplyAddContainer = props => {
     <>
       <ReplyAdd
         attachList={attachList}
+        attachImgList={attachImgList}
         addForm={addForm}
         handleChange={handleChange}
         handleSecret={handleSecret}

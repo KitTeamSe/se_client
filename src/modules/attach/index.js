@@ -51,11 +51,11 @@ export const loadAttachList = createAction(
   LOAD_ATTACH_LIST,
   ({ direction, page, size }) => ({ direction, page, size })
 );
-export const addAttach = createAction(ADD_ATTACH, ({ multipartFile }) => ({
-  multipartFile
+export const addAttach = createAction(ADD_ATTACH, ({ files }) => ({
+  files
 }));
-export const addAttachList = createAction(ADD_ATTACH, ({ multipartFile }) => ({
-  multipartFile
+export const addAttachList = createAction(ADD_ATTACH, ({ files }) => ({
+  files
 }));
 export const removeAttach = createAction(REMOVE_ATTACH, ({ id }) => ({
   id
