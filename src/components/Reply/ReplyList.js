@@ -12,7 +12,7 @@ const PaginationStyled = styled(Pagination)`
 `;
 
 const ReplyPagination = props => {
-  const { totalPage, page, boardId, postId } = props;
+  const { totalPage, page, boardNameEng, postId } = props;
 
   return (
     <PaginationStyled
@@ -27,7 +27,7 @@ const ReplyPagination = props => {
       renderItem={item => (
         <PaginationItem
           component={Link}
-          to={`/board/${boardId}/${postId}?replyPage=${item.page}`}
+          to={`/board/${boardNameEng}/${postId}?replyPage=${item.page}`}
           {...item}
         />
       )}
@@ -36,7 +36,7 @@ const ReplyPagination = props => {
 };
 
 const ReplyList = props => {
-  const { data, totalPage, loading, error, page, boardId, postId } = props;
+  const { data, totalPage, loading, error, page, boardNameEng, postId } = props;
 
   return (
     <>
@@ -63,7 +63,7 @@ const ReplyList = props => {
       <ReplyPagination
         totalPage={totalPage}
         page={page}
-        boardId={boardId}
+        boardNameEng={boardNameEng}
         postId={postId}
       />
     </>

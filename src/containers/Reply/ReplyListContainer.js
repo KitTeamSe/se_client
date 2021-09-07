@@ -65,7 +65,7 @@ const ReplyListContainer = props => {
       error={error}
       totalPage={data && data.totalPage}
       page={myReplyPage}
-      boardId={match.params.boardId}
+      boardNameEng={match.params.boardNameEng}
       postId={match.params.postId}
     />
   );
