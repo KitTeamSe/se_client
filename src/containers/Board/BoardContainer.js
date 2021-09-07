@@ -6,22 +6,24 @@ import Board from '../../components/Board/Board';
 import { loadPostList, searchPost } from '../../modules/post';
 
 const BoardContainer = props => {
-  const { location, match } = props;
+  const { location } = props;
   const dispatch = useDispatch();
   const [keyword, setKeyword] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
   const [boardPage, setBoardPage] = useState(1);
   const [postSearchType, setPostSearchType] = useState('TITLE_TEXT');
-  const { data, loading, error, menuListObj } = useSelector(({ post }) => ({
-    data: post.loadedPostList.data,
-    loading: post.loadedPostList.loading,
-    error: post.loadedPostList.error,
-    menuListObj: post.loadedMenuList
-  }));
+  const { data, loading, error, menuListObj, boardId } = useSelector(
+    ({ post }) => ({
+      data: post.loadedPostList.data,
+      loading: post.loadedPostList.loading,
+      error: post.loadedPostList.error,
+      menuListObj: post.loadedMenuList,
+      boardId: post.boardId.boardId
+    })
+  );
 
   const pageSize = 20;
 
-  const { boardId } = match.params;
   useEffect(() => {
     const {
       page,
@@ -51,7 +53,7 @@ const BoardContainer = props => {
     };
     dispatch(loadPostList(parameter));
     setBoardPage(page);
-  }, [location.search]);
+  }, [location.search, boardId]);
 
   const onChange = e => {
     e.preventDefault();
@@ -106,7 +108,6 @@ const BoardContainer = props => {
       onPostSearchTypeChange={onPostSearchTypeChange}
       postSearchType={postSearchType}
       menuListObj={menuListObj}
-      boardId={boardId}
       boardPage={boardPage}
     />
   );

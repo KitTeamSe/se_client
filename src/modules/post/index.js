@@ -10,6 +10,8 @@ import reducerUtils from '../../libs/reducerUtils';
 // Actions
 const INITIALIZE = 'post/INITIALIZE';
 
+const CHANGE_BOARD = 'post/CHANGEBOARD';
+
 const [LOAD_POST_LIST, LOAD_POST_LIST_SUCCESS, LOAD_POST_LIST_FAILURE] =
   createRequestActionTypes('post/LOAD_POST_LIST');
 
@@ -30,6 +32,8 @@ const [POST_DELETE, POST_DELETE_SUCCESS, POST_DELETE_FAILURE] =
 
 // Action Creators
 export const initialize = createAction(INITIALIZE, form => form);
+
+export const changeBoard = createAction(CHANGE_BOARD, boardId => boardId);
 
 export const loadPostList = createAction(
   LOAD_POST_LIST,
@@ -83,6 +87,7 @@ export function* postSaga() {
 
 // reducer (handleActions => switch문 대체)
 const initialState = {
+  boardId: { boardId: 1 },
   loadedPostList: reducerUtils.initial(),
   loadedMenuList: reducerUtils.initial(),
   loadedPost: reducerUtils.initial(),
@@ -94,6 +99,10 @@ export default handleActions(
     [INITIALIZE]: (state, { payload: form }) => ({
       ...state,
       [form]: initialState[form]
+    }),
+    [CHANGE_BOARD]: (state, { payload: boardId }) => ({
+      ...state,
+      boardId
     }),
     [LOAD_POST_LIST]: state => ({
       ...state,
