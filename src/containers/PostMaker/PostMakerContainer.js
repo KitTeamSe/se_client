@@ -3,13 +3,12 @@ import PostMaker from '../../components/PostMaker/PostMaker';
 import { makeSomePost } from '../../libs/api/post';
 
 const makePost = async () => {
-  const attachedFiles = [];
   const data = {
     anonymous: {
       anonymousNickname: '익명사용자',
       anonymousPassword: 'asdf1234'
     },
-
+    attachmentList: [],
     boardId: 1,
     isNotice: 'NORMAL',
     isSecret: 'NORMAL',
@@ -23,15 +22,7 @@ const makePost = async () => {
     console.log('제목수는 50자를 초과할수 없습니다');
     return;
   }
-  const formData = new FormData();
-  formData.append(
-    'key',
-    new Blob([JSON.stringify(data)], { type: 'application/json' })
-  );
-  attachedFiles.forEach(({ file }) => {
-    formData.append('files', file);
-  });
-  const res = await makeSomePost({ formData });
+  const res = await makeSomePost({ data });
   console.log(res);
 };
 const PostMakerContainer = () => {
