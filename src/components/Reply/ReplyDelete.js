@@ -10,21 +10,7 @@ import {
   DialogContentText
 } from '@material-ui/core';
 
-const ButtonStyled = styled.button`
-  padding: 0;
-  margin-right: 10px;
-  color: #999999;
-  background: none;
-  font-size: 0.8125rem;
-  border: none;
-  border-radius: 0;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: 0.2s;
-  &:hover {
-    color: #666666;
-  }
-`;
+import ActionButton from './ReplyActionButton';
 
 const BackdropStyled = styled(Backdrop)`
   z-index: 9999;
@@ -42,7 +28,7 @@ const ReplyDelete = props => {
   const { loading, error, onDelete, open, handleOpen, handleClose } = props;
   return (
     <>
-      <ButtonStyled onClick={handleOpen}>삭제</ButtonStyled>
+      <ActionButton onClick={handleOpen}>삭제</ActionButton>
       <Dialog open={open} aria-labelledby="delete-dialog-title">
         <DialogTitle id="delete-dialog-title">
           댓글을 삭제하시겠습니까?

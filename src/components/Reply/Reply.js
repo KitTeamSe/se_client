@@ -12,6 +12,7 @@ import ReplyAnonyDeleteContainer from '../../containers/Reply/ReplyAnonyDeleteCo
 import ReplyChildAddContainer from '../../containers/Reply/ReplyChildAddContainer';
 import SecretReplyContainer from '../../containers/Reply/SecretReplyContainer';
 import EditorOutput from '../Editor/EditorOutput';
+import ActionButton from './ReplyActionButton';
 
 const Wrapper = styled.div`
   display: flex;
@@ -110,28 +111,6 @@ const DateText = styled(Typography)`
 const TimeText = styled(DateText)`
   font-color: #999999;
 `;
-
-const ButtonStyled = styled.button`
-  padding: 0;
-  margin-right: 10px;
-  color: #999999;
-  background: none;
-  font-size: 0.8125rem;
-  border: none;
-  border-radius: 0;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: 0.2s;
-  &:hover {
-    color: #666666;
-  }
-`;
-
-const ActionButton = props => {
-  const { children, onClick } = props;
-
-  return <ButtonStyled onClick={onClick}>{children}</ButtonStyled>;
-};
 
 const ReplyInfo = props => {
   const { accountId, anonymousNickname, createAt } = props;
