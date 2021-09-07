@@ -50,13 +50,13 @@ const ProfilePageContainer = () => {
     dispatch(myinfo({ token }));
   }, []);
 
-  function editFormRefresh() {
+  const editFormRefresh = () => {
     if (myinformation) {
       const { data } = myinformation;
       setInfoObj(data);
       setInfoEditObj(data);
     }
-  }
+  };
 
   useEffect(() => {
     editFormRefresh();
