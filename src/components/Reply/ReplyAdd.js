@@ -115,6 +115,63 @@ const SecretToggle = props => {
     />
   );
 };
+const ReplyAddInput = props => {
+  const { addForm, handleChange, handleSecret } = props;
+
+  return (
+    <InputWrapper>
+      {!localStorage.getItem('token') || !localStorage.getItem('userId') ? (
+        <>
+          <InputStyled
+            placeholder="글쓴이"
+            id="anonymousNickname"
+            size="small"
+            value={addForm.anonymousNickname}
+            onChange={handleChange}
+          />
+          <InputStyled
+            placeholder="비밀번호"
+            id="anonymousPassword"
+            type="password"
+            value={addForm.anonymousPassword}
+            onChange={handleChange}
+          />
+        </>
+      ) : null}
+      <SecretToggle onChange={handleSecret} />
+    </InputWrapper>
+  );
+};
+
+const ReplyAddAction = () => {
+  return (
+    <ButtonWrapper>
+      <ButtonStyled
+        variant="contained"
+        color="default"
+        size="small"
+        type="submit"
+      >
+        작성
+      </ButtonStyled>
+    </ButtonWrapper>
+  );
+};
+
+const ReplyAddFooter = props => {
+  const { addForm, handleChange, handleSecret, children } = props;
+
+  return (
+    <Wrapper>
+      <ReplyAddInput
+        addForm={addForm}
+        handleChange={handleChange}
+        handleSecret={handleSecret}
+      />
+      {children}
+    </Wrapper>
+  );
+};
 
 const ReplyAdd = props => {
   const {
@@ -137,48 +194,19 @@ const ReplyAdd = props => {
         data={addForm.text}
         placeholder="댓글을 입력하세요"
       />
-
       <FileAttachDropZone
         loading={loading}
         error={error}
         handleAttachFiles={handleAttachFiles}
       />
-
       <AttachImageList attachImgList={attachImgList} />
-
-      <Wrapper>
-        <InputWrapper>
-          {!localStorage.getItem('token') || !localStorage.getItem('userId') ? (
-            <>
-              <InputStyled
-                placeholder="글쓴이"
-                id="anonymousNickname"
-                size="small"
-                value={addForm.anonymousNickname}
-                onChange={handleChange}
-              />
-              <InputStyled
-                placeholder="비밀번호"
-                id="anonymousPassword"
-                type="password"
-                value={addForm.anonymousPassword}
-                onChange={handleChange}
-              />
-            </>
-          ) : null}
-          <SecretToggle onChange={handleSecret} />
-        </InputWrapper>
-        <ButtonWrapper>
-          <ButtonStyled
-            variant="contained"
-            color="default"
-            size="small"
-            type="submit"
-          >
-            작성
-          </ButtonStyled>
-        </ButtonWrapper>
-      </Wrapper>
+      <ReplyAddFooter
+        addForm={addForm}
+        handleChange={handleChange}
+        handleSecret={handleSecret}
+      >
+        <ReplyAddAction />
+      </ReplyAddFooter>
     </form>
   );
 };

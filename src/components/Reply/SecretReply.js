@@ -5,28 +5,12 @@ import {
   DialogTitle,
   DialogActions,
   Button,
-  Backdrop,
-  CircularProgress,
   DialogContent,
-  DialogContentText,
   TextField
 } from '@material-ui/core';
-
-const ButtonStyled = styled.button`
-  padding: 0;
-  margin-right: 10px;
-  color: #999999;
-  background: none;
-  font-size: 0.8125rem;
-  border: none;
-  border-radius: 0;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: 0.2s;
-  &:hover {
-    color: #666666;
-  }
-`;
+import ReplyActionButton from './ReplyActionButton';
+import ActionLoading from '../Action/ActionLoading';
+import { DialogErrorMessage } from '../Action/ErrorMessage';
 
 const FieldWrapper = styled(DialogContent)`
   &.MuiDialogContent-root:first-child {
@@ -34,17 +18,17 @@ const FieldWrapper = styled(DialogContent)`
   }
 `;
 
-const BackdropStyled = styled(Backdrop)`
-  z-index: 9999;
-  color: #fff;
-  background-color: rgba(0, 0, 0, 0.03);
-`;
-
-const ErrorMessage = styled(DialogContentText)`
-  width: 100%;
-  text-align: center;
-  color: #dc004e;
-`;
+const SecretReplyAction = props => {
+  const { handleClose } = props;
+  return (
+    <DialogActions>
+      <Button type="submit" variant="contained" color="secondary" autoFocus>
+        확인
+      </Button>
+      <Button onClick={handleClose}>취소</Button>
+    </DialogActions>
+  );
+};
 
 const SecretReplyForm = props => {
   const {
@@ -69,17 +53,25 @@ const SecretReplyForm = props => {
           fullWidth
         />
       </FieldWrapper>
-
-      <ErrorMessage>{!loading && error && '[Error]'}</ErrorMessage>
-      <ErrorMessage>{!loading && error && error.message}</ErrorMessage>
-
-      <DialogActions>
-        <Button type="submit" variant="contained" color="secondary" autoFocus>
-          확인
-        </Button>
-        <Button onClick={handleClose}>취소</Button>
-      </DialogActions>
+      <DialogErrorMessage loading={loading} error={error} />
+      <SecretReplyAction handleClose={handleClose} />
     </form>
+  );
+};
+
+const SecretCheckDialog = props => {
+  const { open, handleClose, children } = props;
+  return (
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="secret-dialog-title"
+    >
+      <DialogTitle id="secret-dialog-title">
+        비밀 댓글을 확인하시겠습니까?
+      </DialogTitle>
+      {children}
+    </Dialog>
   );
 };
 
@@ -96,27 +88,18 @@ const SecretReply = props => {
   } = props;
   return (
     <>
-      <ButtonStyled onClick={handleOpen}>비밀글확인</ButtonStyled>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="secret-dialog-title"
-      >
-        <DialogTitle id="secret-dialog-title">
-          비밀 댓글을 확인하시겠습니까?
-        </DialogTitle>
+      <ReplyActionButton onClick={handleOpen}>비밀글확인</ReplyActionButton>
+      <SecretCheckDialog open={open} onClose={handleClose}>
         <SecretReplyForm
-          onSubmit={onSubmit}
-          loadSecretForm={loadSecretForm}
-          handleChange={handleChange}
           loading={loading}
           error={error}
+          loadSecretForm={loadSecretForm}
+          onSubmit={onSubmit}
+          handleChange={handleChange}
           handleClose={handleClose}
         />
-      </Dialog>
-      <BackdropStyled open={loading}>
-        <CircularProgress color="inherit" />
-      </BackdropStyled>
+      </SecretCheckDialog>
+      <ActionLoading loading={loading} />
     </>
   );
 };

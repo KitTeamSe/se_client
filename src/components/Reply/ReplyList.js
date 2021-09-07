@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
 import { Pagination, PaginationItem } from '@material-ui/lab';
 import Reply from './Reply';
+import ReplyChild from './ReplyChild';
 
 const PaginationStyled = styled(Pagination)`
   & ul {
@@ -58,6 +59,79 @@ const ReplyPagination = props => {
   );
 };
 
+const ReplyEmpty = props => {
+  const { data } = props;
+  return (
+    data &&
+    !data.length && <CommentWrapper>작성된 댓글이 없습니다.</CommentWrapper>
+  );
+};
+
+const ReplyLoading = props => {
+  const { loading } = props;
+  return (
+    loading && <CommentWrapper>데이터를 불러오는 중입니다.</CommentWrapper>
+  );
+};
+
+const ReplyError = props => {
+  const { loading, error } = props;
+  return !loading && error ? (
+    <CommentWrapper>
+      데이터를 불러올 수 없습니다. 새로고침을 하거나 관리자에게 문의하세요.
+    </CommentWrapper>
+  ) : null;
+};
+
+const ReplyMessage = props => {
+  const { data, loading, error } = props;
+  return (
+    <>
+      <ReplyEmpty data={data} />
+      <ReplyLoading loading={loading} />
+      <ReplyError loading={loading} error={error} />
+    </>
+  );
+};
+
+const ReplyEntries = props => {
+  const { loading, data, handleAddReplyChild } = props;
+
+  return !loading && data
+    ? data.map((reply, idx) => (
+        <Reply
+          replyId={reply.replyId}
+          replyIndex={idx}
+          accountId={reply.accountId}
+          anonymousNickname={reply.anonymousNickname}
+          content={reply.text}
+          createAt={reply.createAt}
+          isSecret={reply.isSecret}
+          isDelete={reply.isDelete}
+          handleAddReplyChild={handleAddReplyChild}
+        >
+          {reply.child && reply.child.length
+            ? reply.child.map((childReply, childIdx) => (
+                <ReplyChild
+                  parentId={reply.replyId}
+                  parentIndex={idx}
+                  replyId={childReply.replyId}
+                  replyIndex={childIdx}
+                  accountId={childReply.accountId}
+                  anonymousNickname={childReply.anonymousNickname}
+                  content={childReply.text}
+                  createAt={childReply.createAt}
+                  isSecret={childReply.isSecret}
+                  isDelete={childReply.isDelete}
+                  handleAddReplyChild={handleAddReplyChild}
+                />
+              ))
+            : null}
+        </Reply>
+      ))
+    : null;
+};
+
 const ReplyList = props => {
   const {
     data,
@@ -73,31 +147,12 @@ const ReplyList = props => {
   return (
     <>
       <ReplyHeader totalData={totalData} />
-      {!loading && data
-        ? data.map((e, index) => (
-            <Reply
-              replyId={e.replyId}
-              replyIndex={index}
-              accountId={e.accountId}
-              anonymousNickname={e.anonymousNickname}
-              content={e.text}
-              createAt={e.createAt}
-              child={e.child}
-              isSecret={e.isSecret}
-              isDelete={e.isDelete}
-              handleAddReplyChild={handleAddReplyChild}
-            />
-          ))
-        : null}
-      {data && !data.length && (
-        <CommentWrapper>작성된 댓글이 없습니다.</CommentWrapper>
-      )}
-      {loading && <CommentWrapper>데이터를 불러오는 중입니다.</CommentWrapper>}
-      {!loading && error ? (
-        <CommentWrapper>
-          데이터를 불러올 수 없습니다. 새로고침을 하거나 관리자에게 문의하세요.
-        </CommentWrapper>
-      ) : null}
+      <ReplyEntries
+        loading={loading}
+        data={data}
+        handleAddReplyChild={handleAddReplyChild}
+      />
+      <ReplyMessage data={data} loading={loading} error={error} />
       <ReplyPagination totalPage={totalPage} page={page} baseUrl={baseUrl} />
     </>
   );
