@@ -4,20 +4,19 @@ import { withRouter } from 'react-router-dom';
 import ReplyAdd from '../../components/Reply/ReplyAdd';
 
 import { changeField, addReply } from '../../modules/reply';
-import { addAttachList, initializeAdd } from '../../modules/attach';
+import { addAttachList, removeAttach } from '../../modules/attach';
 import confirmFileExtension from '../../utils/confirmFileExtension';
 import { getDecodeHTML } from '../../utils/format';
 
 const ReplyAddContainer = props => {
   const { match } = props;
   const dispatch = useDispatch();
-  const { addForm, addAttachData, loading, error, attachList } = useSelector(
+  const { addForm, addAttachData, loading, error } = useSelector(
     ({ reply, attach }) => ({
       addForm: reply.addForm,
       addAttachData: attach.addAttach.data,
       loading: attach.addAttach.loading,
-      error: attach.addAttach.error,
-      attachList: attach.attachList
+      error: attach.addAttach.error
     })
   );
   const [attachImgList, setAttachImgList] = useState([]);
@@ -76,6 +75,10 @@ const ReplyAddContainer = props => {
     const { postId } = match.params;
     const parentId = null;
     const replaceText = getDecodeHTML(text);
+    const attachIdList = attachmentList.map(attach => ({
+      attachId: attach.attachId
+    }));
+
     dispatch(
       addReply({
         anonymous,
@@ -83,32 +86,48 @@ const ReplyAddContainer = props => {
         text: replaceText,
         postId,
         parentId,
-        attachmentList
+        attachmentList: attachIdList
       })
     );
   };
 
-  const handleEditorImg = ({ downloadUrl, fileName }) =>
-    `<p><img src="${downloadUrl}" alt="${fileName}"></p>`;
+  const onDeleteAttach = attachId => {
+    const attachListData = addForm.attachmentList.filter(
+      e => e.attachId !== attachId
+    );
+
+    dispatch(
+      changeField({
+        form: 'addForm',
+        key: 'attachmentList',
+        value: attachListData
+      })
+    );
+    dispatch(removeAttach({ id: attachId }));
+  };
+
+  const handleEditorImg = ({ downloadUrl, fileName }) => {
+    const $p = document.createElement('p');
+    const $img = document.createElement('img');
+    $img.setAttribute('src', downloadUrl);
+    $img.setAttribute('alt', fileName);
+    $p.appendChild($img);
+    return $p.outerHTML;
+  };
 
   useEffect(() => {
     if (addAttachData) {
-      console.log(attachList);
-      const attachIamges = attachList.filter(e =>
-        confirmFileExtension(e.fileName)
-      );
-      const text = `${addForm.text}${addAttachData.data
+      const attachListData = addForm.attachmentList.concat(addAttachData.data);
+      const editorText = `${addForm.text}${addAttachData.data
         .filter(e => confirmFileExtension(e.fileName))
         .map(e => handleEditorImg(e))
         .join('')}`;
-      const attachId = addAttachData.data.map(e => ({ attachId: e.attachId }));
-      setAttachImgList(attachIamges);
 
       dispatch(
         changeField({
           form: 'addForm',
           key: 'text',
-          value: text
+          value: editorText
         })
       );
 
@@ -116,25 +135,34 @@ const ReplyAddContainer = props => {
         changeField({
           form: 'addForm',
           key: 'attachmentList',
-          value: attachId
+          value: attachListData
         })
       );
-      dispatch(initializeAdd());
     }
   }, [addAttachData]);
+
+  useEffect(() => {
+    if (addForm.attachmentList) {
+      const attachIamges = addForm.attachmentList.filter(e =>
+        confirmFileExtension(e.fileName)
+      );
+
+      setAttachImgList(attachIamges);
+    }
+  }, [addForm.attachmentList]);
 
   return (
     <>
       <ReplyAdd
-        attachList={attachList}
         attachImgList={attachImgList}
+        loading={loading}
+        error={error}
         addForm={addForm}
         handleChange={handleChange}
         handleSecret={handleSecret}
         handleContentText={handleContentText}
         onSubmit={onSubmit}
-        loading={loading}
-        error={error}
+        onDeleteAttach={onDeleteAttach}
         handleAttachFiles={handleAttachFiles}
       />
     </>

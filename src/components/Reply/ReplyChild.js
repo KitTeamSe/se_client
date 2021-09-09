@@ -1,7 +1,7 @@
 import React from 'react';
 
 import styled from 'styled-components';
-import { ReplyContent, ReplyWrapper } from './Reply';
+import { ReplyInfo, ReplyContent, ReplyWrapper } from './Reply';
 
 const ChildWrapper = styled(ReplyWrapper)`
   padding-left: 30px;
@@ -25,8 +25,15 @@ const ChildReply = props => {
     handleAddReplyChild
   } = props;
 
+  console.log(props);
+
   return (
     <ChildWrapper isDelete={isDelete}>
+      <ReplyInfo
+        accountId={accountId}
+        anonymousNickname={anonymousNickname}
+        createAt={createAt}
+      />
       <ReplyContent
         parentId={parentId}
         parentIndex={parentIndex}

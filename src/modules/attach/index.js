@@ -37,10 +37,14 @@ const [
 export const initialize = createAction(INITIALIZE);
 export const initializeField = createAction(INITIALIZE_FIELD);
 export const initializeAdd = createAction(INITIALIZE_ADD);
-export const changeField = createAction(CHANGE_FIELD, ({ key, value }) => ({
-  key,
-  value
-}));
+export const changeField = createAction(
+  CHANGE_FIELD,
+  ({ form, key, value }) => ({
+    form,
+    key,
+    value
+  })
+);
 export const changeSelect = createAction(CHANGE_SELECT, ({ select }) => ({
   select
 }));
@@ -54,8 +58,9 @@ export const loadAttachList = createAction(
 export const addAttach = createAction(ADD_ATTACH, ({ files }) => ({
   files
 }));
-export const addAttachList = createAction(ADD_ATTACH, ({ files }) => ({
-  files
+export const addAttachList = createAction(ADD_ATTACH, ({ files, type }) => ({
+  files,
+  type
 }));
 export const removeAttach = createAction(REMOVE_ATTACH, ({ id }) => ({
   id
@@ -108,7 +113,6 @@ const initialState = {
     postId: '',
     replyId: ''
   },
-  attachList: [],
   loadAttach: reducerUtils.initial(),
   loadAttachList: reducerUtils.initial(),
   addAttach: reducerUtils.initial(),
@@ -132,9 +136,9 @@ export default handleActions(
       ...state,
       addAttach: reducerUtils.initial()
     }),
-    [CHANGE_FIELD]: (state, { payload: { key, value } }) =>
+    [CHANGE_FIELD]: (state, { payload: { form, key, value } }) =>
       produce(state, draft => {
-        draft.attach[key] = value;
+        draft[form][key] = value;
       }),
     [CHANGE_SELECT]: (state, { payload: { select } }) => ({
       ...state,
@@ -172,7 +176,6 @@ export default handleActions(
     }),
     [ADD_ATTACH_SUCCESS]: (state, { payload: add }) => ({
       ...state,
-      attachList: state.attachList.concat(add.data),
       addAttach: reducerUtils.success(add)
     }),
     [ADD_ATTACH_FAILURE]: (state, { payload: error }) => ({

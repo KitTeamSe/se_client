@@ -48,7 +48,7 @@ export const addAttachList = ({ files }) => {
 
 export const removeAttach = ({ id }) =>
   client.delete(`${URL}/${id}`).catch(error => {
-    throw error;
+    throw error.response.data;
   });
 
 export const getPostAttachList = ({ id }) =>
