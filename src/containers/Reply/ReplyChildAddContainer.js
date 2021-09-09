@@ -4,12 +4,20 @@ import { withRouter } from 'react-router-dom';
 import ReplyChildAdd from '../../components/Reply/ReplyChildAdd';
 
 import { changeField, addReply } from '../../modules/reply';
+import {
+  addAttachList,
+  changeSelect,
+  removeAttach
+} from '../../modules/attach';
+import { getDecodeHTML } from '../../utils/format';
 
 const ReplyChildAddContainer = props => {
   const { parentId, match } = props;
   const dispatch = useDispatch();
-  const { addChildForm } = useSelector(({ reply }) => ({
-    addChildForm: reply.addChildForm
+  const { addChildForm, loading, error } = useSelector(({ reply, attach }) => ({
+    addChildForm: reply.addChildForm,
+    loading: attach.addAttach.loading,
+    error: attach.addAttach.errord
   }));
 
   const handleChange = e => {
@@ -49,17 +57,51 @@ const ReplyChildAddContainer = props => {
     );
   };
 
-  const onFocus = (e, editor) => {
-    editor.setData(addChildForm.text);
+  const handleAttachFiles = files => {
+    dispatch(changeSelect({ select: 'replyChild' }));
+    dispatch(addAttachList({ files }));
   };
 
   const onSubmit = e => {
     e.preventDefault();
-    const { anonymousNickname, anonymousPassword, isSecret, text, files } =
-      addChildForm;
+    const {
+      anonymousNickname,
+      anonymousPassword,
+      isSecret,
+      text,
+      attachmentList
+    } = addChildForm;
     const anonymous = { anonymousNickname, anonymousPassword };
     const { postId } = match.params;
-    dispatch(addReply({ anonymous, isSecret, text, postId, parentId, files }));
+    const replaceText = getDecodeHTML(text);
+    const attachIdList = attachmentList.map(attach => ({
+      attachId: attach.attachId
+    }));
+    dispatch(
+      addReply({
+        anonymous,
+        isSecret,
+        text: replaceText,
+        postId,
+        parentId,
+        attachmentList: attachIdList
+      })
+    );
+  };
+
+  const onDeleteAttach = attachId => {
+    const attachListData = addChildForm.attachmentList.filter(
+      e => e.attachId !== attachId
+    );
+
+    dispatch(
+      changeField({
+        form: 'addChildForm',
+        key: 'attachmentList',
+        value: attachListData
+      })
+    );
+    dispatch(removeAttach({ id: attachId }));
   };
 
   const onCancel = () => {
@@ -76,13 +118,16 @@ const ReplyChildAddContainer = props => {
     addChildForm &&
     addChildForm.parentId === parentId && (
       <ReplyChildAdd
+        loading={loading}
+        error={error}
         addChildForm={addChildForm}
         handleChange={handleChange}
         handleSecret={handleSecret}
         handleContentText={handleContentText}
-        onFocus={onFocus}
         onSubmit={onSubmit}
         onCancel={onCancel}
+        onDeleteAttach={onDeleteAttach}
+        handleAttachFiles={handleAttachFiles}
       />
     )
   );

@@ -261,7 +261,7 @@ const Reply = props => {
         </ReplyWrapper>
       )}
       {children}
-      {replyId && <ReplyChildAddContainer parentId={replyId} />}
+      {replyId ? <ReplyChildAddContainer parentId={replyId} /> : null}
     </>
   );
 };

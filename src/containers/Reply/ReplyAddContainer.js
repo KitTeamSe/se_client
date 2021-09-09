@@ -1,25 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ReplyAdd from '../../components/Reply/ReplyAdd';
 
 import { changeField, addReply } from '../../modules/reply';
-import { addAttachList, removeAttach } from '../../modules/attach';
+import {
+  changeSelect,
+  addAttachList,
+  removeAttach,
+  initializeAdd
+} from '../../modules/attach';
 import confirmFileExtension from '../../utils/confirmFileExtension';
 import { getDecodeHTML } from '../../utils/format';
 
 const ReplyAddContainer = props => {
   const { match } = props;
   const dispatch = useDispatch();
-  const { addForm, addAttachData, loading, error } = useSelector(
-    ({ reply, attach }) => ({
+  const { addForm, addChildForm, addAttachData, loading, error, select } =
+    useSelector(({ reply, attach }) => ({
       addForm: reply.addForm,
+      addChildForm: reply.addChildForm,
       addAttachData: attach.addAttach.data,
       loading: attach.addAttach.loading,
-      error: attach.addAttach.error
-    })
-  );
-  const [attachImgList, setAttachImgList] = useState([]);
+      error: attach.addAttach.error,
+      select: attach.select
+    }));
 
   const handleChange = e => {
     const { id, value } = e.target;
@@ -59,6 +64,7 @@ const ReplyAddContainer = props => {
   };
 
   const handleAttachFiles = files => {
+    dispatch(changeSelect({ select: 'reply' }));
     dispatch(addAttachList({ files }));
   };
 
@@ -73,7 +79,6 @@ const ReplyAddContainer = props => {
     } = addForm;
     const anonymous = { anonymousNickname, anonymousPassword };
     const { postId } = match.params;
-    const parentId = null;
     const replaceText = getDecodeHTML(text);
     const attachIdList = attachmentList.map(attach => ({
       attachId: attach.attachId
@@ -85,7 +90,7 @@ const ReplyAddContainer = props => {
         isSecret,
         text: replaceText,
         postId,
-        parentId,
+        parentId: null,
         attachmentList: attachIdList
       })
     );
@@ -115,46 +120,67 @@ const ReplyAddContainer = props => {
     return $p.outerHTML;
   };
 
+  const handleEditorText = (form, text) => {
+    dispatch(changeField({ form, key: 'text', value: text }));
+  };
+
+  const handleAttachList = (form, data) => {
+    dispatch(changeField({ form, key: 'attachmentList', value: data }));
+  };
+
+  const handleReplyImage = () => {
+    const form = 'addForm';
+    const attachListData = addForm.attachmentList.concat(addAttachData.data);
+    const editorText = `${addForm.text}${addAttachData.data
+      .filter(e => confirmFileExtension(e.fileName))
+      .map(e => handleEditorImg(e))
+      .join('')}`;
+
+    handleEditorText(form, editorText);
+    handleAttachList(form, attachListData);
+  };
+
+  const handleReplyChildIamge = () => {
+    const form = 'addChildForm';
+    const attachListData = addChildForm.attachmentList.concat(
+      addAttachData.data
+    );
+    const editorText = `${addChildForm.text}${addAttachData.data
+      .filter(e => confirmFileExtension(e.fileName))
+      .map(e => handleEditorImg(e))
+      .join('')}`;
+
+    handleEditorText(form, editorText);
+    handleAttachList(form, attachListData);
+  };
+
   useEffect(() => {
-    if (addAttachData) {
-      const attachListData = addForm.attachmentList.concat(addAttachData.data);
-      const editorText = `${addForm.text}${addAttachData.data
-        .filter(e => confirmFileExtension(e.fileName))
-        .map(e => handleEditorImg(e))
-        .join('')}`;
-
-      dispatch(
-        changeField({
-          form: 'addForm',
-          key: 'text',
-          value: editorText
-        })
-      );
-
-      dispatch(
-        changeField({
-          form: 'addForm',
-          key: 'attachmentList',
-          value: attachListData
-        })
-      );
+    if (addAttachData && select === 'reply') {
+      handleReplyImage();
+    }
+    if (addAttachData && select === 'replyChild') {
+      handleReplyChildIamge();
     }
   }, [addAttachData]);
 
   useEffect(() => {
-    if (addForm.attachmentList) {
-      const attachIamges = addForm.attachmentList.filter(e =>
-        confirmFileExtension(e.fileName)
-      );
+    dispatch(initializeAdd());
+  }, [addForm.attachmentList, addChildForm.attachmentList]);
 
-      setAttachImgList(attachIamges);
+  useEffect(() => {
+    if (!addChildForm.parentId) {
+      const form = 'addChildForm';
+      const attachList = addChildForm.attachmentList;
+
+      attachList.forEach(e => dispatch(removeAttach({ id: e.attachId })));
+      handleEditorText(form, '');
+      handleAttachList(form, []);
     }
-  }, [addForm.attachmentList]);
+  }, [addChildForm.parentId]);
 
   return (
     <>
       <ReplyAdd
-        attachImgList={attachImgList}
         loading={loading}
         error={error}
         addForm={addForm}

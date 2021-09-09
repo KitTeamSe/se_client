@@ -7,10 +7,11 @@ import {
   Button
   // List,
 } from '@material-ui/core';
-import Editor from '../Editor/Editor';
 import FileAttachDropZone from '../FileAttachDropZone/FileAttachDropZone';
+import Editor from '../Editor/Editor';
 import AttachList from '../Editor/AttachList';
 import AttachImageList from '../Editor/AttachImageList';
+import confirmFileExtension from '../../utils/confirmFileExtension';
 
 const Wrapper = styled.div`
   display: flex;
@@ -132,7 +133,6 @@ const ReplyAddFooter = props => {
 
 const ReplyAdd = props => {
   const {
-    attachImgList,
     addForm,
     handleChange,
     handleSecret,
@@ -156,7 +156,11 @@ const ReplyAdd = props => {
         error={error}
         handleAttachFiles={handleAttachFiles}
       />
-      <AttachImageList attachImgList={attachImgList} />
+      <AttachImageList
+        attachImgList={addForm.attachmentList.filter(e =>
+          confirmFileExtension(e.fileName)
+        )}
+      />
       <AttachList
         attachList={addForm.attachmentList}
         onDeleteAttach={onDeleteAttach}

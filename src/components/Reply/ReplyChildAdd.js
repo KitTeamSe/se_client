@@ -7,7 +7,11 @@ import {
   Button,
   Tooltip
 } from '@material-ui/core';
+import FileAttachDropZone from '../FileAttachDropZone/FileAttachDropZone';
 import Editor from '../Editor/Editor';
+import AttachList from '../Editor/AttachList';
+import AttachImageList from '../Editor/AttachImageList';
+import confirmFileExtension from '../../utils/confirmFileExtension';
 
 const Wrapper = styled.div`
   display: flex;
@@ -68,15 +72,86 @@ const SecretToggle = props => {
   );
 };
 
+const ReplyAddInput = props => {
+  const { addChildForm, handleChange, handleSecret } = props;
+
+  return (
+    <InputWrapper>
+      {!localStorage.getItem('token') || !localStorage.getItem('userId') ? (
+        <>
+          <InputStyled
+            placeholder="글쓴이"
+            id="anonymousNickname"
+            size="small"
+            value={addChildForm.anonymousNickname}
+            onChange={handleChange}
+          />
+          <InputStyled
+            placeholder="비밀번호"
+            id="anonymousPassword"
+            type="password"
+            value={addChildForm.anonymousPassword}
+            onChange={handleChange}
+          />
+        </>
+      ) : null}
+      <SecretToggle onChange={handleSecret} />
+    </InputWrapper>
+  );
+};
+
+const ReplyAddAction = props => {
+  const { onCancel } = props;
+  return (
+    <ButtonWrapper>
+      <ButtonStyled
+        variant="outlined"
+        color="default"
+        size="small"
+        onClick={onCancel}
+      >
+        취소
+      </ButtonStyled>
+      <ButtonStyled
+        variant="contained"
+        color="default"
+        size="small"
+        type="submit"
+      >
+        작성
+      </ButtonStyled>
+    </ButtonWrapper>
+  );
+};
+
+const ReplyAddFooter = props => {
+  const { addChildForm, handleChange, handleSecret, children } = props;
+
+  return (
+    <Wrapper>
+      <ReplyAddInput
+        addChildForm={addChildForm}
+        handleChange={handleChange}
+        handleSecret={handleSecret}
+      />
+      {children}
+    </Wrapper>
+  );
+};
+
 const ReplyAdd = props => {
   const {
     addChildForm,
+    loading,
+    error,
     handleChange,
     handleSecret,
     handleContentText,
     onFocus,
     onSubmit,
-    onCancel
+    onCancel,
+    onDeleteAttach,
+    handleAttachFiles
   } = props;
 
   return (
@@ -87,47 +162,27 @@ const ReplyAdd = props => {
         data={addChildForm.text}
         type="reply"
       />
-      <Wrapper>
-        <InputWrapper>
-          {!localStorage.getItem('token') || !localStorage.getItem('userId') ? (
-            <>
-              <InputStyled
-                placeholder="글쓴이"
-                id="anonymousNickname"
-                size="small"
-                value={addChildForm.anonymousNickname}
-                onChange={handleChange}
-              />
-              <InputStyled
-                placeholder="비밀번호"
-                id="anonymousPassword"
-                type="password"
-                value={addChildForm.anonymousPassword}
-                onChange={handleChange}
-              />
-            </>
-          ) : null}
-          <SecretToggle onChange={handleSecret} />
-        </InputWrapper>
-        <ButtonWrapper>
-          <ButtonStyled
-            variant="outlined"
-            color="default"
-            size="small"
-            onClick={onCancel}
-          >
-            취소
-          </ButtonStyled>
-          <ButtonStyled
-            variant="contained"
-            color="default"
-            size="small"
-            type="submit"
-          >
-            작성
-          </ButtonStyled>
-        </ButtonWrapper>
-      </Wrapper>
+      <FileAttachDropZone
+        loading={loading}
+        error={error}
+        handleAttachFiles={handleAttachFiles}
+      />
+      <AttachImageList
+        attachImgList={addChildForm.attachmentList.filter(e =>
+          confirmFileExtension(e.fileName)
+        )}
+      />
+      <AttachList
+        attachList={addChildForm.attachmentList}
+        onDeleteAttach={onDeleteAttach}
+      />
+      <ReplyAddFooter
+        addChildForm={addChildForm}
+        handleChange={handleChange}
+        handleSecret={handleSecret}
+      >
+        <ReplyAddAction onCancel={onCancel} />
+      </ReplyAddFooter>
     </form>
   );
 };

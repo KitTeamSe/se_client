@@ -146,7 +146,7 @@ const initialState = {
     anonymousPassword: '',
     isSecret: 'NORMAL',
     text: '',
-    files: []
+    attachmentList: []
   },
   updateForm: {
     password: '',
@@ -189,7 +189,7 @@ export default handleActions(
         anonymousPassword: '',
         isSecret: 'NORMAL',
         text: '',
-        files: []
+        attachmentList: []
       },
       updateForm: {
         password: '',
