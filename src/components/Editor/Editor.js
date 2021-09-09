@@ -286,7 +286,7 @@ const typing = {
 };
 
 const mediaEmbed = {
-  previewsInData: false
+  previewsInData: true
 };
 
 const config = placeholder => ({
