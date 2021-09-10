@@ -48,7 +48,6 @@ export const postDelete = async ({ id }) => {
 
 export const anonymousPostDelete = async ({ anonymousPassword, postId }) => {
   const body = { anonymousPassword, postId };
-  console.log(postId);
   return client.post(`/post/anonymous/${postId}`, body).catch(error => {
     throw error.response.data;
   });

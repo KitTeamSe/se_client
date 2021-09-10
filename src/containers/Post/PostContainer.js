@@ -94,7 +94,6 @@ const PostContainer = props => {
     e.preventDefault();
     setAnonymousDeleteBoxOpen(false);
     const { postId } = match.params;
-    console.log(postId);
     dispatch(anonymousPostDelete({ anonymousPassword, postId }));
   };
 
