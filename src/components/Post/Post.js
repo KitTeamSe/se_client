@@ -189,7 +189,7 @@ const PostHeaderInfo = props => {
       writer: ['profile', 'post', 'message', 'mail'],
       menu: ['report']
     },
-    Annoymous: { writer: [], menu: ['report', 'fix', 'delete'] }
+    Annoymous: { writer: [], menu: ['report', 'fix', 'anonyDelete'] }
   };
 
   const menuStorage = {
@@ -199,7 +199,8 @@ const PostHeaderInfo = props => {
     mail: '메일 보내기',
     report: '신고',
     fix: '수정',
-    delete: '삭제'
+    delete: '삭제',
+    anonyDelete: '삭제'
   };
 
   function menuItem(type) {

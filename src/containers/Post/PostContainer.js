@@ -77,6 +77,10 @@ const PostContainer = props => {
     dispatch(postDelete({ id }));
   };
 
+  const anonymousDeleteFunction = () => {
+    console.log('anonymous post delete logic');
+  };
+
   const banFunction = () => {
     console.log('ban logic');
   };
@@ -119,6 +123,9 @@ const PostContainer = props => {
         break;
       case 'delete':
         deleteBoxHandle();
+        break;
+      case 'anonyDelete':
+        anonymousDeleteFunction();
         break;
       default:
         console.log('not selected');

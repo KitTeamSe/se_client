@@ -21,10 +21,7 @@ const makePost = async () => {
     console.log('제목수는 50자를 초과할수 없습니다');
     return;
   }
-  // const attachedFiles = [];
-  // attachedFiles.forEach(({ file }) => {
-  //   data.append('files', file);
-  // });
+
   const res = await makeSomePost({ data });
   console.log(res);
 };
