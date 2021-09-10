@@ -166,7 +166,7 @@ const AnonymousDeleteDialog = props => {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">삭제</DialogTitle>
+      <DialogTitle id="alert-dialog-title">게시글 삭제</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           익명 게시글을 삭제하기 위해서는 비밀번호를 입력하세요
@@ -181,14 +181,15 @@ const AnonymousDeleteDialog = props => {
           onChange={anonyPwChange}
           value={anonymousPassword}
         />
-        <SubmitButton
-          type="submit"
-          onClick={anonymousDeleteFunction}
-          color="primary"
-        >
-          확인
-        </SubmitButton>
       </FormField>
+      <DialogActions>
+        <Button onClick={anonymousDeleteBoxHandle} color="primary">
+          취소
+        </Button>
+        <Button onClick={anonymousDeleteFunction} color="secondary">
+          삭제
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };
