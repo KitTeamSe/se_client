@@ -70,3 +70,34 @@ export const tagList = {
   4: { name: '4학년', color1: '6dd5ed', color2: '8393b0' },
   5: { name: '5학년', color1: 'ff6e7f', color2: 'bfe9ff' }
 };
+
+export const ConditionClassify = {
+  LogoutNotAnonymous: {
+    writer: ['profile', 'post'],
+    menu: ['needLogin']
+  },
+  LogoutAnonymous: {
+    writer: [],
+    menu: ['needLogin']
+  },
+  LoginAnnoymous: { writer: [], menu: ['report', 'fix', 'anonyDelete'] },
+  LoginMy: { writer: ['profile'], menu: ['fix', 'delete'] },
+  LoginNotmy: {
+    writer: ['profile', 'post', 'message', 'mail', 'ban'],
+    menu: ['report']
+  }
+};
+
+export const menuStorage = {
+  profile: '회원 정보 보기',
+  post: '게시글 보기',
+  message: '메세지 보내기',
+  mail: '메일 보내기',
+  report: '신고',
+  fix: '수정',
+  delete: '삭제',
+  anonyDelete: '삭제',
+  needLogin: '로그인을 해야 신고가 가능합니다'
+};
+
+export const reportType = ['POST', 'etc'];

@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { CircularProgress, Menu, MenuItem, TextField } from '@material-ui/core';
-
 import {
   faLock,
   faEye,
@@ -10,6 +9,7 @@ import {
   faEllipsisH
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ConditionClassify, menuStorage } from '../../DataExport';
 import ReplyTestPage from '../Reply/ReplyTestPage';
 import Tags from './Tags';
 
@@ -132,42 +132,19 @@ const PostHeaderInfo = props => {
     accountIdString
   } = props;
 
-  const ConditionClassify = {
-    Logout: {
-      writer: ['profile', 'post'],
-      menu: ['report']
-    },
-    LoginMy: { writer: ['profile'], menu: ['fix', 'delete'] },
-    LoginNotmy: {
-      writer: ['profile', 'post', 'message', 'mail', 'ban'],
-      menu: ['report']
-    },
-    Annoymous: { writer: [], menu: ['report', 'fix', 'anonyDelete'] }
-  };
-
-  const menuStorage = {
-    profile: '회원 정보 보기',
-    post: '게시글 보기',
-    message: '메세지 보내기',
-    mail: '메일 보내기',
-    report: '신고',
-    fix: '수정',
-    delete: '삭제',
-    anonyDelete: '삭제'
-  };
-
   function menuItem(type) {
-    let condition = 'Anonymous';
-    if (!accountIdString) {
-      condition = 'Annoymous';
+    let condition = 'LogoutNotAnonymous';
+    if (!userId && !accountIdString) {
+      condition = 'LogoutAnonymous';
+    } else if (!userId && accountIdString) {
+      condition = 'LogoutNotAnonymous';
+    } else if (userId && !accountIdString) {
+      condition = 'LoginAnnoymous';
     } else if (userId && userId === accountIdString) {
       condition = 'LoginMy';
     } else if (userId && userId !== accountIdString) {
       condition = 'LoginNotmy';
-    } else if (!userId) {
-      condition = 'Logout';
     }
-
     return (
       <div>
         {ConditionClassify[condition][type].map(content => (

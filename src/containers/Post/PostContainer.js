@@ -12,14 +12,18 @@ import {
 } from '../../modules/post';
 import DeleteAlertDialog from '../../components/Post/DeleteAlertDialog';
 import AnonymousDeleteDialog from '../../components/Post/AnonymousDeleteDialog';
+import PostReportDialog from '../../components/Post/PostReportDialog';
 
 const PostContainer = props => {
   const { location, match } = props;
   const [moremenuEl, setMoremenuEl] = useState(null);
   const [writerEl, setWriterEl] = useState(null);
   const [secretPost, setSecretPost] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
   const [password, setPassword] = useState('');
   const [anonymousPassword, setAnonymousPassword] = useState('');
+  const [reportDescription, setReportDescription] = useState('');
+  const [reportTypeSelect, setReportTypeSelect] = useState('POST');
   const dispatch = useDispatch();
   const {
     data,
@@ -56,6 +60,7 @@ const PostContainer = props => {
     }
   }, [match.params.postId]);
 
+  // 비밀글 관련
   const PasswordSubmit = e => {
     e.preventDefault();
     const postId = Number(match.params.postId);
@@ -68,22 +73,27 @@ const PostContainer = props => {
     setPassword(value);
   };
 
+  // 익명게시글 삭제 관련
+  const anonymousDeleteFunction = e => {
+    e.preventDefault();
+    setAnonymousDeleteBoxOpen(false);
+    const { postId } = match.params;
+    dispatch(anonymousPostDelete({ anonymousPassword, postId }));
+  };
+
   const anonyPwChange = e => {
     e.preventDefault();
     const { value } = e.target;
     setAnonymousPassword(value);
   };
 
-  const reportFunction = () => {
-    console.log('report logic');
-  };
-
-  const deleteBoxHandle = () => {
-    setDeleteBoxOpen(!deleteBoxOpen);
-  };
-
   const anonymousDeleteBoxHandle = () => {
     setAnonymousDeleteBoxOpen(!anonymousDeleteBoxOpen);
+  };
+
+  // 일반 삭제 관련
+  const deleteBoxHandle = () => {
+    setDeleteBoxOpen(!deleteBoxOpen);
   };
 
   const deleteFunction = () => {
@@ -92,11 +102,29 @@ const PostContainer = props => {
     dispatch(postDelete({ id }));
   };
 
-  const anonymousDeleteFunction = e => {
+  // 신고 관련
+  const reportBoxHandle = () => {
+    setReportOpen(!reportOpen);
+  };
+
+  const descriptionChange = e => {
     e.preventDefault();
-    setAnonymousDeleteBoxOpen(false);
-    const { postId } = match.params;
-    dispatch(anonymousPostDelete({ anonymousPassword, postId }));
+    const { value } = e.target;
+    setReportDescription(value);
+  };
+
+  const reportTypeChange = e => {
+    e.preventDefault();
+    const { value } = e.target;
+    setReportTypeSelect(value);
+  };
+
+  const reportSubmit = e => {
+    e.preventDefault();
+    console.log(reportTypeSelect, reportDescription);
+    setReportOpen(false);
+    setReportDescription('');
+    setReportTypeSelect('POST');
   };
 
   const banFunction = () => {
@@ -125,7 +153,7 @@ const PostContainer = props => {
         banFunction();
         break;
       case 'report':
-        reportFunction();
+        reportBoxHandle();
         break;
       case 'message':
         messageFunction();
@@ -166,6 +194,15 @@ const PostContainer = props => {
 
   return (
     <>
+      <PostReportDialog
+        reportOpen={reportOpen}
+        reportBoxHandle={reportBoxHandle}
+        reportSubmit={reportSubmit}
+        reportDescription={reportDescription}
+        descriptionChange={descriptionChange}
+        reportTypeChange={reportTypeChange}
+        reportTypeSelect={reportTypeSelect}
+      />
       <DeleteAlertDialog
         deleteBoxOpen={deleteBoxOpen}
         deleteBoxHandle={deleteBoxHandle}
