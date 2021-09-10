@@ -1,32 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import {
-  Dialog,
-  DialogTitle,
   DialogActions,
   Button,
-  Backdrop,
-  CircularProgress,
   DialogContent,
-  DialogContentText,
   TextField
 } from '@material-ui/core';
-
-const ButtonStyled = styled.button`
-  padding: 0;
-  margin-right: 10px;
-  color: #999999;
-  background: none;
-  font-size: 0.8125rem;
-  border: none;
-  border-radius: 0;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: 0.2s;
-  &:hover {
-    color: #666666;
-  }
-`;
+import { ReplyDeleteTemplate } from './ReplyDelete';
 
 const FieldWrapper = styled(DialogContent)`
   &.MuiDialogContent-root:first-child {
@@ -34,21 +14,21 @@ const FieldWrapper = styled(DialogContent)`
   }
 `;
 
-const BackdropStyled = styled(Backdrop)`
-  z-index: 9999;
-  color: #fff;
-  background-color: rgba(0, 0, 0, 0.03);
-`;
+const ReplyAnonyDeleteAction = props => {
+  const { handleClose } = props;
 
-const ErrorMessage = styled(DialogContentText)`
-  width: 100%;
-  text-align: center;
-  color: #dc004e;
-`;
+  return (
+    <DialogActions>
+      <Button type="submit" variant="contained" color="secondary" autoFocus>
+        삭제
+      </Button>
+      <Button onClick={handleClose}>취소</Button>
+    </DialogActions>
+  );
+};
 
-const DeleteForm = props => {
-  const { onSubmit, removeForm, handleChange, loading, error, handleClose } =
-    props;
+const ReplyAnonyDeleteForm = props => {
+  const { onSubmit, removeForm, handleChange, children } = props;
 
   return (
     <form onSubmit={onSubmit}>
@@ -63,16 +43,7 @@ const DeleteForm = props => {
           fullWidth
         />
       </FieldWrapper>
-
-      <ErrorMessage>{!loading && error && '[Error]'}</ErrorMessage>
-      <ErrorMessage>{!loading && error && error.message}</ErrorMessage>
-
-      <DialogActions>
-        <Button type="submit" variant="contained" color="secondary" autoFocus>
-          삭제
-        </Button>
-        <Button onClick={handleClose}>취소</Button>
-      </DialogActions>
+      {children}
     </form>
   );
 };
@@ -88,30 +59,23 @@ const ReplyAnonyDelete = props => {
     handleOpen,
     handleClose
   } = props;
+
   return (
-    <>
-      <ButtonStyled onClick={handleOpen}>삭제</ButtonStyled>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="delete-dialog-title"
+    <ReplyDeleteTemplate
+      open={open}
+      loading={loading}
+      error={error}
+      handleOpen={handleOpen}
+    >
+      <ReplyAnonyDeleteForm
+        onSubmit={onSubmit}
+        removeForm={removeForm}
+        handleChange={handleChange}
+        handleClose={handleClose}
       >
-        <DialogTitle id="delete-dialog-title">
-          댓글을 삭제하시겠습니까?
-        </DialogTitle>
-        <DeleteForm
-          onSubmit={onSubmit}
-          removeForm={removeForm}
-          handleChange={handleChange}
-          loading={loading}
-          error={error}
-          handleClose={handleClose}
-        />
-      </Dialog>
-      <BackdropStyled open={loading}>
-        <CircularProgress color="inherit" />
-      </BackdropStyled>
-    </>
+        <ReplyAnonyDeleteAction handleClose={handleClose} />
+      </ReplyAnonyDeleteForm>
+    </ReplyDeleteTemplate>
   );
 };
 
