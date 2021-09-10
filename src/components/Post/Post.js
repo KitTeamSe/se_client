@@ -1,17 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {
-  CircularProgress,
-  Menu,
-  MenuItem,
-  TextField,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle
-} from '@material-ui/core';
+import { CircularProgress, Menu, MenuItem, TextField } from '@material-ui/core';
 
 import {
   faLock,
@@ -127,76 +116,6 @@ const SubmitButton = styled.button`
     transition: 0.5s;
   }
 `;
-
-const DeleteAlertDialog = props => {
-  const { deleteBoxOpen, deleteBoxHandle, deleteFunction } = props;
-  return (
-    <Dialog
-      open={deleteBoxOpen}
-      onClose={deleteBoxHandle}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">삭제</DialogTitle>
-      <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          게시글을 삭제하시겠습니까? 복구되지 않습니다
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={deleteBoxHandle} color="primary">
-          취소
-        </Button>
-        <Button onClick={deleteFunction} color="secondary">
-          삭제
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
-
-const AnonymousDeleteDialog = props => {
-  const {
-    anonymousDeleteBoxOpen,
-    anonymousDeleteBoxHandle,
-    anonymousDeleteFunction,
-    anonyPwChange,
-    anonymousPassword
-  } = props;
-  return (
-    <Dialog
-      open={anonymousDeleteBoxOpen}
-      onClose={anonymousDeleteBoxHandle}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">게시글 삭제</DialogTitle>
-      <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          익명 게시글을 삭제하기 위해서는 비밀번호를 입력하세요
-        </DialogContentText>
-      </DialogContent>
-      <FormField onSubmit={anonymousDeleteFunction}>
-        <FormTextField
-          autoFocus
-          id="nowPassword"
-          label="비밀번호를 입력하세요"
-          type="password"
-          onChange={anonyPwChange}
-          value={anonymousPassword}
-        />
-      </FormField>
-      <DialogActions>
-        <Button onClick={anonymousDeleteBoxHandle} color="primary">
-          취소
-        </Button>
-        <Button onClick={anonymousDeleteFunction} color="secondary">
-          삭제
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
 
 const PostHeaderInfo = props => {
   const {
@@ -406,17 +325,9 @@ const Post = props => {
     functionExcute,
     secretPost,
     onChange,
-    anonyPwChange,
     password,
-    anonymousPassword,
     PasswordSubmit,
     userId,
-    deleteBoxOpen,
-    deleteBoxHandle,
-    deleteFunction,
-    anonymousDeleteBoxOpen,
-    anonymousDeleteBoxHandle,
-    anonymousDeleteFunction,
     postDeleteData,
     postDeleteLoading,
     postDeleteError
@@ -451,18 +362,6 @@ const Post = props => {
 
   return (
     <MainWrapper>
-      <DeleteAlertDialog
-        deleteBoxOpen={deleteBoxOpen}
-        deleteBoxHandle={deleteBoxHandle}
-        deleteFunction={deleteFunction}
-      />
-      <AnonymousDeleteDialog
-        anonymousDeleteBoxOpen={anonymousDeleteBoxOpen}
-        anonymousDeleteBoxHandle={anonymousDeleteBoxHandle}
-        anonymousDeleteFunction={anonymousDeleteFunction}
-        anonyPwChange={anonyPwChange}
-        anonymousPassword={anonymousPassword}
-      />
       <PostHeader
         res={res}
         moremenuEl={moremenuEl}

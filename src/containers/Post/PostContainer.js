@@ -10,6 +10,8 @@ import {
   anonymousPostDelete,
   initialize
 } from '../../modules/post';
+import DeleteAlertDialog from '../../components/Post/DeleteAlertDialog';
+import AnonymousDeleteDialog from '../../components/Post/AnonymousDeleteDialog';
 
 const PostContainer = props => {
   const { location, match } = props;
@@ -163,31 +165,37 @@ const PostContainer = props => {
   };
 
   return (
-    <Post
-      data={data}
-      loading={loading}
-      error={error}
-      moremenuEl={moremenuEl}
-      writerEl={writerEl}
-      secretPost={secretPost}
-      password={password}
-      anonymousPassword={anonymousPassword}
-      userId={userId}
-      deleteBoxOpen={deleteBoxOpen}
-      postDeleteData={postDeleteData}
-      postDeleteLoading={postDeleteLoading}
-      postDeleteError={postDeleteError}
-      onChange={onChange}
-      anonyPwChange={anonyPwChange}
-      functionExcute={functionExcute}
-      menuClick={menuClick}
-      PasswordSubmit={PasswordSubmit}
-      deleteBoxHandle={deleteBoxHandle}
-      deleteFunction={deleteFunction}
-      anonymousDeleteBoxOpen={anonymousDeleteBoxOpen}
-      anonymousDeleteBoxHandle={anonymousDeleteBoxHandle}
-      anonymousDeleteFunction={anonymousDeleteFunction}
-    />
+    <>
+      <DeleteAlertDialog
+        deleteBoxOpen={deleteBoxOpen}
+        deleteBoxHandle={deleteBoxHandle}
+        deleteFunction={deleteFunction}
+      />
+      <AnonymousDeleteDialog
+        anonymousDeleteBoxOpen={anonymousDeleteBoxOpen}
+        anonymousDeleteBoxHandle={anonymousDeleteBoxHandle}
+        anonymousDeleteFunction={anonymousDeleteFunction}
+        anonyPwChange={anonyPwChange}
+        anonymousPassword={anonymousPassword}
+      />
+      <Post
+        data={data}
+        loading={loading}
+        error={error}
+        moremenuEl={moremenuEl}
+        writerEl={writerEl}
+        secretPost={secretPost}
+        password={password}
+        userId={userId}
+        postDeleteData={postDeleteData}
+        postDeleteLoading={postDeleteLoading}
+        postDeleteError={postDeleteError}
+        onChange={onChange}
+        functionExcute={functionExcute}
+        menuClick={menuClick}
+        PasswordSubmit={PasswordSubmit}
+      />
+    </>
   );
 };
 
