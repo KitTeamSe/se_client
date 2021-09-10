@@ -82,6 +82,10 @@ const WriterIcon = styled.span`
   cursor: pointer;
 `;
 
+const AnonymousIcon = styled.span`
+  margin: 0px 0.3rem;
+`;
+
 const PostText = styled.div`
   padding: 3rem 2rem;
   font-size: 1rem;
@@ -219,7 +223,7 @@ const PostHeaderInfo = props => {
       writer: ['profile', 'post', 'message', 'mail', 'ban'],
       menu: ['report']
     },
-    Annoymous: { writer: ['report'], menu: ['report', 'fix', 'anonyDelete'] }
+    Annoymous: { writer: [], menu: ['report', 'fix', 'anonyDelete'] }
   };
 
   const menuStorage = {
@@ -260,10 +264,17 @@ const PostHeaderInfo = props => {
     <>
       <PostHeadInfo>
         <PostHeadInfoComponent>
-          <WriterIcon onClick={menuClick} id="writer">
-            <Icon icon={faUser} />
-            {nickname}
-          </WriterIcon>
+          {accountIdString ? (
+            <WriterIcon onClick={menuClick} id="writer">
+              <Icon icon={faUser} />
+              {nickname}
+            </WriterIcon>
+          ) : (
+            <AnonymousIcon id="writer">
+              <Icon icon={faUser} />
+              {nickname}
+            </AnonymousIcon>
+          )}
           <Menu
             anchorEl={writerEl}
             keepMounted
