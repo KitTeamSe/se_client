@@ -8,6 +8,7 @@ import {
   loadSecretPost,
   postDelete,
   anonymousPostDelete,
+  postReport,
   initialize
 } from '../../modules/post';
 import DeleteAlertDialog from '../../components/Post/DeleteAlertDialog';
@@ -31,15 +32,20 @@ const PostContainer = props => {
     error,
     postDeleteData,
     postDeleteLoading,
-    postDeleteError
+    postDeleteError,
+    reportResponse
   } = useSelector(({ post }) => ({
     data: post.loadedPost.data,
     loading: post.loadedPost.loading,
     error: post.loadedPost.error,
     postDeleteData: post.postDeleteRes.data,
     postDeleteLoading: post.postDeleteRes.loading,
-    postDeleteError: post.postDeleteRes.error
+    postDeleteError: post.postDeleteRes.error,
+    reportResponse: post.reportRes
   }));
+  if (reportResponse.error) {
+    console.log(reportResponse.error);
+  }
   const [deleteBoxOpen, setDeleteBoxOpen] = useState(false);
   const [anonymousDeleteBoxOpen, setAnonymousDeleteBoxOpen] = useState(false);
   const userId = localStorage.getItem('userId');
@@ -121,7 +127,14 @@ const PostContainer = props => {
 
   const reportSubmit = e => {
     e.preventDefault();
-    console.log(reportTypeSelect, reportDescription);
+    const targetId = Number(match.params.postId);
+    dispatch(
+      postReport({
+        description: reportDescription,
+        reportType: reportTypeSelect,
+        targetId
+      })
+    );
     setReportOpen(false);
     setReportDescription('');
     setReportTypeSelect('POST');
