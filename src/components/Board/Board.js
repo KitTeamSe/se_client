@@ -142,7 +142,7 @@ const Tag = styled.span`
 `;
 
 const Paginations = props => {
-  const { res, boardId, boardPage } = props;
+  const { res, boardNameEng, boardPage } = props;
   const totalPage = res.postListItem.totalPages;
   return (
     <PaginationStyled
@@ -153,7 +153,7 @@ const Paginations = props => {
       renderItem={item => (
         <PaginationItem
           component={Link}
-          to={`/board/${boardId}?page=${item.page}`}
+          to={`/board/${boardNameEng}?page=${item.page}`}
           {...item}
         />
       )}
@@ -162,7 +162,7 @@ const Paginations = props => {
 };
 
 const PostTitle = props => {
-  const { postInfo, boardId } = props;
+  const { postInfo, boardNameEng } = props;
   const { postId, title, isSecret, nickname, numReply, views, tags, createAt } =
     postInfo;
   const writeTime = `${createAt[0]}년${createAt[1]}월${createAt[2]}일 ${createAt[3]}:${createAt[4]}`;
@@ -175,8 +175,8 @@ const PostTitle = props => {
         <Title
           to={
             isSecret === 'NORMAL'
-              ? `/board/${boardId}/${postId}`
-              : `/board/${boardId}/${postId}?secret=true`
+              ? `/board/${boardNameEng}/${postId}`
+              : `/board/${boardNameEng}/${postId}?secret=true`
           }
         >
           {title}
@@ -235,7 +235,7 @@ const NoPost = props => {
 };
 
 const MainTable = props => {
-  const { res, boardId } = props;
+  const { res, boardNameEng } = props;
   const tableColumns = ['번호', '제목', '닉네임', '정보'];
 
   return (
@@ -255,7 +255,7 @@ const MainTable = props => {
             <PostTitle
               key={postInfo.postId}
               postInfo={postInfo}
-              boardId={boardId}
+              boardNameEng={boardNameEng}
             />
           ))}
         </TableBody>
@@ -315,7 +315,7 @@ const Board = props => {
     onSearch,
     onPostSearchTypeChange,
     postSearchType,
-    boardId,
+    boardNameEng,
     boardPage
   } = props;
 
@@ -333,8 +333,12 @@ const Board = props => {
   const res = data.data;
   return (
     <MainWrapper>
-      <Route exact path="/board/:boardId/:postId" component={PostContainer} />
-      <Route path="/board/:boardId">
+      <Route
+        exact
+        path="/board/:boardNameEng/:postId"
+        component={PostContainer}
+      />
+      <Route path="/board/:boardNameEng">
         <BoardHeader
           postSearchType={postSearchType}
           onPostSearchTypeChange={onPostSearchTypeChange}
@@ -346,11 +350,11 @@ const Board = props => {
           <NoPost searchKeyword={searchKeyword} />
         ) : (
           <>
-            <MainTable res={res} boardId={boardId} />
+            <MainTable res={res} boardNameEng={boardNameEng} />
             <Paginations
               res={res}
               onChange={onChange}
-              boardId={boardId}
+              boardNameEng={boardNameEng}
               boardPage={boardPage}
             />
           </>

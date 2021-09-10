@@ -33,7 +33,12 @@ export const initialize = createAction(INITIALIZE, form => form);
 
 export const loadPostList = createAction(
   LOAD_POST_LIST,
-  ({ boardId, direction, page, size }) => ({ boardId, direction, page, size })
+  ({ boardNameEng, direction, page, size }) => ({
+    boardNameEng,
+    direction,
+    page,
+    size
+  })
 );
 
 export const loadMenuList = createAction(LOAD_MENU_LIST);

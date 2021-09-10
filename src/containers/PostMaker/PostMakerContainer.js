@@ -10,7 +10,7 @@ const makePost = async () => {
       anonymousPassword: 'asdf1234'
     },
 
-    boardId: 1,
+    boardNameEng: 1,
     isNotice: 'NORMAL',
     isSecret: 'NORMAL',
     postContent: {
