@@ -21,8 +21,8 @@ import {
   faEllipsisH
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { tagList } from '../../DataExport';
 import ReplyTestPage from '../Reply/ReplyTestPage';
+import Tags from './Tags';
 
 const LoadingCircle = styled(CircularProgress)`
   position: absolute;
@@ -63,7 +63,7 @@ const PostHead = styled.div`
 
 const PostHeadTitle = styled.div`
   width: 100%;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   margin-bottom: 1rem;
 `;
 
@@ -80,22 +80,6 @@ const PostHeadInfoComponent = styled.span`
 const WriterIcon = styled.span`
   margin: 0px 0.3rem;
   cursor: pointer;
-`;
-
-const TagIcon = styled.span`
-  padding: 0 0.3rem;
-  margin-left: 0.5rem;
-  border-radius: 12px;
-  font-size: 1rem;
-  background-image: linear-gradient(
-    to right,
-    #${props => props.color1} 0%,
-    #${props => props.color2} 100%
-  );
-`;
-
-const Tag = styled.span`
-  display: inline-block;
 `;
 
 const PostText = styled.div`
@@ -348,21 +332,7 @@ const PostHeader = props => {
     <PostHead>
       <PostHeadTitle>
         {postContent.title}
-        {tags.length === 0 ? (
-          <></>
-        ) : (
-          <Tag>
-            {tags.map(tag => (
-              <TagIcon
-                color1={tagList[tag.tagId].color1}
-                color2={tagList[tag.tagId].color2}
-                key={tag.tagId}
-              >
-                {tagList[tag.tagId].name}
-              </TagIcon>
-            ))}
-          </Tag>
-        )}
+        <Tags tags={tags} />
       </PostHeadTitle>
       <PostHeaderInfo
         userId={userId}
