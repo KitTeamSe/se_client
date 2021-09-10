@@ -24,9 +24,9 @@ const Routes = () => (
         />
         <Route exact path="/profile" component={ProfilePageContainer} />
         <Route exact path="/signup" component={SignupPageContainer} />
-        <Route path="/board/:boardId" component={BoardContainer} />
+        <Route path="/board/:boardNameEng" component={BoardContainer} />
         <Route path="/">
-          <Redirect to="/board/1" />
+          <Redirect to="/board/freeboard" />
         </Route>
       </Switch>
     </BodyContainer>
