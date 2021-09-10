@@ -9,22 +9,12 @@ export const addReply = ({
   parentId,
   postId,
   text,
-  files
+  attachmentList
 }) => {
-  const formData = new FormData();
   const token = localStorage.getItem('token');
-  const data = { anonymous, isSecret, parentId, postId, text };
+  const data = { anonymous, isSecret, parentId, postId, text, attachmentList };
 
-  formData.append(
-    'key',
-    new Blob([JSON.stringify(data)], { type: 'application/json' })
-  );
-
-  files.forEach(({ file }) => {
-    formData.append('files', file);
-  });
-
-  return client.post(`${URL}`, formData, tokenHeader(token)).catch(error => {
+  return client.post(`${URL}`, data, tokenHeader(token)).catch(error => {
     if (error.response.data.code === 'GE05') {
       localStorage.clear();
       window.location.reload(true);
@@ -103,6 +93,21 @@ export const removeReplyAnony = ({ password, replyId }) => {
 
   return client
     .post(`${URL}/anonymous`, anonymousReplyDeleteRequest, tokenHeader(token))
+    .catch(error => {
+      if (error.response.data.code === 'GE05') {
+        localStorage.clear();
+        window.location.reload(true);
+      }
+      throw error.response.data;
+    });
+};
+
+export const getSecretReply = ({ password, replyId }) => {
+  const queryString = qs.stringify({ password, replyId });
+  const token = localStorage.getItem('token');
+
+  return client
+    .get(`${URL}/secret?${queryString}`, tokenHeader(token))
     .catch(error => {
       if (error.response.data.code === 'GE05') {
         localStorage.clear();

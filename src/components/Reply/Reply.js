@@ -1,49 +1,74 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Avatar as AnonyAvatar, Typography } from '@material-ui/core';
-import { getFormatDate, getFormatTime } from '../../utils/format';
+import { Avatar, Typography } from '@material-ui/core';
+import {
+  getEncodeHTML,
+  getFormatDate,
+  getFormatTime
+} from '../../utils/format';
 import ReplyDeleteContainer from '../../containers/Reply/ReplyDeleteContainer';
 import ReplyAnonyDeleteContainer from '../../containers/Reply/ReplyAnonyDeleteContainer';
+import ReplyChildAddContainer from '../../containers/Reply/ReplyChildAddContainer';
+import SecretReplyContainer from '../../containers/Reply/SecretReplyContainer';
+import EditorOutput from '../Editor/EditorOutput';
+import ActionButton from './ReplyActionButton';
 
-const AvatarDiameter = `40px`;
-
-const Comment = styled.div`
-  padding: 0 10px;
-  font-size: 0.875rem;
-`;
-
-const Wrapper = styled.div`
+const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: calc(100% - 180px);
-`;
-const ReplyWrapper = styled.div`
-  display: flex;
-  padding: 10px 0 20px 10px;
-  border-bottom: 1px solid #e9e9e9;
-  background: ${props => props.isDelete === 'DELETED' && '#eeeeee'};
+  width: 100%;
 `;
 
-const ChildWrapper = styled(ReplyWrapper)`
-  padding-left: 30px;
+export const ReplyWrapper = styled.div`
+  display: flex;
+  padding: 10px 10px 20px 10px;
+  border-bottom: 1px solid #e9e9e9;
+  background: ${props => props.isDelete === 'DELETED' && '#eeeeee'};
+  @media ${props => props.theme.mobile} {
+    flex-direction: column;
+  }
 `;
 
 const AvatarWrapper = styled.div`
-  width: ${AvatarDiameter};
-  height: ${AvatarDiameter};
-  margin-right: 10px;
+  width: 40px;
+  height: 40px;
+  padding-right: 10px;
+  @media ${props => props.theme.mobile} {
+    width: 35px;
+    height: 35px;
+  }
+`;
+
+const AnonyAvatar = styled(Avatar)`
+  width: 40px;
+  height: 40px;
+  @media ${props => props.theme.mobile} {
+    width: 35px;
+    height: 35px;
+  }
 `;
 
 const UserAvatar = styled(AnonyAvatar)`
   background: #ff518f;
 `;
 
-const InfoWrapper = styled.div`
-  width: 130px;
+const ReplyInfoWrapper = styled.div`
+  display: flex;
+  width: 180px;
+  min-width: 180px;
+  @media ${props => props.theme.mobile} {
+    width: 180px;
+    min-width: 130px;
+  }
+`;
+
+const UserInfoWrapper = styled.div`
+  width: 100%;
 `;
 
 const CommentWrapper = styled.div`
+  display: flex;
   width: 100%;
 `;
 
@@ -56,14 +81,18 @@ const AnonyNickName = styled(Typography)`
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 0.875rem;
-  font-weight: 400;
 `;
 
 const NickName = styled(AnonyNickName)`
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  color: ${props =>
-    props.children === localStorage.getItem('userId') && '#1976d2'};
+`;
+
+const DateWrapper = styled.div`
+  @media ${props => props.theme.mobile} {
+    display: flex;
+    margin-bottom: 10px;
+  }
 `;
 
 const DateText = styled(Typography)`
@@ -76,69 +105,51 @@ const TimeText = styled(DateText)`
   font-color: #999999;
 `;
 
-const ButtonStyled = styled.button`
-  padding: 0;
-  margin-right: 10px;
-  color: #999999;
-  background: none;
-  font-size: 0.8125rem;
-  border: none;
-  border-radius: 0;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: 0.2s;
-  &:hover {
-    color: #666666;
-  }
-`;
-
-const ActionButton = props => {
-  const { children, onClick } = props;
-
-  return <ButtonStyled onClick={onClick}>{children}</ButtonStyled>;
-};
-
-const ReplyInfo = props => {
-  const { accountId, anonymousNickname, createAt } = props;
-
-  return (
-    <>
-      <AvatarWrapper>
-        {accountId ? <UserAvatar /> : <AnonyAvatar />}
-      </AvatarWrapper>
-      <InfoWrapper>
-        {accountId ? (
-          <NickName>{accountId}</NickName>
-        ) : (
-          <AnonyNickName>{anonymousNickname}</AnonyNickName>
-        )}
-
-        <DateText>{getFormatDate(createAt)}</DateText>
-        <TimeText>{getFormatTime(createAt)}</TimeText>
-      </InfoWrapper>
-    </>
-  );
-};
-
 const ReplyComment = props => {
-  const { content } = props;
+  const { content, isDelete, isSecret } = props;
+  const handleContent = () => {
+    if (isDelete === 'DELETED') return { __html: `❌ ${content}` };
+    if (isSecret === 'SECRET') return { __html: `🔒 ${content}` };
+    return { __html: getEncodeHTML(content) };
+  };
 
   return (
     <CommentWrapper>
-      <Comment
-        className="ck-content"
-        dangerouslySetInnerHTML={{ __html: content }}
-      />
+      <EditorOutput content={handleContent()} />
     </CommentWrapper>
   );
 };
 
 const ReplyAction = props => {
-  const { accountId, anonymousNickname, replyId } = props;
+  const {
+    parentId,
+    parentIndex,
+    accountId,
+    replyIndex,
+    anonymousNickname,
+    replyId,
+    isSecret,
+    handleAddReplyChild
+  } = props;
 
   return (
     <ActionWrapper>
-      <ActionButton onClick={() => console.log(replyId)}>댓글</ActionButton>
+      {isSecret === 'SECRET' && (
+        <SecretReplyContainer
+          replyId={replyId}
+          parentIndex={parentIndex}
+          replyIndex={replyIndex}
+        />
+      )}
+      <ActionButton
+        onClick={() =>
+          parentId
+            ? handleAddReplyChild(parentId)
+            : handleAddReplyChild(replyId)
+        }
+      >
+        댓글
+      </ActionButton>
       {localStorage.getItem('token') &&
       localStorage.getItem('userId') &&
       accountId ? (
@@ -157,78 +168,100 @@ const ReplyAction = props => {
   );
 };
 
-const ReplyContents = props => {
-  const { replyId, accountId, anonymousNickname, content, createAt } = props;
+export const ReplyInfo = props => {
+  const { accountId, anonymousNickname, createAt } = props;
 
   return (
-    <>
-      <ReplyInfo
-        accountId={accountId}
-        anonymousNickname={anonymousNickname}
-        createAt={createAt}
-      />
-      <Wrapper>
-        <ReplyComment content={content} />
-        <ReplyAction
-          accountId={accountId}
-          anonymousNickname={anonymousNickname}
-          replyId={replyId}
-        />
-      </Wrapper>
-    </>
+    <ReplyInfoWrapper>
+      <AvatarWrapper>
+        {accountId ? <UserAvatar /> : <AnonyAvatar />}
+      </AvatarWrapper>
+      <UserInfoWrapper>
+        {accountId ? (
+          <NickName>{`${accountId}`}</NickName>
+        ) : (
+          <AnonyNickName>{anonymousNickname}</AnonyNickName>
+        )}
+        <DateWrapper>
+          <DateText>{getFormatDate(createAt)}</DateText>
+          <TimeText>{getFormatTime(createAt)}</TimeText>
+        </DateWrapper>
+      </UserInfoWrapper>
+    </ReplyInfoWrapper>
   );
 };
 
-const ChildReply = props => {
-  const { replyId, accountId, anonymousNickname, content, createAt } = props;
+export const ReplyContent = props => {
+  const {
+    parentId,
+    parentIndex,
+    replyId,
+    replyIndex,
+    accountId,
+    anonymousNickname,
+    content,
+    isSecret,
+    isDelete,
+    handleAddReplyChild
+  } = props;
 
   return (
-    <ChildWrapper id={replyId}>
-      <ReplyContents
-        replyId={replyId}
-        accountId={accountId}
-        anonymousNickname={anonymousNickname}
-        content={content}
-        createAt={createAt}
-      />
-    </ChildWrapper>
+    <ContentWrapper>
+      <ReplyComment content={content} isDelete={isDelete} isSecret={isSecret} />
+      {isDelete === 'NORMAL' && (
+        <ReplyAction
+          parentId={parentId}
+          parentIndex={parentIndex}
+          accountId={accountId}
+          replyIndex={replyIndex}
+          anonymousNickname={anonymousNickname}
+          replyId={replyId}
+          isSecret={isSecret}
+          handleAddReplyChild={handleAddReplyChild}
+        />
+      )}
+    </ContentWrapper>
   );
 };
 
 const Reply = props => {
   const {
     replyId,
+    replyIndex,
     accountId,
     anonymousNickname,
     content,
     createAt,
-    child,
-    isDelete
+    isSecret,
+    isDelete,
+    handleAddReplyChild,
+    children
   } = props;
 
   return (
     <>
-      <ReplyWrapper id={replyId} isDelete={isDelete}>
-        <ReplyContents
-          replyId={replyId}
-          accountId={accountId}
-          anonymousNickname={anonymousNickname}
-          content={content}
-          createAt={createAt}
-        />
-      </ReplyWrapper>
-      {child && child.length
-        ? child.map(e => (
-            <ChildReply
-              replyId={e.replyId}
-              accountId={e.accountId}
-              anonymousNickname={e.anonymousNickname}
-              content={e.text}
-              createAt={e.createAt}
-              isDelete={e.isDelete}
-            />
-          ))
-        : null}
+      {replyId && (
+        <ReplyWrapper isDelete={isDelete}>
+          <ReplyInfo
+            accountId={accountId}
+            anonymousNickname={anonymousNickname}
+            createAt={createAt}
+          />
+          <ReplyContent
+            replyId={replyId}
+            replyIndex={replyIndex}
+            accountId={accountId}
+            anonymousNickname={anonymousNickname}
+            content={content}
+            createAt={createAt}
+            isSecret={isSecret}
+            isDelete={isDelete}
+            handleAddReplyChild={handleAddReplyChild}
+          />
+        </ReplyWrapper>
+      )}
+      {children}
+      {replyId ? <ReplyChildAddContainer parentId={replyId} /> : null}
     </>
   );
 };

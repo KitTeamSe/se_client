@@ -21,7 +21,7 @@ const BoardContainer = props => {
 
   const pageSize = 20;
 
-  const { boardId } = match.params;
+  const { boardNameEng } = match.params;
   useEffect(() => {
     const {
       page,
@@ -33,7 +33,7 @@ const BoardContainer = props => {
 
     if (page === undefined) {
       const parameter = {
-        boardId,
+        boardNameEng,
         direction,
         page: 0,
         size
@@ -44,7 +44,7 @@ const BoardContainer = props => {
     }
 
     const parameter = {
-      boardId,
+      boardNameEng,
       direction,
       page: page - 1,
       size
@@ -85,7 +85,7 @@ const BoardContainer = props => {
       size: pageSize
     };
     const postSearchRequest = {
-      boardId,
+      boardNameEng,
       keyword,
       pageRequest,
       postSearchType
@@ -106,7 +106,7 @@ const BoardContainer = props => {
       onPostSearchTypeChange={onPostSearchTypeChange}
       postSearchType={postSearchType}
       menuListObj={menuListObj}
-      boardId={boardId}
+      boardNameEng={boardNameEng}
       boardPage={boardPage}
     />
   );

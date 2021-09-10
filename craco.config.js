@@ -6,7 +6,7 @@ module.exports = {
     configure: (config, { env, paths }) => {
       config.plugins.push(
         new CKEditorWebpackPlugin({
-          language: 'en',
+          language: 'ko',
           addMainLanguageTranslationsToAllAssets: true
         })
       );

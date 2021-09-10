@@ -68,7 +68,7 @@ const Menu = props => {
       {data.data.map(menu => (
         <li key={menu.boardId}>
           <MenuItem
-            to={`/board/${menu.boardId}`}
+            to={`/board/${menu.nameEng}`}
             activeStyle={{ color: 'black' }}
           >
             {menu.nameKor}
@@ -80,7 +80,7 @@ const Menu = props => {
 };
 
 const Header = props => {
-  const { boardId, data, loading } = props;
+  const { data, loading } = props;
   if (data === null || loading) {
     return <LoadingCircle />;
   }
@@ -88,7 +88,7 @@ const Header = props => {
     <HeaderWraper>
       <LogoWrapper to="/1">SE Board</LogoWrapper>
       <MenuWrapper>
-        <Menu boardId={boardId} data={data} />
+        <Menu data={data} />
       </MenuWrapper>
       <NavigationWrapper>
         <LoginDialogContainer />

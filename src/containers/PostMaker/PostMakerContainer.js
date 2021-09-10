@@ -4,10 +4,11 @@ import { makeSomePost } from '../../libs/api/post';
 
 const makePost = async () => {
   const data = {
-    // anonymous: {
-    //   anonymousNickname: '익명사용자',
-    //   anonymousPassword: 'asdf1234'
-    // },
+    anonymous: {
+      anonymousNickname: '익명사용자',
+      anonymousPassword: 'asdf1234'
+    },
+    attachmentList: [],
     boardId: 1,
     isNotice: 'NORMAL',
     isSecret: 'NORMAL',
@@ -21,7 +22,6 @@ const makePost = async () => {
     console.log('제목수는 50자를 초과할수 없습니다');
     return;
   }
-
   const res = await makeSomePost({ data });
   console.log(res);
 };
