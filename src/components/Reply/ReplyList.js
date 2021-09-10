@@ -95,7 +95,7 @@ const ReplyMessage = props => {
 };
 
 const ReplyEntries = props => {
-  const { loading, data, handleAddReplyChild } = props;
+  const { loading, data, handleAddReplyChild, onUpdate } = props;
 
   return !loading && data
     ? data.map((reply, idx) => (
@@ -109,6 +109,7 @@ const ReplyEntries = props => {
           isSecret={reply.isSecret}
           isDelete={reply.isDelete}
           handleAddReplyChild={handleAddReplyChild}
+          onUpdate={onUpdate}
         >
           {reply.child && reply.child.length
             ? reply.child.map((childReply, childIdx) => (
@@ -124,6 +125,7 @@ const ReplyEntries = props => {
                   isSecret={childReply.isSecret}
                   isDelete={childReply.isDelete}
                   handleAddReplyChild={handleAddReplyChild}
+                  onUpdate={onUpdate}
                 />
               ))
             : null}
@@ -141,7 +143,8 @@ const ReplyList = props => {
     error,
     page,
     baseUrl,
-    handleAddReplyChild
+    handleAddReplyChild,
+    onUpdate
   } = props;
 
   return (
@@ -151,6 +154,7 @@ const ReplyList = props => {
         loading={loading}
         data={data}
         handleAddReplyChild={handleAddReplyChild}
+        onUpdate={onUpdate}
       />
       <ReplyMessage data={data} loading={loading} error={error} />
       <ReplyPagination totalPage={totalPage} page={page} baseUrl={baseUrl} />

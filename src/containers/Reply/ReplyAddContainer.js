@@ -108,7 +108,6 @@ const ReplyAddContainer = props => {
         value: attachListData
       })
     );
-    dispatch(removeAttach({ id: attachId }));
   };
 
   const handleEditorImg = ({ downloadUrl, fileName }) => {
@@ -187,9 +186,9 @@ const ReplyAddContainer = props => {
         handleChange={handleChange}
         handleSecret={handleSecret}
         handleContentText={handleContentText}
+        handleAttachFiles={handleAttachFiles}
         onSubmit={onSubmit}
         onDeleteAttach={onDeleteAttach}
-        handleAttachFiles={handleAttachFiles}
       />
     </>
   );

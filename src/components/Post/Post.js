@@ -21,7 +21,7 @@ import {
   faEllipsisH
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import ReplyTestPage from '../Reply/ReplyTestPage';
+import ReplyTestPage from '../../pages/ReplyListPage';
 import Tags from './Tags';
 
 const LoadingCircle = styled(CircularProgress)`
@@ -316,7 +316,7 @@ const PostHeaderInfo = props => {
             keepMounted
             open={Boolean(moremenuEl)}
             onClose={menuClick}
-            style={{ marginLeft: '1.75rem' }}
+         style={{ marginLeft: '1.75rem' }}
           >
             {menuItem('menu')}
           </Menu>
