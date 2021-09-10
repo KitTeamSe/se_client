@@ -67,5 +67,6 @@ export const tagList = {
   1: { name: '1학년', color1: '74f2ce', color2: '7cffcb' },
   2: { name: '2학년', color1: '83eaf1', color2: '63a4ff' },
   3: { name: '3학년', color1: 'f6f0c4', color2: 'd99ec9' },
-  4: { name: '4학년', color1: 'eeeeee', color2: '222222' }
+  4: { name: '4학년', color1: '6dd5ed', color2: '8393b0' },
+  5: { name: '5학년', color1: 'ff6e7f', color2: 'bfe9ff' }
 };

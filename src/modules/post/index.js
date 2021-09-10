@@ -28,6 +28,12 @@ const [LOAD_SECRET_POST, LOAD_SECRET_POST_SUCCESS, LOAD_SECRET_POST_FAILURE] =
 const [POST_DELETE, POST_DELETE_SUCCESS, POST_DELETE_FAILURE] =
   createRequestActionTypes('post/POST_DELETE');
 
+const [
+  ANONYMOUS_POST_DELETE,
+  ANONYMOUS_POST_DELETE_SUCCESS,
+  ANONYMOUS_POST_DELETE_FAILURE
+] = createRequestActionTypes('post/ANONYMOUS_POST_DELETE');
+
 // Action Creators
 export const initialize = createAction(INITIALIZE, form => form);
 
@@ -66,6 +72,14 @@ export const postDelete = createAction(POST_DELETE, ({ id }) => ({
   id
 }));
 
+export const anonymousPostDelete = createAction(
+  ANONYMOUS_POST_DELETE,
+  ({ anonymousPassword, postId }) => ({
+    anonymousPassword,
+    postId
+  })
+);
+
 // Sagas
 const loadPostListSaga = createRequestSaga(LOAD_POST_LIST, api.loadPostList);
 const loadMenuListSage = createRequestSaga(LOAD_MENU_LIST, api.loadMenuList);
@@ -76,6 +90,10 @@ const loadSecretPostSaga = createRequestSaga(
   api.loadSecretPost
 );
 const postDeleteSaga = createRequestSaga(POST_DELETE, api.postDelete);
+const anonymousPostDeleteSaga = createRequestSaga(
+  ANONYMOUS_POST_DELETE,
+  api.anonymousPostDelete
+);
 
 export function* postSaga() {
   yield takeLatest(LOAD_POST_LIST, loadPostListSaga);
@@ -84,6 +102,7 @@ export function* postSaga() {
   yield takeLatest(LOAD_POST, loadPostSaga);
   yield takeLatest(LOAD_SECRET_POST, loadSecretPostSaga);
   yield takeLatest(POST_DELETE, postDeleteSaga);
+  yield takeLatest(ANONYMOUS_POST_DELETE, anonymousPostDeleteSaga);
 }
 
 // reducer (handleActions => switch문 대체)
@@ -169,6 +188,18 @@ export default handleActions(
       postDeleteRes: reducerUtils.success(response)
     }),
     [POST_DELETE_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      postDeleteRes: reducerUtils.error(error)
+    }),
+    [ANONYMOUS_POST_DELETE]: state => ({
+      ...state,
+      postDeleteRes: reducerUtils.loading(state.postDeleteRes.data)
+    }),
+    [ANONYMOUS_POST_DELETE_SUCCESS]: (state, { payload: response }) => ({
+      ...state,
+      postDeleteRes: reducerUtils.success(response)
+    }),
+    [ANONYMOUS_POST_DELETE_FAILURE]: (state, { payload: error }) => ({
       ...state,
       postDeleteRes: reducerUtils.error(error)
     })
