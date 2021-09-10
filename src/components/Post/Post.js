@@ -179,143 +179,107 @@ const PostHeaderInfo = props => {
     accountIdString
   } = props;
 
+  const ConditionClassify = {
+    Logout: {
+      writer: ['profile', 'post'],
+      menu: ['report']
+    },
+    LoginMy: { writer: ['profile'], menu: ['fix', 'delete'] },
+    LoginNotmy: {
+      writer: ['profile', 'post', 'message', 'mail'],
+      menu: ['report']
+    },
+    Annoymous: { writer: [], menu: ['report', 'fix', 'delete'] }
+  };
+
+  const menuStorage = {
+    profile: '회원 정보 보기',
+    post: '게시글 보기',
+    message: '메세지 보내기',
+    mail: '메일 보내기',
+    report: '신고',
+    fix: '수정',
+    delete: '삭제'
+  };
+
+  function menuItem(type) {
+    let condition = 'Anonymous';
+    if (!accountIdString) {
+      condition = 'Annoymous';
+    } else if (userId && userId === accountIdString) {
+      condition = 'LoginMy';
+    } else if (userId && userId !== accountIdString) {
+      condition = 'LoginNotmy';
+    } else if (!userId) {
+      condition = 'Logout';
+    }
+
+    return (
+      <div>
+        {ConditionClassify[condition][type].map(content => (
+          <MenuItem id={content} onClick={functionExcute} key={content}>
+            {menuStorage[content]}
+          </MenuItem>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <>
-      {userId && userId === accountIdString ? (
-        <PostHeadInfo>
+      <PostHeadInfo>
+        <PostHeadInfoComponent>
+          <WriterIcon onClick={menuClick} id="writer">
+            <Icon icon={faUser} />
+            {nickname}
+          </WriterIcon>
+          <Menu
+            anchorEl={writerEl}
+            keepMounted
+            open={Boolean(writerEl)}
+            onClose={menuClick}
+            style={{ marginLeft: '4rem' }}
+          >
+            {menuItem('writer')}
+          </Menu>
+          <PostHeadInfoComponent>{writeTime}</PostHeadInfoComponent>
           <PostHeadInfoComponent>
-            <WriterIcon onClick={menuClick} id="writer">
-              <Icon icon={faUser} />
-              {nickname}
-            </WriterIcon>
-            <Menu
-              anchorEl={writerEl}
-              keepMounted
-              open={Boolean(writerEl)}
-              onClose={menuClick}
-              style={{ marginLeft: '4rem' }}
-            >
-              <MenuItem id="profile" onClick={functionExcute}>
-                회원정보 보기
-              </MenuItem>
-              <MenuItem id="post" onClick={functionExcute}>
-                작성 글 보기
-              </MenuItem>
-            </Menu>
-            <PostHeadInfoComponent>{writeTime}</PostHeadInfoComponent>
+            <Icon icon={faEye} />
+            {views}
+          </PostHeadInfoComponent>
+          {isNotice === 'NORMAL' ? (
+            <></>
+          ) : (
             <PostHeadInfoComponent>
-              <Icon icon={faEye} />
-              {views}
+              <Icon icon={faFlag} />
             </PostHeadInfoComponent>
-            {isNotice === 'NORMAL' ? (
-              <></>
-            ) : (
-              <PostHeadInfoComponent>
-                <Icon icon={faFlag} />
-              </PostHeadInfoComponent>
-            )}
-            {isSecret === 'NORMAL' ? (
-              <></>
-            ) : (
-              <PostHeadInfoComponent>
-                <Icon icon={faLock} />
-              </PostHeadInfoComponent>
-            )}
-          </PostHeadInfoComponent>
-          <PostHeadInfoComponent>
-            <MoreButton
-              icon={faEllipsisH}
-              size="lg"
-              onClick={menuClick}
-              id="more"
-            />
-            <Menu
-              anchorEl={moremenuEl}
-              keepMounted
-              open={Boolean(moremenuEl)}
-              onClose={menuClick}
-              style={{ marginLeft: '1.75rem' }}
-            >
-              <MenuItem id="fix" onClick={functionExcute}>
-                게시글 수정
-              </MenuItem>
-              <MenuItem id="delete" onClick={functionExcute}>
-                게시글 삭제
-              </MenuItem>
-            </Menu>
-          </PostHeadInfoComponent>
-        </PostHeadInfo>
-      ) : (
-        <PostHeadInfo>
-          <PostHeadInfoComponent>
-            <WriterIcon onClick={menuClick} id="writer">
-              <Icon icon={faUser} />
-              {nickname}
-            </WriterIcon>
-            <Menu
-              anchorEl={writerEl}
-              keepMounted
-              open={Boolean(writerEl)}
-              onClose={menuClick}
-              style={{ marginLeft: '4rem' }}
-            >
-              <MenuItem id="message" onClick={functionExcute}>
-                쪽지 보내기
-              </MenuItem>
-              <MenuItem id="profile" onClick={functionExcute}>
-                회원정보 보기
-              </MenuItem>
-              <MenuItem id="mail" onClick={functionExcute}>
-                메일 보내기
-              </MenuItem>
-              <MenuItem id="post" onClick={functionExcute}>
-                작성 글 보기
-              </MenuItem>
-              <MenuItem id="ban" onClick={functionExcute}>
-                작성자 차단
-              </MenuItem>
-            </Menu>
-            <PostHeadInfoComponent>{writeTime}</PostHeadInfoComponent>
+          )}
+          {isSecret === 'NORMAL' ? (
+            <></>
+          ) : (
             <PostHeadInfoComponent>
-              <Icon icon={faEye} />
-              {views}
+              <Icon icon={faLock} />
             </PostHeadInfoComponent>
-            {isNotice === 'NORMAL' ? (
-              <></>
-            ) : (
-              <PostHeadInfoComponent>
-                <Icon icon={faFlag} />
-              </PostHeadInfoComponent>
-            )}
-            {isSecret === 'NORMAL' ? (
-              <></>
-            ) : (
-              <PostHeadInfoComponent>
-                <Icon icon={faLock} />
-              </PostHeadInfoComponent>
-            )}
-          </PostHeadInfoComponent>
-          <PostHeadInfoComponent>
-            <MoreButton
-              icon={faEllipsisH}
-              size="lg"
-              onClick={menuClick}
-              id="more"
-            />
-            <Menu
-              anchorEl={moremenuEl}
-              keepMounted
-              open={Boolean(moremenuEl)}
-              onClose={menuClick}
-              style={{ marginLeft: '1.75rem' }}
-            >
-              <MenuItem id="report" onClick={functionExcute}>
-                게시글 신고
-              </MenuItem>
-            </Menu>
-          </PostHeadInfoComponent>
-        </PostHeadInfo>
-      )}
+          )}
+        </PostHeadInfoComponent>
+        <PostHeadInfoComponent>
+          <MoreButton
+            icon={faEllipsisH}
+            size="lg"
+            onClick={menuClick}
+            id="more"
+          />
+          <Menu
+            anchorEl={moremenuEl}
+            keepMounted
+            open={Boolean(moremenuEl)}
+            onClose={menuClick}
+            style={{ marginLeft: '1.75rem' }}
+          >
+            {menuItem('menu')}
+          </Menu>
+        </PostHeadInfoComponent>
+      </PostHeadInfo>
     </>
   );
 };
