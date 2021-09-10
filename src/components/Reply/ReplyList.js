@@ -1,8 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { Typography } from '@material-ui/core';
 import { Pagination, PaginationItem } from '@material-ui/lab';
 import Reply from './Reply';
+import ReplyChild from './ReplyChild';
 
 const PaginationStyled = styled(Pagination)`
   & ul {
@@ -11,8 +13,30 @@ const PaginationStyled = styled(Pagination)`
   }
 `;
 
+const ReplyHeaderWrapper = styled.div`
+  border-top: 1px solid #ddd;
+  padding: 10px;
+`;
+
+const CommentWrapper = styled.div`
+  padding: 10px;
+`;
+
+const ReplyHeader = props => {
+  const { totalData } = props;
+  return (
+    <ReplyHeaderWrapper>
+      {totalData > -1 ? (
+        <Typography variant="h6">{totalData} 개의 댓글</Typography>
+      ) : (
+        <Typography variant="h6">댓글 없음</Typography>
+      )}
+    </ReplyHeaderWrapper>
+  );
+};
+
 const ReplyPagination = props => {
-  const { totalPage, page, boardNameEng, postId } = props;
+  const { totalPage, page, baseUrl } = props;
 
   return (
     <PaginationStyled
@@ -27,7 +51,7 @@ const ReplyPagination = props => {
       renderItem={item => (
         <PaginationItem
           component={Link}
-          to={`/board/${boardNameEng}/${postId}?replyPage=${item.page}`}
+          to={`${baseUrl}?replyPage=${item.page}`}
           {...item}
         />
       )}
@@ -35,37 +59,101 @@ const ReplyPagination = props => {
   );
 };
 
+const ReplyEmpty = props => {
+  const { data } = props;
+  return (
+    data &&
+    !data.length && <CommentWrapper>작성된 댓글이 없습니다.</CommentWrapper>
+  );
+};
+
+const ReplyLoading = props => {
+  const { loading } = props;
+  return (
+    loading && <CommentWrapper>데이터를 불러오는 중입니다.</CommentWrapper>
+  );
+};
+
+const ReplyError = props => {
+  const { loading, error } = props;
+  return !loading && error ? (
+    <CommentWrapper>
+      데이터를 불러올 수 없습니다. 새로고침을 하거나 관리자에게 문의하세요.
+    </CommentWrapper>
+  ) : null;
+};
+
+const ReplyMessage = props => {
+  const { data, loading, error } = props;
+  return (
+    <>
+      <ReplyEmpty data={data} />
+      <ReplyLoading loading={loading} />
+      <ReplyError loading={loading} error={error} />
+    </>
+  );
+};
+
+const ReplyEntries = props => {
+  const { loading, data, handleAddReplyChild } = props;
+
+  return !loading && data
+    ? data.map((reply, idx) => (
+        <Reply
+          replyId={reply.replyId}
+          replyIndex={idx}
+          accountId={reply.accountId}
+          anonymousNickname={reply.anonymousNickname}
+          content={reply.text}
+          createAt={reply.createAt}
+          isSecret={reply.isSecret}
+          isDelete={reply.isDelete}
+          handleAddReplyChild={handleAddReplyChild}
+        >
+          {reply.child && reply.child.length
+            ? reply.child.map((childReply, childIdx) => (
+                <ReplyChild
+                  parentId={reply.replyId}
+                  parentIndex={idx}
+                  replyId={childReply.replyId}
+                  replyIndex={childIdx}
+                  accountId={childReply.accountId}
+                  anonymousNickname={childReply.anonymousNickname}
+                  content={childReply.text}
+                  createAt={childReply.createAt}
+                  isSecret={childReply.isSecret}
+                  isDelete={childReply.isDelete}
+                  handleAddReplyChild={handleAddReplyChild}
+                />
+              ))
+            : null}
+        </Reply>
+      ))
+    : null;
+};
+
 const ReplyList = props => {
-  const { data, totalPage, loading, error, page, boardNameEng, postId } = props;
+  const {
+    data,
+    totalPage,
+    totalData,
+    loading,
+    error,
+    page,
+    baseUrl,
+    handleAddReplyChild
+  } = props;
 
   return (
     <>
-      {!loading && data
-        ? data.map(e => (
-            <Reply
-              replyId={e.replyId}
-              accountId={e.accountId}
-              anonymousNickname={e.anonymousNickname}
-              content={e.text}
-              createAt={e.createAt}
-              child={e.child}
-              isDelete={e.isDelete}
-            />
-          ))
-        : null}
-      {data && !data.length && <div>작성된 댓글이 없습니다.</div>}
-      {loading && <div>데이터를 불러오는 중입니다.</div>}
-      {!loading && error ? (
-        <div>
-          데이터를 불러올 수 없습니다. 새로고침을 하거나 관리자에게 문의하세요.
-        </div>
-      ) : null}
-      <ReplyPagination
-        totalPage={totalPage}
-        page={page}
-        boardNameEng={boardNameEng}
-        postId={postId}
+      <ReplyHeader totalData={totalData} />
+      <ReplyEntries
+        loading={loading}
+        data={data}
+        handleAddReplyChild={handleAddReplyChild}
       />
+      <ReplyMessage data={data} loading={loading} error={error} />
+      <ReplyPagination totalPage={totalPage} page={page} baseUrl={baseUrl} />
     </>
   );
 };

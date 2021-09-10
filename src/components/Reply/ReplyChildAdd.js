@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import {
-  Switch,
   FormControlLabel,
+  Switch,
   Input,
-  Button
-  // List,
+  Button,
+  Tooltip
 } from '@material-ui/core';
 import FileAttachDropZone from '../FileAttachDropZone/FileAttachDropZone';
 import Editor from '../Editor/Editor';
@@ -25,8 +25,6 @@ const Wrapper = styled.div`
 
 const InputWrapper = styled.div`
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
 `;
 
 const InputStyled = styled(Input)`
@@ -64,17 +62,18 @@ const ButtonStyled = styled(Button)`
 const SecretToggle = props => {
   const { onChange } = props;
   return (
-    <FormControlLabelStyled
-      control={<Switch color="secondary" id="isSecret" onChange={onChange} />}
-      labelPlacement="start"
-      label="비밀글"
-      size="small"
-      margin="dense"
-    />
+    <Tooltip title="비밀글" aria-label="secret-child-add" place="bottom">
+      <FormControlLabelStyled
+        control={<Switch color="secondary" id="isSecret" onChange={onChange} />}
+        labelPlacement="start"
+        label="비밀글"
+      />
+    </Tooltip>
   );
 };
+
 const ReplyAddInput = props => {
-  const { addForm, handleChange, handleSecret } = props;
+  const { addChildForm, handleChange, handleSecret } = props;
 
   return (
     <InputWrapper>
@@ -84,14 +83,14 @@ const ReplyAddInput = props => {
             placeholder="글쓴이"
             id="anonymousNickname"
             size="small"
-            value={addForm.anonymousNickname}
+            value={addChildForm.anonymousNickname}
             onChange={handleChange}
           />
           <InputStyled
             placeholder="비밀번호"
             id="anonymousPassword"
             type="password"
-            value={addForm.anonymousPassword}
+            value={addChildForm.anonymousPassword}
             onChange={handleChange}
           />
         </>
@@ -101,9 +100,18 @@ const ReplyAddInput = props => {
   );
 };
 
-const ReplyAddAction = () => {
+const ReplyAddAction = props => {
+  const { onCancel } = props;
   return (
     <ButtonWrapper>
+      <ButtonStyled
+        variant="outlined"
+        color="default"
+        size="small"
+        onClick={onCancel}
+      >
+        취소
+      </ButtonStyled>
       <ButtonStyled
         variant="contained"
         color="default"
@@ -117,12 +125,12 @@ const ReplyAddAction = () => {
 };
 
 const ReplyAddFooter = props => {
-  const { addForm, handleChange, handleSecret, children } = props;
+  const { addChildForm, handleChange, handleSecret, children } = props;
 
   return (
     <Wrapper>
       <ReplyAddInput
-        addForm={addForm}
+        addChildForm={addChildForm}
         handleChange={handleChange}
         handleSecret={handleSecret}
       />
@@ -133,14 +141,16 @@ const ReplyAddFooter = props => {
 
 const ReplyAdd = props => {
   const {
-    addForm,
+    addChildForm,
+    loading,
+    error,
     handleChange,
     handleSecret,
     handleContentText,
+    onFocus,
     onSubmit,
+    onCancel,
     onDeleteAttach,
-    loading,
-    error,
     handleAttachFiles
   } = props;
 
@@ -148,8 +158,9 @@ const ReplyAdd = props => {
     <form onSubmit={onSubmit}>
       <Editor
         onChange={handleContentText}
-        data={addForm.text}
-        placeholder="댓글을 입력하세요"
+        onFocus={onFocus}
+        data={addChildForm.text}
+        type="reply"
       />
       <FileAttachDropZone
         loading={loading}
@@ -157,20 +168,20 @@ const ReplyAdd = props => {
         handleAttachFiles={handleAttachFiles}
       />
       <AttachImageList
-        attachImgList={addForm.attachmentList.filter(e =>
+        attachImgList={addChildForm.attachmentList.filter(e =>
           confirmFileExtension(e.fileName)
         )}
       />
       <AttachList
-        attachList={addForm.attachmentList}
+        attachList={addChildForm.attachmentList}
         onDeleteAttach={onDeleteAttach}
       />
       <ReplyAddFooter
-        addForm={addForm}
+        addChildForm={addChildForm}
         handleChange={handleChange}
         handleSecret={handleSecret}
       >
-        <ReplyAddAction />
+        <ReplyAddAction onCancel={onCancel} />
       </ReplyAddFooter>
     </form>
   );

@@ -42,6 +42,10 @@ const MainWrapper = styled.div`
   align-items: center;
   background-color: #ffffff;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  @media ${props => props.theme.mobile} {
+    width: calc(100% - 1rem);
+    padding: 0.5rem;
+  }
 `;
 
 const NoBoardBox = styled.div`

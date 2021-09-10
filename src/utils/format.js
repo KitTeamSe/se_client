@@ -21,3 +21,24 @@ export const getFormatTime = createAt => {
   second = second >= 10 ? second : `0${second}`;
   return `${hour}:${minute}:${second}`;
 };
+
+export const getDecodeHTML = html => {
+  if (html !== undefined && html) {
+    return html
+      .replace(/<script[^>]*>([\S\s]*?)<\/script>/gim, '')
+      .replaceAll('&lt;', '')
+      .replaceAll('&gt;', '')
+      .replaceAll('&amp;', '')
+      .replaceAll('<p></p>;', '')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;');
+  }
+  return html;
+};
+
+export const getEncodeHTML = text => {
+  if (text !== undefined && text) {
+    return text.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
+  }
+  return text;
+};

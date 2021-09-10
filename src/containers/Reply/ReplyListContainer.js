@@ -5,23 +5,39 @@ import { withRouter } from 'react-router-dom';
 import ReplyList from '../../components/Reply/ReplyList';
 import {
   initializeField,
+  initializeAdd,
+  initializeUpdate,
   initializeRemove,
-  loadReplyList
+  changeField,
+  loadReplyList,
+  changeSecretReply,
+  initializeSecret
 } from '../../modules/reply';
 
 const ReplyListContainer = props => {
   const { location, match } = props;
   const dispatch = useDispatch();
-  const { data, loading, error, add, update, remove } = useSelector(
-    ({ reply }) => ({
-      data: reply.loadReplyList.data,
-      loading: reply.loadReplyList.loading,
-      error: reply.loadReplyList.error,
-      add: reply.addReply.data,
-      update: reply.updateReply.data,
-      remove: reply.removeReply.data
-    })
-  );
+  const {
+    data,
+    loading,
+    error,
+    add,
+    update,
+    remove,
+    secret,
+    parentIndex,
+    replyIndex
+  } = useSelector(({ reply }) => ({
+    data: reply.loadReplyList.data,
+    loading: reply.loadReplyList.loading,
+    error: reply.loadReplyList.error,
+    add: reply.addReply.data,
+    update: reply.updateReply.data,
+    remove: reply.removeReply.data,
+    secret: reply.loadSecretReply.data,
+    parentIndex: reply.loadSecretForm.parentIndex,
+    replyIndex: reply.loadSecretForm.replyIndex
+  }));
   const [myReplyPage, setMyReplyPage] = useState(1);
 
   const handleReplyList = () => {
@@ -38,6 +54,16 @@ const ReplyListContainer = props => {
     dispatch(loadReplyList({ postId, direction, size, page: replyPage - 1 }));
   };
 
+  const handleAddReplyChild = parentId => {
+    dispatch(
+      changeField({
+        form: 'addChildForm',
+        key: 'parentId',
+        value: parentId
+      })
+    );
+  };
+
   useEffect(() => {
     handleReplyList();
   }, [location.search]);
@@ -45,18 +71,22 @@ const ReplyListContainer = props => {
   useEffect(() => {
     if (add) {
       handleReplyList();
-      dispatch(initializeField());
+      dispatch(initializeAdd());
     }
     if (update) {
       handleReplyList();
-      dispatch(initializeField());
+      dispatch(initializeUpdate());
     }
     if (remove) {
       handleReplyList();
-      dispatch(initializeField());
       dispatch(initializeRemove());
     }
-  }, [dispatch, add, update, remove]);
+    if (secret) {
+      dispatch(changeSecretReply({ parentIndex, replyIndex }));
+      dispatch(initializeSecret());
+    }
+    dispatch(initializeField());
+  }, [add, update, remove, secret]);
 
   return (
     <ReplyList
@@ -64,9 +94,10 @@ const ReplyListContainer = props => {
       loading={loading}
       error={error}
       totalPage={data && data.totalPage}
+      totalData={data && data.totalData}
       page={myReplyPage}
-      boardNameEng={match.params.boardNameEng}
-      postId={match.params.postId}
+      baseUrl={match.url}
+      handleAddReplyChild={handleAddReplyChild}
     />
   );
 };
