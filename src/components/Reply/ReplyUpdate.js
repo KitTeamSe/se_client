@@ -1,17 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
-import {
-  Switch,
-  FormControlLabel,
-  Input,
-  Button
-  // List,
-} from '@material-ui/core';
-import FileAttachDropZone from '../FileAttachDropZone/FileAttachDropZone';
-import Editor from '../Editor/Editor';
-import AttachList from '../Editor/AttachList';
-import AttachImageList from '../Editor/AttachImageList';
+import { Switch, FormControlLabel, Input, Button } from '@material-ui/core';
 import confirmFileExtension from '../../utils/confirmFileExtension';
+import AttachImageList from '../Editor/AttachImageList';
+import AttachList from '../Editor/AttachList';
+import Editor from '../Editor/Editor';
+import FileAttachDropZone from '../FileAttachDropZone/FileAttachDropZone';
+import ErrorMessage from '../Action/ErrorMessage';
+
+const PostHeadTitle = styled.div`
+  width: 100%;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #ddd;
+`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -74,25 +77,22 @@ const SecretToggle = props => {
   );
 };
 
-const ReplyAddInput = props => {
-  const { addForm, handleChange, handleSecret } = props;
+const ReplyUpdateHeader = () => {
+  return <PostHeadTitle variant="h6">댓글 수정</PostHeadTitle>;
+};
+
+const ReplyUpdateInput = props => {
+  const { replyData, updateForm, handleChange, handleSecret } = props;
 
   return (
     <InputWrapper>
-      {!localStorage.getItem('token') || !localStorage.getItem('userId') ? (
+      {replyData && !replyData.anonymousNickname ? (
         <>
           <InputStyled
-            placeholder="글쓴이"
-            id="anonymousNickname"
-            size="small"
-            value={addForm.anonymousNickname}
-            onChange={handleChange}
-          />
-          <InputStyled
             placeholder="비밀번호"
-            id="anonymousPassword"
+            id="password"
             type="password"
-            value={addForm.anonymousPassword}
+            value={updateForm.password}
             onChange={handleChange}
           />
         </>
@@ -102,74 +102,94 @@ const ReplyAddInput = props => {
   );
 };
 
-const ReplyAddAction = () => (
-  <ButtonWrapper>
-    <ButtonStyled
-      variant="contained"
-      color="default"
-      size="small"
-      type="submit"
-    >
-      작성
-    </ButtonStyled>
-  </ButtonWrapper>
-);
+const ReplyUpdateAction = props => {
+  const { onCancel } = props;
+  return (
+    <ButtonWrapper>
+      <ButtonStyled
+        variant="outlined"
+        color="default"
+        size="small"
+        onClick={onCancel}
+      >
+        취소
+      </ButtonStyled>
+      <ButtonStyled
+        variant="contained"
+        color="default"
+        size="small"
+        type="submit"
+      >
+        수정
+      </ButtonStyled>
+    </ButtonWrapper>
+  );
+};
 
-const ReplyAddFooter = props => {
-  const { addForm, handleChange, handleSecret } = props;
+const ReplyUpdateFooter = props => {
+  const { replyData, updateForm, handleChange, handleSecret, onCancel } = props;
 
   return (
     <Wrapper>
-      <ReplyAddInput
-        addForm={addForm}
+      <ReplyUpdateInput
+        replyData={replyData}
+        updateForm={updateForm}
         handleChange={handleChange}
         handleSecret={handleSecret}
       />
-      <ReplyAddAction />
+      <ReplyUpdateAction onCancel={onCancel} />
     </Wrapper>
   );
 };
 
-const ReplyAdd = props => {
+const ReplyUpdate = props => {
   const {
-    addForm,
-    loading,
-    error,
+    replyData,
+    attachLoading,
+    attachError,
+    updateForm,
+    updateLoading,
+    updateError,
     handleChange,
     handleSecret,
     handleContentText,
     handleAttachFiles,
     onSubmit,
+    onCancel,
     onDeleteAttach
   } = props;
 
   return (
     <form onSubmit={onSubmit}>
+      <ReplyUpdateHeader />
       <Editor
         onChange={handleContentText}
-        data={addForm.text}
+        data={updateForm.text}
         placeholder="댓글을 입력하세요"
       />
       <FileAttachDropZone
-        loading={loading}
-        error={error}
+        loading={attachLoading}
+        error={attachError}
         handleAttachFiles={handleAttachFiles}
       />
       <AttachImageList
-        attachImgList={addForm.attachmentList.filter(e =>
+        attachImgList={updateForm.attachmentList.filter(e =>
           confirmFileExtension(e.fileName)
         )}
       />
       <AttachList
-        attachList={addForm.attachmentList}
+        attachList={updateForm.attachmentList}
         onDeleteAttach={onDeleteAttach}
       />
-      <ReplyAddFooter
-        addForm={addForm}
+      <ReplyUpdateFooter
+        updateForm={updateForm}
         handleChange={handleChange}
         handleSecret={handleSecret}
+        replyData={replyData}
+        onCancel={onCancel}
       />
+      <ErrorMessage loading={updateLoading} error={updateError} />
     </form>
   );
 };
-export default ReplyAdd;
+export default ReplyUpdate;

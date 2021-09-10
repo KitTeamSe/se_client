@@ -22,7 +22,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { tagList } from '../../DataExport';
-import ReplyTestPage from '../Reply/ReplyTestPage';
+import ReplyTestPage from '../../pages/ReplyListPage';
 
 const LoadingCircle = styled(CircularProgress)`
   position: absolute;

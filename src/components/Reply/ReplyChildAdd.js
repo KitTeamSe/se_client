@@ -125,7 +125,7 @@ const ReplyAddAction = props => {
 };
 
 const ReplyAddFooter = props => {
-  const { addChildForm, handleChange, handleSecret, children } = props;
+  const { addChildForm, handleChange, handleSecret, onCancel } = props;
 
   return (
     <Wrapper>
@@ -134,7 +134,7 @@ const ReplyAddFooter = props => {
         handleChange={handleChange}
         handleSecret={handleSecret}
       />
-      {children}
+      <ReplyAddAction onCancel={onCancel} />
     </Wrapper>
   );
 };
@@ -180,9 +180,8 @@ const ReplyAdd = props => {
         addChildForm={addChildForm}
         handleChange={handleChange}
         handleSecret={handleSecret}
-      >
-        <ReplyAddAction onCancel={onCancel} />
-      </ReplyAddFooter>
+        onCancel={onCancel}
+      />
     </form>
   );
 };

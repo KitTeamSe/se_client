@@ -4,11 +4,7 @@ import { withRouter } from 'react-router-dom';
 import ReplyChildAdd from '../../components/Reply/ReplyChildAdd';
 
 import { changeField, addReply } from '../../modules/reply';
-import {
-  addAttachList,
-  changeSelect,
-  removeAttach
-} from '../../modules/attach';
+import { addAttachList, changeSelect } from '../../modules/attach';
 import { getDecodeHTML } from '../../utils/format';
 
 const ReplyChildAddContainer = props => {
@@ -101,7 +97,6 @@ const ReplyChildAddContainer = props => {
         value: attachListData
       })
     );
-    dispatch(removeAttach({ id: attachId }));
   };
 
   const onCancel = () => {

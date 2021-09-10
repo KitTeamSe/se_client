@@ -6,7 +6,7 @@ import BoardContainer from './containers/Board/BoardContainer';
 import PostMakerContainer from './containers/PostMaker/PostMakerContainer';
 import ProfilePageContainer from './containers/ProfilePage/ProfilePageContainer';
 import SignupPageContainer from './containers/SignupPage/SignupPageContainer';
-import ReplyTestPage from './components/Reply/ReplyTestPage';
+import ReplyUpdatePage from './pages/ReplyUpdatePage';
 
 const BodyContainer = styled.div`
   padding-top: 96px;
@@ -19,8 +19,8 @@ const Routes = () => (
       <Switch>
         <Route
           exact
-          path="/test/board/:boardId/:postId"
-          component={ReplyTestPage}
+          path="/board/:boardNameEng/:postId/update/:replyId"
+          component={ReplyUpdatePage}
         />
         <Route exact path="/profile" component={ProfilePageContainer} />
         <Route exact path="/signup" component={SignupPageContainer} />

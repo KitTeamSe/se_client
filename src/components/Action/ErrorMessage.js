@@ -8,6 +8,12 @@ const DialogMessage = styled(DialogContentText)`
   color: #dc004e;
 `;
 
+const Message = styled(Typography)`
+  width: 100%;
+  text-align: right;
+  color: #dc004e;
+`;
+
 export const DialogErrorMessage = props => {
   const { loading, error } = props;
 
@@ -25,7 +31,7 @@ export const DialogErrorMessage = props => {
 const ErrorMessage = props => {
   const { loading, error } = props;
 
-  return !loading && error && <Typography>{error.message}</Typography>;
+  return !loading && error && <Message>{error.message}</Message>;
 };
 
 export default ErrorMessage;
