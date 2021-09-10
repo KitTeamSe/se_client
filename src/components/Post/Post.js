@@ -140,9 +140,8 @@ const SubmitButton = styled.button`
   }
 `;
 
-const AlertDialog = props => {
+const DeleteAlertDialog = props => {
   const { deleteBoxOpen, deleteBoxHandle, deleteFunction } = props;
-
   return (
     <Dialog
       open={deleteBoxOpen}
@@ -164,6 +163,48 @@ const AlertDialog = props => {
           삭제
         </Button>
       </DialogActions>
+    </Dialog>
+  );
+};
+
+const AnonymousDeleteDialog = props => {
+  const {
+    anonymousDeleteBoxOpen,
+    anonymousDeleteBoxHandle,
+    anonymousDeleteFunction,
+    anonyPwChange,
+    anonymousPassword
+  } = props;
+  return (
+    <Dialog
+      open={anonymousDeleteBoxOpen}
+      onClose={anonymousDeleteBoxHandle}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">삭제</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          익명 게시글을 삭제하기 위해서는 비밀번호를 입력하세요
+        </DialogContentText>
+      </DialogContent>
+      <FormField onSubmit={anonymousDeleteFunction}>
+        <FormTextField
+          autoFocus
+          id="nowPassword"
+          label="비밀번호를 입력하세요"
+          type="password"
+          onChange={anonyPwChange}
+          value={anonymousPassword}
+        />
+        <SubmitButton
+          type="submit"
+          onClick={anonymousDeleteFunction}
+          color="primary"
+        >
+          확인
+        </SubmitButton>
+      </FormField>
     </Dialog>
   );
 };
@@ -190,10 +231,10 @@ const PostHeaderInfo = props => {
     },
     LoginMy: { writer: ['profile'], menu: ['fix', 'delete'] },
     LoginNotmy: {
-      writer: ['profile', 'post', 'message', 'mail'],
+      writer: ['profile', 'post', 'message', 'mail', 'ban'],
       menu: ['report']
     },
-    Annoymous: { writer: [], menu: ['report', 'fix', 'anonyDelete'] }
+    Annoymous: { writer: ['report'], menu: ['report', 'fix', 'anonyDelete'] }
   };
 
   const menuStorage = {
@@ -383,12 +424,17 @@ const Post = props => {
     functionExcute,
     secretPost,
     onChange,
+    anonyPwChange,
     password,
+    anonymousPassword,
     PasswordSubmit,
     userId,
     deleteBoxOpen,
     deleteBoxHandle,
     deleteFunction,
+    anonymousDeleteBoxOpen,
+    anonymousDeleteBoxHandle,
+    anonymousDeleteFunction,
     postDeleteData,
     postDeleteLoading,
     postDeleteError
@@ -423,10 +469,17 @@ const Post = props => {
 
   return (
     <MainWrapper>
-      <AlertDialog
+      <DeleteAlertDialog
         deleteBoxOpen={deleteBoxOpen}
         deleteBoxHandle={deleteBoxHandle}
         deleteFunction={deleteFunction}
+      />
+      <AnonymousDeleteDialog
+        anonymousDeleteBoxOpen={anonymousDeleteBoxOpen}
+        anonymousDeleteBoxHandle={anonymousDeleteBoxHandle}
+        anonymousDeleteFunction={anonymousDeleteFunction}
+        anonyPwChange={anonyPwChange}
+        anonymousPassword={anonymousPassword}
       />
       <PostHeader
         res={res}
