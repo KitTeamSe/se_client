@@ -21,7 +21,7 @@ import {
   faEllipsisH
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import ReplyTestPage from '../Reply/ReplyTestPage';
+import ReplyTestPage from '../../pages/ReplyListPage';
 import Tags from './Tags';
 
 const LoadingCircle = styled(CircularProgress)`
