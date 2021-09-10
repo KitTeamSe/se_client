@@ -7,6 +7,7 @@ import {
   loadPost,
   loadSecretPost,
   postDelete,
+  anonymousPostDelete,
   initialize
 } from '../../modules/post';
 
@@ -16,6 +17,7 @@ const PostContainer = props => {
   const [writerEl, setWriterEl] = useState(null);
   const [secretPost, setSecretPost] = useState(false);
   const [password, setPassword] = useState('');
+  const [anonymousPassword, setAnonymousPassword] = useState('');
   const dispatch = useDispatch();
   const {
     data,
@@ -33,11 +35,13 @@ const PostContainer = props => {
     postDeleteError: post.postDeleteRes.error
   }));
   const [deleteBoxOpen, setDeleteBoxOpen] = useState(false);
+  const [anonymousDeleteBoxOpen, setAnonymousDeleteBoxOpen] = useState(false);
   const userId = localStorage.getItem('userId');
 
   useEffect(() => {
     window.scrollTo(0, 0);
     setPassword('');
+    setAnonymousPassword('');
     const { secret } = qs.parse(location.search, {
       ignoreQueryPrefix: true
     });
@@ -62,6 +66,12 @@ const PostContainer = props => {
     setPassword(value);
   };
 
+  const anonyPwChange = e => {
+    e.preventDefault();
+    const { value } = e.target;
+    setAnonymousPassword(value);
+  };
+
   const reportFunction = () => {
     console.log('report logic');
   };
@@ -70,11 +80,21 @@ const PostContainer = props => {
     setDeleteBoxOpen(!deleteBoxOpen);
   };
 
+  const anonymousDeleteBoxHandle = () => {
+    setAnonymousDeleteBoxOpen(!anonymousDeleteBoxOpen);
+  };
+
   const deleteFunction = () => {
-    console.log('delete logic');
     setDeleteBoxOpen(false);
     const id = match.params.postId;
     dispatch(postDelete({ id }));
+  };
+
+  const anonymousDeleteFunction = e => {
+    e.preventDefault();
+    setAnonymousDeleteBoxOpen(false);
+    const { postId } = match.params;
+    dispatch(anonymousPostDelete({ anonymousPassword, postId }));
   };
 
   const banFunction = () => {
@@ -120,6 +140,9 @@ const PostContainer = props => {
       case 'delete':
         deleteBoxHandle();
         break;
+      case 'anonyDelete':
+        anonymousDeleteBoxHandle();
+        break;
       default:
         console.log('not selected');
     }
@@ -148,17 +171,22 @@ const PostContainer = props => {
       writerEl={writerEl}
       secretPost={secretPost}
       password={password}
+      anonymousPassword={anonymousPassword}
       userId={userId}
       deleteBoxOpen={deleteBoxOpen}
       postDeleteData={postDeleteData}
       postDeleteLoading={postDeleteLoading}
       postDeleteError={postDeleteError}
       onChange={onChange}
+      anonyPwChange={anonyPwChange}
       functionExcute={functionExcute}
       menuClick={menuClick}
       PasswordSubmit={PasswordSubmit}
       deleteBoxHandle={deleteBoxHandle}
       deleteFunction={deleteFunction}
+      anonymousDeleteBoxOpen={anonymousDeleteBoxOpen}
+      anonymousDeleteBoxHandle={anonymousDeleteBoxHandle}
+      anonymousDeleteFunction={anonymousDeleteFunction}
     />
   );
 };

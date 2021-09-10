@@ -25,8 +25,6 @@ const ChildReply = props => {
     handleAddReplyChild
   } = props;
 
-  console.log(props);
-
   return (
     <ChildWrapper isDelete={isDelete}>
       <ReplyInfo

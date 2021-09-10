@@ -17,8 +17,9 @@ import {
 } from '@material-ui/core';
 import { Pagination, PaginationItem } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { postSearchTypeList, tagList } from '../../DataExport';
+import { postSearchTypeList } from '../../DataExport';
 import PostContainer from '../../containers/Post/PostContainer';
+import Tags from '../Post/Tags';
 
 const LoadingCircle = styled(CircularProgress)`
   position: absolute;
@@ -48,18 +49,6 @@ const TableHeader = styled(TableRow)`
 const IconMargin = styled.span`
   display: inline-block;
   margin: 2px;
-`;
-
-const TagIcon = styled.span`
-  padding: 0px 4px;
-  margin: 2px;
-  border-radius: 8px;
-  font-size: 0.7rem;
-  background-image: linear-gradient(
-    to right,
-    #${props => props.color1} 0%,
-    #${props => props.color2} 100%
-  );
 `;
 
 const InfoBox = styled.div`
@@ -140,10 +129,6 @@ const PaginationStyled = styled(Pagination)`
   }
 `;
 
-const Tag = styled.span`
-  display: inline-block;
-`;
-
 const Paginations = props => {
   const { res, boardNameEng, boardPage } = props;
   const totalPage = res.postListItem.totalPages;
@@ -186,21 +171,7 @@ const PostTitle = props => {
           <IconMargin>
             {isSecret === 'NORMAL' ? <></> : <InfoIcon icon={faLock} />}
           </IconMargin>
-          {tags.length === 0 ? (
-            <></>
-          ) : (
-            <Tag>
-              {tags.map(tag => (
-                <TagIcon
-                  color1={tagList[tag.tagId].color1}
-                  color2={tagList[tag.tagId].color2}
-                  key={tag.tagId}
-                >
-                  {tagList[tag.tagId].name}
-                </TagIcon>
-              ))}
-            </Tag>
-          )}
+          <Tags tags={tags} />
         </Title>
       </NoneBorderCell>
       <NoneBorderCell nowrap="true" width="10%" align="center">

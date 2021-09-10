@@ -21,8 +21,8 @@ import {
   faEllipsisH
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { tagList } from '../../DataExport';
 import ReplyTestPage from '../Reply/ReplyTestPage';
+import Tags from './Tags';
 
 const LoadingCircle = styled(CircularProgress)`
   position: absolute;
@@ -63,7 +63,7 @@ const PostHead = styled.div`
 
 const PostHeadTitle = styled.div`
   width: 100%;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   margin-bottom: 1rem;
 `;
 
@@ -82,20 +82,8 @@ const WriterIcon = styled.span`
   cursor: pointer;
 `;
 
-const TagIcon = styled.span`
-  padding: 0 0.3rem;
-  margin-left: 0.5rem;
-  border-radius: 12px;
-  font-size: 1rem;
-  background-image: linear-gradient(
-    to right,
-    #${props => props.color1} 0%,
-    #${props => props.color2} 100%
-  );
-`;
-
-const Tag = styled.span`
-  display: inline-block;
+const AnonymousIcon = styled.span`
+  margin: 0px 0.3rem;
 `;
 
 const PostText = styled.div`
@@ -140,9 +128,8 @@ const SubmitButton = styled.button`
   }
 `;
 
-const AlertDialog = props => {
+const DeleteAlertDialog = props => {
   const { deleteBoxOpen, deleteBoxHandle, deleteFunction } = props;
-
   return (
     <Dialog
       open={deleteBoxOpen}
@@ -168,6 +155,49 @@ const AlertDialog = props => {
   );
 };
 
+const AnonymousDeleteDialog = props => {
+  const {
+    anonymousDeleteBoxOpen,
+    anonymousDeleteBoxHandle,
+    anonymousDeleteFunction,
+    anonyPwChange,
+    anonymousPassword
+  } = props;
+  return (
+    <Dialog
+      open={anonymousDeleteBoxOpen}
+      onClose={anonymousDeleteBoxHandle}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">게시글 삭제</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          익명 게시글을 삭제하기 위해서는 비밀번호를 입력하세요
+        </DialogContentText>
+      </DialogContent>
+      <FormField onSubmit={anonymousDeleteFunction}>
+        <FormTextField
+          autoFocus
+          id="nowPassword"
+          label="비밀번호를 입력하세요"
+          type="password"
+          onChange={anonyPwChange}
+          value={anonymousPassword}
+        />
+      </FormField>
+      <DialogActions>
+        <Button onClick={anonymousDeleteBoxHandle} color="primary">
+          취소
+        </Button>
+        <Button onClick={anonymousDeleteFunction} color="secondary">
+          삭제
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
 const PostHeaderInfo = props => {
   const {
     menuClick,
@@ -183,143 +213,115 @@ const PostHeaderInfo = props => {
     accountIdString
   } = props;
 
+  const ConditionClassify = {
+    Logout: {
+      writer: ['profile', 'post'],
+      menu: ['report']
+    },
+    LoginMy: { writer: ['profile'], menu: ['fix', 'delete'] },
+    LoginNotmy: {
+      writer: ['profile', 'post', 'message', 'mail', 'ban'],
+      menu: ['report']
+    },
+    Annoymous: { writer: [], menu: ['report', 'fix', 'anonyDelete'] }
+  };
+
+  const menuStorage = {
+    profile: '회원 정보 보기',
+    post: '게시글 보기',
+    message: '메세지 보내기',
+    mail: '메일 보내기',
+    report: '신고',
+    fix: '수정',
+    delete: '삭제',
+    anonyDelete: '삭제'
+  };
+
+  function menuItem(type) {
+    let condition = 'Anonymous';
+    if (!accountIdString) {
+      condition = 'Annoymous';
+    } else if (userId && userId === accountIdString) {
+      condition = 'LoginMy';
+    } else if (userId && userId !== accountIdString) {
+      condition = 'LoginNotmy';
+    } else if (!userId) {
+      condition = 'Logout';
+    }
+
+    return (
+      <div>
+        {ConditionClassify[condition][type].map(content => (
+          <MenuItem id={content} onClick={functionExcute} key={content}>
+            {menuStorage[content]}
+          </MenuItem>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <>
-      {userId && userId === accountIdString ? (
-        <PostHeadInfo>
-          <PostHeadInfoComponent>
+      <PostHeadInfo>
+        <PostHeadInfoComponent>
+          {accountIdString ? (
             <WriterIcon onClick={menuClick} id="writer">
               <Icon icon={faUser} />
               {nickname}
             </WriterIcon>
-            <Menu
-              anchorEl={writerEl}
-              keepMounted
-              open={Boolean(writerEl)}
-              onClose={menuClick}
-              style={{ marginLeft: '4rem' }}
-            >
-              <MenuItem id="profile" onClick={functionExcute}>
-                회원정보 보기
-              </MenuItem>
-              <MenuItem id="post" onClick={functionExcute}>
-                작성 글 보기
-              </MenuItem>
-            </Menu>
-            <PostHeadInfoComponent>{writeTime}</PostHeadInfoComponent>
-            <PostHeadInfoComponent>
-              <Icon icon={faEye} />
-              {views}
-            </PostHeadInfoComponent>
-            {isNotice === 'NORMAL' ? (
-              <></>
-            ) : (
-              <PostHeadInfoComponent>
-                <Icon icon={faFlag} />
-              </PostHeadInfoComponent>
-            )}
-            {isSecret === 'NORMAL' ? (
-              <></>
-            ) : (
-              <PostHeadInfoComponent>
-                <Icon icon={faLock} />
-              </PostHeadInfoComponent>
-            )}
-          </PostHeadInfoComponent>
-          <PostHeadInfoComponent>
-            <MoreButton
-              icon={faEllipsisH}
-              size="lg"
-              onClick={menuClick}
-              id="more"
-            />
-            <Menu
-              anchorEl={moremenuEl}
-              keepMounted
-              open={Boolean(moremenuEl)}
-              onClose={menuClick}
-              style={{ marginLeft: '1.75rem' }}
-            >
-              <MenuItem id="fix" onClick={functionExcute}>
-                게시글 수정
-              </MenuItem>
-              <MenuItem id="delete" onClick={functionExcute}>
-                게시글 삭제
-              </MenuItem>
-            </Menu>
-          </PostHeadInfoComponent>
-        </PostHeadInfo>
-      ) : (
-        <PostHeadInfo>
-          <PostHeadInfoComponent>
-            <WriterIcon onClick={menuClick} id="writer">
+          ) : (
+            <AnonymousIcon id="writer">
               <Icon icon={faUser} />
               {nickname}
-            </WriterIcon>
-            <Menu
-              anchorEl={writerEl}
-              keepMounted
-              open={Boolean(writerEl)}
-              onClose={menuClick}
-              style={{ marginLeft: '4rem' }}
-            >
-              <MenuItem id="message" onClick={functionExcute}>
-                쪽지 보내기
-              </MenuItem>
-              <MenuItem id="profile" onClick={functionExcute}>
-                회원정보 보기
-              </MenuItem>
-              <MenuItem id="mail" onClick={functionExcute}>
-                메일 보내기
-              </MenuItem>
-              <MenuItem id="post" onClick={functionExcute}>
-                작성 글 보기
-              </MenuItem>
-              <MenuItem id="ban" onClick={functionExcute}>
-                작성자 차단
-              </MenuItem>
-            </Menu>
-            <PostHeadInfoComponent>{writeTime}</PostHeadInfoComponent>
-            <PostHeadInfoComponent>
-              <Icon icon={faEye} />
-              {views}
-            </PostHeadInfoComponent>
-            {isNotice === 'NORMAL' ? (
-              <></>
-            ) : (
-              <PostHeadInfoComponent>
-                <Icon icon={faFlag} />
-              </PostHeadInfoComponent>
-            )}
-            {isSecret === 'NORMAL' ? (
-              <></>
-            ) : (
-              <PostHeadInfoComponent>
-                <Icon icon={faLock} />
-              </PostHeadInfoComponent>
-            )}
-          </PostHeadInfoComponent>
+            </AnonymousIcon>
+          )}
+          <Menu
+            anchorEl={writerEl}
+            keepMounted
+            open={Boolean(writerEl)}
+            onClose={menuClick}
+            style={{ marginLeft: '4rem' }}
+          >
+            {menuItem('writer')}
+          </Menu>
+          <PostHeadInfoComponent>{writeTime}</PostHeadInfoComponent>
           <PostHeadInfoComponent>
-            <MoreButton
-              icon={faEllipsisH}
-              size="lg"
-              onClick={menuClick}
-              id="more"
-            />
-            <Menu
-              anchorEl={moremenuEl}
-              keepMounted
-              open={Boolean(moremenuEl)}
-              onClose={menuClick}
-              style={{ marginLeft: '1.75rem' }}
-            >
-              <MenuItem id="report" onClick={functionExcute}>
-                게시글 신고
-              </MenuItem>
-            </Menu>
+            <Icon icon={faEye} />
+            {views}
           </PostHeadInfoComponent>
-        </PostHeadInfo>
-      )}
+          {isNotice === 'NORMAL' ? (
+            <></>
+          ) : (
+            <PostHeadInfoComponent>
+              <Icon icon={faFlag} />
+            </PostHeadInfoComponent>
+          )}
+          {isSecret === 'NORMAL' ? (
+            <></>
+          ) : (
+            <PostHeadInfoComponent>
+              <Icon icon={faLock} />
+            </PostHeadInfoComponent>
+          )}
+        </PostHeadInfoComponent>
+        <PostHeadInfoComponent>
+          <MoreButton
+            icon={faEllipsisH}
+            size="lg"
+            onClick={menuClick}
+            id="more"
+          />
+          <Menu
+            anchorEl={moremenuEl}
+            keepMounted
+            open={Boolean(moremenuEl)}
+            onClose={menuClick}
+            style={{ marginLeft: '1.75rem' }}
+          >
+            {menuItem('menu')}
+          </Menu>
+        </PostHeadInfoComponent>
+      </PostHeadInfo>
     </>
   );
 };
@@ -342,21 +344,7 @@ const PostHeader = props => {
     <PostHead>
       <PostHeadTitle>
         {postContent.title}
-        {tags.length === 0 ? (
-          <></>
-        ) : (
-          <Tag>
-            {tags.map(tag => (
-              <TagIcon
-                color1={tagList[tag.tagId].color1}
-                color2={tagList[tag.tagId].color2}
-                key={tag.tagId}
-              >
-                {tagList[tag.tagId].name}
-              </TagIcon>
-            ))}
-          </Tag>
-        )}
+        <Tags tags={tags} />
       </PostHeadTitle>
       <PostHeaderInfo
         userId={userId}
@@ -418,12 +406,17 @@ const Post = props => {
     functionExcute,
     secretPost,
     onChange,
+    anonyPwChange,
     password,
+    anonymousPassword,
     PasswordSubmit,
     userId,
     deleteBoxOpen,
     deleteBoxHandle,
     deleteFunction,
+    anonymousDeleteBoxOpen,
+    anonymousDeleteBoxHandle,
+    anonymousDeleteFunction,
     postDeleteData,
     postDeleteLoading,
     postDeleteError
@@ -458,10 +451,17 @@ const Post = props => {
 
   return (
     <MainWrapper>
-      <AlertDialog
+      <DeleteAlertDialog
         deleteBoxOpen={deleteBoxOpen}
         deleteBoxHandle={deleteBoxHandle}
         deleteFunction={deleteFunction}
+      />
+      <AnonymousDeleteDialog
+        anonymousDeleteBoxOpen={anonymousDeleteBoxOpen}
+        anonymousDeleteBoxHandle={anonymousDeleteBoxHandle}
+        anonymousDeleteFunction={anonymousDeleteFunction}
+        anonyPwChange={anonyPwChange}
+        anonymousPassword={anonymousPassword}
       />
       <PostHeader
         res={res}
