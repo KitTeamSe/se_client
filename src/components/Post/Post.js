@@ -316,7 +316,7 @@ const PostHeaderInfo = props => {
             keepMounted
             open={Boolean(moremenuEl)}
             onClose={menuClick}
-         style={{ marginLeft: '1.75rem' }}
+            style={{ marginLeft: '1.75rem' }}
           >
             {menuItem('menu')}
           </Menu>
