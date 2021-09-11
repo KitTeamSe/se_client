@@ -34,6 +34,9 @@ const [
   ANONYMOUS_POST_DELETE_FAILURE
 ] = createRequestActionTypes('post/ANONYMOUS_POST_DELETE');
 
+const [ADD_POST, ADD_POST_SUCCESS, ADD_POST_FAILURE] =
+  createRequestActionTypes('post/ADD_POST');
+
 // Action Creators
 export const initialize = createAction(INITIALIZE, form => form);
 
@@ -80,6 +83,27 @@ export const anonymousPostDelete = createAction(
   })
 );
 
+export const addPost = createAction(
+  ADD_POST,
+  ({
+    anonymous,
+    attachmentList,
+    boardId,
+    isNOtice,
+    isSecret,
+    postContent,
+    tagList
+  }) => ({
+    anonymous,
+    attachmentList,
+    boardId,
+    isNOtice,
+    isSecret,
+    postContent,
+    tagList
+  })
+);
+
 // Sagas
 const loadPostListSaga = createRequestSaga(LOAD_POST_LIST, api.loadPostList);
 const loadMenuListSage = createRequestSaga(LOAD_MENU_LIST, api.loadMenuList);
@@ -94,6 +118,7 @@ const anonymousPostDeleteSaga = createRequestSaga(
   ANONYMOUS_POST_DELETE,
   api.anonymousPostDelete
 );
+const addPostSaga = createRequestSaga(ADD_POST, api.addPost);
 
 export function* postSaga() {
   yield takeLatest(LOAD_POST_LIST, loadPostListSaga);
@@ -103,6 +128,7 @@ export function* postSaga() {
   yield takeLatest(LOAD_SECRET_POST, loadSecretPostSaga);
   yield takeLatest(POST_DELETE, postDeleteSaga);
   yield takeLatest(ANONYMOUS_POST_DELETE, anonymousPostDeleteSaga);
+  yield takeLatest(ADD_POST, addPostSaga);
 }
 
 // reducer (handleActions => switch문 대체)
@@ -110,7 +136,8 @@ const initialState = {
   loadedPostList: reducerUtils.initial(),
   loadedMenuList: reducerUtils.initial(),
   loadedPost: reducerUtils.initial(),
-  postDeleteRes: reducerUtils.initial()
+  postDeleteRes: reducerUtils.initial(),
+  addPost: reducerUtils.initial()
 };
 
 export default handleActions(
@@ -202,6 +229,18 @@ export default handleActions(
     [ANONYMOUS_POST_DELETE_FAILURE]: (state, { payload: error }) => ({
       ...state,
       postDeleteRes: reducerUtils.error(error)
+    }),
+    [ADD_POST]: state => ({
+      ...state,
+      addPost: reducerUtils.loading(state.addPost.data)
+    }),
+    [ADD_POST_SUCCESS]: (state, { payload: response }) => ({
+      ...state,
+      addPost: reducerUtils.success(response)
+    }),
+    [ADD_POST_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      addPost: reducerUtils.error(error)
     })
   },
   initialState

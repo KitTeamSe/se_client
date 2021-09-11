@@ -52,3 +52,27 @@ export const anonymousPostDelete = async ({ anonymousPassword, postId }) => {
     throw error.response.data;
   });
 };
+
+export const addPost = ({
+  anonymous,
+  attachmentList,
+  boardId,
+  isNOtice,
+  isSecret,
+  postContent,
+  tagList
+}) => {
+  const token = localStorage.getItem('token');
+  const body = {
+    anonymous,
+    attachmentList,
+    boardId,
+    isNOtice,
+    isSecret,
+    postContent,
+    tagList
+  };
+  return client.post(`/post`, body, tokenHeader(token)).catch(error => {
+    throw error.response.data;
+  });
+};
