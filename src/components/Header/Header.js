@@ -38,7 +38,7 @@ const LogoWrapper = styled(Link)`
   color: #57bee1;
 `;
 
-const MenuWrapper = styled.nav`
+const MenuUl = styled.ul`
   width: auto;
   display: flex;
   align-items: center;
@@ -64,7 +64,7 @@ const LoadingCircle = styled(CircularProgress)`
 const Menu = props => {
   const { data } = props;
   return (
-    <ul>
+    <MenuUl>
       {data.data.map(menu => (
         <li key={menu.boardId}>
           <MenuItem
@@ -75,7 +75,7 @@ const Menu = props => {
           </MenuItem>
         </li>
       ))}
-    </ul>
+    </MenuUl>
   );
 };
 
@@ -87,9 +87,9 @@ const Header = props => {
   return (
     <HeaderWraper>
       <LogoWrapper to="/1">SE Board</LogoWrapper>
-      <MenuWrapper>
+      <nav>
         <Menu data={data} />
-      </MenuWrapper>
+      </nav>
       <NavigationWrapper>
         <LoginDialogContainer />
       </NavigationWrapper>

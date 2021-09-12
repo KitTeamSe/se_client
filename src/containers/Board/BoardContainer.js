@@ -51,7 +51,7 @@ const BoardContainer = props => {
     };
     dispatch(loadPostList(parameter));
     setBoardPage(page);
-  }, [location.search]);
+  }, [location.search, boardNameEng]);
 
   const onChange = e => {
     e.preventDefault();
