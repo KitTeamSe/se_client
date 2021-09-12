@@ -27,6 +27,7 @@ const Routes = () => (
       <Route path="/">
         <Redirect to="/board/freeboard" />
       </Route>
+
     </BodyContainer>
     <PostMakerContainer />
   </>

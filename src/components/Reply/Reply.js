@@ -129,8 +129,12 @@ const ReplyAction = props => {
     anonymousNickname,
     replyId,
     isSecret,
-    handleAddReplyChild
+    handleAddReplyChild,
+    onUpdate
   } = props;
+
+  const onAddReply = () => handleAddReplyChild(parentId || replyId);
+  const onUpdateReply = () => onUpdate(replyId);
 
   return (
     <ActionWrapper>
@@ -141,26 +145,18 @@ const ReplyAction = props => {
           replyIndex={replyIndex}
         />
       )}
-      <ActionButton
-        onClick={() =>
-          parentId
-            ? handleAddReplyChild(parentId)
-            : handleAddReplyChild(replyId)
-        }
-      >
-        댓글
-      </ActionButton>
+      <ActionButton onClick={onAddReply}>댓글</ActionButton>
       {localStorage.getItem('token') &&
       localStorage.getItem('userId') &&
       accountId ? (
         <>
-          <ActionButton onClick={() => console.log(replyId)}>수정</ActionButton>
+          <ActionButton onClick={onUpdateReply}>수정</ActionButton>
           <ReplyDeleteContainer replyId={replyId} />
         </>
       ) : null}
       {anonymousNickname ? (
         <>
-          <ActionButton onClick={() => console.log(replyId)}>수정</ActionButton>
+          <ActionButton onClick={onUpdateReply}>수정</ActionButton>
           <ReplyAnonyDeleteContainer replyId={replyId} />
         </>
       ) : null}
@@ -202,7 +198,8 @@ export const ReplyContent = props => {
     content,
     isSecret,
     isDelete,
-    handleAddReplyChild
+    handleAddReplyChild,
+    onUpdate
   } = props;
 
   return (
@@ -218,6 +215,7 @@ export const ReplyContent = props => {
           replyId={replyId}
           isSecret={isSecret}
           handleAddReplyChild={handleAddReplyChild}
+          onUpdate={onUpdate}
         />
       )}
     </ContentWrapper>
@@ -235,6 +233,7 @@ const Reply = props => {
     isSecret,
     isDelete,
     handleAddReplyChild,
+    onUpdate,
     children
   } = props;
 
@@ -257,6 +256,7 @@ const Reply = props => {
             isSecret={isSecret}
             isDelete={isDelete}
             handleAddReplyChild={handleAddReplyChild}
+            onUpdate={onUpdate}
           />
         </ReplyWrapper>
       )}
