@@ -24,15 +24,17 @@ const FormTextField = styled(TextField)`
 `;
 
 const MainWrapper = styled.div`
+  margin: auto;
   margin-top: 3rem;
-  width: calc(100% - 4rem);
-  padding: 2rem;
-  flex-direction: column;
+  width: 70vw;
+  padding: 1.5rem;
+  display: display;
   align-items: center;
   background-color: #ffffff;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   @media ${props => props.theme.mobile} {
-    width: calc(100% - 1rem);
+    width: calc(100vw - 1rem);
+    margin-top: 1rem;
     padding: 0.5rem;
   }
 `;
