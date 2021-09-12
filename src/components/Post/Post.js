@@ -132,19 +132,28 @@ const PostHeaderInfo = props => {
     accountIdString
   } = props;
 
-  function menuItem(type) {
-    let condition = 'LogoutNotAnonymous';
+  function conditionMaker() {
     if (!userId && !accountIdString) {
-      condition = 'LogoutAnonymous';
-    } else if (!userId && accountIdString) {
-      condition = 'LogoutNotAnonymous';
-    } else if (userId && !accountIdString) {
-      condition = 'LoginAnnoymous';
-    } else if (userId && userId === accountIdString) {
-      condition = 'LoginMy';
-    } else if (userId && userId !== accountIdString) {
-      condition = 'LoginNotmy';
+      return 'LogoutAnonymous';
     }
+    if (!userId && accountIdString) {
+      return 'LogoutNotAnonymous';
+    }
+    if (userId && !accountIdString) {
+      return 'LoginAnnoymous';
+    }
+    if (userId && userId === accountIdString) {
+      return 'LoginMy';
+    }
+    if (userId && userId !== accountIdString) {
+      return 'LoginNotmy';
+    }
+    return 'LogoutAnonymous';
+  }
+
+  function menuItem(type) {
+    const condition = conditionMaker();
+
     return (
       <div>
         {ConditionClassify[condition][type].map(content => (
