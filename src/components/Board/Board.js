@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { faEye, faCommentAlt, faLock } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -18,7 +18,6 @@ import {
 import { Pagination, PaginationItem } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { postSearchTypeList } from '../../DataExport';
-import PostContainer from '../../containers/Post/PostContainer';
 import Tags from '../Post/Tags';
 
 const LoadingCircle = styled(CircularProgress)`
@@ -307,33 +306,26 @@ const Board = props => {
   const res = data.data;
   return (
     <MainWrapper>
-      <Route
-        exact
-        path="/board/:boardNameEng/:postId"
-        component={PostContainer}
+      <BoardHeader
+        postSearchType={postSearchType}
+        onPostSearchTypeChange={onPostSearchTypeChange}
+        keyword={keyword}
+        onSearch={onSearch}
+        onSearchChange={onSearchChange}
       />
-      <Route path="/board/:boardNameEng">
-        <BoardHeader
-          postSearchType={postSearchType}
-          onPostSearchTypeChange={onPostSearchTypeChange}
-          keyword={keyword}
-          onSearch={onSearch}
-          onSearchChange={onSearchChange}
-        />
-        {res.postListItem.content.length === 0 ? (
-          <NoPost searchKeyword={searchKeyword} />
-        ) : (
-          <>
-            <MainTable res={res} boardNameEng={boardNameEng} />
-            <Paginations
-              res={res}
-              onChange={onChange}
-              boardNameEng={boardNameEng}
-              boardPage={boardPage}
-            />
-          </>
-        )}
-      </Route>
+      {res.postListItem.content.length === 0 ? (
+        <NoPost searchKeyword={searchKeyword} />
+      ) : (
+        <>
+          <MainTable res={res} boardNameEng={boardNameEng} />
+          <Paginations
+            res={res}
+            onChange={onChange}
+            boardNameEng={boardNameEng}
+            boardPage={boardPage}
+          />
+        </>
+      )}
     </MainWrapper>
   );
 };

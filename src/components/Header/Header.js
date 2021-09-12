@@ -86,7 +86,7 @@ const Header = props => {
   }
   return (
     <HeaderWraper>
-      <LogoWrapper to="/1">SE Board</LogoWrapper>
+      <LogoWrapper to="/board/freeboard">SE Board</LogoWrapper>
       <nav>
         <Menu data={data} />
       </nav>
