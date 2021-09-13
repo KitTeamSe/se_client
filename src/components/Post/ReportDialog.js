@@ -13,6 +13,7 @@ const FlexBox = styled.div`
   display: flex;
   flex-direction: column;
   text-align: left;
+  width: 20rem;
 `;
 
 const ReportDialog = props => {
@@ -21,23 +22,27 @@ const ReportDialog = props => {
     reportBoxHandle,
     reportSubmit,
     reportDescription,
-    descriptionChange
+    descriptionChange,
+    reportType,
+    targetName
   } = props;
   return (
     <Dialog
       open={reportOpen}
-      onClose={reportOpen}
+      onClose={reportBoxHandle}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">신고</DialogTitle>
+      <DialogTitle id="alert-dialog-title">
+        {targetName} 님의 {reportType === 'POST' ? '게시글' : '댓글'} 신고
+      </DialogTitle>
       <DialogContent>
         <FlexBox>
           <TextField
             id="outlined-multiline-static"
             label="신고내용"
             multiline
-            rows={4}
+            rows={6}
             variant="outlined"
             value={reportDescription}
             onChange={descriptionChange}

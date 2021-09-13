@@ -23,6 +23,8 @@ const PostContainer = props => {
   const [password, setPassword] = useState('');
   const [reportOpen, setReportOpen] = useState(false);
   const [reportType, setReportType] = useState(null);
+  const [targetId, setTargetId] = useState(null);
+  const [targetName, setTargetName] = useState(null);
   const [anonymousPassword, setAnonymousPassword] = useState('');
   const [reportDescription, setReportDescription] = useState('');
   const dispatch = useDispatch();
@@ -43,12 +45,14 @@ const PostContainer = props => {
     postDeleteError: post.postDeleteRes.error,
     reportResponse: post.reportRes
   }));
-  if (reportResponse.error) {
-    console.log(reportResponse.error);
-  }
+
   const [deleteBoxOpen, setDeleteBoxOpen] = useState(false);
   const [anonymousDeleteBoxOpen, setAnonymousDeleteBoxOpen] = useState(false);
   const userId = localStorage.getItem('userId');
+
+  useEffect(() => {
+    console.log(reportResponse);
+  }, [reportResponse]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -109,13 +113,22 @@ const PostContainer = props => {
   };
 
   // 신고 관련
-  const replyReportHandle = () => {
+  const replyReportHandle = (replyId, accountId, anonymousNickname) => {
     setReportType('REPLY');
+    setTargetId(replyId);
+    if (accountId) {
+      setTargetName(accountId);
+    } else {
+      setTargetName(anonymousNickname);
+    }
     setReportOpen(!reportOpen);
   };
 
   const reportBoxHandle = () => {
     setReportType('POST');
+    const postId = Number(match.params.postId);
+    setTargetId(postId);
+    setTargetName(data.data.nickname);
     setReportOpen(!reportOpen);
   };
 
@@ -127,7 +140,6 @@ const PostContainer = props => {
 
   const reportSubmit = e => {
     e.preventDefault();
-    const targetId = Number(match.params.postId);
     dispatch(
       postReport({
         description: reportDescription,
@@ -212,6 +224,8 @@ const PostContainer = props => {
         reportSubmit={reportSubmit}
         reportDescription={reportDescription}
         descriptionChange={descriptionChange}
+        reportType={reportType}
+        targetName={targetName}
       />
       <DeleteAlertDialog
         deleteBoxOpen={deleteBoxOpen}

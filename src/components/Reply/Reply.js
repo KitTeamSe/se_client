@@ -136,6 +136,8 @@ const ReplyAction = props => {
   const userId = localStorage.getItem('userId');
   const onAddReply = () => handleAddReplyChild(parentId || replyId);
   const onUpdateReply = () => onUpdate(replyId);
+  const onReplyReport = () =>
+    replyReportHandle(replyId, accountId, anonymousNickname);
 
   return (
     <ActionWrapper>
@@ -160,7 +162,7 @@ const ReplyAction = props => {
         </>
       ) : null}
       {userId && userId !== accountId ? (
-        <ActionButton onClick={replyReportHandle}>신고</ActionButton>
+        <ActionButton onClick={onReplyReport}>신고</ActionButton>
       ) : null}
     </ActionWrapper>
   );
