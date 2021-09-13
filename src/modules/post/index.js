@@ -1,5 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
 import { takeLatest } from 'redux-saga/effects';
+import produce from 'immer';
 import * as api from '../../libs/api/post';
 import {
   createRequestActionTypes,
@@ -9,6 +10,8 @@ import reducerUtils from '../../libs/reducerUtils';
 
 // Actions
 const INITIALIZE = 'post/INITIALIZE';
+
+const CHANGE_FIELD = 'post/CHANGE_FIELD';
 
 const [LOAD_POST_LIST, LOAD_POST_LIST_SUCCESS, LOAD_POST_LIST_FAILURE] =
   createRequestActionTypes('post/LOAD_POST_LIST');
@@ -39,6 +42,15 @@ const [ADD_POST, ADD_POST_SUCCESS, ADD_POST_FAILURE] =
 
 // Action Creators
 export const initialize = createAction(INITIALIZE, form => form);
+
+export const changeField = createAction(
+  CHANGE_FIELD,
+  ({ form, key, value }) => ({
+    form,
+    key,
+    value
+  })
+);
 
 export const loadPostList = createAction(
   LOAD_POST_LIST,
@@ -88,16 +100,16 @@ export const addPost = createAction(
   ({
     anonymous,
     attachmentList,
-    boardId,
-    isNOtice,
+    boardNameEng,
+    isNotice,
     isSecret,
     postContent,
     tagList
   }) => ({
     anonymous,
     attachmentList,
-    boardId,
-    isNOtice,
+    boardNameEng,
+    isNotice,
     isSecret,
     postContent,
     tagList
@@ -133,6 +145,16 @@ export function* postSaga() {
 
 // reducer (handleActions => switch문 대체)
 const initialState = {
+  addForm: {
+    anonymousNickname: '',
+    anonymousPassword: '',
+    attachmentList: [],
+    isNotice: 'NORMAL',
+    isSecret: 'NORMAL',
+    text: '',
+    title: '',
+    tagList: []
+  },
   loadedPostList: reducerUtils.initial(),
   loadedMenuList: reducerUtils.initial(),
   loadedPost: reducerUtils.initial(),
@@ -146,6 +168,10 @@ export default handleActions(
       ...state,
       [form]: initialState[form]
     }),
+    [CHANGE_FIELD]: (state, { payload: { key, form, value } }) =>
+      produce(state, draft => {
+        draft[form][key] = value;
+      }),
     [LOAD_POST_LIST]: state => ({
       ...state,
       loadedPostList: reducerUtils.loading(state.loadedPostList.data)

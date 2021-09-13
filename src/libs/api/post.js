@@ -56,8 +56,8 @@ export const anonymousPostDelete = async ({ anonymousPassword, postId }) => {
 export const addPost = ({
   anonymous,
   attachmentList,
-  boardId,
-  isNOtice,
+  boardNameEng,
+  isNotice,
   isSecret,
   postContent,
   tagList
@@ -66,8 +66,8 @@ export const addPost = ({
   const body = {
     anonymous,
     attachmentList,
-    boardId,
-    isNOtice,
+    boardNameEng,
+    isNotice,
     isSecret,
     postContent,
     tagList

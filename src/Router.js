@@ -6,6 +6,7 @@ import BoardContainer from './containers/Board/BoardContainer';
 import PostMakerContainer from './containers/PostMaker/PostMakerContainer';
 import ProfilePageContainer from './containers/ProfilePage/ProfilePageContainer';
 import SignupPageContainer from './containers/SignupPage/SignupPageContainer';
+import PostWritePage from './pages/PostWritePage';
 import ReplyUpdatePage from './pages/ReplyUpdatePage';
 
 const BodyContainer = styled.div`
@@ -17,6 +18,11 @@ const Routes = () => (
     <HeaderContainer />
     <BodyContainer>
       <Switch>
+        <Route
+          exact
+          path="/board/:boardNameEng/write"
+          component={PostWritePage}
+        />
         <Route
           exact
           path="/board/:boardNameEng/:postId/update/:replyId"
