@@ -5,6 +5,7 @@ import { Typography } from '@material-ui/core';
 import { Pagination, PaginationItem } from '@material-ui/lab';
 import Reply from './Reply';
 import ReplyChild from './ReplyChild';
+import ReplyAddContainer from '../../containers/Reply/ReplyAddContainer';
 
 const PaginationStyled = styled(Pagination)`
   & ul {
@@ -95,7 +96,8 @@ const ReplyMessage = props => {
 };
 
 const ReplyEntries = props => {
-  const { loading, data, handleAddReplyChild, onUpdate } = props;
+  const { loading, data, handleAddReplyChild, onUpdate, replyReportHandle } =
+    props;
 
   return !loading && data
     ? data.map((reply, idx) => (
@@ -110,6 +112,7 @@ const ReplyEntries = props => {
           isDelete={reply.isDelete}
           handleAddReplyChild={handleAddReplyChild}
           onUpdate={onUpdate}
+          replyReportHandle={replyReportHandle}
         >
           {reply.child && reply.child.length
             ? reply.child.map((childReply, childIdx) => (
@@ -126,6 +129,7 @@ const ReplyEntries = props => {
                   isDelete={childReply.isDelete}
                   handleAddReplyChild={handleAddReplyChild}
                   onUpdate={onUpdate}
+                  replyReportHandle={replyReportHandle}
                 />
               ))
             : null}
@@ -144,18 +148,20 @@ const ReplyList = props => {
     page,
     baseUrl,
     handleAddReplyChild,
-    onUpdate
+    onUpdate,
+    replyReportHandle
   } = props;
-  console.log(data);
 
   return (
     <>
       <ReplyHeader totalData={totalData} />
+      <ReplyAddContainer />
       <ReplyEntries
         loading={loading}
         data={data}
         handleAddReplyChild={handleAddReplyChild}
         onUpdate={onUpdate}
+        replyReportHandle={replyReportHandle}
       />
       <ReplyMessage data={data} loading={loading} error={error} />
       <ReplyPagination totalPage={totalPage} page={page} baseUrl={baseUrl} />

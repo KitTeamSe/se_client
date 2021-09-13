@@ -318,7 +318,8 @@ const Post = props => {
     userId,
     postDeleteData,
     postDeleteLoading,
-    postDeleteError
+    postDeleteError,
+    replyReportHandle
   } = props;
 
   if (error) {
@@ -359,7 +360,7 @@ const Post = props => {
         userId={userId}
       />
       <PostMain res={res} />
-      <ReplyListContainer />
+      <ReplyListContainer replyReportHandle={replyReportHandle} />
     </MainWrapper>
   );
 };

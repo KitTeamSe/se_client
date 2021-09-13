@@ -13,18 +13,18 @@ import {
 } from '../../modules/post';
 import DeleteAlertDialog from '../../components/Post/DeleteAlertDialog';
 import AnonymousDeleteDialog from '../../components/Post/AnonymousDeleteDialog';
-import PostReportDialog from '../../components/Post/PostReportDialog';
+import ReportDialog from '../../components/Post/ReportDialog';
 
 const PostContainer = props => {
   const { location, match } = props;
   const [moremenuEl, setMoremenuEl] = useState(null);
   const [writerEl, setWriterEl] = useState(null);
   const [secretPost, setSecretPost] = useState(false);
-  const [reportOpen, setReportOpen] = useState(false);
   const [password, setPassword] = useState('');
+  const [reportOpen, setReportOpen] = useState(false);
+  const [reportType, setReportType] = useState(null);
   const [anonymousPassword, setAnonymousPassword] = useState('');
   const [reportDescription, setReportDescription] = useState('');
-  const [reportTypeSelect, setReportTypeSelect] = useState('POST');
   const dispatch = useDispatch();
   const {
     data,
@@ -109,7 +109,13 @@ const PostContainer = props => {
   };
 
   // 신고 관련
+  const replyReportHandle = () => {
+    setReportType('REPLY');
+    setReportOpen(!reportOpen);
+  };
+
   const reportBoxHandle = () => {
+    setReportType('POST');
     setReportOpen(!reportOpen);
   };
 
@@ -119,25 +125,18 @@ const PostContainer = props => {
     setReportDescription(value);
   };
 
-  const reportTypeChange = e => {
-    e.preventDefault();
-    const { value } = e.target;
-    setReportTypeSelect(value);
-  };
-
   const reportSubmit = e => {
     e.preventDefault();
     const targetId = Number(match.params.postId);
     dispatch(
       postReport({
         description: reportDescription,
-        reportType: reportTypeSelect,
+        reportType,
         targetId
       })
     );
     setReportOpen(false);
     setReportDescription('');
-    setReportTypeSelect('POST');
   };
 
   const banFunction = () => {
@@ -166,7 +165,7 @@ const PostContainer = props => {
         banFunction();
         break;
       case 'report':
-        reportBoxHandle();
+        reportBoxHandle(e);
         break;
       case 'message':
         messageFunction();
@@ -207,14 +206,12 @@ const PostContainer = props => {
 
   return (
     <>
-      <PostReportDialog
+      <ReportDialog
         reportOpen={reportOpen}
         reportBoxHandle={reportBoxHandle}
         reportSubmit={reportSubmit}
         reportDescription={reportDescription}
         descriptionChange={descriptionChange}
-        reportTypeChange={reportTypeChange}
-        reportTypeSelect={reportTypeSelect}
       />
       <DeleteAlertDialog
         deleteBoxOpen={deleteBoxOpen}
@@ -244,6 +241,7 @@ const PostContainer = props => {
         functionExcute={functionExcute}
         menuClick={menuClick}
         PasswordSubmit={PasswordSubmit}
+        replyReportHandle={replyReportHandle}
       />
     </>
   );

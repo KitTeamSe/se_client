@@ -6,15 +6,8 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField,
-  Select,
-  MenuItem
+  TextField
 } from '@material-ui/core';
-import { reportType } from '../../DataExport';
-
-const FormSelectField = styled(Select)`
-  margin: 1.5rem 0;
-`;
 
 const FlexBox = styled.div`
   display: flex;
@@ -22,15 +15,13 @@ const FlexBox = styled.div`
   text-align: left;
 `;
 
-const PostReportDialog = props => {
+const ReportDialog = props => {
   const {
     reportOpen,
     reportBoxHandle,
     reportSubmit,
     reportDescription,
-    descriptionChange,
-    reportTypeSelect,
-    reportTypeChange
+    descriptionChange
   } = props;
   return (
     <Dialog
@@ -42,18 +33,6 @@ const PostReportDialog = props => {
       <DialogTitle id="alert-dialog-title">신고</DialogTitle>
       <DialogContent>
         <FlexBox>
-          <FormSelectField
-            name="editType"
-            id="form1"
-            value={reportTypeSelect}
-            onChange={reportTypeChange}
-          >
-            {reportType.map(menu => (
-              <MenuItem value={menu} key={menu}>
-                {menu}
-              </MenuItem>
-            ))}
-          </FormSelectField>
           <TextField
             id="outlined-multiline-static"
             label="신고내용"
@@ -77,4 +56,4 @@ const PostReportDialog = props => {
   );
 };
 
-export default PostReportDialog;
+export default ReportDialog;
