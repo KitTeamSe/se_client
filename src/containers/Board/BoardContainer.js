@@ -11,18 +11,24 @@ const BoardContainer = props => {
   const [keyword, setKeyword] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
   const [boardPage, setBoardPage] = useState(1);
+  const [boardDescription, setBoardDescription] = useState('');
   const [postSearchType, setPostSearchType] = useState('TITLE_TEXT');
-  const { data, loading, error, menuListObj } = useSelector(({ post }) => ({
+  const { data, loading, error, menuList } = useSelector(({ post }) => ({
     data: post.loadedPostList.data,
     loading: post.loadedPostList.loading,
     error: post.loadedPostList.error,
-    menuListObj: post.loadedMenuList
+    menuList: post.loadedMenuList.data
   }));
 
   const pageSize = 20;
-
   const { boardNameEng } = match.params;
+
   useEffect(() => {
+    if (menuList) {
+      const myMenu = menuList.data.find(menu => menu.nameEng === boardNameEng);
+      setBoardDescription(myMenu.description);
+    }
+
     const {
       page,
       size = pageSize,
@@ -51,7 +57,7 @@ const BoardContainer = props => {
     };
     dispatch(loadPostList(parameter));
     setBoardPage(page);
-  }, [location.search]);
+  }, [location.search, boardNameEng, menuList]);
 
   const onChange = e => {
     e.preventDefault();
@@ -105,9 +111,9 @@ const BoardContainer = props => {
       searchKeyword={searchKeyword}
       onPostSearchTypeChange={onPostSearchTypeChange}
       postSearchType={postSearchType}
-      menuListObj={menuListObj}
       boardNameEng={boardNameEng}
       boardPage={boardPage}
+      boardDescription={boardDescription}
     />
   );
 };

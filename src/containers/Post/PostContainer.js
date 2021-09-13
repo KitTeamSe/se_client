@@ -8,16 +8,23 @@ import {
   loadSecretPost,
   postDelete,
   anonymousPostDelete,
+  postReport,
   initialize
 } from '../../modules/post';
+import DeleteAlertDialog from '../../components/Post/DeleteAlertDialog';
+import AnonymousDeleteDialog from '../../components/Post/AnonymousDeleteDialog';
+import PostReportDialog from '../../components/Post/PostReportDialog';
 
 const PostContainer = props => {
   const { location, match } = props;
   const [moremenuEl, setMoremenuEl] = useState(null);
   const [writerEl, setWriterEl] = useState(null);
   const [secretPost, setSecretPost] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
   const [password, setPassword] = useState('');
   const [anonymousPassword, setAnonymousPassword] = useState('');
+  const [reportDescription, setReportDescription] = useState('');
+  const [reportTypeSelect, setReportTypeSelect] = useState('POST');
   const dispatch = useDispatch();
   const {
     data,
@@ -25,15 +32,20 @@ const PostContainer = props => {
     error,
     postDeleteData,
     postDeleteLoading,
-    postDeleteError
+    postDeleteError,
+    reportResponse
   } = useSelector(({ post }) => ({
     data: post.loadedPost.data,
     loading: post.loadedPost.loading,
     error: post.loadedPost.error,
     postDeleteData: post.postDeleteRes.data,
     postDeleteLoading: post.postDeleteRes.loading,
-    postDeleteError: post.postDeleteRes.error
+    postDeleteError: post.postDeleteRes.error,
+    reportResponse: post.reportRes
   }));
+  if (reportResponse.error) {
+    console.log(reportResponse.error);
+  }
   const [deleteBoxOpen, setDeleteBoxOpen] = useState(false);
   const [anonymousDeleteBoxOpen, setAnonymousDeleteBoxOpen] = useState(false);
   const userId = localStorage.getItem('userId');
@@ -54,6 +66,7 @@ const PostContainer = props => {
     }
   }, [match.params.postId]);
 
+  // 비밀글 관련
   const PasswordSubmit = e => {
     e.preventDefault();
     const postId = Number(match.params.postId);
@@ -66,22 +79,27 @@ const PostContainer = props => {
     setPassword(value);
   };
 
+  // 익명게시글 삭제 관련
+  const anonymousDeleteFunction = e => {
+    e.preventDefault();
+    setAnonymousDeleteBoxOpen(false);
+    const { postId } = match.params;
+    dispatch(anonymousPostDelete({ anonymousPassword, postId }));
+  };
+
   const anonyPwChange = e => {
     e.preventDefault();
     const { value } = e.target;
     setAnonymousPassword(value);
   };
 
-  const reportFunction = () => {
-    console.log('report logic');
-  };
-
-  const deleteBoxHandle = () => {
-    setDeleteBoxOpen(!deleteBoxOpen);
-  };
-
   const anonymousDeleteBoxHandle = () => {
     setAnonymousDeleteBoxOpen(!anonymousDeleteBoxOpen);
+  };
+
+  // 일반 삭제 관련
+  const deleteBoxHandle = () => {
+    setDeleteBoxOpen(!deleteBoxOpen);
   };
 
   const deleteFunction = () => {
@@ -90,11 +108,36 @@ const PostContainer = props => {
     dispatch(postDelete({ id }));
   };
 
-  const anonymousDeleteFunction = e => {
+  // 신고 관련
+  const reportBoxHandle = () => {
+    setReportOpen(!reportOpen);
+  };
+
+  const descriptionChange = e => {
     e.preventDefault();
-    setAnonymousDeleteBoxOpen(false);
-    const { postId } = match.params;
-    dispatch(anonymousPostDelete({ anonymousPassword, postId }));
+    const { value } = e.target;
+    setReportDescription(value);
+  };
+
+  const reportTypeChange = e => {
+    e.preventDefault();
+    const { value } = e.target;
+    setReportTypeSelect(value);
+  };
+
+  const reportSubmit = e => {
+    e.preventDefault();
+    const targetId = Number(match.params.postId);
+    dispatch(
+      postReport({
+        description: reportDescription,
+        reportType: reportTypeSelect,
+        targetId
+      })
+    );
+    setReportOpen(false);
+    setReportDescription('');
+    setReportTypeSelect('POST');
   };
 
   const banFunction = () => {
@@ -123,7 +166,7 @@ const PostContainer = props => {
         banFunction();
         break;
       case 'report':
-        reportFunction();
+        reportBoxHandle();
         break;
       case 'message':
         messageFunction();
@@ -163,31 +206,46 @@ const PostContainer = props => {
   };
 
   return (
-    <Post
-      data={data}
-      loading={loading}
-      error={error}
-      moremenuEl={moremenuEl}
-      writerEl={writerEl}
-      secretPost={secretPost}
-      password={password}
-      anonymousPassword={anonymousPassword}
-      userId={userId}
-      deleteBoxOpen={deleteBoxOpen}
-      postDeleteData={postDeleteData}
-      postDeleteLoading={postDeleteLoading}
-      postDeleteError={postDeleteError}
-      onChange={onChange}
-      anonyPwChange={anonyPwChange}
-      functionExcute={functionExcute}
-      menuClick={menuClick}
-      PasswordSubmit={PasswordSubmit}
-      deleteBoxHandle={deleteBoxHandle}
-      deleteFunction={deleteFunction}
-      anonymousDeleteBoxOpen={anonymousDeleteBoxOpen}
-      anonymousDeleteBoxHandle={anonymousDeleteBoxHandle}
-      anonymousDeleteFunction={anonymousDeleteFunction}
-    />
+    <>
+      <PostReportDialog
+        reportOpen={reportOpen}
+        reportBoxHandle={reportBoxHandle}
+        reportSubmit={reportSubmit}
+        reportDescription={reportDescription}
+        descriptionChange={descriptionChange}
+        reportTypeChange={reportTypeChange}
+        reportTypeSelect={reportTypeSelect}
+      />
+      <DeleteAlertDialog
+        deleteBoxOpen={deleteBoxOpen}
+        deleteBoxHandle={deleteBoxHandle}
+        deleteFunction={deleteFunction}
+      />
+      <AnonymousDeleteDialog
+        anonymousDeleteBoxOpen={anonymousDeleteBoxOpen}
+        anonymousDeleteBoxHandle={anonymousDeleteBoxHandle}
+        anonymousDeleteFunction={anonymousDeleteFunction}
+        anonyPwChange={anonyPwChange}
+        anonymousPassword={anonymousPassword}
+      />
+      <Post
+        data={data}
+        loading={loading}
+        error={error}
+        moremenuEl={moremenuEl}
+        writerEl={writerEl}
+        secretPost={secretPost}
+        password={password}
+        userId={userId}
+        postDeleteData={postDeleteData}
+        postDeleteLoading={postDeleteLoading}
+        postDeleteError={postDeleteError}
+        onChange={onChange}
+        functionExcute={functionExcute}
+        menuClick={menuClick}
+        PasswordSubmit={PasswordSubmit}
+      />
+    </>
   );
 };
 
