@@ -146,6 +146,7 @@ const ReplyList = props => {
     handleAddReplyChild,
     onUpdate
   } = props;
+  console.log(data);
 
   return (
     <>
