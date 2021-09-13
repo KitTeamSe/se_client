@@ -25,13 +25,10 @@ const BoardContainer = props => {
 
   useEffect(() => {
     if (menuList) {
-      menuList.data.map(menu => {
-        if (menu.nameEng === boardNameEng) {
-          setBoardDescription(menu.description);
-        }
-        return true;
-      });
+      const myMenu = menuList.data.find(menu => menu.nameEng === boardNameEng);
+      setBoardDescription(myMenu.description);
     }
+
     const {
       page,
       size = pageSize,

@@ -100,4 +100,4 @@ export const menuStorage = {
   needLogin: '로그인을 해야 신고가 가능합니다'
 };
 
-export const reportType = ['POST', 'etc'];
+export const reportType = ['POST', 'REPLY'];
