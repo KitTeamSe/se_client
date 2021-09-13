@@ -16,6 +16,7 @@ const INITIALIZE_UPDATE = 'reply/INITIALIZE_UPDATE';
 const INITIALIZE_DELETE = 'reply/INITIALIZE_DELETE';
 const INITIALIZE_SECRET = 'reply/INITIALIZE_SECRET';
 const CHANGE_FIELD = 'reply/CHANGE_FIELD';
+const CHANGE_UPDATE = 'reply/CHANGE_UPDATE';
 const CHANGE_SECRET_REPLY = 'reply/CHANGE_SECRET_REPLY';
 const [ADD_REPLY, ADD_REPLY_SUCCESS, ADD_REPLY_FAILURE] =
   createRequestActionTypes('reply/ADD_REPLY');
@@ -49,6 +50,10 @@ export const changeField = createAction(
     value
   })
 );
+export const changeUpdate = createAction(
+  CHANGE_UPDATE,
+  ({ isSecret, text, attachmentList }) => ({ isSecret, text, attachmentList })
+);
 export const changeSecretReply = createAction(
   CHANGE_SECRET_REPLY,
   ({ parentIndex, replyIndex }) => ({ parentIndex, replyIndex })
@@ -70,13 +75,12 @@ export const addReply = createAction(
 );
 export const updateReply = createAction(
   UPDATE_REPLY,
-  ({ anonymous, isSecret, parentId, postId, text, files }) => ({
-    anonymous,
+  ({ password, isSecret, replyId, text, attachmentList }) => ({
+    password,
     isSecret,
-    parentId,
-    postId,
+    replyId,
     text,
-    files
+    attachmentList
   })
 );
 export const removeReply = createAction(REMOVE_REPLY, ({ id }) => ({
@@ -151,9 +155,10 @@ const initialState = {
   updateForm: {
     password: '',
     isSecret: '',
-    parentId: null,
+    parentId: 1,
     postId: null,
-    text: ''
+    text: '',
+    attachmentList: []
   },
   removeForm: {
     password: ''
@@ -193,10 +198,11 @@ export default handleActions(
       },
       updateForm: {
         password: '',
-        isSecret: '',
         parentId: null,
         postId: null,
-        text: ''
+        isSecret: '',
+        text: '',
+        attachmentList: []
       },
       removeForm: {
         password: ''
@@ -227,6 +233,18 @@ export default handleActions(
       produce(state, draft => {
         draft[form][key] = value;
       }),
+    [CHANGE_UPDATE]: (
+      state,
+      { payload: { isSecret, text, attachmentList } }
+    ) => ({
+      ...state,
+      updateForm: {
+        ...state.updateForm,
+        isSecret,
+        text,
+        attachmentList
+      }
+    }),
     [CHANGE_SECRET_REPLY]: (
       state,
       { payload: { parentIndex, replyIndex } }
@@ -287,15 +305,15 @@ export default handleActions(
 
     [LOAD_REPLY_BY_ID]: state => ({
       ...state,
-      loadReplyById: reducerUtils.loading(state.loadReply.data)
+      loadReplyById: reducerUtils.loading(state.loadReplyById.data)
     }),
     [LOAD_REPLY_BY_ID_SUCCESS]: (state, { payload: reply }) => ({
       ...state,
-      loadReply: reducerUtils.success(reply)
+      loadReplyById: reducerUtils.success(reply)
     }),
     [LOAD_REPLY_BY_ID_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      loadReply: reducerUtils.error(error)
+      loadReplyById: reducerUtils.error(error)
     }),
 
     [REMOVE_REPLY_ANONY]: state => ({

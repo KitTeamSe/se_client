@@ -15,7 +15,7 @@ import {
 } from '../../modules/reply';
 
 const ReplyListContainer = props => {
-  const { location, match } = props;
+  const { location, match, history } = props;
   const dispatch = useDispatch();
   const {
     data,
@@ -64,6 +64,11 @@ const ReplyListContainer = props => {
     );
   };
 
+  const onUpdate = replyId => {
+    const { boardNameEng, postId } = match.params;
+    history.push(`/board/${boardNameEng}/${postId}/update/${replyId}`);
+  };
+
   useEffect(() => {
     handleReplyList();
   }, [location.search]);
@@ -98,6 +103,7 @@ const ReplyListContainer = props => {
       page={myReplyPage}
       baseUrl={match.url}
       handleAddReplyChild={handleAddReplyChild}
+      onUpdate={onUpdate}
     />
   );
 };

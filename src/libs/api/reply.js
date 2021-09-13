@@ -26,24 +26,20 @@ export const addReply = ({
 export const updateReply = ({
   password,
   isSecret,
-  parentId,
-  postId,
+  replyId,
   text,
-  files
+  attachmentList
 }) => {
-  const formData = new FormData();
-  const data = { password, isSecret, parentId, postId, text };
+  const token = localStorage.getItem('token');
+  const data = {
+    password,
+    isSecret,
+    replyId,
+    text,
+    attachmentList
+  };
 
-  formData.append(
-    'key',
-    new Blob([JSON.stringify(data)], { type: 'application/json' })
-  );
-
-  files.forEach(({ file }) => {
-    formData.append('files', file);
-  });
-
-  return client.put(`${URL}`, formData).catch(error => {
+  return client.put(`${URL}`, data, tokenHeader(token)).catch(error => {
     if (error.response.data.code === 'GE05') {
       localStorage.clear();
     }
@@ -63,14 +59,17 @@ export const removeReply = ({ id }) => {
   });
 };
 
-export const getReplyById = ({ replyId }) =>
-  client.get(`${URL}/${replyId}`).catch(error => {
+export const getReplyById = ({ replyId }) => {
+  const token = localStorage.getItem('token');
+
+  return client.get(`${URL}/${replyId}`, tokenHeader(token)).catch(error => {
     if (error.response.data.code === 'GE05') {
       localStorage.clear();
       window.location.reload(true);
     }
     throw error.response.data;
   });
+};
 
 export const getReplyList = ({ postId, direction, page, size }) => {
   const queryString = qs.stringify({ direction, page, size });
