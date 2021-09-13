@@ -78,7 +78,7 @@ export const ConditionClassify = {
   },
   LogoutAnonymous: {
     writer: [],
-    menu: ['needLogin']
+    menu: ['report', 'fix', 'anonyDelete']
   },
   LoginAnnoymous: { writer: [], menu: ['report', 'fix', 'anonyDelete'] },
   LoginMy: { writer: ['profile'], menu: ['fix', 'delete'] },
