@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 import HeaderContainer from './containers/Header/HeaderContainer';
 import BoardContainer from './containers/Board/BoardContainer';
@@ -16,17 +16,24 @@ const Routes = () => (
   <>
     <HeaderContainer />
     <BodyContainer>
-      <Route exact path="/profile" component={ProfilePageContainer} />
-      <Route exact path="/signup" component={SignupPageContainer} />
-      <Route
-        exact
-        path="/board/:boardNameEng/:postId"
-        component={PostContainer}
-      />
-      <Route path="/board/:boardNameEng" component={BoardContainer} />
-      <Route path="/">
-        <Redirect to="/board/freeboard" />
-      </Route>
+      <Switch>
+        <Route
+          exact
+          path="/board/:boardNameEng/:postId"
+          render={() => (
+            <>
+              <PostContainer />
+              <BoardContainer />
+            </>
+          )}
+        />
+        <Route exact path="/board/:boardNameEng" component={BoardContainer} />
+        <Route exact path="/profile" component={ProfilePageContainer} />
+        <Route exact path="/signup" component={SignupPageContainer} />
+        <Route path="/">
+          <Redirect to="/board/freeboard" />
+        </Route>
+      </Switch>
     </BodyContainer>
     <PostMakerContainer />
   </>

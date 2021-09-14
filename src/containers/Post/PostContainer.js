@@ -52,7 +52,7 @@ const PostContainer = props => {
 
   useEffect(() => {
     console.log(reportResponse);
-  }, [reportResponse]);
+  }, [reportResponse.error]);
 
   useEffect(() => {
     window.scrollTo(0, 0);

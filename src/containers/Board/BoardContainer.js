@@ -26,7 +26,9 @@ const BoardContainer = props => {
   useEffect(() => {
     if (menuList) {
       const myMenu = menuList.data.find(menu => menu.nameEng === boardNameEng);
-      setBoardDescription(myMenu.description);
+      if (myMenu) {
+        setBoardDescription(myMenu.description);
+      }
     }
 
     const {
