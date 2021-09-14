@@ -9,6 +9,8 @@ import {
   changeField,
   accountdelete
 } from '../../modules/account';
+import WithdrawalDialog from '../../components/ProfilePage/WithdrawalDialog';
+import PwChangeDialog from '../../components/ProfilePage/PwChangeDialog';
 
 const ProfilePageContainer = props => {
   const { match } = props;
@@ -33,7 +35,6 @@ const ProfilePageContainer = props => {
     myinformationLoading,
     myinfoError,
     myinfoEditRes,
-    myinfoEditLoading,
     myinfoEditError,
     newPwForm,
     withDrawalForm
@@ -42,7 +43,6 @@ const ProfilePageContainer = props => {
     myinformationLoading: account.myinfo.loading,
     myinfoError: account.myinfo.error,
     myinfoEditRes: account.myinfoEditRes.data,
-    myinfoEditLoading: account.myinfoEditRes.loading,
     myinfoEditError: account.myinfoEditRes.error,
     newPwForm: account.newPwForm,
     withDrawalForm: account.withDrawalForm
@@ -200,27 +200,40 @@ const ProfilePageContainer = props => {
   };
 
   return (
-    <ProfilePage
-      infoObj={infoObj}
-      infoEditObj={infoEditObj}
-      anchorEl={anchorEl}
-      mode={mode}
-      newPwForm={newPwForm}
-      withDrawalForm={withDrawalForm}
-      error={error}
-      handleChange={handleChange}
-      formChange={formChange}
-      typeChange={typeChange}
-      informationOpenAgreeChange={informationOpenAgreeChange}
-      menuClick={menuClick}
-      modeChange={modeChange}
-      myinfoEditSubmit={myinfoEditSubmit}
-      pwChangeSubmit={pwChangeSubmit}
-      withdrawalSubmit={withdrawalSubmit}
-      editFormRefresh={editFormRefresh}
-      myinformationLoading={myinformationLoading}
-      myinfoEditLoading={myinfoEditLoading}
-    />
+    <>
+      <WithdrawalDialog
+        mode={mode}
+        withDrawalForm={withDrawalForm}
+        error={error}
+        modeChange={modeChange}
+        formChange={formChange}
+        withdrawalSubmit={withdrawalSubmit}
+      />
+      <PwChangeDialog
+        mode={mode}
+        error={error}
+        newPwForm={newPwForm}
+        modeChange={modeChange}
+        pwChangeSubmit={pwChangeSubmit}
+        formChange={formChange}
+      />
+      <ProfilePage
+        infoObj={infoObj}
+        infoEditObj={infoEditObj}
+        anchorEl={anchorEl}
+        mode={mode}
+        error={error}
+        handleChange={handleChange}
+        formChange={formChange}
+        typeChange={typeChange}
+        informationOpenAgreeChange={informationOpenAgreeChange}
+        menuClick={menuClick}
+        modeChange={modeChange}
+        myinfoEditSubmit={myinfoEditSubmit}
+        editFormRefresh={editFormRefresh}
+        myinformationLoading={myinformationLoading}
+      />
+    </>
   );
 };
 export default withRouter(ProfilePageContainer);
