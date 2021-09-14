@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ProfilePage from '../../components/ProfilePage/ProfilePage';
 import {
@@ -10,8 +10,10 @@ import {
   accountdelete
 } from '../../modules/account';
 
-const ProfilePageContainer = () => {
-  const [infoObj, setInfoObj] = useState({ Waitting: 'Waitting' });
+const ProfilePageContainer = props => {
+  const { match } = props;
+
+  const [infoObj, setInfoObj] = useState(null);
   const [infoEditObj, setInfoEditObj] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
   const [mode, setMode] = useState(null);
@@ -47,8 +49,9 @@ const ProfilePageContainer = () => {
   }));
 
   useEffect(() => {
-    dispatch(myinfo({ token }));
-  }, []);
+    const id = match.params.userId;
+    dispatch(myinfo({ id }));
+  }, [match.params]);
 
   const editFormRefresh = () => {
     if (myinformation) {
@@ -220,4 +223,4 @@ const ProfilePageContainer = () => {
     />
   );
 };
-export default ProfilePageContainer;
+export default withRouter(ProfilePageContainer);

@@ -73,7 +73,7 @@ export const tagList = {
 
 export const ConditionClassify = {
   LogoutNotAnonymous: {
-    writer: ['profile', 'post'],
+    writer: ['post'],
     menu: ['needLogin']
   },
   LogoutAnonymous: {

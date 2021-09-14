@@ -28,7 +28,7 @@ const Routes = () => (
           )}
         />
         <Route exact path="/board/:boardNameEng" component={BoardContainer} />
-        <Route exact path="/profile" component={ProfilePageContainer} />
+        <Route exact path="/profile/:userId" component={ProfilePageContainer} />
         <Route exact path="/signup" component={SignupPageContainer} />
         <Route path="/">
           <Redirect to="/board/freeboard" />

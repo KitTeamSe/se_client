@@ -14,6 +14,7 @@ import {
 import DeleteAlertDialog from '../../components/Post/DeleteAlertDialog';
 import AnonymousDeleteDialog from '../../components/Post/AnonymousDeleteDialog';
 import ReportDialog from '../../components/Post/ReportDialog';
+import { userSearch } from '../../libs/api/profile';
 
 const PostContainer = props => {
   const { location, match } = props;
@@ -161,6 +162,8 @@ const PostContainer = props => {
 
   const profileFunction = () => {
     console.log('profile logic');
+    const id = 'alsanrlf';
+    userSearch({ id });
   };
   const mailFunction = () => {
     console.log('mail logic');

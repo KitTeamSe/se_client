@@ -13,7 +13,8 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText
+  DialogContentText,
+  CircularProgress
 } from '@material-ui/core';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -136,6 +137,11 @@ const RefreshIcon = styled(FontAwesomeIcon)`
   }
 `;
 
+const LoadingCircle = styled(CircularProgress)`
+  position: absolute;
+  bottom: 50vh;
+`;
+
 const PwChangeDialog = props => {
   const { mode, error, newPwForm, modeChange, pwChangeSubmit, formChange } =
     props;
@@ -249,6 +255,8 @@ const ProfileHeader = props => {
     error,
     newPwForm,
     withDrawalForm,
+    profileUserId,
+    userId,
     modeChange,
     menuClick,
     formChange,
@@ -256,6 +264,10 @@ const ProfileHeader = props => {
     withdrawalSubmit,
     editFormRefresh
   } = props;
+
+  if (profileUserId !== userId) {
+    return <Welcome>기본정보</Welcome>;
+  }
 
   return (
     <MyinfoHeader>
@@ -492,7 +504,8 @@ const PropfilePage = props => {
     newPwForm,
     error,
     withDrawalForm,
-    mode
+    mode,
+    myinformationLoading
   } = props;
 
   const {
@@ -508,8 +521,16 @@ const PropfilePage = props => {
     editFormRefresh
   } = props;
 
+  if (infoObj === null || myinformationLoading) {
+    return (
+      <Wrapper>
+        <LoadingCircle />
+      </Wrapper>
+    );
+  }
   const rows = Object.entries(infoObj);
-
+  const profileUserId = infoObj.idString;
+  const userId = localStorage.getItem('userId');
   return (
     <Wrapper>
       <InfoTableWrapper>
@@ -519,6 +540,8 @@ const PropfilePage = props => {
           anchorEl={anchorEl}
           newPwForm={newPwForm}
           withDrawalForm={withDrawalForm}
+          profileUserId={profileUserId}
+          userId={userId}
           formChange={formChange}
           modeChange={modeChange}
           menuClick={menuClick}

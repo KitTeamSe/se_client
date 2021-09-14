@@ -28,8 +28,8 @@ export const changeField = createAction(
     value
   })
 );
-export const myinfo = createAction(MYINFO, ({ token }) => ({
-  token
+export const myinfo = createAction(MYINFO, ({ id }) => ({
+  id
 }));
 export const myinfoedit = createAction(MYINFOEDIT, ({ parameter, token }) => ({
   parameter,

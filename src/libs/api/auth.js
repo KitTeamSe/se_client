@@ -39,8 +39,9 @@ export const signup = ({
   });
 };
 
-export const myinfo = ({ token }) => {
-  return client.get('account/my', tokenHeader(token)).catch(error => {
+export const myinfo = ({ id }) => {
+  const token = localStorage.getItem('token');
+  return client.get(`/account/${id}`, tokenHeader(token)).catch(error => {
     throw error.response.data.message;
   });
 };
