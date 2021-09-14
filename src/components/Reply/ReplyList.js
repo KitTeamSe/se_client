@@ -98,6 +98,7 @@ const ReplyMessage = props => {
 const ReplyEntries = props => {
   const { loading, data, handleAddReplyChild, onUpdate, replyReportHandle } =
     props;
+  console.log(data);
 
   return !loading && data
     ? data.map((reply, idx) => (

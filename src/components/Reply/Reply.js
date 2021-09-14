@@ -13,6 +13,7 @@ import ReplyChildAddContainer from '../../containers/Reply/ReplyChildAddContaine
 import SecretReplyContainer from '../../containers/Reply/SecretReplyContainer';
 import EditorOutput from '../Editor/EditorOutput';
 import ActionButton from './ReplyActionButton';
+import Nicknamecontainer from '../../containers/Post/NicknameContainer';
 
 const ContentWrapper = styled.div`
   display: flex;
@@ -83,7 +84,7 @@ const AnonyNickName = styled(Typography)`
   font-size: 0.875rem;
 `;
 
-const NickName = styled(AnonyNickName)`
+const UserNickName = styled(AnonyNickName)`
   font-weight: 600;
   cursor: pointer;
 `;
@@ -178,7 +179,12 @@ export const ReplyInfo = props => {
       </AvatarWrapper>
       <UserInfoWrapper>
         {accountId ? (
-          <NickName>{`${accountId}`}</NickName>
+          <UserNickName>
+            <Nicknamecontainer
+              nickname={accountId}
+              accountIdString={accountId}
+            />
+          </UserNickName>
         ) : (
           <AnonyNickName>{anonymousNickname}</AnonyNickName>
         )}

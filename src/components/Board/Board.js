@@ -19,6 +19,7 @@ import { Pagination, PaginationItem } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { postSearchTypeList } from '../../DataExport';
 import Tags from '../Post/Tags';
+import NicknameContainer from '../../containers/Post/NicknameContainer';
 
 const LoadingCircle = styled(CircularProgress)`
   position: absolute;
@@ -61,11 +62,11 @@ const InfoBox = styled.div`
   display: inline-block;
 `;
 
-const NickName = styled.span`
-  font-weight: 500;
-  width: 6rem;
-  font-size: 0.85rem;
-`;
+// const NickName = styled.span`
+//   font-weight: 500;
+//   width: 6rem;
+//   font-size: 0.85rem;
+// `;
 
 const InfoIcon = styled(FontAwesomeIcon)`
   margin: 1px;
@@ -161,8 +162,17 @@ const Paginations = props => {
 
 const PostTitle = props => {
   const { postInfo, boardNameEng } = props;
-  const { postId, title, isSecret, nickname, numReply, views, tags, createAt } =
-    postInfo;
+  const {
+    postId,
+    title,
+    isSecret,
+    nickname,
+    numReply,
+    views,
+    tags,
+    createAt,
+    accountIdString
+  } = postInfo;
   const writeTime = `${createAt[0]}년${createAt[1]}월${createAt[2]}일 ${createAt[3]}:${createAt[4]}`;
   return (
     <PostContent>
@@ -185,7 +195,10 @@ const PostTitle = props => {
         </Title>
       </NoneBorderCell>
       <NoneBorderCell nowrap="true" width="10%" align="center">
-        <NickName>{nickname}</NickName>
+        <NicknameContainer
+          nickname={nickname}
+          accountIdString={accountIdString}
+        />
       </NoneBorderCell>
       <NoneBorderCell width="15%" align="center">
         <InfoBox>

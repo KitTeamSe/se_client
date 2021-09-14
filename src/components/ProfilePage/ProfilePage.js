@@ -266,7 +266,7 @@ const ProfileHeader = props => {
   } = props;
 
   if (profileUserId !== userId) {
-    return <Welcome>기본정보</Welcome>;
+    return <Welcome>{profileUserId} 님의 정보</Welcome>;
   }
 
   return (
@@ -274,7 +274,7 @@ const ProfileHeader = props => {
       {mode === 'editMode' ? (
         <>
           <div />
-          <Welcome>기본정보</Welcome>
+          <Welcome>내 정보</Welcome>
           <FontAwesomeIcon
             icon={faTimesCircle}
             size="lg"
@@ -292,7 +292,7 @@ const ProfileHeader = props => {
       ) : (
         <>
           <div />
-          <Welcome>기본정보</Welcome>
+          <Welcome>내 정보</Welcome>
           <FontAwesomeIcon
             icon={faTools}
             size="lg"
@@ -343,7 +343,7 @@ const ProfileRow = props => {
   const { row } = props;
   return (
     <>
-      <TableRow>
+      <TableRow key={`${row[0]}profileRow`}>
         <TableCell component="th" scope="row">
           {accountData[row[0]]}
         </TableCell>
@@ -421,7 +421,7 @@ const EditRow = props => {
     typeChange
   } = props;
   return (
-    <TableRow>
+    <TableRow key={`${row[0]}profileRow`}>
       <TableCell component="th" scope="row">
         {accountData[row[0]]}
       </TableCell>
@@ -484,7 +484,7 @@ const ProfileBody = props => {
                     key={`${row[0]}editRow`}
                   />
                 ) : (
-                  <ProfileRow row={row} key={`${row[0]}profileRow`} />
+                  <ProfileRow row={row} />
                 )}
               </>
             ))}
