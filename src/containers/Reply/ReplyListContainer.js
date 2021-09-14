@@ -15,7 +15,7 @@ import {
 } from '../../modules/reply';
 
 const ReplyListContainer = props => {
-  const { location, match, history } = props;
+  const { location, match, history, replyReportHandle } = props;
   const dispatch = useDispatch();
   const {
     data,
@@ -104,6 +104,7 @@ const ReplyListContainer = props => {
       baseUrl={match.url}
       handleAddReplyChild={handleAddReplyChild}
       onUpdate={onUpdate}
+      replyReportHandle={replyReportHandle}
     />
   );
 };

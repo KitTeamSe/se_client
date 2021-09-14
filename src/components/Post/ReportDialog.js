@@ -6,59 +6,43 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField,
-  Select,
-  MenuItem
+  TextField
 } from '@material-ui/core';
-import { reportType } from '../../DataExport';
-
-const FormSelectField = styled(Select)`
-  margin: 1.5rem 0;
-`;
 
 const FlexBox = styled.div`
   display: flex;
   flex-direction: column;
   text-align: left;
+  width: 20rem;
 `;
 
-const PostReportDialog = props => {
+const ReportDialog = props => {
   const {
     reportOpen,
     reportBoxHandle,
     reportSubmit,
     reportDescription,
     descriptionChange,
-    reportTypeSelect,
-    reportTypeChange
+    reportType,
+    targetName
   } = props;
   return (
     <Dialog
       open={reportOpen}
-      onClose={reportOpen}
+      onClose={reportBoxHandle}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">신고</DialogTitle>
+      <DialogTitle id="alert-dialog-title">
+        {targetName} 님의 {reportType === 'POST' ? '게시글' : '댓글'} 신고
+      </DialogTitle>
       <DialogContent>
         <FlexBox>
-          <FormSelectField
-            name="editType"
-            id="form1"
-            value={reportTypeSelect}
-            onChange={reportTypeChange}
-          >
-            {reportType.map(menu => (
-              <MenuItem value={menu} key={menu}>
-                {menu}
-              </MenuItem>
-            ))}
-          </FormSelectField>
           <TextField
             id="outlined-multiline-static"
             label="신고내용"
             multiline
-            rows={4}
+            rows={6}
             variant="outlined"
             value={reportDescription}
             onChange={descriptionChange}
@@ -77,4 +61,4 @@ const PostReportDialog = props => {
   );
 };
 
-export default PostReportDialog;
+export default ReportDialog;

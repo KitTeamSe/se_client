@@ -10,7 +10,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ConditionClassify, menuStorage } from '../../DataExport';
-import ReplyTestPage from '../Reply/ReplyTestPage';
+import ReplyListContainer from '../../containers/Reply/ReplyListContainer';
 import Tags from './Tags';
 
 const LoadingCircle = styled(CircularProgress)`
@@ -223,7 +223,7 @@ const PostHeaderInfo = props => {
             keepMounted
             open={Boolean(moremenuEl)}
             onClose={menuClick}
-         style={{ marginLeft: '1.75rem' }}
+            style={{ marginLeft: '1.75rem' }}
           >
             {menuItem('menu')}
           </Menu>
@@ -318,7 +318,8 @@ const Post = props => {
     userId,
     postDeleteData,
     postDeleteLoading,
-    postDeleteError
+    postDeleteError,
+    replyReportHandle
   } = props;
 
   if (error) {
@@ -359,7 +360,7 @@ const Post = props => {
         userId={userId}
       />
       <PostMain res={res} />
-      <ReplyTestPage />
+      <ReplyListContainer replyReportHandle={replyReportHandle} />
     </MainWrapper>
   );
 };

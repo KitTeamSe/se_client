@@ -130,11 +130,14 @@ const ReplyAction = props => {
     replyId,
     isSecret,
     handleAddReplyChild,
-    onUpdate
+    onUpdate,
+    replyReportHandle
   } = props;
-
+  const userId = localStorage.getItem('userId');
   const onAddReply = () => handleAddReplyChild(parentId || replyId);
   const onUpdateReply = () => onUpdate(replyId);
+  const onReplyReport = () =>
+    replyReportHandle(replyId, accountId, anonymousNickname);
 
   return (
     <ActionWrapper>
@@ -146,9 +149,7 @@ const ReplyAction = props => {
         />
       )}
       <ActionButton onClick={onAddReply}>댓글</ActionButton>
-      {localStorage.getItem('token') &&
-      localStorage.getItem('userId') &&
-      accountId ? (
+      {userId && accountId ? (
         <>
           <ActionButton onClick={onUpdateReply}>수정</ActionButton>
           <ReplyDeleteContainer replyId={replyId} />
@@ -159,6 +160,9 @@ const ReplyAction = props => {
           <ActionButton onClick={onUpdateReply}>수정</ActionButton>
           <ReplyAnonyDeleteContainer replyId={replyId} />
         </>
+      ) : null}
+      {userId && userId !== accountId ? (
+        <ActionButton onClick={onReplyReport}>신고</ActionButton>
       ) : null}
     </ActionWrapper>
   );
@@ -199,7 +203,8 @@ export const ReplyContent = props => {
     isSecret,
     isDelete,
     handleAddReplyChild,
-    onUpdate
+    onUpdate,
+    replyReportHandle
   } = props;
 
   return (
@@ -216,6 +221,7 @@ export const ReplyContent = props => {
           isSecret={isSecret}
           handleAddReplyChild={handleAddReplyChild}
           onUpdate={onUpdate}
+          replyReportHandle={replyReportHandle}
         />
       )}
     </ContentWrapper>
@@ -234,7 +240,8 @@ const Reply = props => {
     isDelete,
     handleAddReplyChild,
     onUpdate,
-    children
+    children,
+    replyReportHandle
   } = props;
 
   return (
@@ -257,6 +264,7 @@ const Reply = props => {
             isDelete={isDelete}
             handleAddReplyChild={handleAddReplyChild}
             onUpdate={onUpdate}
+            replyReportHandle={replyReportHandle}
           />
         </ReplyWrapper>
       )}
