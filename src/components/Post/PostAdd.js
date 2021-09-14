@@ -1,35 +1,13 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
-import {
-  Switch,
-  FormControlLabel,
-  Input,
-  Button,
-  Chip
-} from '@material-ui/core';
-import {
-  faRedo,
-  faPlus as faPlusCircle
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import styled from 'styled-components';
+import { Switch, FormControlLabel, Input, Button } from '@material-ui/core';
 import confirmFileExtension from '../../utils/confirmFileExtension';
 import AttachImageList from '../Editor/AttachImageList';
 import AttachList from '../Editor/AttachList';
 import Editor from '../Editor/Editor';
 import FileAttachDropZone from '../FileAttachDropZone/FileAttachDropZone';
 import ErrorMessage from '../Action/ErrorMessage';
-
-const boxFade = keyframes`
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-`;
+import PostTagAdd from './PostTagAdd';
 
 const Wrapper = styled.div`
   display: flex;
@@ -42,22 +20,6 @@ const Wrapper = styled.div`
   }
 `;
 
-const TagWrapper = styled.div`
-  display: flex;
-  justifycontent: center;
-  flexwrap: wrap;
-  liststyle: none;
-  margin-bottom: 5px;
-`;
-
-const TagActionsWrapper = styled.div`
-  display: flex;
-`;
-
-const TagListWrapper = styled.div`
-  display: flex;
-`;
-
 const TitleInput = styled.input`
   width: 100%;
   font-size: 1.5rem;
@@ -68,7 +30,6 @@ const TitleInput = styled.input`
 
   &:focus {
     outline: none;
-    animation: ${boxFade};
     border-bottom: 2px solid #000;
   }
 `;
@@ -109,18 +70,6 @@ const ButtonStyled = styled(Button)`
   padding: 6px 12px;
   border-radius: 100px;
   margin-left: 10px;
-`;
-
-const Icon = styled(FontAwesomeIcon)`
-  font-size: 0.875rem;
-  margin-left: 6px;
-  margin-right: -9px;
-`;
-
-const ChipStyled = styled(Chip)`
-  font-size: 0.75rem;
-  height: 28px;
-  margin-right: 3px;
 `;
 
 const SecretToggle = props => {
@@ -172,73 +121,29 @@ const PostTitle = props => {
       value={value}
       onChange={onChange}
       placeholder="제목을 입력하세요"
+      required
     />
   );
 };
 
-const PostTagInput = () => {
+const PostAddAction = props => {
+  const { onSubmit } = props;
   return (
-    <TagWrapper>
-      <TagActionsWrapper>
-        <ChipStyled
-          color="secondary"
-          icon={<Icon icon={faRedo} />}
-          label="초기화"
-          disabled
-        />
-        <TagListWrapper>
-          <ChipStyled
-            variant="outlined"
-            label="data"
-            onDelete={() => console.log('a')}
-          />
-          <ChipStyled
-            variant="outlined"
-            label="data"
-            onDelete={() => console.log('a')}
-          />
-          <ChipStyled
-            variant="outlined"
-            label="data"
-            onDelete={() => console.log('a')}
-          />
-          <ChipStyled
-            variant="outlined"
-            label="data"
-            onDelete={() => console.log('a')}
-          />
-        </TagListWrapper>
-        <ChipStyled icon={<Icon icon={faPlusCircle} />} label="태그 추가" />
-      </TagActionsWrapper>
-    </TagWrapper>
+    <ButtonWrapper>
+      <ButtonStyled
+        variant="contained"
+        color="default"
+        size="small"
+        type="submit"
+        onClick={onSubmit}
+      >
+        작성
+      </ButtonStyled>
+    </ButtonWrapper>
   );
 };
-
-const PostAddHeader = props => {
-  const { value, onChange } = props;
-  return (
-    <>
-      <PostTitle value={value} onChange={onChange} />
-      <PostTagInput />
-    </>
-  );
-};
-
-const PostAddAction = () => (
-  <ButtonWrapper>
-    <ButtonStyled
-      variant="contained"
-      color="default"
-      size="small"
-      type="submit"
-    >
-      작성
-    </ButtonStyled>
-  </ButtonWrapper>
-);
-
 const PostAddFooter = props => {
-  const { addForm, handleChange, handleSecret } = props;
+  const { addForm, handleChange, handleSecret, onSubmit } = props;
 
   return (
     <Wrapper>
@@ -246,8 +151,9 @@ const PostAddFooter = props => {
         addForm={addForm}
         handleChange={handleChange}
         handleSecret={handleSecret}
+        onSubmit={onSubmit}
       />
-      <PostAddAction />
+      <PostAddAction onSubmit={onSubmit} />
     </Wrapper>
   );
 };
@@ -268,8 +174,9 @@ const PostAdd = props => {
     onDeleteAttach
   } = props;
   return (
-    <form onSubmit={onSubmit}>
-      <PostAddHeader addForm={addForm} onChange={handleChange} />
+    <>
+      <PostTitle addForm={addForm} onChange={handleChange} />
+      <PostTagAdd />
       <Editor
         onChange={handleContentText}
         data={addForm.text}
@@ -293,10 +200,11 @@ const PostAdd = props => {
         addForm={addForm}
         handleChange={handleChange}
         handleSecret={handleSecret}
+        onSubmit={onSubmit}
         onCancel={onCancel}
       />
       <ErrorMessage loading={addLoading} error={addError} />
-    </form>
+    </>
   );
 };
 
