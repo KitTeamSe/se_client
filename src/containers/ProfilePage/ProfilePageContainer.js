@@ -31,16 +31,16 @@ const ProfilePageContainer = props => {
   }
 
   const {
-    myinformation,
-    myinformationLoading,
+    data,
+    loading,
     myinfoError,
     myinfoEditRes,
     myinfoEditError,
     newPwForm,
     withDrawalForm
   } = useSelector(({ account }) => ({
-    myinformation: account.myinfo.data,
-    myinformationLoading: account.myinfo.loading,
+    data: account.myinfo.data,
+    loading: account.myinfo.loading,
     myinfoError: account.myinfo.error,
     myinfoEditRes: account.myinfoEditRes.data,
     myinfoEditError: account.myinfoEditRes.error,
@@ -54,30 +54,33 @@ const ProfilePageContainer = props => {
   }, [match.params]);
 
   const editFormRefresh = () => {
-    if (myinformation) {
-      const { data } = myinformation;
-      setInfoObj(data);
-      setInfoEditObj(data);
+    if (data) {
+      const res = data.data;
+      setInfoObj(res);
+      setInfoEditObj(res);
     }
   };
 
   useEffect(() => {
     editFormRefresh();
-  }, [myinformation]);
+  }, [data]);
 
   useEffect(() => {
     if (myinfoError) {
-      setInfoObj({ Error: String(myinfoError) });
       setError(String(myinfoError));
     }
     if (myinfoEditError) {
       setError(String(myinfoEditError));
     }
+  }, [myinfoError, myinfoEditError]);
+
+  useEffect(() => {
     if (myinfoEditRes) {
-      dispatch(myinfo({ token }));
+      const id = match.params.userId;
+      dispatch(myinfo({ id }));
       setMode(null);
     }
-  }, [myinfoError, myinfoEditError, myinfoEditRes]);
+  }, [myinfoEditRes]);
 
   const handleChange = e => {
     e.preventDefault();
@@ -231,7 +234,7 @@ const ProfilePageContainer = props => {
         modeChange={modeChange}
         myinfoEditSubmit={myinfoEditSubmit}
         editFormRefresh={editFormRefresh}
-        myinformationLoading={myinformationLoading}
+        loading={loading}
       />
     </>
   );

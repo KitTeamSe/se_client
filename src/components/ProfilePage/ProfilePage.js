@@ -29,7 +29,7 @@ import {
 const MainWrapper = styled.div`
   margin: auto;
   margin-top: 3rem;
-  width: 70vw;
+  width: 30vw;
   padding: 1.5rem;
   display: display;
   align-items: center;
@@ -105,11 +105,10 @@ const FormSelectField = styled(Select)`
 `;
 
 const RefreshIcon = styled(FontAwesomeIcon)`
-  position: absolute;
-  right: -10px;
-  transition: 0.5s;
+  margin-left: 1.5rem;
+  transition: 1s;
   &:hover {
-    transform: rotate(180deg);
+    transform: rotate(360deg);
     transition: 1s;
   }
 `;
@@ -140,19 +139,21 @@ const ProfileHeader = props => {
         <>
           <div />
           <Welcome>내 정보</Welcome>
-          <FontAwesomeIcon
-            icon={faTimesCircle}
-            size="lg"
-            color="#DC143C"
-            style={{ cursor: 'pointer' }}
-            onClick={modeChange}
-          />
-          <RefreshIcon
-            icon={faSyncAlt}
-            size="lg"
-            style={{ cursor: 'pointer' }}
-            onClick={editFormRefresh}
-          />
+          <div>
+            <FontAwesomeIcon
+              icon={faTimesCircle}
+              size="lg"
+              color="#DC143C"
+              style={{ cursor: 'pointer' }}
+              onClick={modeChange}
+            />
+            <RefreshIcon
+              icon={faSyncAlt}
+              size="lg"
+              style={{ cursor: 'pointer' }}
+              onClick={editFormRefresh}
+            />
+          </div>
         </>
       ) : (
         <>
@@ -346,8 +347,7 @@ const ProfileBody = props => {
 };
 
 const PropfilePage = props => {
-  const { infoObj, infoEditObj, anchorEl, error, mode, myinformationLoading } =
-    props;
+  const { infoObj, infoEditObj, anchorEl, error, mode, loading } = props;
 
   const {
     handleChange,
@@ -360,7 +360,7 @@ const PropfilePage = props => {
     editFormRefresh
   } = props;
 
-  if (infoObj === null || myinformationLoading) {
+  if (infoObj === null || loading) {
     return (
       <Wrapper>
         <LoadingCircle />
