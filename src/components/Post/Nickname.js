@@ -10,6 +10,11 @@ const Nickname = props => {
   const { nickname, accountIdString, anchorEl, menuHandle, GoUserProfile } =
     props;
 
+  const userId = localStorage.getItem('userId');
+
+  if (!userId) {
+    return <span>{nickname}</span>;
+  }
   return (
     <>
       {accountIdString ? (

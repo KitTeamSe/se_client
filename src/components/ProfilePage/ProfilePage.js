@@ -130,7 +130,11 @@ const ProfileHeader = props => {
   } = props;
 
   if (profileUserId !== userId) {
-    return <Welcome>{profileUserId} 님의 정보</Welcome>;
+    return (
+      <MyinfoHeader>
+        <Welcome>{profileUserId} 님의 정보</Welcome>
+      </MyinfoHeader>
+    );
   }
 
   return (
