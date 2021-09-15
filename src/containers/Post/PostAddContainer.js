@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PostAdd from '../../components/Post/PostAdd';
 import { addAttachList } from '../../modules/attach';
+import { searchTag, changeText } from '../../modules/tag';
 import { addPost, changeField, initialize } from '../../modules/post';
 import confirmFileExtension from '../../utils/confirmFileExtension';
 import { getDecodeHTML } from '../../utils/format';
@@ -16,14 +17,22 @@ const PostAddContainer = props => {
     addError,
     addAttachData,
     attachLoading,
-    attachError
-  } = useSelector(({ post, attach }) => ({
+    attachError,
+    searchText,
+    searchTagData,
+    searchTagLoading,
+    searchTagError
+  } = useSelector(({ post, attach, tag }) => ({
     addForm: post.addForm,
     addLoading: post.addPost.loading,
     addError: post.addPost.error,
     addAttachData: attach.addAttach.data,
     attachLoading: attach.addAttach.loading,
-    attachError: attach.addAttach.error
+    attachError: attach.addAttach.error,
+    searchText: tag.searchText,
+    searchTagData: tag.searchTag.data,
+    searchTagLoading: tag.searchTag.loading,
+    searchTagError: tag.searchTag.error
   }));
 
   const handleChange = e => {
@@ -61,6 +70,11 @@ const PostAddContainer = props => {
         value
       })
     );
+  };
+
+  const handleSearchTag = (e, value) => {
+    const newSearchText = value || '';
+    dispatch(changeText({ searchText: newSearchText }));
   };
 
   const handleAttachFiles = files => {
@@ -159,6 +173,12 @@ const PostAddContainer = props => {
     }
   }, [addAttachData]);
 
+  useEffect(() => {
+    if (searchText) {
+      dispatch(searchTag({ text: searchText }));
+    }
+  }, [searchText]);
+
   return (
     <PostAdd
       addForm={addForm}
@@ -166,10 +186,15 @@ const PostAddContainer = props => {
       addError={addError}
       attachLoading={attachLoading}
       attachError={attachError}
+      searchText={searchText}
+      searchTagData={searchTagData}
+      searchTagLoading={searchTagLoading}
+      searchTagError={searchTagError}
       handleChange={handleChange}
       handleSecret={handleSecret}
       handleContentText={handleContentText}
       handleAttachFiles={handleAttachFiles}
+      handleSearchTag={handleSearchTag}
       onSubmit={onSubmit}
       onCancel={onCancel}
       onDeleteAttach={onDeleteAttach}

@@ -165,10 +165,16 @@ const PostAdd = props => {
     addError,
     attachLoading,
     attachError,
+    searchText,
+    searchTagData,
+    searchTagLoading,
+    searchTagError,
     handleChange,
     handleSecret,
     handleContentText,
     handleAttachFiles,
+    handleSearchTag,
+    handleAddTag,
     onSubmit,
     onCancel,
     onDeleteAttach
@@ -176,7 +182,15 @@ const PostAdd = props => {
   return (
     <>
       <PostTitle addForm={addForm} onChange={handleChange} />
-      <PostTagAdd />
+      <PostTagAdd
+        value={searchText}
+        tagData={addForm.tagList}
+        searchTagData={searchTagData}
+        searchTagLoading={searchTagLoading}
+        searchTagError={searchTagError}
+        handleAddTag={handleAddTag}
+        handleSearchTag={handleSearchTag}
+      />
       <Editor
         onChange={handleContentText}
         data={addForm.text}

@@ -9,14 +9,14 @@ import reducerUtils from '../../libs/reducerUtils';
 
 // Actions
 const INITIALIZE = 'tag/INITIALIZE';
-const CHANGE_TAG_TEXT = 'tag/CHANGE_TAG_TEXT';
+const CHANGE_TEXT = 'tag/CHANGE_TEXT';
 const [SEARCH_TAG, SEARCH_TAG_SUCCESS, SEARCH_TAG_FAILURE] =
   createRequestActionTypes('tag/SEARCH_TAG');
 
 // Action Creators
 export const initialize = createAction(INITIALIZE);
-export const changeSelect = createAction(CHANGE_TAG_TEXT, ({ search }) => ({
-  search
+export const changeText = createAction(CHANGE_TEXT, ({ searchText }) => ({
+  searchText
 }));
 export const searchTag = createAction(SEARCH_TAG, ({ text }) => ({
   text
@@ -24,22 +24,22 @@ export const searchTag = createAction(SEARCH_TAG, ({ text }) => ({
 
 // Sagas
 const searchTagSaga = createRequestSaga(SEARCH_TAG, api.searchTag);
-export function* attachSaga() {
+export function* tagSaga() {
   yield takeLatest(SEARCH_TAG, searchTagSaga);
 }
 
 // reducer (handleActions => switch문 대체)
 const initialState = {
-  search: [],
+  searchText: '',
   searchTag: reducerUtils.initial()
 };
 
 export default handleActions(
   {
     [INITIALIZE]: () => initialState,
-    [CHANGE_TAG_TEXT]: (state, { payload: { search } }) => ({
+    [CHANGE_TEXT]: (state, { payload: { searchText } }) => ({
       ...state,
-      search
+      searchText
     }),
 
     [SEARCH_TAG]: state => ({

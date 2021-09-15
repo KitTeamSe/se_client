@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Chip, TextField } from '@material-ui/core';
-import { faRedo, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Chip, TextField, Button, Paper } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 
 const TagWrapper = styled.div`
@@ -20,24 +18,12 @@ const TagActionWrapper = styled.div`
 const TagInputWrapper = styled.div`
   display: flex;
   width: 100%;
-  @media ${props => props.theme.mobile} {
-    flex-direction: column;
-  }
 `;
 
 const TagListWrapper = styled.div`
   display: flex;
   margin-bottom: 5px;
   flex-wrap: wrap;
-  @media ${props => props.theme.mobile} {
-    flex-direction: column;
-  }
-`;
-
-const Icon = styled(FontAwesomeIcon)`
-  font-size: 0.875rem;
-  margin-left: 6px;
-  margin-right: -9px;
 `;
 
 const ChipStyled = styled(Chip)`
@@ -53,82 +39,74 @@ const ChipStyled = styled(Chip)`
   }
 `;
 
+const ButtonStyled = styled(Button)`
+  border-radius: 50px;
+  font-size: 0.75rem;
+  height: 28px;
+  margin-right: 3px;
+  & span {
+    width: 100%;
+    text-align: center;
+    white-space: nowrap;
+  }
+`;
+
 const AutocompleteStyled = styled(Autocomplete)`
   width: 100%;
   margin-bottom: 5px;
 `;
 
+const PaperStyled = styled(Paper)`
+  & li {
+    min-height: auto;
+  }
+`;
+
 const PostTagInput = props => {
-  const {
-    data = [
-      {
-        tagId: 1,
-        text: '1학년'
-      },
-      {
-        tagId: 2,
-        text: '2학년'
-      },
-      {
-        tagId: 3,
-        text: '3학년'
-      },
-      {
-        tagId: 4,
-        text: '4학년'
-      }
-    ],
-    value = '',
-    onChange = () => console.log('ch')
-  } = props;
+  const { value, data, loading, onChange, handleAddTag } = props;
 
   return (
     <TagInputWrapper>
       <AutocompleteStyled
-        id="free-solo-demo"
+        id="search-tag"
+        size="small"
         value={value}
+        inputValue={value}
         onChange={onChange}
+        onInputChange={onChange}
         freeSolo
-        options={data.map(option => option.text)}
-        renderInput={params => <TextField {...params} />}
+        options={data ? data.data.map(option => option.text) : []}
+        loading={loading}
+        PaperComponent={({ children }) => (
+          <PaperStyled variant="outlined" square>
+            {children}
+          </PaperStyled>
+        )}
+        renderInput={params => (
+          <TextField {...params} placeholder="태그 검색" />
+        )}
       />
       <TagActionWrapper>
-        <ChipStyled icon={<Icon icon={faPlus} />} label="태그 추가" />
+        <ButtonStyled variant="contained" size="small" onClick={handleAddTag}>
+          태그 추가
+        </ButtonStyled>
       </TagActionWrapper>
     </TagInputWrapper>
   );
 };
 
 const PostTagList = props => {
-  const {
-    data = [
-      {
-        tagId: 1,
-        text: '1학년'
-      },
-      {
-        tagId: 2,
-        text: '2학년'
-      },
-      {
-        tagId: 3,
-        text: '3학년'
-      },
-      {
-        tagId: 4,
-        text: '4학년'
-      }
-    ],
-    handleRemoveTag = () => console.log('removetag')
-  } = props;
+  const { data, handleRemoveTag } = props;
   return (
     <TagListWrapper>
-      <ChipStyled
+      <ButtonStyled
+        variant="contained"
         color="secondary"
-        icon={<Icon icon={faRedo} />}
-        label="초기화"
-        disabled={!data.length}
-      />
+        size="small"
+        // disabled={!data.length}
+      >
+        초기화
+      </ButtonStyled>
       {data.map(e => (
         <ChipStyled
           variant="outlined"
@@ -147,33 +125,27 @@ const PostTagList = props => {
 
 const PostTagAdd = props => {
   const {
-    data = [
-      {
-        tagId: 1,
-        text: '1학년'
-      },
-      {
-        tagId: 2,
-        text: '2학년'
-      },
-      {
-        tagId: 3,
-        text: '3학년'
-      },
-      {
-        tagId: 4,
-        text: '4학년'
-      }
-    ],
-    value = '',
-    onChange = () => console.log('ch'),
-    handleRemoveTag = () => console.log('removetag')
+    value,
+    tagData,
+    searchTagData,
+    searchTagLoading,
+    searchTagError,
+    handleSearchTag,
+    handleAddTag,
+    handleRemoveTag
   } = props;
 
   return (
     <TagWrapper>
-      <PostTagInput value={value} onChange={onChange} />
-      <PostTagList data={data} handleRemoveTag={handleRemoveTag} />
+      <PostTagInput
+        value={value}
+        data={searchTagData}
+        loading={searchTagLoading}
+        error={searchTagError}
+        onChange={handleSearchTag}
+        handleAddTag={handleAddTag}
+      />
+      <PostTagList data={tagData} handleRemoveTag={handleRemoveTag} />
     </TagWrapper>
   );
 };
