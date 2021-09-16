@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import ReplyUpdateContainer from '../containers/Reply/ReplyUpdateContainer';
+import PostAddContainer from '../containers/Post/PostAddContainer';
 
 const ContentWrapper = styled.div`
   margin-top: 3rem;
@@ -24,18 +24,17 @@ const MainWrapper = styled.div`
   width: 70vw;
   @media ${props => props.theme.mobile} {
     width: 100vw;
-    max-width: 100%;
   }
 `;
 
-const ReplyUpdatePage = () => {
+const PostWritePage = () => {
   return (
     <MainWrapper>
       <ContentWrapper>
-        <ReplyUpdateContainer />
+        <PostAddContainer />
       </ContentWrapper>
     </MainWrapper>
   );
 };
 
-export default ReplyUpdatePage;
+export default PostWritePage;

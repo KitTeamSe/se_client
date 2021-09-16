@@ -1,7 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { faEye, faCommentAlt, faLock } from '@fortawesome/free-solid-svg-icons';
+import {
+  faEye,
+  faCommentAlt,
+  faLock,
+  faEdit
+} from '@fortawesome/free-solid-svg-icons';
 import {
   CircularProgress,
   Table,
@@ -13,7 +18,8 @@ import {
   Paper,
   TextField,
   Select,
-  MenuItem
+  MenuItem,
+  Button
 } from '@material-ui/core';
 import { Pagination, PaginationItem } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -139,6 +145,13 @@ const PaginationStyled = styled(Pagination)`
   }
 `;
 
+const ButtonStyled = styled(Button)`
+  font-weight: 500;
+  line-height: 1.5;
+  padding: 6px 12px;
+  border-radius: 100px;
+`;
+
 const Paginations = props => {
   const { res, boardNameEng, boardPage } = props;
   const totalPage = res.postListItem.totalPages;
@@ -255,6 +268,7 @@ const BoardHeader = props => {
     keyword,
     onSearch,
     onSearchChange,
+    onWritePost,
     boardDescription
   } = props;
   return (
@@ -283,6 +297,16 @@ const BoardHeader = props => {
             onChange={onSearchChange}
           />
         </SearchBar>
+
+        <ButtonStyled
+          variant="contained"
+          color="default"
+          size="small"
+          startIcon={<FontAwesomeIcon icon={faEdit} size="sm" />}
+          onClick={onWritePost}
+        >
+          글쓰기
+        </ButtonStyled>
       </BoardHeadRight>
     </BoardHead>
   );
@@ -299,6 +323,7 @@ const Board = props => {
     searchKeyword,
     onSearch,
     onPostSearchTypeChange,
+    onWritePost,
     postSearchType,
     boardNameEng,
     boardPage,
@@ -326,6 +351,7 @@ const Board = props => {
         keyword={keyword}
         onSearch={onSearch}
         onSearchChange={onSearchChange}
+        onWritePost={onWritePost}
       />
       {res.postListItem.content.length === 0 ? (
         <NoPost searchKeyword={searchKeyword} />

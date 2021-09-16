@@ -21,7 +21,7 @@ const getColor = props => {
 const getComment = props => {
   const { isDragAccept, isDragReject, isDragActive } = props;
   if (isDragAccept) {
-    return '✅ 이미지 파일 추가';
+    return '✅ 첨부파일 추가';
   }
   if (isDragReject) {
     return '❌ 파일 업로드 불가 파일이 제외됩니다';
@@ -29,7 +29,7 @@ const getComment = props => {
   if (isDragActive) {
     return '⛔ 드래그 활성화 안됨';
   }
-  return '이미지 파일 추가';
+  return '첨부파일 추가';
 };
 
 const Container = styled.div`

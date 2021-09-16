@@ -1,5 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
 import { takeLatest } from 'redux-saga/effects';
+import produce from 'immer';
 import * as api from '../../libs/api/post';
 import {
   createRequestActionTypes,
@@ -9,6 +10,10 @@ import reducerUtils from '../../libs/reducerUtils';
 
 // Actions
 const INITIALIZE = 'post/INITIALIZE';
+
+const INITIALIZE_FORM = 'post/INITIALIZE_FORM';
+
+const CHANGE_FIELD = 'post/CHANGE_FIELD';
 
 const [LOAD_POST_LIST, LOAD_POST_LIST_SUCCESS, LOAD_POST_LIST_FAILURE] =
   createRequestActionTypes('post/LOAD_POST_LIST');
@@ -34,11 +39,25 @@ const [
   ANONYMOUS_POST_DELETE_FAILURE
 ] = createRequestActionTypes('post/ANONYMOUS_POST_DELETE');
 
+const [ADD_POST, ADD_POST_SUCCESS, ADD_POST_FAILURE] =
+  createRequestActionTypes('post/ADD_POST');
+
 const [POST_REPORT, POST_REPORT_SUCCESS, POST_REPORT_FAILURE] =
   createRequestActionTypes('post/POST_REPORT');
 
 // Action Creators
-export const initialize = createAction(INITIALIZE, form => form);
+export const initialize = createAction(INITIALIZE);
+
+export const initializeForm = createAction(INITIALIZE_FORM);
+
+export const changeField = createAction(
+  CHANGE_FIELD,
+  ({ form, key, value }) => ({
+    form,
+    key,
+    value
+  })
+);
 
 export const loadPostList = createAction(
   LOAD_POST_LIST,
@@ -84,6 +103,27 @@ export const anonymousPostDelete = createAction(
   })
 );
 
+export const addPost = createAction(
+  ADD_POST,
+  ({
+    anonymous,
+    attachmentList,
+    boardNameEng,
+    isNotice,
+    isSecret,
+    postContent,
+    tagList
+  }) => ({
+    anonymous,
+    attachmentList,
+    boardNameEng,
+    isNotice,
+    isSecret,
+    postContent,
+    tagList
+  })
+);
+
 export const postReport = createAction(
   POST_REPORT,
   ({ description, reportType, targetId }) => ({
@@ -107,6 +147,7 @@ const anonymousPostDeleteSaga = createRequestSaga(
   ANONYMOUS_POST_DELETE,
   api.anonymousPostDelete
 );
+const addPostSaga = createRequestSaga(ADD_POST, api.addPost);
 const postReportSaga = createRequestSaga(POST_REPORT, api.reportPost);
 
 export function* postSaga() {
@@ -117,24 +158,50 @@ export function* postSaga() {
   yield takeLatest(LOAD_SECRET_POST, loadSecretPostSaga);
   yield takeLatest(POST_DELETE, postDeleteSaga);
   yield takeLatest(ANONYMOUS_POST_DELETE, anonymousPostDeleteSaga);
+  yield takeLatest(ADD_POST, addPostSaga);
   yield takeLatest(POST_REPORT, postReportSaga);
 }
 
 // reducer (handleActions => switch문 대체)
 const initialState = {
+  addForm: {
+    anonymousNickname: '',
+    anonymousPassword: '',
+    attachmentList: [],
+    isNotice: 'NORMAL',
+    isSecret: 'NORMAL',
+    text: '',
+    title: '',
+    tagList: []
+  },
   loadedPostList: reducerUtils.initial(),
   loadedMenuList: reducerUtils.initial(),
   loadedPost: reducerUtils.initial(),
   postDeleteRes: reducerUtils.initial(),
+  addPost: reducerUtils.initial(),
   reportRes: reducerUtils.initial()
 };
 
 export default handleActions(
   {
-    [INITIALIZE]: (state, { payload: form }) => ({
+    [INITIALIZE]: () => initialState,
+    [INITIALIZE_FORM]: state => ({
       ...state,
-      [form]: initialState[form]
+      addForm: {
+        anonymousNickname: '',
+        anonymousPassword: '',
+        attachmentList: [],
+        isNotice: 'NORMAL',
+        isSecret: 'NORMAL',
+        text: '',
+        title: '',
+        tagList: []
+      }
     }),
+    [CHANGE_FIELD]: (state, { payload: { key, form, value } }) =>
+      produce(state, draft => {
+        draft[form][key] = value;
+      }),
     [LOAD_POST_LIST]: state => ({
       ...state,
       loadedPostList: reducerUtils.loading(state.loadedPostList.data)
@@ -218,6 +285,18 @@ export default handleActions(
     [ANONYMOUS_POST_DELETE_FAILURE]: (state, { payload: error }) => ({
       ...state,
       postDeleteRes: reducerUtils.error(error)
+    }),
+    [ADD_POST]: state => ({
+      ...state,
+      addPost: reducerUtils.loading(state.addPost.data)
+    }),
+    [ADD_POST_SUCCESS]: (state, { payload: response }) => ({
+      ...state,
+      addPost: reducerUtils.success(response)
+    }),
+    [ADD_POST_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      addPost: reducerUtils.error(error)
     }),
     [POST_REPORT]: state => ({
       ...state,
