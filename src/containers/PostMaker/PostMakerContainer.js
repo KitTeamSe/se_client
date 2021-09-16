@@ -9,7 +9,7 @@ const makePost = async () => {
       anonymousPassword: 'asdf1234'
     },
     attachmentList: [],
-    boardId: 1,
+    boardNameEng: 'freeboard',
     isNotice: 'NORMAL',
     isSecret: 'NORMAL',
     postContent: {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import {
   faEye,
@@ -24,7 +24,6 @@ import {
 import { Pagination, PaginationItem } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { postSearchTypeList } from '../../DataExport';
-import PostContainer from '../../containers/Post/PostContainer';
 import Tags from '../Post/Tags';
 
 const LoadingCircle = styled(CircularProgress)`
@@ -34,12 +33,17 @@ const LoadingCircle = styled(CircularProgress)`
 
 const MainWrapper = styled.div`
   margin: auto;
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 70vw;
+  padding: 0 1.5rem;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   @media ${props => props.theme.mobile} {
-    width: 100vw;
+    width: calc(100vw - 1rem);
+    margin-top: 1rem;
+    padding: 0.5rem;
   }
 `;
 
@@ -121,6 +125,12 @@ const FormSelectField = styled(Select)`
 `;
 
 const BoardHeadRight = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const BoardHeadLeft = styled.div`
+  font-size: 1.5rem;
   display: flex;
   align-items: center;
 `;
@@ -258,11 +268,12 @@ const BoardHeader = props => {
     keyword,
     onSearch,
     onSearchChange,
-    onWritePost
+    onWritePost,
+    boardDescription
   } = props;
   return (
     <BoardHead>
-      <div />
+      <BoardHeadLeft>{boardDescription}</BoardHeadLeft>
       <BoardHeadRight>
         <FormSelectField
           margin="dense"
@@ -312,10 +323,10 @@ const Board = props => {
     searchKeyword,
     onSearch,
     onPostSearchTypeChange,
-    onWritePost,
     postSearchType,
     boardNameEng,
-    boardPage
+    boardPage,
+    boardDescription
   } = props;
 
   if (error) {
@@ -332,34 +343,27 @@ const Board = props => {
   const res = data.data;
   return (
     <MainWrapper>
-      <Route
-        exact
-        path="/board/:boardNameEng/:postId"
-        component={PostContainer}
+      <BoardHeader
+        boardDescription={boardDescription}
+        postSearchType={postSearchType}
+        onPostSearchTypeChange={onPostSearchTypeChange}
+        keyword={keyword}
+        onSearch={onSearch}
+        onSearchChange={onSearchChange}
       />
-      <Route path="/board/:boardNameEng">
-        <BoardHeader
-          postSearchType={postSearchType}
-          onPostSearchTypeChange={onPostSearchTypeChange}
-          keyword={keyword}
-          onSearch={onSearch}
-          onSearchChange={onSearchChange}
-          onWritePost={onWritePost}
-        />
-        {res.postListItem.content.length === 0 ? (
-          <NoPost searchKeyword={searchKeyword} />
-        ) : (
-          <>
-            <MainTable res={res} boardNameEng={boardNameEng} />
-            <Paginations
-              res={res}
-              onChange={onChange}
-              boardNameEng={boardNameEng}
-              boardPage={boardPage}
-            />
-          </>
-        )}
-      </Route>
+      {res.postListItem.content.length === 0 ? (
+        <NoPost searchKeyword={searchKeyword} />
+      ) : (
+        <>
+          <MainTable res={res} boardNameEng={boardNameEng} />
+          <Paginations
+            res={res}
+            onChange={onChange}
+            boardNameEng={boardNameEng}
+            boardPage={boardPage}
+          />
+        </>
+      )}
     </MainWrapper>
   );
 };

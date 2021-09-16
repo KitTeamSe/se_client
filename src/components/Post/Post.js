@@ -1,18 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {
-  CircularProgress,
-  Menu,
-  MenuItem,
-  TextField,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle
-} from '@material-ui/core';
-
+import { CircularProgress, Menu, MenuItem, TextField } from '@material-ui/core';
 import {
   faLock,
   faEye,
@@ -21,7 +9,8 @@ import {
   faEllipsisH
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import ReplyTestPage from '../../pages/ReplyListPage';
+import { ConditionClassify, menuStorage } from '../../DataExport';
+import ReplyListContainer from '../../containers/Reply/ReplyListContainer';
 import Tags from './Tags';
 
 const LoadingCircle = styled(CircularProgress)`
@@ -35,15 +24,17 @@ const FormTextField = styled(TextField)`
 `;
 
 const MainWrapper = styled.div`
+  margin: auto;
   margin-top: 3rem;
-  width: calc(100% - 4rem);
-  padding: 2rem;
-  flex-direction: column;
+  width: 70vw;
+  padding: 1.5rem;
+  display: display;
   align-items: center;
   background-color: #ffffff;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   @media ${props => props.theme.mobile} {
-    width: calc(100% - 1rem);
+    width: calc(100vw - 1rem);
+    margin-top: 1rem;
     padding: 0.5rem;
   }
 `;
@@ -128,76 +119,6 @@ const SubmitButton = styled.button`
   }
 `;
 
-const DeleteAlertDialog = props => {
-  const { deleteBoxOpen, deleteBoxHandle, deleteFunction } = props;
-  return (
-    <Dialog
-      open={deleteBoxOpen}
-      onClose={deleteBoxHandle}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">삭제</DialogTitle>
-      <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          게시글을 삭제하시겠습니까? 복구되지 않습니다
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={deleteBoxHandle} color="primary">
-          취소
-        </Button>
-        <Button onClick={deleteFunction} color="secondary">
-          삭제
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
-
-const AnonymousDeleteDialog = props => {
-  const {
-    anonymousDeleteBoxOpen,
-    anonymousDeleteBoxHandle,
-    anonymousDeleteFunction,
-    anonyPwChange,
-    anonymousPassword
-  } = props;
-  return (
-    <Dialog
-      open={anonymousDeleteBoxOpen}
-      onClose={anonymousDeleteBoxHandle}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">게시글 삭제</DialogTitle>
-      <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          익명 게시글을 삭제하기 위해서는 비밀번호를 입력하세요
-        </DialogContentText>
-      </DialogContent>
-      <FormField onSubmit={anonymousDeleteFunction}>
-        <FormTextField
-          autoFocus
-          id="nowPassword"
-          label="비밀번호를 입력하세요"
-          type="password"
-          onChange={anonyPwChange}
-          value={anonymousPassword}
-        />
-      </FormField>
-      <DialogActions>
-        <Button onClick={anonymousDeleteBoxHandle} color="primary">
-          취소
-        </Button>
-        <Button onClick={anonymousDeleteFunction} color="secondary">
-          삭제
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
-
 const PostHeaderInfo = props => {
   const {
     menuClick,
@@ -213,41 +134,27 @@ const PostHeaderInfo = props => {
     accountIdString
   } = props;
 
-  const ConditionClassify = {
-    Logout: {
-      writer: ['profile', 'post'],
-      menu: ['report']
-    },
-    LoginMy: { writer: ['profile'], menu: ['fix', 'delete'] },
-    LoginNotmy: {
-      writer: ['profile', 'post', 'message', 'mail', 'ban'],
-      menu: ['report']
-    },
-    Annoymous: { writer: [], menu: ['report', 'fix', 'anonyDelete'] }
-  };
-
-  const menuStorage = {
-    profile: '회원 정보 보기',
-    post: '게시글 보기',
-    message: '메세지 보내기',
-    mail: '메일 보내기',
-    report: '신고',
-    fix: '수정',
-    delete: '삭제',
-    anonyDelete: '삭제'
-  };
+  function conditionMaker() {
+    if (!userId && !accountIdString) {
+      return 'LogoutAnonymous';
+    }
+    if (!userId && accountIdString) {
+      return 'LogoutNotAnonymous';
+    }
+    if (userId && !accountIdString) {
+      return 'LoginAnnoymous';
+    }
+    if (userId && userId === accountIdString) {
+      return 'LoginMy';
+    }
+    if (userId && userId !== accountIdString) {
+      return 'LoginNotmy';
+    }
+    return 'LogoutAnonymous';
+  }
 
   function menuItem(type) {
-    let condition = 'Anonymous';
-    if (!accountIdString) {
-      condition = 'Annoymous';
-    } else if (userId && userId === accountIdString) {
-      condition = 'LoginMy';
-    } else if (userId && userId !== accountIdString) {
-      condition = 'LoginNotmy';
-    } else if (!userId) {
-      condition = 'Logout';
-    }
+    const condition = conditionMaker();
 
     return (
       <div>
@@ -406,20 +313,13 @@ const Post = props => {
     functionExcute,
     secretPost,
     onChange,
-    anonyPwChange,
     password,
-    anonymousPassword,
     PasswordSubmit,
     userId,
-    deleteBoxOpen,
-    deleteBoxHandle,
-    deleteFunction,
-    anonymousDeleteBoxOpen,
-    anonymousDeleteBoxHandle,
-    anonymousDeleteFunction,
     postDeleteData,
     postDeleteLoading,
-    postDeleteError
+    postDeleteError,
+    replyReportHandle
   } = props;
 
   if (error) {
@@ -451,18 +351,6 @@ const Post = props => {
 
   return (
     <MainWrapper>
-      <DeleteAlertDialog
-        deleteBoxOpen={deleteBoxOpen}
-        deleteBoxHandle={deleteBoxHandle}
-        deleteFunction={deleteFunction}
-      />
-      <AnonymousDeleteDialog
-        anonymousDeleteBoxOpen={anonymousDeleteBoxOpen}
-        anonymousDeleteBoxHandle={anonymousDeleteBoxHandle}
-        anonymousDeleteFunction={anonymousDeleteFunction}
-        anonyPwChange={anonyPwChange}
-        anonymousPassword={anonymousPassword}
-      />
       <PostHeader
         res={res}
         moremenuEl={moremenuEl}
@@ -472,7 +360,7 @@ const Post = props => {
         userId={userId}
       />
       <PostMain res={res} />
-      <ReplyTestPage />
+      <ReplyListContainer replyReportHandle={replyReportHandle} />
     </MainWrapper>
   );
 };

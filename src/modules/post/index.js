@@ -42,6 +42,9 @@ const [
 const [ADD_POST, ADD_POST_SUCCESS, ADD_POST_FAILURE] =
   createRequestActionTypes('post/ADD_POST');
 
+const [POST_REPORT, POST_REPORT_SUCCESS, POST_REPORT_FAILURE] =
+  createRequestActionTypes('post/POST_REPORT');
+
 // Action Creators
 export const initialize = createAction(INITIALIZE);
 
@@ -121,6 +124,15 @@ export const addPost = createAction(
   })
 );
 
+export const postReport = createAction(
+  POST_REPORT,
+  ({ description, reportType, targetId }) => ({
+    description,
+    reportType,
+    targetId
+  })
+);
+
 // Sagas
 const loadPostListSaga = createRequestSaga(LOAD_POST_LIST, api.loadPostList);
 const loadMenuListSage = createRequestSaga(LOAD_MENU_LIST, api.loadMenuList);
@@ -136,6 +148,7 @@ const anonymousPostDeleteSaga = createRequestSaga(
   api.anonymousPostDelete
 );
 const addPostSaga = createRequestSaga(ADD_POST, api.addPost);
+const postReportSaga = createRequestSaga(POST_REPORT, api.reportPost);
 
 export function* postSaga() {
   yield takeLatest(LOAD_POST_LIST, loadPostListSaga);
@@ -146,6 +159,7 @@ export function* postSaga() {
   yield takeLatest(POST_DELETE, postDeleteSaga);
   yield takeLatest(ANONYMOUS_POST_DELETE, anonymousPostDeleteSaga);
   yield takeLatest(ADD_POST, addPostSaga);
+  yield takeLatest(POST_REPORT, postReportSaga);
 }
 
 // reducer (handleActions => switch문 대체)
@@ -164,7 +178,8 @@ const initialState = {
   loadedMenuList: reducerUtils.initial(),
   loadedPost: reducerUtils.initial(),
   postDeleteRes: reducerUtils.initial(),
-  addPost: reducerUtils.initial()
+  addPost: reducerUtils.initial(),
+  reportRes: reducerUtils.initial()
 };
 
 export default handleActions(
@@ -282,6 +297,18 @@ export default handleActions(
     [ADD_POST_FAILURE]: (state, { payload: error }) => ({
       ...state,
       addPost: reducerUtils.error(error)
+    }),
+    [POST_REPORT]: state => ({
+      ...state,
+      reportRes: reducerUtils.loading(state.reportRes.data)
+    }),
+    [POST_REPORT_SUCCESS]: (state, { payload: response }) => ({
+      ...state,
+      reportRes: reducerUtils.success(response)
+    }),
+    [POST_REPORT_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      reportRes: reducerUtils.error(error)
     })
   },
   initialState

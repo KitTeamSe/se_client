@@ -22,7 +22,8 @@ const ChildReply = props => {
     createAt,
     isSecret,
     isDelete,
-    handleAddReplyChild
+    handleAddReplyChild,
+    replyReportHandle
   } = props;
 
   return (
@@ -44,6 +45,7 @@ const ChildReply = props => {
         isSecret={isSecret}
         isDelete={isDelete}
         handleAddReplyChild={handleAddReplyChild}
+        replyReportHandle={replyReportHandle}
       />
     </ChildWrapper>
   );

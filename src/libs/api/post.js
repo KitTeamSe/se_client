@@ -82,3 +82,9 @@ export const addPost = ({
     throw error.response.data;
   });
 };
+
+export const reportPost = async ({ description, reportType, targetId }) => {
+  const body = { description, reportType, targetId };
+  const token = localStorage.getItem('token');
+  return client.post(`/administrator/report`, body, tokenHeader(token));
+};

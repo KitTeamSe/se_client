@@ -8,8 +8,12 @@ import {
   loadSecretPost,
   postDelete,
   anonymousPostDelete,
+  postReport,
   initialize
 } from '../../modules/post';
+import DeleteAlertDialog from '../../components/Post/DeleteAlertDialog';
+import AnonymousDeleteDialog from '../../components/Post/AnonymousDeleteDialog';
+import ReportDialog from '../../components/Post/ReportDialog';
 
 const PostContainer = props => {
   const { location, match } = props;
@@ -17,7 +21,12 @@ const PostContainer = props => {
   const [writerEl, setWriterEl] = useState(null);
   const [secretPost, setSecretPost] = useState(false);
   const [password, setPassword] = useState('');
+  const [reportOpen, setReportOpen] = useState(false);
+  const [reportType, setReportType] = useState(null);
+  const [targetId, setTargetId] = useState(null);
+  const [targetName, setTargetName] = useState(null);
   const [anonymousPassword, setAnonymousPassword] = useState('');
+  const [reportDescription, setReportDescription] = useState('');
   const dispatch = useDispatch();
   const {
     data,
@@ -25,18 +34,25 @@ const PostContainer = props => {
     error,
     postDeleteData,
     postDeleteLoading,
-    postDeleteError
+    postDeleteError,
+    reportResponse
   } = useSelector(({ post }) => ({
     data: post.loadedPost.data,
     loading: post.loadedPost.loading,
     error: post.loadedPost.error,
     postDeleteData: post.postDeleteRes.data,
     postDeleteLoading: post.postDeleteRes.loading,
-    postDeleteError: post.postDeleteRes.error
+    postDeleteError: post.postDeleteRes.error,
+    reportResponse: post.reportRes
   }));
+
   const [deleteBoxOpen, setDeleteBoxOpen] = useState(false);
   const [anonymousDeleteBoxOpen, setAnonymousDeleteBoxOpen] = useState(false);
   const userId = localStorage.getItem('userId');
+
+  useEffect(() => {
+    console.log(reportResponse);
+  }, [reportResponse]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -54,6 +70,7 @@ const PostContainer = props => {
     }
   }, [match.params.postId]);
 
+  // 비밀글 관련
   const PasswordSubmit = e => {
     e.preventDefault();
     const postId = Number(match.params.postId);
@@ -66,22 +83,27 @@ const PostContainer = props => {
     setPassword(value);
   };
 
+  // 익명게시글 삭제 관련
+  const anonymousDeleteFunction = e => {
+    e.preventDefault();
+    setAnonymousDeleteBoxOpen(false);
+    const { postId } = match.params;
+    dispatch(anonymousPostDelete({ anonymousPassword, postId }));
+  };
+
   const anonyPwChange = e => {
     e.preventDefault();
     const { value } = e.target;
     setAnonymousPassword(value);
   };
 
-  const reportFunction = () => {
-    console.log('report logic');
-  };
-
-  const deleteBoxHandle = () => {
-    setDeleteBoxOpen(!deleteBoxOpen);
-  };
-
   const anonymousDeleteBoxHandle = () => {
     setAnonymousDeleteBoxOpen(!anonymousDeleteBoxOpen);
+  };
+
+  // 일반 삭제 관련
+  const deleteBoxHandle = () => {
+    setDeleteBoxOpen(!deleteBoxOpen);
   };
 
   const deleteFunction = () => {
@@ -90,11 +112,43 @@ const PostContainer = props => {
     dispatch(postDelete({ id }));
   };
 
-  const anonymousDeleteFunction = e => {
+  // 신고 관련
+  const replyReportHandle = (replyId, accountId, anonymousNickname) => {
+    setReportType('REPLY');
+    setTargetId(replyId);
+    if (accountId) {
+      setTargetName(accountId);
+    } else {
+      setTargetName(anonymousNickname);
+    }
+    setReportOpen(!reportOpen);
+  };
+
+  const reportBoxHandle = () => {
+    setReportType('POST');
+    const postId = Number(match.params.postId);
+    setTargetId(postId);
+    setTargetName(data.data.nickname);
+    setReportOpen(!reportOpen);
+  };
+
+  const descriptionChange = e => {
     e.preventDefault();
-    setAnonymousDeleteBoxOpen(false);
-    const { postId } = match.params;
-    dispatch(anonymousPostDelete({ anonymousPassword, postId }));
+    const { value } = e.target;
+    setReportDescription(value);
+  };
+
+  const reportSubmit = e => {
+    e.preventDefault();
+    dispatch(
+      postReport({
+        description: reportDescription,
+        reportType,
+        targetId
+      })
+    );
+    setReportOpen(false);
+    setReportDescription('');
   };
 
   const banFunction = () => {
@@ -123,7 +177,7 @@ const PostContainer = props => {
         banFunction();
         break;
       case 'report':
-        reportFunction();
+        reportBoxHandle(e);
         break;
       case 'message':
         messageFunction();
@@ -163,31 +217,47 @@ const PostContainer = props => {
   };
 
   return (
-    <Post
-      data={data}
-      loading={loading}
-      error={error}
-      moremenuEl={moremenuEl}
-      writerEl={writerEl}
-      secretPost={secretPost}
-      password={password}
-      anonymousPassword={anonymousPassword}
-      userId={userId}
-      deleteBoxOpen={deleteBoxOpen}
-      postDeleteData={postDeleteData}
-      postDeleteLoading={postDeleteLoading}
-      postDeleteError={postDeleteError}
-      onChange={onChange}
-      anonyPwChange={anonyPwChange}
-      functionExcute={functionExcute}
-      menuClick={menuClick}
-      PasswordSubmit={PasswordSubmit}
-      deleteBoxHandle={deleteBoxHandle}
-      deleteFunction={deleteFunction}
-      anonymousDeleteBoxOpen={anonymousDeleteBoxOpen}
-      anonymousDeleteBoxHandle={anonymousDeleteBoxHandle}
-      anonymousDeleteFunction={anonymousDeleteFunction}
-    />
+    <>
+      <ReportDialog
+        reportOpen={reportOpen}
+        reportBoxHandle={reportBoxHandle}
+        reportSubmit={reportSubmit}
+        reportDescription={reportDescription}
+        descriptionChange={descriptionChange}
+        reportType={reportType}
+        targetName={targetName}
+      />
+      <DeleteAlertDialog
+        deleteBoxOpen={deleteBoxOpen}
+        deleteBoxHandle={deleteBoxHandle}
+        deleteFunction={deleteFunction}
+      />
+      <AnonymousDeleteDialog
+        anonymousDeleteBoxOpen={anonymousDeleteBoxOpen}
+        anonymousDeleteBoxHandle={anonymousDeleteBoxHandle}
+        anonymousDeleteFunction={anonymousDeleteFunction}
+        anonyPwChange={anonyPwChange}
+        anonymousPassword={anonymousPassword}
+      />
+      <Post
+        data={data}
+        loading={loading}
+        error={error}
+        moremenuEl={moremenuEl}
+        writerEl={writerEl}
+        secretPost={secretPost}
+        password={password}
+        userId={userId}
+        postDeleteData={postDeleteData}
+        postDeleteLoading={postDeleteLoading}
+        postDeleteError={postDeleteError}
+        onChange={onChange}
+        functionExcute={functionExcute}
+        menuClick={menuClick}
+        PasswordSubmit={PasswordSubmit}
+        replyReportHandle={replyReportHandle}
+      />
+    </>
   );
 };
 

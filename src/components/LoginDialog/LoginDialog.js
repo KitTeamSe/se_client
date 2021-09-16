@@ -9,6 +9,7 @@ import {
   DialogTitle
 } from '@material-ui/core';
 import styled from 'styled-components';
+import { signup } from '../../libs/api/auth';
 
 const AlignCenter = styled.div`
   text-align: center;
@@ -116,6 +117,23 @@ const LoginDialog = props => {
     loading
   } = props;
 
+  // 나중에 지워야됨
+  function fastSignup() {
+    console.log('fast signup');
+    signup({
+      id: 'alsanrlf',
+      password: 'alsanrlf',
+      nickname: '길무짱',
+      name: '민무길',
+      questionId: 1,
+      email: 'alsanrlf@naver.com',
+      phoneNumber: '01012345678',
+      studentId: '20160447',
+      answer: 'asdf@naver.com',
+      type: 'STUDENT'
+    });
+  }
+
   return (
     <>
       <IconWrapper>
@@ -149,6 +167,9 @@ const LoginDialog = props => {
               <FindButtonWrapper>
                 <FindLink onClick={handleClose} to="find">
                   forgot?
+                </FindLink>
+                <FindLink onClick={fastSignup} to="gilmujjang">
+                  길무짱전용회원가입
                 </FindLink>
               </FindButtonWrapper>
               <LoginButton type="submit">로그인</LoginButton>
