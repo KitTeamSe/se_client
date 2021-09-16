@@ -41,6 +41,7 @@ const BoardContainer = props => {
       const parameter = {
         boardNameEng,
         direction,
+        isNotice: 'NORMAL',
         page: 0,
         size
       };
@@ -52,6 +53,7 @@ const BoardContainer = props => {
     const parameter = {
       boardNameEng,
       direction,
+      isNotice: 'NORMAL',
       page: page - 1,
       size
     };

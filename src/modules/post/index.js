@@ -42,9 +42,10 @@ export const initialize = createAction(INITIALIZE, form => form);
 
 export const loadPostList = createAction(
   LOAD_POST_LIST,
-  ({ boardNameEng, direction, page, size }) => ({
+  ({ boardNameEng, direction, isNotice, page, size }) => ({
     boardNameEng,
     direction,
+    isNotice,
     page,
     size
   })
