@@ -2,6 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { Chip, TextField, Button, Paper } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faRedo } from '@fortawesome/free-solid-svg-icons';
+import { StateErrorMessage } from '../Action/ErrorMessage';
 
 const TagWrapper = styled.div`
   display: flex;
@@ -49,6 +52,9 @@ const ButtonStyled = styled(Button)`
     text-align: center;
     white-space: nowrap;
   }
+  & .MuiButton-iconSizeSmall > *:first-child {
+    font-size: 12px;
+  }
 `;
 
 const AutocompleteStyled = styled(Autocomplete)`
@@ -63,7 +69,8 @@ const PaperStyled = styled(Paper)`
 `;
 
 const PostTagInput = props => {
-  const { value, data, loading, onChange, handleAddTag } = props;
+  const { value, data, loading, onChange, handleAddTag, handleClearTag } =
+    props;
 
   return (
     <TagInputWrapper>
@@ -87,8 +94,22 @@ const PostTagInput = props => {
         )}
       />
       <TagActionWrapper>
-        <ButtonStyled variant="contained" size="small" onClick={handleAddTag}>
+        <ButtonStyled
+          variant="contained"
+          size="small"
+          onClick={handleAddTag}
+          startIcon={<FontAwesomeIcon size="xs" icon={faPlus} />}
+        >
           태그 추가
+        </ButtonStyled>
+        <ButtonStyled
+          variant="contained"
+          color="secondary"
+          size="small"
+          startIcon={<FontAwesomeIcon size="xs" icon={faRedo} />}
+          onClick={handleClearTag}
+        >
+          초기화
         </ButtonStyled>
       </TagActionWrapper>
     </TagInputWrapper>
@@ -99,26 +120,18 @@ const PostTagList = props => {
   const { data, handleRemoveTag } = props;
   return (
     <TagListWrapper>
-      <ButtonStyled
-        variant="contained"
-        color="secondary"
-        size="small"
-        // disabled={!data.length}
-      >
-        초기화
-      </ButtonStyled>
-      {data.map(e => (
-        <ChipStyled
-          variant="outlined"
-          label={e.text}
-          onDelete={handleRemoveTag}
-        />
-      ))}
-      <ChipStyled
-        variant="outlined"
-        label="스무자를채워야하는데어떻게스무자까지채워"
-        onDelete={handleRemoveTag}
-      />
+      {data.length
+        ? data.map(e => {
+            const onDelete = () => handleRemoveTag(e);
+            return (
+              <ChipStyled
+                variant="outlined"
+                label={e.text}
+                onDelete={onDelete}
+              />
+            );
+          })
+        : null}
     </TagListWrapper>
   );
 };
@@ -130,9 +143,11 @@ const PostTagAdd = props => {
     searchTagData,
     searchTagLoading,
     searchTagError,
+    tagAddMessage,
     handleSearchTag,
     handleAddTag,
-    handleRemoveTag
+    handleRemoveTag,
+    handleClearTag
   } = props;
 
   return (
@@ -144,7 +159,9 @@ const PostTagAdd = props => {
         error={searchTagError}
         onChange={handleSearchTag}
         handleAddTag={handleAddTag}
+        handleClearTag={handleClearTag}
       />
+      <StateErrorMessage error={tagAddMessage} />
       <PostTagList data={tagData} handleRemoveTag={handleRemoveTag} />
     </TagWrapper>
   );

@@ -28,6 +28,12 @@ export const DialogErrorMessage = props => {
   );
 };
 
+export const StateErrorMessage = props => {
+  const { loading = false, error } = props;
+
+  return !loading && error && <Message>{error}</Message>;
+};
+
 const ErrorMessage = props => {
   const { loading, error } = props;
 

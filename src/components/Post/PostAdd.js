@@ -169,11 +169,14 @@ const PostAdd = props => {
     searchTagData,
     searchTagLoading,
     searchTagError,
+    tagAddMessage,
     handleChange,
     handleSecret,
     handleContentText,
     handleAttachFiles,
     handleSearchTag,
+    handleRemoveTag,
+    handleClearTag,
     handleAddTag,
     onSubmit,
     onCancel,
@@ -188,8 +191,11 @@ const PostAdd = props => {
         searchTagData={searchTagData}
         searchTagLoading={searchTagLoading}
         searchTagError={searchTagError}
+        tagAddMessage={tagAddMessage}
         handleAddTag={handleAddTag}
         handleSearchTag={handleSearchTag}
+        handleRemoveTag={handleRemoveTag}
+        handleClearTag={handleClearTag}
       />
       <Editor
         onChange={handleContentText}
