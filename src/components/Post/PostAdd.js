@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Switch, FormControlLabel, Input, Button } from '@material-ui/core';
-import confirmFileExtension from '../../utils/confirmFileExtension';
 import AttachImageList from '../Editor/AttachImageList';
 import AttachList from '../Editor/AttachList';
 import Editor from '../Editor/Editor';
@@ -72,21 +71,31 @@ const ButtonStyled = styled(Button)`
   margin-left: 10px;
 `;
 
-const SecretToggle = props => {
-  const { onChange } = props;
+const Toggle = props => {
+  const { id, label, onChange } = props;
   return (
     <FormControlLabelStyled
-      control={<Switch color="secondary" id="isSecret" onChange={onChange} />}
+      control={<Switch color="secondary" id={id} onChange={onChange} />}
       labelPlacement="start"
-      label="비밀글"
+      label={label}
       size="small"
       margin="dense"
     />
   );
 };
 
+const SecretToggle = props => {
+  const { onChange } = props;
+  return <Toggle id="isSecret" label="비밀글" onChange={onChange} />;
+};
+
+const NoticeToggle = props => {
+  const { onChange } = props;
+  return <Toggle id="isNotice" label="공지" onChange={onChange} />;
+};
+
 const PostAddInput = props => {
-  const { addForm, handleChange, handleSecret } = props;
+  const { addForm, handleChange, handleSecret, handleNotice } = props;
 
   return (
     <InputWrapper>
@@ -109,6 +118,9 @@ const PostAddInput = props => {
         </>
       ) : null}
       <SecretToggle onChange={handleSecret} />
+      {localStorage.getItem('token') && localStorage.getItem('userId') ? (
+        <NoticeToggle onChange={handleNotice} />
+      ) : null}
     </InputWrapper>
   );
 };
@@ -127,9 +139,18 @@ const PostTitle = props => {
 };
 
 const PostAddAction = props => {
-  const { onSubmit } = props;
+  const { onSubmit, onCancel } = props;
   return (
     <ButtonWrapper>
+      <ButtonStyled
+        variant="contained"
+        color="default"
+        size="small"
+        type="submit"
+        onClick={onCancel}
+      >
+        취소
+      </ButtonStyled>
       <ButtonStyled
         variant="contained"
         color="default"
@@ -143,7 +164,14 @@ const PostAddAction = props => {
   );
 };
 const PostAddFooter = props => {
-  const { addForm, handleChange, handleSecret, onSubmit } = props;
+  const {
+    addForm,
+    handleChange,
+    handleSecret,
+    handleNotice,
+    onSubmit,
+    onCancel
+  } = props;
 
   return (
     <Wrapper>
@@ -151,79 +179,35 @@ const PostAddFooter = props => {
         addForm={addForm}
         handleChange={handleChange}
         handleSecret={handleSecret}
+        handleNotice={handleNotice}
         onSubmit={onSubmit}
       />
-      <PostAddAction onSubmit={onSubmit} />
+      <PostAddAction onSubmit={onSubmit} onCancel={onCancel} />
     </Wrapper>
   );
 };
 
 const PostAdd = props => {
   const {
-    addForm,
-    addLoading,
-    addError,
-    attachLoading,
-    attachError,
-    searchText,
-    searchTagData,
-    searchTagLoading,
-    searchTagError,
-    tagAddMessage,
-    handleChange,
-    handleSecret,
-    handleContentText,
-    handleAttachFiles,
-    handleSearchTag,
-    handleRemoveTag,
-    handleClearTag,
-    handleAddTag,
-    onSubmit,
-    onCancel,
-    onDeleteAttach
+    postTitleProps,
+    postTagAddProps,
+    editorProps,
+    fileAttachDropZoneProps,
+    attachImageListProps,
+    attachListProps,
+    postAddFooterProps,
+    errorMessageProps
   } = props;
   return (
     <>
-      <PostTitle addForm={addForm} onChange={handleChange} />
-      <PostTagAdd
-        value={searchText}
-        tagData={addForm.tagList}
-        searchTagData={searchTagData}
-        searchTagLoading={searchTagLoading}
-        searchTagError={searchTagError}
-        tagAddMessage={tagAddMessage}
-        handleAddTag={handleAddTag}
-        handleSearchTag={handleSearchTag}
-        handleRemoveTag={handleRemoveTag}
-        handleClearTag={handleClearTag}
-      />
-      <Editor
-        onChange={handleContentText}
-        data={addForm.text}
-        placeholder="내용을 입력하세요"
-      />
-      <FileAttachDropZone
-        loading={attachLoading}
-        error={attachError}
-        handleAttachFiles={handleAttachFiles}
-      />
-      <AttachImageList
-        attachImgList={addForm.attachmentList.filter(e =>
-          confirmFileExtension(e.fileName)
-        )}
-      />
-      <AttachList
-        attachList={addForm.attachmentList}
-        onDeleteAttach={onDeleteAttach}
-      />
-      <PostAddFooter
-        addForm={addForm}
-        handleChange={handleChange}
-        handleSecret={handleSecret}
-        onSubmit={onSubmit}
-        onCancel={onCancel}
-      />
-      <ErrorMessage loading={addLoading} error={addError} />
+      <PostTitle {...postTitleProps} />
+      <PostTagAdd {...postTagAddProps} />
+      <Editor {...editorProps} />
+      <FileAttachDropZone {...fileAttachDropZoneProps} />
+      <AttachImageList {...attachImageListProps} />
+      <AttachList {...attachListProps} />
+      <PostAddFooter {...postAddFooterProps} />
+      <ErrorMessage {...errorMessageProps} />
     </>
   );
 };

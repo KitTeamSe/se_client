@@ -1,7 +1,13 @@
 import { client, tokenHeader } from './client';
 
-export const loadPostList = async ({ boardNameEng, direction, page, size }) => {
-  const parameters = { boardNameEng, direction, page, size };
+export const loadPostList = async ({
+  boardNameEng,
+  isNotice,
+  direction,
+  page,
+  size
+}) => {
+  const parameters = { boardNameEng, isNotice, direction, page, size };
   return client.get('/post', { params: parameters }).catch(error => {
     throw error.response.data;
   });

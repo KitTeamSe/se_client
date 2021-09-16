@@ -3,8 +3,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PostAdd from '../../components/Post/PostAdd';
 import { addAttachList } from '../../modules/attach';
-import { searchTag, changeText, initialize } from '../../modules/tag';
-import { addPost, changeField } from '../../modules/post';
+import {
+  searchTag,
+  changeText,
+  initialize as initializeTag
+} from '../../modules/tag';
+import {
+  addPost,
+  changeField,
+  initializeForm as initializePostForm
+} from '../../modules/post';
 import confirmFileExtension from '../../utils/confirmFileExtension';
 import { getDecodeHTML } from '../../utils/format';
 
@@ -36,8 +44,17 @@ const PostAddContainer = props => {
   }));
   const [tagAddMessage, setTagAddMessage] = useState('');
 
-  const handlePostForm = (form, key, text) => {
-    dispatch(changeField({ form, key, value: text }));
+  const handlePostForm = (form, key, value) => {
+    dispatch(changeField({ form, key, value }));
+  };
+
+  const handleToggle = (e, values) => {
+    const { id, checked } = e.target;
+    const form = 'addForm';
+    const key = id;
+    const value = checked ? values[0] : values[1];
+
+    handlePostForm(form, key, value);
   };
 
   const handleChange = e => {
@@ -49,12 +66,11 @@ const PostAddContainer = props => {
   };
 
   const handleSecret = e => {
-    const { id, checked } = e.target;
-    const form = 'addForm';
-    const key = id;
-    const value = checked ? 'SECRET' : 'NORMAL';
+    handleToggle(e, ['SECRET', 'NORMAL']);
+  };
 
-    handlePostForm(form, key, value);
+  const handleNotice = e => {
+    handleToggle(e, ['NOTICE', 'NORMAL']);
   };
 
   const handleContentText = (e, editor) => {
@@ -108,12 +124,17 @@ const PostAddContainer = props => {
   };
 
   const onGoBack = () => {
-    const { boardNameEng, postId } = match.params;
-    history.push(`/board/${boardNameEng}/${postId}`);
+    const { boardNameEng } = match.params;
+    history.push(`/board/${boardNameEng}`);
+  };
+
+  const onInitialize = () => {
+    dispatch(initializeTag());
+    dispatch(initializePostForm());
   };
 
   const onCancel = () => {
-    dispatch(initialize());
+    onInitialize();
     onGoBack();
   };
 
@@ -158,6 +179,7 @@ const PostAddContainer = props => {
     const key = 'tagList';
     const tagListData = [];
     handlePostForm(form, key, tagListData);
+    dispatch(changeText({ searchText: '' }));
   };
 
   const handleAddTag = () => {
@@ -181,7 +203,6 @@ const PostAddContainer = props => {
       : addForm.tagList;
 
     handlePostForm(form, key, tagListData);
-    dispatch(initialize());
     return setTagAddMessage('');
   };
 
@@ -197,29 +218,75 @@ const PostAddContainer = props => {
     }
   }, [searchText]);
 
+  useEffect(() => {
+    return onInitialize();
+  }, []);
+
+  const postTitleProps = {
+    value: addForm.title,
+    onChange: handleChange
+  };
+
+  const postTagAddProps = {
+    value: searchText,
+    tagData: addForm.tagList,
+    searchTagData,
+    searchTagLoading,
+    searchTagError,
+    tagAddMessage,
+    handleAddTag,
+    handleSearchTag,
+    handleRemoveTag,
+    handleClearTag
+  };
+
+  const editorProps = {
+    onChange: handleContentText,
+    data: addForm.text,
+    placeholder: '내용을 입력하세요'
+  };
+
+  const fileAttachDropZoneProps = {
+    loading: attachLoading,
+    error: attachError,
+    handleAttachFiles
+  };
+
+  const attachImageListProps = {
+    attachImgList: addForm.attachmentList.filter(e =>
+      confirmFileExtension(e.fileName)
+    )
+  };
+
+  const attachListProps = {
+    attachList: addForm.attachmentList,
+    onDeleteAttach
+  };
+
+  const postAddFooterProps = {
+    addForm,
+    handleChange,
+    handleSecret,
+    handleNotice,
+    onSubmit,
+    onCancel
+  };
+
+  const errorMessageProps = {
+    loading: addLoading,
+    error: addError
+  };
+
   return (
     <PostAdd
-      addForm={addForm}
-      addLoading={addLoading}
-      addError={addError}
-      attachLoading={attachLoading}
-      attachError={attachError}
-      searchText={searchText}
-      searchTagData={searchTagData}
-      searchTagLoading={searchTagLoading}
-      searchTagError={searchTagError}
-      tagAddMessage={tagAddMessage}
-      handleChange={handleChange}
-      handleSecret={handleSecret}
-      handleContentText={handleContentText}
-      handleAttachFiles={handleAttachFiles}
-      handleSearchTag={handleSearchTag}
-      handleRemoveTag={handleRemoveTag}
-      handleClearTag={handleClearTag}
-      handleAddTag={handleAddTag}
-      onSubmit={onSubmit}
-      onCancel={onCancel}
-      onDeleteAttach={onDeleteAttach}
+      postTitleProps={postTitleProps}
+      postTagAddProps={postTagAddProps}
+      fileAttachDropZoneProps={fileAttachDropZoneProps}
+      attachImageListProps={attachImageListProps}
+      attachListProps={attachListProps}
+      editorProps={editorProps}
+      postAddFooterProps={postAddFooterProps}
+      errorMessageProps={errorMessageProps}
     />
   );
 };

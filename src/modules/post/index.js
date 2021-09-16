@@ -11,6 +11,8 @@ import reducerUtils from '../../libs/reducerUtils';
 // Actions
 const INITIALIZE = 'post/INITIALIZE';
 
+const INITIALIZE_FORM = 'post/INITIALIZE_FORM';
+
 const CHANGE_FIELD = 'post/CHANGE_FIELD';
 
 const [LOAD_POST_LIST, LOAD_POST_LIST_SUCCESS, LOAD_POST_LIST_FAILURE] =
@@ -41,7 +43,9 @@ const [ADD_POST, ADD_POST_SUCCESS, ADD_POST_FAILURE] =
   createRequestActionTypes('post/ADD_POST');
 
 // Action Creators
-export const initialize = createAction(INITIALIZE, form => form);
+export const initialize = createAction(INITIALIZE);
+
+export const initializeForm = createAction(INITIALIZE_FORM);
 
 export const changeField = createAction(
   CHANGE_FIELD,
@@ -54,8 +58,9 @@ export const changeField = createAction(
 
 export const loadPostList = createAction(
   LOAD_POST_LIST,
-  ({ boardNameEng, direction, page, size }) => ({
+  ({ boardNameEng, isNotice, direction, page, size }) => ({
     boardNameEng,
+    isNotice,
     direction,
     page,
     size
@@ -164,9 +169,19 @@ const initialState = {
 
 export default handleActions(
   {
-    [INITIALIZE]: (state, { payload: form }) => ({
+    [INITIALIZE]: () => initialState,
+    [INITIALIZE_FORM]: state => ({
       ...state,
-      [form]: initialState[form]
+      addForm: {
+        anonymousNickname: '',
+        anonymousPassword: '',
+        attachmentList: [],
+        isNotice: 'NORMAL',
+        isSecret: 'NORMAL',
+        text: '',
+        title: '',
+        tagList: []
+      }
     }),
     [CHANGE_FIELD]: (state, { payload: { key, form, value } }) =>
       produce(state, draft => {

@@ -150,7 +150,7 @@ const PostTagAdd = props => {
     handleClearTag
   } = props;
 
-  return (
+  return localStorage.getItem('token') && localStorage.getItem('userId') ? (
     <TagWrapper>
       <PostTagInput
         value={value}
@@ -164,7 +164,7 @@ const PostTagAdd = props => {
       <StateErrorMessage error={tagAddMessage} />
       <PostTagList data={tagData} handleRemoveTag={handleRemoveTag} />
     </TagWrapper>
-  );
+  ) : null;
 };
 
 export default PostTagAdd;
