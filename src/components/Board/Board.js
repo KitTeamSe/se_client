@@ -323,6 +323,7 @@ const Board = props => {
     searchKeyword,
     onSearch,
     onPostSearchTypeChange,
+    onWritePost,
     postSearchType,
     boardNameEng,
     boardPage,
@@ -350,6 +351,7 @@ const Board = props => {
         keyword={keyword}
         onSearch={onSearch}
         onSearchChange={onSearchChange}
+        onWritePost={onWritePost}
       />
       {res.postListItem.content.length === 0 ? (
         <NoPost searchKeyword={searchKeyword} />
