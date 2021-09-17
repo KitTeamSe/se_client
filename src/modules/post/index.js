@@ -42,6 +42,9 @@ const [
 const [ADD_POST, ADD_POST_SUCCESS, ADD_POST_FAILURE] =
   createRequestActionTypes('post/ADD_POST');
 
+const [UPDATE_POST, UPDATE_POST_SUCCESS, UPDATE_POST_FAILURE] =
+  createRequestActionTypes('post/UPDATE_POST');
+
 const [POST_REPORT, POST_REPORT_SUCCESS, POST_REPORT_FAILURE] =
   createRequestActionTypes('post/POST_REPORT');
 
@@ -124,6 +127,29 @@ export const addPost = createAction(
   })
 );
 
+export const updatePost = createAction(
+  UPDATE_POST,
+  ({
+    postId,
+    anonymousPassword,
+    attachmentList,
+    boardNameEng,
+    isNotice,
+    isSecret,
+    postContent,
+    tagList
+  }) => ({
+    postId,
+    anonymousPassword,
+    attachmentList,
+    boardNameEng,
+    isNotice,
+    isSecret,
+    postContent,
+    tagList
+  })
+);
+
 export const postReport = createAction(
   POST_REPORT,
   ({ description, reportType, targetId }) => ({
@@ -148,6 +174,7 @@ const anonymousPostDeleteSaga = createRequestSaga(
   api.anonymousPostDelete
 );
 const addPostSaga = createRequestSaga(ADD_POST, api.addPost);
+const updatePostSaga = createRequestSaga(UPDATE_POST, api.updatePost);
 const postReportSaga = createRequestSaga(POST_REPORT, api.reportPost);
 
 export function* postSaga() {
@@ -159,6 +186,7 @@ export function* postSaga() {
   yield takeLatest(POST_DELETE, postDeleteSaga);
   yield takeLatest(ANONYMOUS_POST_DELETE, anonymousPostDeleteSaga);
   yield takeLatest(ADD_POST, addPostSaga);
+  yield takeLatest(UPDATE_POST, updatePostSaga);
   yield takeLatest(POST_REPORT, postReportSaga);
 }
 
@@ -174,11 +202,21 @@ const initialState = {
     title: '',
     tagList: []
   },
+  updateForm: {
+    anonymousPassword: '',
+    attachmentList: [],
+    isNotice: 'NORMAL',
+    isSecret: 'NORMAL',
+    text: '',
+    title: '',
+    tagList: []
+  },
   loadedPostList: reducerUtils.initial(),
   loadedMenuList: reducerUtils.initial(),
   loadedPost: reducerUtils.initial(),
   postDeleteRes: reducerUtils.initial(),
   addPost: reducerUtils.initial(),
+  updatePost: reducerUtils.initial(),
   reportRes: reducerUtils.initial()
 };
 
@@ -189,6 +227,15 @@ export default handleActions(
       ...state,
       addForm: {
         anonymousNickname: '',
+        anonymousPassword: '',
+        attachmentList: [],
+        isNotice: 'NORMAL',
+        isSecret: 'NORMAL',
+        text: '',
+        title: '',
+        tagList: []
+      },
+      updateForm: {
         anonymousPassword: '',
         attachmentList: [],
         isNotice: 'NORMAL',
@@ -295,6 +342,18 @@ export default handleActions(
       addPost: reducerUtils.success(response)
     }),
     [ADD_POST_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      addPost: reducerUtils.error(error)
+    }),
+    [UPDATE_POST]: state => ({
+      ...state,
+      addPost: reducerUtils.loading(state.addPost.data)
+    }),
+    [UPDATE_POST_SUCCESS]: (state, { payload: response }) => ({
+      ...state,
+      addPost: reducerUtils.success(response)
+    }),
+    [UPDATE_POST_FAILURE]: (state, { payload: error }) => ({
       ...state,
       addPost: reducerUtils.error(error)
     }),
