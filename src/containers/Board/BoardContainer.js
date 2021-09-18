@@ -6,7 +6,7 @@ import Board from '../../components/Board/Board';
 import { loadPostList, searchPost } from '../../modules/post';
 
 const BoardContainer = props => {
-  const { location, match } = props;
+  const { location, match, history } = props;
   const dispatch = useDispatch();
   const [keyword, setKeyword] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -101,6 +101,10 @@ const BoardContainer = props => {
     dispatch(searchPost({ postSearchRequest }));
   };
 
+  const onWritePost = () => {
+    history.push(`${match.url}/write`);
+  };
+
   return (
     <Board
       data={data}
@@ -109,6 +113,7 @@ const BoardContainer = props => {
       onChange={onChange}
       onSearchChange={onSearchChange}
       onSearch={onSearch}
+      onWritePost={onWritePost}
       keyword={keyword}
       searchKeyword={searchKeyword}
       onPostSearchTypeChange={onPostSearchTypeChange}
