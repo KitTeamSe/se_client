@@ -21,6 +21,7 @@ const PostAddContainer = props => {
   const dispatch = useDispatch();
   const {
     addForm,
+    addData,
     addLoading,
     addError,
     addAttachData,
@@ -32,6 +33,7 @@ const PostAddContainer = props => {
     searchTagError
   } = useSelector(({ post, attach, tag }) => ({
     addForm: post.addForm,
+    addData: post.addPost.data,
     addLoading: post.addPost.loading,
     addError: post.addPost.error,
     addAttachData: attach.addAttach.data,
@@ -217,6 +219,12 @@ const PostAddContainer = props => {
       dispatch(searchTag({ text: searchText }));
     }
   }, [searchText]);
+
+  useEffect(() => {
+    if (addData) {
+      onGoBack();
+    }
+  }, [addData]);
 
   useEffect(() => {
     return onInitialize();
