@@ -11,7 +11,9 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ConditionClassify, menuStorage } from '../../DataExport';
 import ReplyListContainer from '../../containers/Reply/ReplyListContainer';
+import EditorOutput from '../Editor/EditorOutput';
 import Tags from './Tags';
+import { getEncodeHTML } from '../../utils/format';
 
 const LoadingCircle = styled(CircularProgress)`
   position: absolute;
@@ -27,6 +29,7 @@ const MainWrapper = styled.div`
   margin: auto;
   margin-top: 3rem;
   width: 70vw;
+  max-width: 100%;
   padding: 1.5rem;
   display: display;
   align-items: center;
@@ -35,7 +38,7 @@ const MainWrapper = styled.div`
   @media ${props => props.theme.mobile} {
     width: calc(100vw - 1rem);
     margin-top: 1rem;
-    padding: 0.5rem;
+    padding: 0;
   }
 `;
 
@@ -48,8 +51,7 @@ const NoBoardBox = styled.div`
 `;
 
 const PostHead = styled.div`
-  width: 100%;
-  padding-bottom: 1rem;
+  padding: 1rem 0.5rem;
 `;
 
 const PostHeadTitle = styled.div`
@@ -78,7 +80,7 @@ const AnonymousIcon = styled.span`
 `;
 
 const PostText = styled.div`
-  padding: 3rem 2rem;
+  padding: 3rem 0.6em;
   font-size: 1rem;
   border-top: 1px solid #cccccc;
   border-bottom: 1px solid #cccccc;
@@ -273,9 +275,12 @@ const PostHeader = props => {
 const PostMain = props => {
   const { res } = props;
   const { postContent } = res;
+  const handleContent = () => {
+    return { __html: getEncodeHTML(postContent.text) };
+  };
   return (
     <PostText>
-      <p>{postContent.text}</p>
+      <EditorOutput content={handleContent()} />
     </PostText>
   );
 };
