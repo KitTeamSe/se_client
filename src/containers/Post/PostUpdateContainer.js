@@ -11,19 +11,22 @@ import {
 import {
   updatePost,
   changeField,
-  initializeForm as initializePostForm
+  initializeForm as initializePostForm,
+  loadPost
 } from '../../modules/post';
 import confirmFileExtension from '../../utils/confirmFileExtension';
-import { getDecodeHTML } from '../../utils/format';
+import { getDecodeHTML, getEncodeHTML } from '../../utils/format';
 
 const PostUpdateContainer = props => {
-  const { history, match } = props;
+  const { history, match, location } = props;
   const dispatch = useDispatch();
   const {
+    loadedPostData,
     updateForm,
+    updateData,
     updateLoading,
     updateError,
-    updateAttachData,
+    addAttachData,
     attachLoading,
     attachError,
     searchText,
@@ -31,7 +34,9 @@ const PostUpdateContainer = props => {
     searchTagLoading,
     searchTagError
   } = useSelector(({ post, attach, tag }) => ({
+    loadedPostData: post.loadedPost.data,
     updateForm: post.updateForm,
+    updateData: post.updatePost.data,
     updateLoading: post.updatePost.loading,
     updateError: post.updatePost.error,
     addAttachData: attach.addAttach.data,
@@ -42,10 +47,34 @@ const PostUpdateContainer = props => {
     searchTagLoading: tag.searchTag.loading,
     searchTagError: tag.searchTag.error
   }));
-  const [tagUpdateMessage, setTagUpdateMessage] = useState('');
+  const [tagAddMessage, setTagAddMessage] = useState('');
+
+  const handlePost = () => {
+    const { postId } = match.params;
+    const id = postId;
+
+    dispatch(loadPost({ id }));
+  };
 
   const handlePostForm = (form, key, value) => {
     dispatch(changeField({ form, key, value }));
+  };
+
+  const handleUpdateForm = () => {
+    const { postContent, attaches, tags, isNotice, isSecret } =
+      loadedPostData.data;
+    const attachmentList = attaches;
+    const tagList = tags.map(e => ({ tagId: e.tagId, text: e.tag }));
+    const { title, text } = postContent;
+    const replaceText = getEncodeHTML(text);
+    const form = 'updateForm';
+
+    handlePostForm(form, 'attachmentList', attachmentList);
+    handlePostForm(form, 'isNotice', isNotice);
+    handlePostForm(form, 'isSecret', isSecret);
+    handlePostForm(form, 'title', title);
+    handlePostForm(form, 'text', replaceText);
+    handlePostForm(form, 'tagList', tagList);
   };
 
   const handleToggle = (e, values) => {
@@ -92,6 +121,7 @@ const PostUpdateContainer = props => {
 
   const onSubmit = e => {
     e.preventDefault();
+    const { postId } = match.params;
     const {
       anonymousNickname,
       anonymousPassword,
@@ -112,6 +142,7 @@ const PostUpdateContainer = props => {
 
     dispatch(
       updatePost({
+        postId,
         anonymous,
         attachmentList: attachIdList,
         boardNameEng,
@@ -124,8 +155,8 @@ const PostUpdateContainer = props => {
   };
 
   const onGoBack = () => {
-    const { boardNameEng } = match.params;
-    history.push(`/board/${boardNameEng}`);
+    const { boardNameEng, postId } = match.params;
+    history.push(`/board/${boardNameEng}/${postId}`);
   };
 
   const onInitialize = () => {
@@ -159,10 +190,8 @@ const PostUpdateContainer = props => {
 
   const handleReplyImage = () => {
     const form = 'updateForm';
-    const attachListData = updateForm.attachmentList.concat(
-      updateAttachData.data
-    );
-    const editorText = `${updateForm.text}${updateAttachData.data
+    const attachListData = updateForm.attachmentList.concat(addAttachData.data);
+    const editorText = `${updateForm.text}${addAttachData.data
       .filter(e => confirmFileExtension(e.fileName))
       .map(e => handleEditorImg(e))
       .join('')}`;
@@ -186,18 +215,18 @@ const PostUpdateContainer = props => {
     dispatch(changeText({ searchText: '' }));
   };
 
-  const handleUpdateTag = () => {
+  const handleAddTag = () => {
     if (!searchText) {
-      return setTagUpdateMessage('태그를 입력하세요.');
+      return setTagAddMessage('태그를 입력하세요.');
     }
     if (!searchTagData) {
-      return setTagUpdateMessage('검색 결과가 없습니다.');
+      return setTagAddMessage('검색 결과가 없습니다.');
     }
     if (searchTagData && !searchTagData.data.find(e => e.text === searchText)) {
-      return setTagUpdateMessage('존재하지 않는 태그입니다.');
+      return setTagAddMessage('존재하지 않는 태그입니다.');
     }
     if (updateForm.tagList.find(e => e.text === searchText)) {
-      return setTagUpdateMessage('이미 추가된 태그입니다.');
+      return setTagAddMessage('이미 추가된 태그입니다.');
     }
     const form = 'updateForm';
     const key = 'tagList';
@@ -207,20 +236,36 @@ const PostUpdateContainer = props => {
       : updateForm.tagList;
 
     handlePostForm(form, key, tagListData);
-    return setTagUpdateMessage('');
+    return setTagAddMessage('');
   };
 
   useEffect(() => {
-    if (updateAttachData) {
+    handlePost();
+  }, [location.search]);
+
+  useEffect(() => {
+    if (loadedPostData) {
+      handleUpdateForm();
+    }
+  }, [loadedPostData]);
+
+  useEffect(() => {
+    if (addAttachData) {
       handleReplyImage();
     }
-  }, [updateAttachData]);
+  }, [addAttachData]);
 
   useEffect(() => {
     if (searchText) {
       dispatch(searchTag({ text: searchText }));
     }
   }, [searchText]);
+
+  useEffect(() => {
+    if (updateData) {
+      onGoBack();
+    }
+  }, [updateData]);
 
   useEffect(() => {
     return onInitialize();
@@ -237,8 +282,8 @@ const PostUpdateContainer = props => {
     searchTagData,
     searchTagLoading,
     searchTagError,
-    tagUpdateMessage,
-    handleUpdateTag,
+    tagAddMessage,
+    handleAddTag,
     handleSearchTag,
     handleRemoveTag,
     handleClearTag

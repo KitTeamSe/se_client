@@ -347,15 +347,15 @@ export default handleActions(
     }),
     [UPDATE_POST]: state => ({
       ...state,
-      addPost: reducerUtils.loading(state.addPost.data)
+      updatePost: reducerUtils.loading(state.updatePost.data)
     }),
     [UPDATE_POST_SUCCESS]: (state, { payload: response }) => ({
       ...state,
-      addPost: reducerUtils.success(response)
+      updatePost: reducerUtils.success(response)
     }),
     [UPDATE_POST_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      addPost: reducerUtils.error(error)
+      updatePost: reducerUtils.error(error)
     }),
     [POST_REPORT]: state => ({
       ...state,
