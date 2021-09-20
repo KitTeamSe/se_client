@@ -25,23 +25,6 @@ const FormTextField = styled(TextField)`
   min-width: 256px;
 `;
 
-const MainWrapper = styled.div`
-  margin: auto;
-  margin-top: 3rem;
-  width: 70vw;
-  max-width: 100%;
-  padding: 1.5rem;
-  display: display;
-  align-items: center;
-  background-color: #ffffff;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-  @media ${props => props.theme.mobile} {
-    width: calc(100vw - 1rem);
-    margin-top: 1rem;
-    padding: 0;
-  }
-`;
-
 const NoBoardBox = styled.div`
   width: 100%;
   height: 100%;
@@ -289,7 +272,7 @@ const SecretPostPassword = props => {
   const { password, PasswordSubmit, onChange } = props;
 
   return (
-    <MainWrapper>
+    <>
       <FormField onSubmit={PasswordSubmit}>
         <FormTextField
           autoFocus
@@ -303,7 +286,7 @@ const SecretPostPassword = props => {
           확인
         </SubmitButton>
       </FormField>
-    </MainWrapper>
+    </>
   );
 };
 
@@ -355,7 +338,7 @@ const Post = props => {
   const res = data.data;
 
   return (
-    <MainWrapper>
+    <>
       <PostHeader
         res={res}
         moremenuEl={moremenuEl}
@@ -366,7 +349,7 @@ const Post = props => {
       />
       <PostMain res={res} />
       <ReplyListContainer replyReportHandle={replyReportHandle} />
-    </MainWrapper>
+    </>
   );
 };
 

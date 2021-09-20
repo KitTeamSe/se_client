@@ -137,7 +137,6 @@ const PostUpdateAction = props => {
         variant="contained"
         color="default"
         size="small"
-        type="submit"
         onClick={onCancel}
       >
         취소
@@ -171,7 +170,6 @@ const PostUpdateFooter = props => {
         handleChange={handleChange}
         handleSecret={handleSecret}
         handleNotice={handleNotice}
-        onSubmit={onSubmit}
       />
       <PostUpdateAction onSubmit={onSubmit} onCancel={onCancel} />
     </Wrapper>
@@ -193,7 +191,7 @@ const PostUpdate = props => {
     <>
       <PostTitle {...postTitleProps} />
       <PostTagAdd {...postTagAddProps} />
-      <Editor {...editorProps} />
+      {editorProps.data && <Editor {...editorProps} />}
       <FileAttachDropZone {...fileAttachDropZoneProps} />
       <AttachImageList {...attachImageListProps} />
       <AttachList {...attachListProps} />

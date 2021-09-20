@@ -11,7 +11,7 @@ import {
 import {
   updatePost,
   changeField,
-  initializeForm as initializePostForm,
+  initialize as initializePost,
   loadPost
 } from '../../modules/post';
 import confirmFileExtension from '../../utils/confirmFileExtension';
@@ -123,7 +123,6 @@ const PostUpdateContainer = props => {
     e.preventDefault();
     const { postId } = match.params;
     const {
-      anonymousNickname,
       anonymousPassword,
       isNotice,
       isSecret,
@@ -132,10 +131,8 @@ const PostUpdateContainer = props => {
       tagList,
       attachmentList
     } = updateForm;
-    const anonymous = { anonymousNickname, anonymousPassword };
     const replaceText = getDecodeHTML(text);
     const postContent = { title, text: replaceText };
-    const { boardNameEng } = match.params;
     const attachIdList = attachmentList.map(attach => ({
       attachId: attach.attachId
     }));
@@ -143,9 +140,8 @@ const PostUpdateContainer = props => {
     dispatch(
       updatePost({
         postId,
-        anonymous,
+        anonymousPassword,
         attachmentList: attachIdList,
-        boardNameEng,
         isNotice,
         isSecret,
         postContent,
@@ -155,13 +151,13 @@ const PostUpdateContainer = props => {
   };
 
   const onGoBack = () => {
-    const { boardNameEng, postId } = match.params;
-    history.push(`/board/${boardNameEng}/${postId}`);
+    console.log('aaa');
+    history.goBack();
   };
 
   const onInitialize = () => {
     dispatch(initializeTag());
-    dispatch(initializePostForm());
+    dispatch(initializePost());
   };
 
   const onCancel = () => {
@@ -263,13 +259,10 @@ const PostUpdateContainer = props => {
 
   useEffect(() => {
     if (updateData) {
+      onInitialize();
       onGoBack();
     }
   }, [updateData]);
-
-  useEffect(() => {
-    return onInitialize();
-  }, []);
 
   const postTitleProps = {
     value: updateForm.title,

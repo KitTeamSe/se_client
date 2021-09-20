@@ -13,11 +13,11 @@ const BoardContainer = props => {
   const [boardPage, setBoardPage] = useState(1);
   const [boardDescription, setBoardDescription] = useState('');
   const [postSearchType, setPostSearchType] = useState('TITLE_TEXT');
-  const { data, loading, error, menuList } = useSelector(({ post }) => ({
+  const { data, loading, error, menuList } = useSelector(({ post, menu }) => ({
     data: post.loadedPostList.data,
     loading: post.loadedPostList.loading,
     error: post.loadedPostList.error,
-    menuList: post.loadedMenuList.data
+    menuList: menu.loadedMenuList.data
   }));
 
   const pageSize = 20;
@@ -59,7 +59,7 @@ const BoardContainer = props => {
     };
     dispatch(loadPostList(parameter));
     setBoardPage(page);
-  }, [location.search, boardNameEng, menuList]);
+  }, [location.search]);
 
   const onChange = e => {
     e.preventDefault();

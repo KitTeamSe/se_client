@@ -11,7 +11,7 @@ import {
 import {
   addPost,
   changeField,
-  initializeForm as initializePostForm
+  initialize as initializePost
 } from '../../modules/post';
 import confirmFileExtension from '../../utils/confirmFileExtension';
 import { getDecodeHTML } from '../../utils/format';
@@ -132,7 +132,7 @@ const PostAddContainer = props => {
 
   const onInitialize = () => {
     dispatch(initializeTag());
-    dispatch(initializePostForm());
+    dispatch(initializePost());
   };
 
   const onCancel = () => {
@@ -222,13 +222,10 @@ const PostAddContainer = props => {
 
   useEffect(() => {
     if (addData) {
+      onInitialize();
       onGoBack();
     }
   }, [addData]);
-
-  useEffect(() => {
-    return onInitialize();
-  }, []);
 
   const postTitleProps = {
     value: addForm.title,

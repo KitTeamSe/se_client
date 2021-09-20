@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import {
   faEye,
   faCommentAlt,
@@ -29,22 +29,6 @@ import Tags from '../Post/Tags';
 const LoadingCircle = styled(CircularProgress)`
   position: absolute;
   bottom: 50vh;
-`;
-
-const MainWrapper = styled.div`
-  margin: auto;
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 70vw;
-  padding: 0 1.5rem;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-  @media ${props => props.theme.mobile} {
-    width: calc(100vw - 1rem);
-    margin-top: 1rem;
-    padding: 0.5rem;
-  }
 `;
 
 const NoneBorderCell = styled(TableCell)`
@@ -335,15 +319,11 @@ const Board = props => {
   }
 
   if (data === null || loading) {
-    return (
-      <MainWrapper>
-        <LoadingCircle />
-      </MainWrapper>
-    );
+    return <LoadingCircle />;
   }
   const res = data.data;
   return (
-    <MainWrapper>
+    <>
       <BoardHeader
         boardDescription={boardDescription}
         postSearchType={postSearchType}
@@ -366,7 +346,7 @@ const Board = props => {
           />
         </>
       )}
-    </MainWrapper>
+    </>
   );
 };
 
