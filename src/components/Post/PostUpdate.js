@@ -95,11 +95,17 @@ const NoticeToggle = props => {
 };
 
 const PostUpdateInput = props => {
-  const { updateForm, handleChange, handleSecret, handleNotice } = props;
+  const {
+    isAccountPost,
+    updateForm,
+    handleChange,
+    handleSecret,
+    handleNotice
+  } = props;
 
   return (
     <InputWrapper>
-      {!localStorage.getItem('token') || !localStorage.getItem('userId') ? (
+      {!isAccountPost ? (
         <InputStyled
           placeholder="비밀번호"
           id="anonymousPassword"
@@ -109,9 +115,7 @@ const PostUpdateInput = props => {
         />
       ) : null}
       <SecretToggle onChange={handleSecret} />
-      {localStorage.getItem('token') && localStorage.getItem('userId') ? (
-        <NoticeToggle onChange={handleNotice} />
-      ) : null}
+      {isAccountPost ? <NoticeToggle onChange={handleNotice} /> : null}
     </InputWrapper>
   );
 };
@@ -155,6 +159,7 @@ const PostUpdateAction = props => {
 };
 const PostUpdateFooter = props => {
   const {
+    isAccountPost,
     updateForm,
     handleChange,
     handleSecret,
@@ -166,6 +171,7 @@ const PostUpdateFooter = props => {
   return (
     <Wrapper>
       <PostUpdateInput
+        isAccountPost={isAccountPost}
         updateForm={updateForm}
         handleChange={handleChange}
         handleSecret={handleSecret}
@@ -190,7 +196,7 @@ const PostUpdate = props => {
   return (
     <>
       <PostTitle {...postTitleProps} />
-      <PostTagAdd {...postTagAddProps} />
+      {postTagAddProps.isAccountPost && <PostTagAdd {...postTagAddProps} />}
       {editorProps.data && <Editor {...editorProps} />}
       <FileAttachDropZone {...fileAttachDropZoneProps} />
       <AttachImageList {...attachImageListProps} />

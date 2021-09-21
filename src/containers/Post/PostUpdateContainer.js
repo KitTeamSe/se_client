@@ -270,6 +270,7 @@ const PostUpdateContainer = props => {
   };
 
   const postTagAddProps = {
+    isAccountPost: loadedPostData ? loadedPostData.data.accountIdString : null,
     value: searchText,
     tagData: updateForm.tagList,
     searchTagData,
@@ -306,6 +307,7 @@ const PostUpdateContainer = props => {
   };
 
   const postUpdateFooterProps = {
+    isAccountPost: loadedPostData ? loadedPostData.data.accountIdString : null,
     updateForm,
     handleChange,
     handleSecret,
