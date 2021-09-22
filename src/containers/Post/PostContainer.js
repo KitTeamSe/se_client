@@ -16,7 +16,7 @@ import AnonymousDeleteDialog from '../../components/Post/AnonymousDeleteDialog';
 import ReportDialog from '../../components/Post/ReportDialog';
 
 const PostContainer = props => {
-  const { location, match } = props;
+  const { location, match, history } = props;
   const [moremenuEl, setMoremenuEl] = useState(null);
   const [writerEl, setWriterEl] = useState(null);
   const [secretPost, setSecretPost] = useState(false);
@@ -151,6 +151,11 @@ const PostContainer = props => {
     setReportDescription('');
   };
 
+  const updatePostFunction = () => {
+    const { boardNameEng, postId } = match.params;
+    history.push(`/board/${boardNameEng}/${postId}/write`);
+  };
+
   const banFunction = () => {
     console.log('ban logic');
   };
@@ -190,6 +195,9 @@ const PostContainer = props => {
         break;
       case 'post':
         postFunction();
+        break;
+      case 'fix':
+        updatePostFunction();
         break;
       case 'delete':
         deleteBoxHandle();

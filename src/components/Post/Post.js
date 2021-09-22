@@ -11,7 +11,9 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ConditionClassify, menuStorage } from '../../DataExport';
 import ReplyListContainer from '../../containers/Reply/ReplyListContainer';
+import EditorOutput from '../Editor/EditorOutput';
 import Tags from './Tags';
+import { getEncodeHTML } from '../../utils/format';
 
 const LoadingCircle = styled(CircularProgress)`
   position: absolute;
@@ -23,22 +25,6 @@ const FormTextField = styled(TextField)`
   min-width: 256px;
 `;
 
-const MainWrapper = styled.div`
-  margin: auto;
-  margin-top: 3rem;
-  width: 70vw;
-  padding: 1.5rem;
-  display: display;
-  align-items: center;
-  background-color: #ffffff;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-  @media ${props => props.theme.mobile} {
-    width: calc(100vw - 1rem);
-    margin-top: 1rem;
-    padding: 0.5rem;
-  }
-`;
-
 const NoBoardBox = styled.div`
   width: 100%;
   height: 100%;
@@ -48,8 +34,7 @@ const NoBoardBox = styled.div`
 `;
 
 const PostHead = styled.div`
-  width: 100%;
-  padding-bottom: 1rem;
+  padding: 1rem 0.5rem;
 `;
 
 const PostHeadTitle = styled.div`
@@ -78,7 +63,7 @@ const AnonymousIcon = styled.span`
 `;
 
 const PostText = styled.div`
-  padding: 3rem 2rem;
+  padding: 3rem 0.6em;
   font-size: 1rem;
   border-top: 1px solid #cccccc;
   border-bottom: 1px solid #cccccc;
@@ -273,9 +258,12 @@ const PostHeader = props => {
 const PostMain = props => {
   const { res } = props;
   const { postContent } = res;
+  const handleContent = () => {
+    return { __html: getEncodeHTML(postContent.text) };
+  };
   return (
     <PostText>
-      <p>{postContent.text}</p>
+      <EditorOutput content={handleContent()} />
     </PostText>
   );
 };
@@ -284,7 +272,7 @@ const SecretPostPassword = props => {
   const { password, PasswordSubmit, onChange } = props;
 
   return (
-    <MainWrapper>
+    <>
       <FormField onSubmit={PasswordSubmit}>
         <FormTextField
           autoFocus
@@ -298,7 +286,7 @@ const SecretPostPassword = props => {
           확인
         </SubmitButton>
       </FormField>
-    </MainWrapper>
+    </>
   );
 };
 
@@ -350,7 +338,7 @@ const Post = props => {
   const res = data.data;
 
   return (
-    <MainWrapper>
+    <>
       <PostHeader
         res={res}
         moremenuEl={moremenuEl}
@@ -361,7 +349,7 @@ const Post = props => {
       />
       <PostMain res={res} />
       <ReplyListContainer replyReportHandle={replyReportHandle} />
-    </MainWrapper>
+    </>
   );
 };
 

@@ -18,9 +18,6 @@ const CHANGE_FIELD = 'post/CHANGE_FIELD';
 const [LOAD_POST_LIST, LOAD_POST_LIST_SUCCESS, LOAD_POST_LIST_FAILURE] =
   createRequestActionTypes('post/LOAD_POST_LIST');
 
-const [LOAD_MENU_LIST, LOAD_MENU_LIST_SUCCESS, LOAD_MENU_LIST_FAILURE] =
-  createRequestActionTypes('post/LOAD_MENU_LIST');
-
 const [SEARCH_POST, SEARCH_POST_SUCCESS, SEARCH_POST_FAILURE] =
   createRequestActionTypes('post/SEARCH_POST');
 
@@ -41,6 +38,9 @@ const [
 
 const [ADD_POST, ADD_POST_SUCCESS, ADD_POST_FAILURE] =
   createRequestActionTypes('post/ADD_POST');
+
+const [UPDATE_POST, UPDATE_POST_SUCCESS, UPDATE_POST_FAILURE] =
+  createRequestActionTypes('post/UPDATE_POST');
 
 const [POST_REPORT, POST_REPORT_SUCCESS, POST_REPORT_FAILURE] =
   createRequestActionTypes('post/POST_REPORT');
@@ -69,8 +69,6 @@ export const loadPostList = createAction(
     size
   })
 );
-
-export const loadMenuList = createAction(LOAD_MENU_LIST);
 
 export const searchPost = createAction(
   SEARCH_POST,
@@ -124,6 +122,29 @@ export const addPost = createAction(
   })
 );
 
+export const updatePost = createAction(
+  UPDATE_POST,
+  ({
+    postId,
+    anonymousPassword,
+    attachmentList,
+    boardNameEng,
+    isNotice,
+    isSecret,
+    postContent,
+    tagList
+  }) => ({
+    postId,
+    anonymousPassword,
+    attachmentList,
+    boardNameEng,
+    isNotice,
+    isSecret,
+    postContent,
+    tagList
+  })
+);
+
 export const postReport = createAction(
   POST_REPORT,
   ({ description, reportType, targetId }) => ({
@@ -135,7 +156,6 @@ export const postReport = createAction(
 
 // Sagas
 const loadPostListSaga = createRequestSaga(LOAD_POST_LIST, api.loadPostList);
-const loadMenuListSage = createRequestSaga(LOAD_MENU_LIST, api.loadMenuList);
 const searchPostSaga = createRequestSaga(SEARCH_POST, api.searchPost);
 const loadPostSaga = createRequestSaga(LOAD_POST, api.loadPost);
 const loadSecretPostSaga = createRequestSaga(
@@ -148,17 +168,18 @@ const anonymousPostDeleteSaga = createRequestSaga(
   api.anonymousPostDelete
 );
 const addPostSaga = createRequestSaga(ADD_POST, api.addPost);
+const updatePostSaga = createRequestSaga(UPDATE_POST, api.updatePost);
 const postReportSaga = createRequestSaga(POST_REPORT, api.reportPost);
 
 export function* postSaga() {
   yield takeLatest(LOAD_POST_LIST, loadPostListSaga);
-  yield takeLatest(LOAD_MENU_LIST, loadMenuListSage);
   yield takeLatest(SEARCH_POST, searchPostSaga);
   yield takeLatest(LOAD_POST, loadPostSaga);
   yield takeLatest(LOAD_SECRET_POST, loadSecretPostSaga);
   yield takeLatest(POST_DELETE, postDeleteSaga);
   yield takeLatest(ANONYMOUS_POST_DELETE, anonymousPostDeleteSaga);
   yield takeLatest(ADD_POST, addPostSaga);
+  yield takeLatest(UPDATE_POST, updatePostSaga);
   yield takeLatest(POST_REPORT, postReportSaga);
 }
 
@@ -174,11 +195,20 @@ const initialState = {
     title: '',
     tagList: []
   },
+  updateForm: {
+    anonymousPassword: '',
+    attachmentList: [],
+    isNotice: 'NORMAL',
+    isSecret: 'NORMAL',
+    text: '',
+    title: '',
+    tagList: []
+  },
   loadedPostList: reducerUtils.initial(),
-  loadedMenuList: reducerUtils.initial(),
   loadedPost: reducerUtils.initial(),
   postDeleteRes: reducerUtils.initial(),
   addPost: reducerUtils.initial(),
+  updatePost: reducerUtils.initial(),
   reportRes: reducerUtils.initial()
 };
 
@@ -189,6 +219,15 @@ export default handleActions(
       ...state,
       addForm: {
         anonymousNickname: '',
+        anonymousPassword: '',
+        attachmentList: [],
+        isNotice: 'NORMAL',
+        isSecret: 'NORMAL',
+        text: '',
+        title: '',
+        tagList: []
+      },
+      updateForm: {
         anonymousPassword: '',
         attachmentList: [],
         isNotice: 'NORMAL',
@@ -213,18 +252,6 @@ export default handleActions(
     [LOAD_POST_LIST_FAILURE]: (state, { payload: error }) => ({
       ...state,
       loadedPostList: reducerUtils.error(error)
-    }),
-    [LOAD_MENU_LIST]: state => ({
-      ...state,
-      loadedMenuList: reducerUtils.loading(state.loadedMenuList.data)
-    }),
-    [LOAD_MENU_LIST_SUCCESS]: (state, { payload: response }) => ({
-      ...state,
-      loadedMenuList: reducerUtils.success(response)
-    }),
-    [LOAD_MENU_LIST_FAILURE]: (state, { payload: error }) => ({
-      ...state,
-      loadedMenuList: reducerUtils.error(error)
     }),
     [SEARCH_POST]: state => ({
       ...state,
@@ -297,6 +324,18 @@ export default handleActions(
     [ADD_POST_FAILURE]: (state, { payload: error }) => ({
       ...state,
       addPost: reducerUtils.error(error)
+    }),
+    [UPDATE_POST]: state => ({
+      ...state,
+      updatePost: reducerUtils.loading(state.updatePost.data)
+    }),
+    [UPDATE_POST_SUCCESS]: (state, { payload: response }) => ({
+      ...state,
+      updatePost: reducerUtils.success(response)
+    }),
+    [UPDATE_POST_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      updatePost: reducerUtils.error(error)
     }),
     [POST_REPORT]: state => ({
       ...state,

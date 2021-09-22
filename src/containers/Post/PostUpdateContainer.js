@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import PostAdd from '../../components/Post/PostAdd';
+import PostUpdate from '../../components/Post/PostUpdate';
 import { addAttachList } from '../../modules/attach';
 import {
   searchTag,
@@ -9,21 +9,23 @@ import {
   initialize as initializeTag
 } from '../../modules/tag';
 import {
-  addPost,
+  updatePost,
   changeField,
-  initialize as initializePost
+  initialize as initializePost,
+  loadPost
 } from '../../modules/post';
 import confirmFileExtension from '../../utils/confirmFileExtension';
-import { getDecodeHTML } from '../../utils/format';
+import { getDecodeHTML, getEncodeHTML } from '../../utils/format';
 
-const PostAddContainer = props => {
-  const { history, match } = props;
+const PostUpdateContainer = props => {
+  const { history, match, location } = props;
   const dispatch = useDispatch();
   const {
-    addForm,
-    addData,
-    addLoading,
-    addError,
+    loadedPostData,
+    updateForm,
+    updateData,
+    updateLoading,
+    updateError,
     addAttachData,
     attachLoading,
     attachError,
@@ -32,10 +34,11 @@ const PostAddContainer = props => {
     searchTagLoading,
     searchTagError
   } = useSelector(({ post, attach, tag }) => ({
-    addForm: post.addForm,
-    addData: post.addPost.data,
-    addLoading: post.addPost.loading,
-    addError: post.addPost.error,
+    loadedPostData: post.loadedPost.data,
+    updateForm: post.updateForm,
+    updateData: post.updatePost.data,
+    updateLoading: post.updatePost.loading,
+    updateError: post.updatePost.error,
     addAttachData: attach.addAttach.data,
     attachLoading: attach.addAttach.loading,
     attachError: attach.addAttach.error,
@@ -46,13 +49,37 @@ const PostAddContainer = props => {
   }));
   const [tagAddMessage, setTagAddMessage] = useState('');
 
+  const handlePost = () => {
+    const { postId } = match.params;
+    const id = postId;
+
+    dispatch(loadPost({ id }));
+  };
+
   const handlePostForm = (form, key, value) => {
     dispatch(changeField({ form, key, value }));
   };
 
+  const handleUpdateForm = () => {
+    const { postContent, attaches, tags, isNotice, isSecret } =
+      loadedPostData.data;
+    const attachmentList = attaches;
+    const tagList = tags.map(e => ({ tagId: e.tagId, text: e.tag }));
+    const { title, text } = postContent;
+    const replaceText = getEncodeHTML(text);
+    const form = 'updateForm';
+
+    handlePostForm(form, 'attachmentList', attachmentList);
+    handlePostForm(form, 'isNotice', isNotice);
+    handlePostForm(form, 'isSecret', isSecret);
+    handlePostForm(form, 'title', title);
+    handlePostForm(form, 'text', replaceText);
+    handlePostForm(form, 'tagList', tagList);
+  };
+
   const handleToggle = (e, values) => {
     const { id, checked } = e.target;
-    const form = 'addForm';
+    const form = 'updateForm';
     const key = id;
     const value = checked ? values[0] : values[1];
 
@@ -61,7 +88,7 @@ const PostAddContainer = props => {
 
   const handleChange = e => {
     const { id, value } = e.target;
-    const form = 'addForm';
+    const form = 'updateForm';
     const key = id;
 
     handlePostForm(form, key, value);
@@ -76,7 +103,7 @@ const PostAddContainer = props => {
   };
 
   const handleContentText = (e, editor) => {
-    const form = 'addForm';
+    const form = 'updateForm';
     const key = 'text';
     const value = editor.getData();
 
@@ -94,8 +121,8 @@ const PostAddContainer = props => {
 
   const onSubmit = e => {
     e.preventDefault();
+    const { postId } = match.params;
     const {
-      anonymousNickname,
       anonymousPassword,
       isNotice,
       isSecret,
@@ -103,20 +130,18 @@ const PostAddContainer = props => {
       title,
       tagList,
       attachmentList
-    } = addForm;
-    const anonymous = { anonymousNickname, anonymousPassword };
+    } = updateForm;
     const replaceText = getDecodeHTML(text);
     const postContent = { title, text: replaceText };
-    const { boardNameEng } = match.params;
     const attachIdList = attachmentList.map(attach => ({
       attachId: attach.attachId
     }));
 
     dispatch(
-      addPost({
-        anonymous,
+      updatePost({
+        postId,
+        anonymousPassword,
         attachmentList: attachIdList,
-        boardNameEng,
         isNotice,
         isSecret,
         postContent,
@@ -126,8 +151,8 @@ const PostAddContainer = props => {
   };
 
   const onGoBack = () => {
-    const { boardNameEng } = match.params;
-    history.push(`/board/${boardNameEng}`);
+    console.log('aaa');
+    history.goBack();
   };
 
   const onInitialize = () => {
@@ -141,9 +166,11 @@ const PostAddContainer = props => {
   };
 
   const onDeleteAttach = attachId => {
-    const form = 'addForm';
+    const form = 'updateForm';
     const key = 'attachmentList';
-    const value = addForm.attachmentList.filter(e => e.attachId !== attachId);
+    const value = updateForm.attachmentList.filter(
+      e => e.attachId !== attachId
+    );
 
     handlePostForm(form, key, value);
   };
@@ -158,9 +185,9 @@ const PostAddContainer = props => {
   };
 
   const handleReplyImage = () => {
-    const form = 'addForm';
-    const attachListData = addForm.attachmentList.concat(addAttachData.data);
-    const editorText = `${addForm.text}${addAttachData.data
+    const form = 'updateForm';
+    const attachListData = updateForm.attachmentList.concat(addAttachData.data);
+    const editorText = `${updateForm.text}${addAttachData.data
       .filter(e => confirmFileExtension(e.fileName))
       .map(e => handleEditorImg(e))
       .join('')}`;
@@ -170,14 +197,14 @@ const PostAddContainer = props => {
   };
 
   const handleRemoveTag = tag => {
-    const form = 'addForm';
+    const form = 'updateForm';
     const key = 'tagList';
-    const tagListData = addForm.tagList.filter(e => e.tagId !== tag.tagId);
+    const tagListData = updateForm.tagList.filter(e => e.tagId !== tag.tagId);
     handlePostForm(form, key, tagListData);
   };
 
   const handleClearTag = () => {
-    const form = 'addForm';
+    const form = 'updateForm';
     const key = 'tagList';
     const tagListData = [];
     handlePostForm(form, key, tagListData);
@@ -194,19 +221,29 @@ const PostAddContainer = props => {
     if (searchTagData && !searchTagData.data.find(e => e.text === searchText)) {
       return setTagAddMessage('존재하지 않는 태그입니다.');
     }
-    if (addForm.tagList.find(e => e.text === searchText)) {
+    if (updateForm.tagList.find(e => e.text === searchText)) {
       return setTagAddMessage('이미 추가된 태그입니다.');
     }
-    const form = 'addForm';
+    const form = 'updateForm';
     const key = 'tagList';
     const newTag = searchTagData.data.find(e => e.text === searchText);
     const tagListData = newTag
-      ? addForm.tagList.concat(newTag)
-      : addForm.tagList;
+      ? updateForm.tagList.concat(newTag)
+      : updateForm.tagList;
 
     handlePostForm(form, key, tagListData);
     return setTagAddMessage('');
   };
+
+  useEffect(() => {
+    handlePost();
+  }, [location.search]);
+
+  useEffect(() => {
+    if (loadedPostData) {
+      handleUpdateForm();
+    }
+  }, [loadedPostData]);
 
   useEffect(() => {
     if (addAttachData) {
@@ -221,20 +258,21 @@ const PostAddContainer = props => {
   }, [searchText]);
 
   useEffect(() => {
-    if (addData) {
+    if (updateData) {
       onInitialize();
       onGoBack();
     }
-  }, [addData]);
+  }, [updateData]);
 
   const postTitleProps = {
-    value: addForm.title,
+    value: updateForm.title,
     onChange: handleChange
   };
 
   const postTagAddProps = {
+    isAccountPost: loadedPostData ? loadedPostData.data.accountIdString : null,
     value: searchText,
-    tagData: addForm.tagList,
+    tagData: updateForm.tagList,
     searchTagData,
     searchTagLoading,
     searchTagError,
@@ -247,7 +285,7 @@ const PostAddContainer = props => {
 
   const editorProps = {
     onChange: handleContentText,
-    data: addForm.text,
+    data: updateForm.text,
     placeholder: '내용을 입력하세요'
   };
 
@@ -258,18 +296,19 @@ const PostAddContainer = props => {
   };
 
   const attachImageListProps = {
-    attachImgList: addForm.attachmentList.filter(e =>
+    attachImgList: updateForm.attachmentList.filter(e =>
       confirmFileExtension(e.fileName)
     )
   };
 
   const attachListProps = {
-    attachList: addForm.attachmentList,
+    attachList: updateForm.attachmentList,
     onDeleteAttach
   };
 
-  const postAddFooterProps = {
-    addForm,
+  const postUpdateFooterProps = {
+    isAccountPost: loadedPostData ? loadedPostData.data.accountIdString : null,
+    updateForm,
     handleChange,
     handleSecret,
     handleNotice,
@@ -278,22 +317,22 @@ const PostAddContainer = props => {
   };
 
   const errorMessageProps = {
-    loading: addLoading,
-    error: addError
+    loading: updateLoading,
+    error: updateError
   };
 
   return (
-    <PostAdd
+    <PostUpdate
       postTitleProps={postTitleProps}
       postTagAddProps={postTagAddProps}
       fileAttachDropZoneProps={fileAttachDropZoneProps}
       attachImageListProps={attachImageListProps}
       attachListProps={attachListProps}
       editorProps={editorProps}
-      postAddFooterProps={postAddFooterProps}
+      postUpdateFooterProps={postUpdateFooterProps}
       errorMessageProps={errorMessageProps}
     />
   );
 };
 
-export default withRouter(PostAddContainer);
+export default withRouter(PostUpdateContainer);
