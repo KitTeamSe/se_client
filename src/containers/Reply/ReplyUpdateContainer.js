@@ -167,9 +167,6 @@ const ReplyUpdateContainer = props => {
 
   useEffect(() => {
     handleReply();
-    console.log(match);
-    console.log(location);
-    console.log(history);
   }, [location.search]);
 
   useEffect(() => {

@@ -157,6 +157,10 @@ const PostContainer = props => {
   const profileFunction = accountIdString => {
     history.push(`/profile/${accountIdString}`);
   };
+  const updatePostFunction = () => {
+    const { boardNameEng, postId } = match.params;
+    history.push(`/board/${boardNameEng}/${postId}/write`);
+  };
 
   const banFunction = () => {
     console.log('ban logic');
@@ -194,6 +198,9 @@ const PostContainer = props => {
         break;
       case 'post':
         postFunction();
+        break;
+      case 'fix':
+        updatePostFunction();
         break;
       case 'delete':
         deleteBoxHandle();

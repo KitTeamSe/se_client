@@ -78,7 +78,7 @@ const SecretToggle = props => {
 };
 
 const ReplyUpdateHeader = () => {
-  return <PostHeadTitle variant="h6">댓글 수정</PostHeadTitle>;
+  return <PostHeadTitle>댓글 수정</PostHeadTitle>;
 };
 
 const ReplyUpdateInput = props => {

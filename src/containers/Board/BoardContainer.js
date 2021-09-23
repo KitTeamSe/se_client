@@ -6,18 +6,18 @@ import Board from '../../components/Board/Board';
 import { loadPostList, searchPost } from '../../modules/post';
 
 const BoardContainer = props => {
-  const { location, match } = props;
+  const { location, match, history } = props;
   const dispatch = useDispatch();
   const [keyword, setKeyword] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
   const [boardPage, setBoardPage] = useState(1);
   const [boardDescription, setBoardDescription] = useState('');
   const [postSearchType, setPostSearchType] = useState('TITLE_TEXT');
-  const { data, loading, error, menuList } = useSelector(({ post }) => ({
+  const { data, loading, error, menuList } = useSelector(({ post, menu }) => ({
     data: post.loadedPostList.data,
     loading: post.loadedPostList.loading,
     error: post.loadedPostList.error,
-    menuList: post.loadedMenuList.data
+    menuList: menu.loadedMenuList.data
   }));
 
   const pageSize = 20;
@@ -43,6 +43,7 @@ const BoardContainer = props => {
       const parameter = {
         boardNameEng,
         direction,
+        isNotice: 'NORMAL',
         page: 0,
         size
       };
@@ -54,12 +55,13 @@ const BoardContainer = props => {
     const parameter = {
       boardNameEng,
       direction,
+      isNotice: 'NORMAL',
       page: page - 1,
       size
     };
     dispatch(loadPostList(parameter));
     setBoardPage(page);
-  }, [location.search, boardNameEng, menuList]);
+  }, [location.search]);
 
   const onChange = e => {
     e.preventDefault();
@@ -101,6 +103,10 @@ const BoardContainer = props => {
     dispatch(searchPost({ postSearchRequest }));
   };
 
+  const onWritePost = () => {
+    history.push(`${match.url}/write`);
+  };
+
   return (
     <Board
       data={data}
@@ -109,6 +115,7 @@ const BoardContainer = props => {
       onChange={onChange}
       onSearchChange={onSearchChange}
       onSearch={onSearch}
+      onWritePost={onWritePost}
       keyword={keyword}
       searchKeyword={searchKeyword}
       onPostSearchTypeChange={onPostSearchTypeChange}

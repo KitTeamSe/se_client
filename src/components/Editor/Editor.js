@@ -307,10 +307,10 @@ const Editor = props => {
 
   return (
     <CKEditor
+      data={data}
       editor={ClassicEditor}
       config={config(placeholder)}
       onChange={onChange}
-      data={data}
     />
   );
 };

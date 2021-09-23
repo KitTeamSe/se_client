@@ -55,6 +55,56 @@ export const anonymousPostDelete = async ({ anonymousPassword, postId }) => {
   });
 };
 
+export const addPost = ({
+  anonymous,
+  attachmentList,
+  boardNameEng,
+  isNotice,
+  isSecret,
+  postContent,
+  tagList
+}) => {
+  const token = localStorage.getItem('token');
+  const body = {
+    anonymous,
+    attachmentList,
+    boardNameEng,
+    isNotice,
+    isSecret,
+    postContent,
+    tagList
+  };
+  return client.post(`/post`, body, tokenHeader(token)).catch(error => {
+    throw error.response.data;
+  });
+};
+
+export const updatePost = ({
+  postId,
+  anonymousPassword,
+  attachmentList,
+  boardNameEng,
+  isNotice,
+  isSecret,
+  postContent,
+  tagList
+}) => {
+  const token = localStorage.getItem('token');
+  const body = {
+    postId,
+    anonymousPassword,
+    attachmentList,
+    boardNameEng,
+    isNotice,
+    isSecret,
+    postContent,
+    tagList
+  };
+  return client.put(`/post`, body, tokenHeader(token)).catch(error => {
+    throw error.response.data;
+  });
+};
+
 export const reportPost = async ({ description, reportType, targetId }) => {
   const body = { description, reportType, targetId };
   const token = localStorage.getItem('token');

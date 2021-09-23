@@ -1,7 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { faEye, faCommentAlt, faLock } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
+import {
+  faEye,
+  faCommentAlt,
+  faLock,
+  faEdit
+} from '@fortawesome/free-solid-svg-icons';
 import {
   CircularProgress,
   Table,
@@ -13,7 +18,8 @@ import {
   Paper,
   TextField,
   Select,
-  MenuItem
+  MenuItem,
+  Button
 } from '@material-ui/core';
 import { Pagination, PaginationItem } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -24,22 +30,6 @@ import NicknameContainer from '../../containers/Post/NicknameContainer';
 const LoadingCircle = styled(CircularProgress)`
   position: absolute;
   bottom: 50vh;
-`;
-
-const MainWrapper = styled.div`
-  margin: auto;
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 70vw;
-  padding: 0 1.5rem;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-  @media ${props => props.theme.mobile} {
-    width: calc(100vw - 1rem);
-    margin-top: 1rem;
-    padding: 0.5rem;
-  }
 `;
 
 const NoneBorderCell = styled(TableCell)`
@@ -132,6 +122,13 @@ const PaginationStyled = styled(Pagination)`
       padding: 4px;
     }
   }
+`;
+
+const ButtonStyled = styled(Button)`
+  font-weight: 500;
+  line-height: 1.5;
+  padding: 6px 12px;
+  border-radius: 100px;
 `;
 
 const Paginations = props => {
@@ -262,6 +259,7 @@ const BoardHeader = props => {
     keyword,
     onSearch,
     onSearchChange,
+    onWritePost,
     boardDescription
   } = props;
   return (
@@ -290,6 +288,16 @@ const BoardHeader = props => {
             onChange={onSearchChange}
           />
         </SearchBar>
+
+        <ButtonStyled
+          variant="contained"
+          color="default"
+          size="small"
+          startIcon={<FontAwesomeIcon icon={faEdit} size="sm" />}
+          onClick={onWritePost}
+        >
+          글쓰기
+        </ButtonStyled>
       </BoardHeadRight>
     </BoardHead>
   );
@@ -306,6 +314,7 @@ const Board = props => {
     searchKeyword,
     onSearch,
     onPostSearchTypeChange,
+    onWritePost,
     postSearchType,
     boardNameEng,
     boardPage,
@@ -317,15 +326,11 @@ const Board = props => {
   }
 
   if (data === null || loading) {
-    return (
-      <MainWrapper>
-        <LoadingCircle />
-      </MainWrapper>
-    );
+    return <LoadingCircle />;
   }
   const res = data.data;
   return (
-    <MainWrapper>
+    <>
       <BoardHeader
         boardDescription={boardDescription}
         postSearchType={postSearchType}
@@ -333,6 +338,7 @@ const Board = props => {
         keyword={keyword}
         onSearch={onSearch}
         onSearchChange={onSearchChange}
+        onWritePost={onWritePost}
       />
       {res.postListItem.content.length === 0 ? (
         <NoPost searchKeyword={searchKeyword} />
@@ -347,7 +353,7 @@ const Board = props => {
           />
         </>
       )}
-    </MainWrapper>
+    </>
   );
 };
 
