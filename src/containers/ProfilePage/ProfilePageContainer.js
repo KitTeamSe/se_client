@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ProfilePage from '../../components/ProfilePage/ProfilePage';
 import {
@@ -13,7 +13,7 @@ import WithdrawalDialog from '../../components/ProfilePage/WithdrawalDialog';
 import PwChangeDialog from '../../components/ProfilePage/PwChangeDialog';
 
 const ProfilePageContainer = props => {
-  const { match } = props;
+  const { match, history } = props;
 
   const [infoObj, setInfoObj] = useState(null);
   const [infoEditObj, setInfoEditObj] = useState({});
@@ -21,7 +21,6 @@ const ProfilePageContainer = props => {
   const [mode, setMode] = useState(null);
   const [error, setError] = useState(null);
 
-  const history = useHistory();
   const dispatch = useDispatch();
   const token = localStorage.getItem('token');
   const userId = localStorage.getItem('userId');

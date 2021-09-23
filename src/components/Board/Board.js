@@ -62,12 +62,6 @@ const InfoBox = styled.div`
   display: inline-block;
 `;
 
-// const NickName = styled.span`
-//   font-weight: 500;
-//   width: 6rem;
-//   font-size: 0.85rem;
-// `;
-
 const InfoIcon = styled(FontAwesomeIcon)`
   margin: 1px;
   color: gray;

@@ -1,14 +1,16 @@
 import { client, tokenHeader } from './client';
 
+const URL = 'post';
+
 export const loadPostList = async ({ boardNameEng, direction, page, size }) => {
   const parameters = { boardNameEng, direction, page, size };
-  return client.get('/post', { params: parameters }).catch(error => {
+  return client.get(`/${URL}`, { params: parameters }).catch(error => {
     throw error.response.data;
   });
 };
 
 export const searchPost = async ({ postSearchRequest }) => {
-  return client.post('/post/search', postSearchRequest).catch(error => {
+  return client.post(`/${URL}/search`, postSearchRequest).catch(error => {
     throw error.response.data;
   });
 };
@@ -21,34 +23,34 @@ export const loadMenuList = async () => {
 
 export const makeSomePost = async ({ data }) => {
   const token = localStorage.getItem('token');
-  return client.post('/post', data, tokenHeader(token)).catch(error => {
+  return client.post(`/${URL}`, data, tokenHeader(token)).catch(error => {
     throw error.response.data;
   });
 };
 
 export const loadPost = async ({ id }) => {
-  return client.get(`/post/${id}`).catch(error => {
+  return client.get(`/${URL}/${id}`).catch(error => {
     throw error.response.data;
   });
 };
 
 export const loadSecretPost = async ({ postId, password }) => {
   const parameters = { postId, password };
-  return client.get(`/post/secret`, { params: parameters }).catch(error => {
+  return client.get(`/${URL}/secret`, { params: parameters }).catch(error => {
     throw error.response.data;
   });
 };
 
 export const postDelete = async ({ id }) => {
   const token = localStorage.getItem('token');
-  return client.delete(`/post/${id}`, tokenHeader(token)).catch(error => {
+  return client.delete(`/${URL}/${id}`, tokenHeader(token)).catch(error => {
     throw error.response.data;
   });
 };
 
 export const anonymousPostDelete = async ({ anonymousPassword, postId }) => {
   const body = { anonymousPassword, postId };
-  return client.post(`/post/anonymous/${postId}`, body).catch(error => {
+  return client.post(`/${URL}/anonymous/${postId}`, body).catch(error => {
     throw error.response.data;
   });
 };
