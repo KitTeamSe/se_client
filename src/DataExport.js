@@ -73,7 +73,7 @@ export const tagList = {
 
 export const ConditionClassify = {
   LogoutNotAnonymous: {
-    writer: ['profile', 'post'],
+    writer: ['post'],
     menu: ['needLogin']
   },
   LogoutAnonymous: {
@@ -97,6 +97,7 @@ export const menuStorage = {
   fix: '수정',
   delete: '삭제',
   anonyDelete: '삭제',
+  ban: '차단',
   needLogin: '로그인을 해야 신고가 가능합니다'
 };
 

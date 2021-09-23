@@ -9,11 +9,7 @@ import {
   Menu,
   Select,
   MenuItem,
-  TextField,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText
+  CircularProgress
 } from '@material-ui/core';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -30,19 +26,26 @@ import {
   typeList
 } from '../../DataExport';
 
+const MainWrapper = styled.div`
+  margin: auto;
+  margin-top: 3rem;
+  width: 30vw;
+  padding: 1.5rem;
+  display: display;
+  align-items: center;
+  background-color: #ffffff;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  @media ${props => props.theme.mobile} {
+    width: calc(100vw - 1rem);
+    margin-top: 1rem;
+    padding: 0.5rem;
+  }
+`;
+
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-`;
-
-const InfoTableWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 396px;
 `;
 
 const InfoTable = styled(TableContainer)`
@@ -90,19 +93,6 @@ const FormInput = styled.input`
   }
 `;
 
-const FormField = styled.form`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  width: 100%;
-  align-items: center;
-`;
-
-const FormTextField = styled(TextField)`
-  margin: 12px 32px 12px 32px;
-  min-width: 256px;
-`;
-
 const ErrorText = styled.div`
   margin: 6px;
   font-size: 18px;
@@ -114,173 +104,65 @@ const FormSelectField = styled(Select)`
   width: 128px;
 `;
 
-const ButtonWrapper = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-`;
-
-const HalfButton = styled(Button)`
-  width: 50%;
-  padding: 8px;
-  margin: 8px;
-`;
-
 const RefreshIcon = styled(FontAwesomeIcon)`
-  position: absolute;
-  right: -10px;
-  transition: 0.5s;
+  margin-left: 1.5rem;
+  transition: 1s;
   &:hover {
-    transform: rotate(180deg);
+    transform: rotate(360deg);
     transition: 1s;
   }
 `;
 
-const PwChangeDialog = props => {
-  const { mode, error, newPwForm, modeChange, pwChangeSubmit, formChange } =
-    props;
-  return (
-    <>
-      <Dialog
-        open={mode === 'pwChangeMode'}
-        onClose={modeChange}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">비밀번호 변경</DialogTitle>
-        <FormField onSubmit={pwChangeSubmit}>
-          <FormTextField
-            autoFocus
-            id="nowPassword"
-            label="현재 비밀번호를 입력하세요"
-            type="password"
-            onChange={formChange}
-            value={newPwForm.nowPassword}
-          />
-          <FormTextField
-            id="newPassword"
-            label="새로운 비밀번호"
-            type="password"
-            onChange={formChange}
-            value={newPwForm.newPassword}
-          />
-          <FormTextField
-            id="newPasswordConfirm"
-            label="새로운 비밀번호 확인"
-            type="password"
-            onChange={formChange}
-            value={newPwForm.newPasswordConfirm}
-          />
-          <ErrorText>{error}</ErrorText>
-          <ButtonWrapper>
-            <HalfButton onClick={modeChange} color="primary">
-              취소
-            </HalfButton>
-            <HalfButton type="submit" onClick={pwChangeSubmit} color="primary">
-              변경하기
-            </HalfButton>
-          </ButtonWrapper>
-        </FormField>
-      </Dialog>
-    </>
-  );
-};
-
-const WithdrawalDialog = props => {
-  const {
-    mode,
-    error,
-    withDrawalForm,
-    modeChange,
-    formChange,
-    withdrawalSubmit
-  } = props;
-  return (
-    <>
-      <Dialog
-        open={mode === 'withdrawalMode'}
-        onClose={modeChange}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">회원 탈퇴</DialogTitle>
-        <DialogContent>
-          <DialogContentText> 나 탈퇴한다~~~~~~~~~</DialogContentText>
-        </DialogContent>
-        <FormField submit={withdrawalSubmit}>
-          <FormTextField
-            autoFocus
-            id="password"
-            label="비밀번호를 입력하세요"
-            type="password"
-            onChange={formChange}
-            value={withDrawalForm.password}
-          />
-          <FormTextField
-            id="text"
-            label="'탈퇴'를 입력하세요"
-            type="text"
-            onChange={formChange}
-            value={withDrawalForm.text}
-          />
-          <Wrapper>
-            <ErrorText style={{ fontSize: '16px' }}>{error}</ErrorText>
-          </Wrapper>
-          <ButtonWrapper>
-            <HalfButton onClick={modeChange} color="primary">
-              취소
-            </HalfButton>
-            <HalfButton
-              type="submit"
-              onClick={withdrawalSubmit}
-              color="primary"
-            >
-              탈퇴
-            </HalfButton>
-          </ButtonWrapper>
-        </FormField>
-      </Dialog>
-    </>
-  );
-};
+const LoadingCircle = styled(CircularProgress)`
+  position: absolute;
+  bottom: 50vh;
+`;
 
 const ProfileHeader = props => {
   const {
     mode,
     anchorEl,
-    error,
-    newPwForm,
-    withDrawalForm,
+    profileUserId,
+    userId,
     modeChange,
     menuClick,
-    formChange,
-    pwChangeSubmit,
-    withdrawalSubmit,
     editFormRefresh
   } = props;
+
+  if (profileUserId !== userId) {
+    return (
+      <MyinfoHeader>
+        <Welcome>{profileUserId} 님의 정보</Welcome>
+      </MyinfoHeader>
+    );
+  }
 
   return (
     <MyinfoHeader>
       {mode === 'editMode' ? (
         <>
           <div />
-          <Welcome>기본정보</Welcome>
-          <FontAwesomeIcon
-            icon={faTimesCircle}
-            size="lg"
-            color="#DC143C"
-            style={{ cursor: 'pointer' }}
-            onClick={modeChange}
-          />
-          <RefreshIcon
-            icon={faSyncAlt}
-            size="lg"
-            style={{ cursor: 'pointer' }}
-            onClick={editFormRefresh}
-          />
+          <Welcome>내 정보</Welcome>
+          <div>
+            <FontAwesomeIcon
+              icon={faTimesCircle}
+              size="lg"
+              color="#DC143C"
+              style={{ cursor: 'pointer' }}
+              onClick={modeChange}
+            />
+            <RefreshIcon
+              icon={faSyncAlt}
+              size="lg"
+              style={{ cursor: 'pointer' }}
+              onClick={editFormRefresh}
+            />
+          </div>
         </>
       ) : (
         <>
           <div />
-          <Welcome>기본정보</Welcome>
+          <Welcome>내 정보</Welcome>
           <FontAwesomeIcon
             icon={faTools}
             size="lg"
@@ -307,22 +189,6 @@ const ProfileHeader = props => {
           </Menu>
         </>
       )}
-      <PwChangeDialog
-        mode={mode}
-        error={error}
-        newPwForm={newPwForm}
-        modeChange={modeChange}
-        formChange={formChange}
-        pwChangeSubmit={pwChangeSubmit}
-      />
-      <WithdrawalDialog
-        mode={mode}
-        withDrawalForm={withDrawalForm}
-        error={error}
-        modeChange={modeChange}
-        formChange={formChange}
-        withdrawalSubmit={withdrawalSubmit}
-      />
     </MyinfoHeader>
   );
 };
@@ -331,7 +197,7 @@ const ProfileRow = props => {
   const { row } = props;
   return (
     <>
-      <TableRow>
+      <TableRow key={`${row[0]}profileRow`}>
         <TableCell component="th" scope="row">
           {accountData[row[0]]}
         </TableCell>
@@ -409,7 +275,7 @@ const EditRow = props => {
     typeChange
   } = props;
   return (
-    <TableRow>
+    <TableRow key={`${row[0]}profileRow`}>
       <TableCell component="th" scope="row">
         {accountData[row[0]]}
       </TableCell>
@@ -472,7 +338,7 @@ const ProfileBody = props => {
                     key={`${row[0]}editRow`}
                   />
                 ) : (
-                  <ProfileRow row={row} key={`${row[0]}profileRow`} />
+                  <ProfileRow row={row} />
                 )}
               </>
             ))}
@@ -485,15 +351,7 @@ const ProfileBody = props => {
 };
 
 const PropfilePage = props => {
-  const {
-    infoObj,
-    infoEditObj,
-    anchorEl,
-    newPwForm,
-    error,
-    withDrawalForm,
-    mode
-  } = props;
+  const { infoObj, infoEditObj, anchorEl, error, mode, loading } = props;
 
   const {
     handleChange,
@@ -502,42 +360,43 @@ const PropfilePage = props => {
     myinfoEditSubmit,
     menuClick,
     formChange,
-    pwChangeSubmit,
     typeChange,
-    withdrawalSubmit,
     editFormRefresh
   } = props;
 
+  if (infoObj === null || loading) {
+    return (
+      <Wrapper>
+        <LoadingCircle />
+      </Wrapper>
+    );
+  }
   const rows = Object.entries(infoObj);
-
+  const profileUserId = infoObj.idString;
+  const userId = localStorage.getItem('userId');
   return (
-    <Wrapper>
-      <InfoTableWrapper>
-        <ProfileHeader
-          mode={mode}
-          error={error}
-          anchorEl={anchorEl}
-          newPwForm={newPwForm}
-          withDrawalForm={withDrawalForm}
-          formChange={formChange}
-          modeChange={modeChange}
-          menuClick={menuClick}
-          pwChangeSubmit={pwChangeSubmit}
-          withdrawalSubmit={withdrawalSubmit}
-          editFormRefresh={editFormRefresh}
-        />
-        <ProfileBody
-          rows={rows}
-          infoEditObj={infoEditObj}
-          informationOpenAgreeChange={informationOpenAgreeChange}
-          handleChange={handleChange}
-          typeChange={typeChange}
-          mode={mode}
-          myinfoEditSubmit={myinfoEditSubmit}
-        />
-        <ErrorText>{error}</ErrorText>
-      </InfoTableWrapper>
-    </Wrapper>
+    <MainWrapper>
+      <ProfileHeader
+        mode={mode}
+        anchorEl={anchorEl}
+        profileUserId={profileUserId}
+        userId={userId}
+        formChange={formChange}
+        modeChange={modeChange}
+        menuClick={menuClick}
+        editFormRefresh={editFormRefresh}
+      />
+      <ProfileBody
+        rows={rows}
+        infoEditObj={infoEditObj}
+        informationOpenAgreeChange={informationOpenAgreeChange}
+        handleChange={handleChange}
+        typeChange={typeChange}
+        mode={mode}
+        myinfoEditSubmit={myinfoEditSubmit}
+      />
+      <ErrorText>{error}</ErrorText>
+    </MainWrapper>
   );
 };
 

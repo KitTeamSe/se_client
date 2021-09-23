@@ -1,7 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 import { takeLatest } from 'redux-saga/effects';
 import produce from 'immer';
-import * as api from '../../libs/api/auth';
+import * as api from '../../libs/api/account';
 import {
   createRequestActionTypes,
   createRequestSaga
@@ -28,8 +28,8 @@ export const changeField = createAction(
     value
   })
 );
-export const myinfo = createAction(MYINFO, ({ token }) => ({
-  token
+export const myinfo = createAction(MYINFO, ({ id }) => ({
+  id
 }));
 export const myinfoedit = createAction(MYINFOEDIT, ({ parameter, token }) => ({
   parameter,

@@ -140,11 +140,16 @@ const PostHeaderInfo = props => {
 
   function menuItem(type) {
     const condition = conditionMaker();
-
     return (
       <div>
         {ConditionClassify[condition][type].map(content => (
-          <MenuItem id={content} onClick={functionExcute} key={content}>
+          <MenuItem
+            id={content}
+            onClick={e => {
+              functionExcute(accountIdString, e);
+            }}
+            key={content}
+          >
             {menuStorage[content]}
           </MenuItem>
         ))}

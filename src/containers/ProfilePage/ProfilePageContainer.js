@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ProfilePage from '../../components/ProfilePage/ProfilePage';
 import {
@@ -9,15 +9,18 @@ import {
   changeField,
   accountdelete
 } from '../../modules/account';
+import WithdrawalDialog from '../../components/ProfilePage/WithdrawalDialog';
+import PwChangeDialog from '../../components/ProfilePage/PwChangeDialog';
 
-const ProfilePageContainer = () => {
-  const [infoObj, setInfoObj] = useState({ Waitting: 'Waitting' });
+const ProfilePageContainer = props => {
+  const { match, history } = props;
+
+  const [infoObj, setInfoObj] = useState(null);
   const [infoEditObj, setInfoEditObj] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
   const [mode, setMode] = useState(null);
   const [error, setError] = useState(null);
 
-  const history = useHistory();
   const dispatch = useDispatch();
   const token = localStorage.getItem('token');
   const userId = localStorage.getItem('userId');
@@ -27,54 +30,56 @@ const ProfilePageContainer = () => {
   }
 
   const {
-    myinformation,
-    myinformationLoading,
+    data,
+    loading,
     myinfoError,
     myinfoEditRes,
-    myinfoEditLoading,
     myinfoEditError,
     newPwForm,
     withDrawalForm
   } = useSelector(({ account }) => ({
-    myinformation: account.myinfo.data,
-    myinformationLoading: account.myinfo.loading,
+    data: account.myinfo.data,
+    loading: account.myinfo.loading,
     myinfoError: account.myinfo.error,
     myinfoEditRes: account.myinfoEditRes.data,
-    myinfoEditLoading: account.myinfoEditRes.loading,
     myinfoEditError: account.myinfoEditRes.error,
     newPwForm: account.newPwForm,
     withDrawalForm: account.withDrawalForm
   }));
 
   useEffect(() => {
-    dispatch(myinfo({ token }));
-  }, []);
+    const id = match.params.userId;
+    dispatch(myinfo({ id }));
+  }, [match.params]);
 
   const editFormRefresh = () => {
-    if (myinformation) {
-      const { data } = myinformation;
-      setInfoObj(data);
-      setInfoEditObj(data);
+    if (data) {
+      const res = data.data;
+      setInfoObj(res);
+      setInfoEditObj(res);
     }
   };
 
   useEffect(() => {
     editFormRefresh();
-  }, [myinformation]);
+  }, [data]);
 
   useEffect(() => {
     if (myinfoError) {
-      setInfoObj({ Error: String(myinfoError) });
       setError(String(myinfoError));
     }
     if (myinfoEditError) {
       setError(String(myinfoEditError));
     }
+  }, [myinfoError, myinfoEditError]);
+
+  useEffect(() => {
     if (myinfoEditRes) {
-      dispatch(myinfo({ token }));
+      const id = match.params.userId;
+      dispatch(myinfo({ id }));
       setMode(null);
     }
-  }, [myinfoError, myinfoEditError, myinfoEditRes]);
+  }, [myinfoEditRes]);
 
   const handleChange = e => {
     e.preventDefault();
@@ -197,27 +202,40 @@ const ProfilePageContainer = () => {
   };
 
   return (
-    <ProfilePage
-      infoObj={infoObj}
-      infoEditObj={infoEditObj}
-      anchorEl={anchorEl}
-      mode={mode}
-      newPwForm={newPwForm}
-      withDrawalForm={withDrawalForm}
-      error={error}
-      handleChange={handleChange}
-      formChange={formChange}
-      typeChange={typeChange}
-      informationOpenAgreeChange={informationOpenAgreeChange}
-      menuClick={menuClick}
-      modeChange={modeChange}
-      myinfoEditSubmit={myinfoEditSubmit}
-      pwChangeSubmit={pwChangeSubmit}
-      withdrawalSubmit={withdrawalSubmit}
-      editFormRefresh={editFormRefresh}
-      myinformationLoading={myinformationLoading}
-      myinfoEditLoading={myinfoEditLoading}
-    />
+    <>
+      <WithdrawalDialog
+        mode={mode}
+        withDrawalForm={withDrawalForm}
+        error={error}
+        modeChange={modeChange}
+        formChange={formChange}
+        withdrawalSubmit={withdrawalSubmit}
+      />
+      <PwChangeDialog
+        mode={mode}
+        error={error}
+        newPwForm={newPwForm}
+        modeChange={modeChange}
+        pwChangeSubmit={pwChangeSubmit}
+        formChange={formChange}
+      />
+      <ProfilePage
+        infoObj={infoObj}
+        infoEditObj={infoEditObj}
+        anchorEl={anchorEl}
+        mode={mode}
+        error={error}
+        handleChange={handleChange}
+        formChange={formChange}
+        typeChange={typeChange}
+        informationOpenAgreeChange={informationOpenAgreeChange}
+        menuClick={menuClick}
+        modeChange={modeChange}
+        myinfoEditSubmit={myinfoEditSubmit}
+        editFormRefresh={editFormRefresh}
+        loading={loading}
+      />
+    </>
   );
 };
-export default ProfilePageContainer;
+export default withRouter(ProfilePageContainer);

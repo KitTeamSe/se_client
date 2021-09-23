@@ -68,7 +68,8 @@ const LoginDialogContainer = () => {
   };
 
   const ProfileClick = () => {
-    history.push('/profile');
+    const userId = localStorage.getItem('userId');
+    history.push(`/profile/${userId}`);
   };
 
   useEffect(() => {

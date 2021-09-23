@@ -51,8 +51,10 @@ const PostContainer = props => {
   const userId = localStorage.getItem('userId');
 
   useEffect(() => {
-    console.log(reportResponse);
-  }, [reportResponse]);
+    if (reportResponse.error) {
+      console.log(reportResponse);
+    }
+  }, [reportResponse.error]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -151,6 +153,10 @@ const PostContainer = props => {
     setReportDescription('');
   };
 
+  // 유저 정보 조회
+  const profileFunction = accountIdString => {
+    history.push(`/profile/${accountIdString}`);
+  };
   const updatePostFunction = () => {
     const { boardNameEng, postId } = match.params;
     history.push(`/board/${boardNameEng}/${postId}/write`);
@@ -164,9 +170,6 @@ const PostContainer = props => {
     console.log('message logic');
   };
 
-  const profileFunction = () => {
-    console.log('profile logic');
-  };
   const mailFunction = () => {
     console.log('mail logic');
   };
@@ -174,7 +177,7 @@ const PostContainer = props => {
     console.log('post logic');
   };
 
-  const functionExcute = e => {
+  const functionExcute = (accountIdString, e) => {
     e.preventDefault();
     const value = e.target.id;
     switch (value) {
@@ -182,13 +185,13 @@ const PostContainer = props => {
         banFunction();
         break;
       case 'report':
-        reportBoxHandle(e);
+        reportBoxHandle();
         break;
       case 'message':
         messageFunction();
         break;
       case 'profile':
-        profileFunction();
+        profileFunction(accountIdString);
         break;
       case 'mail':
         mailFunction();
