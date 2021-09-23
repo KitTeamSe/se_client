@@ -2,8 +2,14 @@ import { client, tokenHeader } from './client';
 
 const URL = 'post';
 
-export const loadPostList = async ({ boardNameEng, direction, page, size }) => {
-  const parameters = { boardNameEng, direction, page, size };
+export const loadPostList = async ({
+  boardNameEng,
+  direction,
+  isNotice,
+  page,
+  size
+}) => {
+  const parameters = { boardNameEng, direction, isNotice, page, size };
   return client.get(`/${URL}`, { params: parameters }).catch(error => {
     throw error.response.data;
   });
