@@ -7,11 +7,11 @@ import {
   initializeField,
   initializeAdd,
   initializeUpdate,
-  initializeRemove,
   changeField,
   loadReplyList,
   changeSecretReply,
-  initializeSecret
+  initializeSecret,
+  initializeRemove
 } from '../../modules/reply';
 import { successFeedback } from '../../modules/feedback';
 
@@ -70,27 +70,46 @@ const ReplyListContainer = props => {
     history.push(`/board/${boardNameEng}/${postId}/update/${replyId}`);
   };
 
+  const handleAddSuccess = () => {
+    handleReplyList();
+    dispatch(successFeedback('작성 완료'));
+    dispatch(initializeAdd());
+  };
+
+  const handleUpdateSuccess = () => {
+    handleReplyList();
+    dispatch(successFeedback('수정 완료'));
+    dispatch(initializeUpdate());
+  };
+
+  const handleRemoveSuccess = () => {
+    handleReplyList();
+    dispatch(successFeedback('삭제 완료'));
+    dispatch(initializeRemove());
+  };
+
+  const handleSecretSuccess = () => {
+    dispatch(successFeedback('비밀글 확인'));
+    dispatch(changeSecretReply({ parentIndex, replyIndex }));
+    dispatch(initializeSecret());
+  };
+
   useEffect(() => {
     handleReplyList();
   }, [location.search]);
 
   useEffect(() => {
     if (add) {
-      handleReplyList();
-      dispatch(successFeedback('댓글작성 성공'));
-      dispatch(initializeAdd());
+      handleAddSuccess();
     }
     if (update) {
-      handleReplyList();
-      dispatch(initializeUpdate());
+      handleUpdateSuccess();
     }
     if (remove) {
-      handleReplyList();
-      dispatch(initializeRemove());
+      handleRemoveSuccess();
     }
     if (secret) {
-      dispatch(changeSecretReply({ parentIndex, replyIndex }));
-      dispatch(initializeSecret());
+      handleSecretSuccess();
     }
     dispatch(initializeField());
   }, [add, update, remove, secret]);
