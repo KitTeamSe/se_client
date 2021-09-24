@@ -26,19 +26,19 @@ export default handleActions(
   {
     [INITIALIZE]: () => initialState,
     [NORMAL_FEEDBACK]: (state, { payload: message }) => ({
-      ...state,
+      ...initialState,
       normal: message
     }),
     [SUCCESS_FEEDBACK]: (state, { payload: message }) => ({
-      ...state,
+      ...initialState,
       success: message
     }),
     [ALERT_FEEDBACK]: (state, { payload: message }) => ({
-      ...state,
+      ...initialState,
       alert: message
     }),
     [ERROR_FEEDBACK]: (state, { payload: message }) => ({
-      ...state,
+      ...initialState,
       error: message
     })
   },

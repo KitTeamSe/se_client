@@ -21,7 +21,7 @@ const Routes = () => (
     <HeaderContainer />
     <BodyContainer>
       <Switch>
-        <Route exact path="/profile" component={ProfilePageContainer} />
+        <Route exact path="/profile/:userId" component={ProfilePageContainer} />
         <Route exact path="/signup" component={SignupPageContainer} />
         <Route
           exact

@@ -1,7 +1,33 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { initialize } from '../../modules/feedback';
+import {
+  alertFeedback,
+  errorFeedback,
+  initialize,
+  successFeedback
+} from '../../modules/feedback';
 import Feedback from '../../components/Feedback/Feedback';
+
+const data = {
+  auth: {
+    signoutSuccess: '로그아웃 성공',
+    signinSuccess: '로그인 성공',
+    signinError: '로그인 실패',
+    signupSuccess: '회원가입 성공',
+    signupError: '회원가입 실패'
+  },
+  reply: {
+    add: '댓글 작성 완료',
+    update: '댓글 수정 완료',
+    delete: '댓글 삭제 완료',
+    secret: '비밀 댓글 확인 성공'
+  },
+  post: {
+    add: '게시글 작성 완료',
+    update: '게시글 수정 완료',
+    delete: '게시글 삭제 완료'
+  }
+};
 
 const FeedbackContainer = () => {
   const dispatch = useDispatch();
@@ -12,13 +38,62 @@ const FeedbackContainer = () => {
     error: feedback.error
   }));
 
+  const { signinSuccess, signinError, signupSuccess, signupError } =
+    useSelector(({ auth }) => ({
+      signinSuccess: auth.auth.data,
+      signinError: auth.auth.error,
+      signupSuccess: auth.signupResponse.data,
+      signupError: auth.signupResponse.error
+    }));
+
+  const { replyAdd, replyUpdate, replyDelete, replySecretCheck } = useSelector(
+    ({ reply }) => ({
+      replyAdd: reply.addReply.data,
+      replyUpdate: reply.updateReply.data,
+      replyDelete: reply.removeReply.data,
+      replySecretCheck: reply.loadSecretReply.data
+    })
+  );
+
+  const { postAdd, postUpdate, postDelete } = useSelector(({ post }) => ({
+    postAdd: post.addPost.data,
+    postUpdate: post.updatePost.data,
+    postDelete: post.postDeleteRes.data
+  }));
+
   const handleClose = () => {
     dispatch(initialize());
+  };
+
+  const handleFeedback = (type, message) => {
+    if (type === 'success') dispatch(successFeedback(message));
+    if (type === 'alert') dispatch(alertFeedback(message));
+    if (type === 'error') dispatch(errorFeedback(message));
   };
 
   useEffect(() => {
     dispatch(initialize());
   }, []);
+
+  useEffect(() => {
+    if (signinSuccess) handleFeedback('success', data.auth.signinSuccess);
+    if (signinError) handleFeedback('error', data.auth.signinError);
+    if (signupSuccess) handleFeedback('success', data.auth.signupSuccess);
+    if (signupError) handleFeedback('error', data.auth.signupError);
+  }, [signinSuccess, signinError, signupSuccess, signupError]);
+
+  useEffect(() => {
+    if (replyAdd) handleFeedback('success', data.reply.add);
+    if (replyUpdate) handleFeedback('success', data.reply.update);
+    if (replyDelete) handleFeedback('success', data.reply.delete);
+    if (replySecretCheck) handleFeedback('success', data.reply.secret);
+  }, [replyAdd, replyUpdate, replyDelete, replySecretCheck]);
+
+  useEffect(() => {
+    if (postAdd) handleFeedback('success', data.post.add);
+    if (postUpdate) handleFeedback('success', data.post.update);
+    if (postDelete) handleFeedback('success', data.post.delete);
+  }, [postAdd, postUpdate, postDelete]);
 
   return (
     <Feedback

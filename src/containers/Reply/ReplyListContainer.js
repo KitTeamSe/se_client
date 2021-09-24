@@ -13,7 +13,6 @@ import {
   initializeSecret,
   initializeRemove
 } from '../../modules/reply';
-import { successFeedback } from '../../modules/feedback';
 
 const ReplyListContainer = props => {
   const { location, match, history, replyReportHandle } = props;
@@ -72,24 +71,20 @@ const ReplyListContainer = props => {
 
   const handleAddSuccess = () => {
     handleReplyList();
-    dispatch(successFeedback('작성 완료'));
     dispatch(initializeAdd());
   };
 
   const handleUpdateSuccess = () => {
     handleReplyList();
-    dispatch(successFeedback('수정 완료'));
     dispatch(initializeUpdate());
   };
 
   const handleRemoveSuccess = () => {
     handleReplyList();
-    dispatch(successFeedback('삭제 완료'));
     dispatch(initializeRemove());
   };
 
   const handleSecretSuccess = () => {
-    dispatch(successFeedback('비밀글 확인'));
     dispatch(changeSecretReply({ parentIndex, replyIndex }));
     dispatch(initializeSecret());
   };
