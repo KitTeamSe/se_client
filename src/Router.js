@@ -2,7 +2,6 @@ import React from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 import HeaderContainer from './containers/Header/HeaderContainer';
-import PostMakerContainer from './containers/PostMaker/PostMakerContainer';
 import ProfilePageContainer from './containers/ProfilePage/ProfilePageContainer';
 import SignupPageContainer from './containers/SignupPage/SignupPageContainer';
 import PostWritePage from './pages/PostWritePage';
@@ -44,7 +43,6 @@ const Routes = () => (
         </Route>
       </Switch>
     </BodyContainer>
-    <PostMakerContainer />
   </>
 );
 
