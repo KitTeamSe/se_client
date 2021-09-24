@@ -13,6 +13,7 @@ import {
   changeSecretReply,
   initializeSecret
 } from '../../modules/reply';
+import { successFeedback } from '../../modules/feedback';
 
 const ReplyListContainer = props => {
   const { location, match, history, replyReportHandle } = props;
@@ -76,6 +77,7 @@ const ReplyListContainer = props => {
   useEffect(() => {
     if (add) {
       handleReplyList();
+      dispatch(successFeedback('댓글작성 성공'));
       dispatch(initializeAdd());
     }
     if (update) {

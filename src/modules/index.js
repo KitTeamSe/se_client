@@ -7,6 +7,7 @@ import post, { postSaga } from './post';
 import attach, { attachSaga } from './attach';
 import tag, { tagSaga } from './tag';
 import menu, { menuSaga } from './menu';
+import feedback from './feedback';
 
 const rootReducer = combineReducers({
   auth,
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
   reply,
   attach,
   tag,
-  menu
+  menu,
+  feedback
 });
 
 export function* rootSaga() {
