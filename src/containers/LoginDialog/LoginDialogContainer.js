@@ -74,7 +74,7 @@ const LoginDialogContainer = () => {
 
   useEffect(() => {
     if (authError) {
-      setError(String(error));
+      setError(authError.message);
     }
     if (data) {
       localStorage.setItem(
