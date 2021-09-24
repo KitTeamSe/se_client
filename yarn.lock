@@ -1526,13 +1526,6 @@
   dependencies:
     ckeditor5 "^29.1.0"
 
-"@ckeditor/ckeditor5-horizontal-line@^29.1.0":
-  version "29.1.0"
-  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-horizontal-line/-/ckeditor5-horizontal-line-29.1.0.tgz#49e6b3a5e5e2f9216d09f88ca235cb676df12999"
-  integrity sha512-wJbySZzWAhm4DNlXzD1yC/HPiHmLzbUvLvJwjeIfQdBW3KTF5UXMLsfj0BCR16D0pVmzbzwC6TyT+EGob1VwdQ==
-  dependencies:
-    ckeditor5 "^29.1.0"
-
 "@ckeditor/ckeditor5-html-embed@^29.1.0":
   version "29.1.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-html-embed/-/ckeditor5-html-embed-29.1.0.tgz#97f05b1f1d672a96886251796334dd4e7014437f"
@@ -1649,13 +1642,6 @@
   version "29.1.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-remove-format/-/ckeditor5-remove-format-29.1.0.tgz#6e3d9d4c419ab27ce7c0fa9f100b4ab22a4f1572"
   integrity sha512-zYy2zKDs0/tEr94Owu5HJbBaWivChYMJcVa9QmvADcJxVd1wKkNRGBV8LZVvVTKm5wMQGMHSKDw5IurLxs7KOA==
-  dependencies:
-    ckeditor5 "^29.1.0"
-
-"@ckeditor/ckeditor5-restricted-editing@^29.1.0":
-  version "29.1.0"
-  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-restricted-editing/-/ckeditor5-restricted-editing-29.1.0.tgz#51cb1d06e815ccead6262c13f1bcc5d1ff8e12a4"
-  integrity sha512-i0ZqjwyBROWvhMKTSrd1kX6H8BhRwLN0joR90EV/QdviwdGpXc4uCsC6vIrq9ves7Vs8jwHPeLxSWuDKOJsraQ==
   dependencies:
     ckeditor5 "^29.1.0"
 
