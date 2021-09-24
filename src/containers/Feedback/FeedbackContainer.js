@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
+import qs from 'qs';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   alertFeedback,
@@ -25,11 +27,13 @@ const data = {
   post: {
     add: '게시글 작성 완료',
     update: '게시글 수정 완료',
-    delete: '게시글 삭제 완료'
+    delete: '게시글 삭제 완료',
+    secret: '비밀 게시글 조회 성공'
   }
 };
 
-const FeedbackContainer = () => {
+const FeedbackContainer = props => {
+  const { location } = props;
   const dispatch = useDispatch();
   const { normal, success, alert, error } = useSelector(({ feedback }) => ({
     normal: feedback.normal,
@@ -55,11 +59,14 @@ const FeedbackContainer = () => {
     })
   );
 
-  const { postAdd, postUpdate, postDelete } = useSelector(({ post }) => ({
-    postAdd: post.addPost.data,
-    postUpdate: post.updatePost.data,
-    postDelete: post.postDeleteRes.data
-  }));
+  const { postAdd, postUpdate, postDelete, postData } = useSelector(
+    ({ post }) => ({
+      postAdd: post.addPost.data,
+      postUpdate: post.updatePost.data,
+      postDelete: post.postDeleteRes.data,
+      postData: post.loadedPost.data
+    })
+  );
 
   const handleClose = () => {
     dispatch(initialize());
@@ -93,7 +100,13 @@ const FeedbackContainer = () => {
     if (postAdd) handleFeedback('success', data.post.add);
     if (postUpdate) handleFeedback('success', data.post.update);
     if (postDelete) handleFeedback('success', data.post.delete);
-  }, [postAdd, postUpdate, postDelete]);
+    if (postData) {
+      const { secret } = qs.parse(location.search, {
+        ignoreQueryPrefix: true
+      });
+      if (secret === 'true') handleFeedback('success', data.post.secret);
+    }
+  }, [postAdd, postUpdate, postDelete, postData]);
 
   return (
     <Feedback
@@ -106,4 +119,4 @@ const FeedbackContainer = () => {
   );
 };
 
-export default FeedbackContainer;
+export default withRouter(FeedbackContainer);
