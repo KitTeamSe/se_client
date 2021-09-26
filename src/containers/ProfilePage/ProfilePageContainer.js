@@ -96,6 +96,12 @@ const ProfilePageContainer = props => {
   const handleChange = e => {
     e.preventDefault();
     const { value, id } = e.target;
+    if (id === 'nickname') {
+      if (value.length < 21 && value.length > 1) {
+        // 알림 띄우기
+        return;
+      }
+    }
     setInfoEditObj({ ...infoEditObj, [id]: value });
   };
 
