@@ -5,6 +5,7 @@ import BoardContainer from '../containers/Board/BoardContainer';
 const MainWrapper = styled.div`
   margin: auto;
   margin-top: 2rem;
+  margin-bottom: 2rem;
   width: 70vw;
   max-width: 100%;
   display: flex;

@@ -27,13 +27,6 @@ export const loadMenuList = async () => {
   });
 };
 
-export const makeSomePost = async ({ data }) => {
-  const token = localStorage.getItem('token');
-  return client.post(`/${URL}`, data, tokenHeader(token)).catch(error => {
-    throw error.response.data;
-  });
-};
-
 export const loadPost = async ({ id }) => {
   return client.get(`/${URL}/${id}`).catch(error => {
     throw error.response.data;

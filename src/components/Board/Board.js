@@ -34,11 +34,7 @@ const LoadingCircle = styled(CircularProgress)`
 
 const NoneBorderCell = styled(TableCell)`
   border: none;
-`;
-
-const TableHeader = styled(TableRow)`
-  height: 28px;
-  background-image: linear-gradient(to right, #fff 0%, #eee 100%);
+  padding: 0 1rem;
 `;
 
 const IconMargin = styled.span`
@@ -59,6 +55,7 @@ const InfoIcon = styled(FontAwesomeIcon)`
 
 const PostContent = styled(TableRow)`
   border-bottom: 1px solid #ddd;
+  background-color: #${props => props.bgcolor};
 `;
 
 const PostNumber = styled.span`
@@ -162,13 +159,25 @@ const PostTitle = props => {
     views,
     tags,
     createAt,
-    accountIdString
+    accountIdString,
+    isNotice
   } = postInfo;
+
+  function backgroundColor() {
+    if (isNotice === 'NOTICE') {
+      return 'eeeeee';
+    }
+    return 'ffffff';
+  }
   const writeTime = `${createAt[0]}년${createAt[1]}월${createAt[2]}일 ${createAt[3]}:${createAt[4]}`;
   return (
-    <PostContent>
+    <PostContent bgcolor={backgroundColor()}>
       <NoneBorderCell nowrap="true" align="center" width="5%">
-        <PostNumber>{postId}</PostNumber>
+        {isNotice === 'NOTICE' ? (
+          <PostNumber>공지</PostNumber>
+        ) : (
+          <PostNumber>{postId}</PostNumber>
+        )}
       </NoneBorderCell>
       <NoneBorderCell width="70%">
         <Title
@@ -223,22 +232,29 @@ const NoPost = props => {
 };
 
 const MainTable = props => {
-  const { res, boardNameEng } = props;
+  const { res, boardNameEng, notice } = props;
   const tableColumns = ['번호', '제목', '닉네임', '정보'];
 
   return (
     <TableContainer component={Paper}>
       <Table size="small">
         <TableHead>
-          <TableHeader>
+          <TableRow>
             {tableColumns.map(column => (
               <TableCell nowrap="true" align="center" key={column}>
                 {column}
               </TableCell>
             ))}
-          </TableHeader>
+          </TableRow>
         </TableHead>
         <TableBody>
+          {notice.postListItem.content.map(postInfo => (
+            <PostTitle
+              key={postInfo.postId}
+              postInfo={postInfo}
+              boardNameEng={boardNameEng}
+            />
+          ))}
           {res.postListItem.content.map(postInfo => (
             <PostTitle
               key={postInfo.postId}
@@ -252,7 +268,7 @@ const MainTable = props => {
   );
 };
 
-const BoardHeader = props => {
+const UpperBar = props => {
   const {
     postSearchType,
     onPostSearchTypeChange,
@@ -310,6 +326,9 @@ const Board = props => {
     data,
     loading,
     error,
+    NoticeData,
+    NoticeLoading,
+    NoticeError,
     keyword,
     searchKeyword,
     onSearch,
@@ -325,13 +344,23 @@ const Board = props => {
     return <ErrorBoard error={error} />;
   }
 
+  if (NoticeError) {
+    return <ErrorBoard error={NoticeError} />;
+  }
+
   if (data === null || loading) {
     return <LoadingCircle />;
   }
+
+  if (NoticeData === null || NoticeLoading) {
+    return <LoadingCircle />;
+  }
+
   const res = data.data;
+  const notice = NoticeData.data;
   return (
     <>
-      <BoardHeader
+      <UpperBar
         boardDescription={boardDescription}
         postSearchType={postSearchType}
         onPostSearchTypeChange={onPostSearchTypeChange}
@@ -344,7 +373,7 @@ const Board = props => {
         <NoPost searchKeyword={searchKeyword} />
       ) : (
         <>
-          <MainTable res={res} boardNameEng={boardNameEng} />
+          <MainTable res={res} notice={notice} boardNameEng={boardNameEng} />
           <Paginations
             res={res}
             onChange={onChange}
