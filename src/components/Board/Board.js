@@ -64,6 +64,8 @@ const PostNumber = styled.span`
 `;
 
 const Title = styled(Link)`
+  display: inline-block;
+  width: 100%;
   font-size: 0.9rem;
   font-weight: 500;
   text-overflow: ellipsis;
