@@ -34,11 +34,7 @@ const LoadingCircle = styled(CircularProgress)`
 
 const NoneBorderCell = styled(TableCell)`
   border: none;
-`;
-
-const TableHeader = styled(TableRow)`
-  height: 28px;
-  background-image: linear-gradient(to right, #fff 0%, #eee 100%);
+  padding: 0 1rem;
 `;
 
 const IconMargin = styled.span`
@@ -59,6 +55,10 @@ const InfoIcon = styled(FontAwesomeIcon)`
 
 const PostContent = styled(TableRow)`
   border-bottom: 1px solid #ddd;
+`;
+
+const NoticePost = styled(PostContent)`
+  background-color: #eeeeee;
 `;
 
 const PostNumber = styled.span`
@@ -151,7 +151,65 @@ const Paginations = props => {
   );
 };
 
-const PostTitle = props => {
+const NoticePostTitle = props => {
+  const { postInfo, boardNameEng } = props;
+  console.log(postInfo);
+  const {
+    postId,
+    title,
+    isSecret,
+    nickname,
+    numReply,
+    views,
+    tags,
+    createAt,
+    accountIdString
+  } = postInfo;
+  const writeTime = `${createAt[0]}년${createAt[1]}월${createAt[2]}일 ${createAt[3]}:${createAt[4]}`;
+  return (
+    <NoticePost>
+      <NoneBorderCell nowrap="true" align="center" width="5%">
+        <PostNumber>공지</PostNumber>
+      </NoneBorderCell>
+      <NoneBorderCell width="70%">
+        <Title
+          to={
+            isSecret === 'NORMAL'
+              ? `/board/${boardNameEng}/${postId}`
+              : `/board/${boardNameEng}/${postId}?secret=true`
+          }
+        >
+          {title}
+          <IconMargin>
+            {isSecret === 'NORMAL' ? <></> : <InfoIcon icon={faLock} />}
+          </IconMargin>
+          <Tags tags={tags} />
+        </Title>
+      </NoneBorderCell>
+      <NoneBorderCell nowrap="true" width="10%" align="center">
+        <NicknameContainer
+          nickname={nickname}
+          accountIdString={accountIdString}
+        />
+      </NoneBorderCell>
+      <NoneBorderCell width="15%" align="center">
+        <InfoBox>
+          <IconMargin>{writeTime}</IconMargin>
+          <IconMargin>
+            <InfoIcon icon={faCommentAlt} />
+            {numReply}
+          </IconMargin>
+          <IconMargin>
+            <InfoIcon icon={faEye} />
+            {views}
+          </IconMargin>
+        </InfoBox>
+      </NoneBorderCell>
+    </NoticePost>
+  );
+};
+
+const NormalPostTitle = props => {
   const { postInfo, boardNameEng } = props;
   const {
     postId,
@@ -223,24 +281,31 @@ const NoPost = props => {
 };
 
 const MainTable = props => {
-  const { res, boardNameEng } = props;
+  const { res, boardNameEng, notice } = props;
   const tableColumns = ['번호', '제목', '닉네임', '정보'];
 
   return (
     <TableContainer component={Paper}>
       <Table size="small">
         <TableHead>
-          <TableHeader>
+          <TableRow>
             {tableColumns.map(column => (
               <TableCell nowrap="true" align="center" key={column}>
                 {column}
               </TableCell>
             ))}
-          </TableHeader>
+          </TableRow>
         </TableHead>
         <TableBody>
+          {notice.postListItem.content.map(postInfo => (
+            <NoticePostTitle
+              key={postInfo.postId}
+              postInfo={postInfo}
+              boardNameEng={boardNameEng}
+            />
+          ))}
           {res.postListItem.content.map(postInfo => (
-            <PostTitle
+            <NormalPostTitle
               key={postInfo.postId}
               postInfo={postInfo}
               boardNameEng={boardNameEng}
@@ -252,7 +317,7 @@ const MainTable = props => {
   );
 };
 
-const BoardHeader = props => {
+const UpperBar = props => {
   const {
     postSearchType,
     onPostSearchTypeChange,
@@ -318,7 +383,8 @@ const Board = props => {
     postSearchType,
     boardNameEng,
     boardPage,
-    boardDescription
+    boardDescription,
+    NoticeData
   } = props;
 
   if (error) {
@@ -328,10 +394,16 @@ const Board = props => {
   if (data === null || loading) {
     return <LoadingCircle />;
   }
+
+  if (NoticeData === null) {
+    return <LoadingCircle />;
+  }
+
   const res = data.data;
+  const notice = NoticeData.data;
   return (
     <>
-      <BoardHeader
+      <UpperBar
         boardDescription={boardDescription}
         postSearchType={postSearchType}
         onPostSearchTypeChange={onPostSearchTypeChange}
@@ -344,7 +416,7 @@ const Board = props => {
         <NoPost searchKeyword={searchKeyword} />
       ) : (
         <>
-          <MainTable res={res} boardNameEng={boardNameEng} />
+          <MainTable res={res} notice={notice} boardNameEng={boardNameEng} />
           <Paginations
             res={res}
             onChange={onChange}

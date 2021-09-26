@@ -3,7 +3,11 @@ import qs from 'qs';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Board from '../../components/Board/Board';
-import { loadPostList, searchPost } from '../../modules/post';
+import {
+  loadNormalpostList,
+  loadNoticepostList,
+  searchPost
+} from '../../modules/post';
 
 const BoardContainer = props => {
   const { location, match, history } = props;
@@ -13,12 +17,15 @@ const BoardContainer = props => {
   const [boardPage, setBoardPage] = useState(1);
   const [boardDescription, setBoardDescription] = useState('');
   const [postSearchType, setPostSearchType] = useState('TITLE_TEXT');
-  const { data, loading, error, menuList } = useSelector(({ post, menu }) => ({
-    data: post.loadedPostList.data,
-    loading: post.loadedPostList.loading,
-    error: post.loadedPostList.error,
-    menuList: menu.loadedMenuList.data
-  }));
+  const { data, loading, error, menuList, NoticeData } = useSelector(
+    ({ post, menu }) => ({
+      data: post.loadedNormalPostList.data,
+      loading: post.loadedNormalPostList.loading,
+      error: post.loadedNormalPostList.error,
+      menuList: menu.loadedMenuList.data,
+      NoticeData: post.loadedNoticePostList.data
+    })
+  );
 
   const pageSize = 20;
   const { boardNameEng } = match.params;
@@ -30,6 +37,15 @@ const BoardContainer = props => {
         setBoardDescription(myMenu.description);
       }
     }
+
+    const params = {
+      boardNameEng,
+      direction: 'DESC',
+      isNotice: 'NOTICE',
+      page: 0,
+      size: 50
+    };
+    dispatch(loadNoticepostList(params));
 
     const {
       page,
@@ -47,7 +63,7 @@ const BoardContainer = props => {
         page: 0,
         size
       };
-      dispatch(loadPostList(parameter));
+      dispatch(loadNormalpostList(parameter));
       setBoardPage(1);
       return;
     }
@@ -59,7 +75,7 @@ const BoardContainer = props => {
       page: page - 1,
       size
     };
-    dispatch(loadPostList(parameter));
+    dispatch(loadNormalpostList(parameter));
     setBoardPage(page);
   }, [location.search]);
 
@@ -112,6 +128,7 @@ const BoardContainer = props => {
       data={data}
       loading={loading}
       error={error}
+      NoticeData={NoticeData}
       onChange={onChange}
       onSearchChange={onSearchChange}
       onSearch={onSearch}

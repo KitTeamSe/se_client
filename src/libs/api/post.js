@@ -2,7 +2,7 @@ import { client, tokenHeader } from './client';
 
 const URL = 'post';
 
-export const loadPostList = async ({
+export const loadNormalpostList = async ({
   boardNameEng,
   direction,
   isNotice,
