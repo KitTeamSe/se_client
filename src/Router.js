@@ -10,6 +10,7 @@ import PostUpdatePage from './pages/PostUpdatePage';
 import ReplyUpdatePage from './pages/ReplyUpdatePage';
 import BoardPage from './pages/BoardPage';
 import PostPage from './pages/PostPage';
+import FeedbackContainer from './containers/Feedback/FeedbackContainer';
 
 const BodyContainer = styled.div`
   padding-top: 96px;
@@ -20,7 +21,7 @@ const Routes = () => (
     <HeaderContainer />
     <BodyContainer>
       <Switch>
-        <Route exact path="/profile" component={ProfilePageContainer} />
+        <Route exact path="/profile/:userId" component={ProfilePageContainer} />
         <Route exact path="/signup" component={SignupPageContainer} />
         <Route
           exact
@@ -44,6 +45,7 @@ const Routes = () => (
         </Route>
       </Switch>
     </BodyContainer>
+    <FeedbackContainer />
     <PostMakerContainer />
   </>
 );

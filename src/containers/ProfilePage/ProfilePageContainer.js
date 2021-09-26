@@ -66,10 +66,10 @@ const ProfilePageContainer = props => {
 
   useEffect(() => {
     if (myinfoError) {
-      setError(String(myinfoError));
+      setError(String(myinfoError.message));
     }
     if (myinfoEditError) {
-      setError(String(myinfoEditError));
+      setError(String(myinfoEditError.message));
     }
   }, [myinfoError, myinfoEditError]);
 

@@ -114,5 +114,9 @@ export const updatePost = ({
 export const reportPost = async ({ description, reportType, targetId }) => {
   const body = { description, reportType, targetId };
   const token = localStorage.getItem('token');
-  return client.post(`/administrator/report`, body, tokenHeader(token));
+  return client
+    .post(`/administrator/report`, body, tokenHeader(token))
+    .catch(error => {
+      throw error.response.data;
+    });
 };

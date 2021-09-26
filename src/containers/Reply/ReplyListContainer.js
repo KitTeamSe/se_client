@@ -7,11 +7,11 @@ import {
   initializeField,
   initializeAdd,
   initializeUpdate,
-  initializeRemove,
   changeField,
   loadReplyList,
   changeSecretReply,
-  initializeSecret
+  initializeSecret,
+  initializeRemove
 } from '../../modules/reply';
 
 const ReplyListContainer = props => {
@@ -69,26 +69,42 @@ const ReplyListContainer = props => {
     history.push(`/board/${boardNameEng}/${postId}/update/${replyId}`);
   };
 
+  const handleAddSuccess = () => {
+    handleReplyList();
+    dispatch(initializeAdd());
+  };
+
+  const handleUpdateSuccess = () => {
+    handleReplyList();
+    dispatch(initializeUpdate());
+  };
+
+  const handleRemoveSuccess = () => {
+    handleReplyList();
+    dispatch(initializeRemove());
+  };
+
+  const handleSecretSuccess = () => {
+    dispatch(changeSecretReply({ parentIndex, replyIndex }));
+    dispatch(initializeSecret());
+  };
+
   useEffect(() => {
     handleReplyList();
   }, [location.search]);
 
   useEffect(() => {
     if (add) {
-      handleReplyList();
-      dispatch(initializeAdd());
+      handleAddSuccess();
     }
     if (update) {
-      handleReplyList();
-      dispatch(initializeUpdate());
+      handleUpdateSuccess();
     }
     if (remove) {
-      handleReplyList();
-      dispatch(initializeRemove());
+      handleRemoveSuccess();
     }
     if (secret) {
-      dispatch(changeSecretReply({ parentIndex, replyIndex }));
-      dispatch(initializeSecret());
+      handleSecretSuccess();
     }
     dispatch(initializeField());
   }, [add, update, remove, secret]);
