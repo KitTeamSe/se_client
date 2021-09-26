@@ -9,6 +9,7 @@ import {
   changeField,
   accountdelete
 } from '../../modules/account';
+import { initializeAuth } from '../../modules/auth';
 import WithdrawalDialog from '../../components/ProfilePage/WithdrawalDialog';
 import PwChangeDialog from '../../components/ProfilePage/PwChangeDialog';
 
@@ -36,7 +37,8 @@ const ProfilePageContainer = props => {
     myinfoEditRes,
     myinfoEditError,
     newPwForm,
-    withDrawalForm
+    withDrawalForm,
+    accountDeleteRes
   } = useSelector(({ account }) => ({
     data: account.myinfo.data,
     loading: account.myinfo.loading,
@@ -44,13 +46,23 @@ const ProfilePageContainer = props => {
     myinfoEditRes: account.myinfoEditRes.data,
     myinfoEditError: account.myinfoEditRes.error,
     newPwForm: account.newPwForm,
-    withDrawalForm: account.withDrawalForm
+    withDrawalForm: account.withDrawalForm,
+    accountDeleteRes: account.accountDeleteRes
   }));
 
   useEffect(() => {
     const id = match.params.userId;
     dispatch(myinfo({ id }));
   }, [match.params]);
+
+  useEffect(() => {
+    if (accountDeleteRes.data) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      dispatch(initializeAuth());
+      history.push('/');
+    }
+  }, [accountDeleteRes]);
 
   const editFormRefresh = () => {
     if (data) {
