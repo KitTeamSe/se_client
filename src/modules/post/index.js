@@ -177,11 +177,11 @@ export const postReport = createAction(
 // Sagas
 const loadNormalpostListSaga = createRequestSaga(
   LOAD_NORMAL_POST_LIST,
-  api.loadNormalpostList
+  api.loadPostList
 );
 const loadNoticepostListSaga = createRequestSaga(
   LOAD_NOTICE_POST_LIST,
-  api.loadNormalpostList
+  api.loadPostList
 );
 const searchPostSaga = createRequestSaga(SEARCH_POST, api.searchPost);
 const loadPostSaga = createRequestSaga(LOAD_POST, api.loadPost);
