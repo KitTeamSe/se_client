@@ -179,7 +179,6 @@ const ProfilePageContainer = props => {
     console.log(password);
     if (text === '탈퇴') {
       dispatch(accountdelete({ userId, token }));
-      setError('탈퇴가 완료되었습니다.');
     } else {
       setError('탈퇴를 입력하세요');
     }
@@ -218,7 +217,6 @@ const ProfilePageContainer = props => {
       <WithdrawalDialog
         mode={mode}
         withDrawalForm={withDrawalForm}
-        error={error}
         modeChange={modeChange}
         formChange={formChange}
         withdrawalSubmit={withdrawalSubmit}
