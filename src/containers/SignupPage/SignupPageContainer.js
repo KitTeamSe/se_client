@@ -16,23 +16,27 @@ const SignupPageContainer = () => {
     history.push('/');
   }
 
-  const [error, setError] = useState(null);
-  const { form, signupResponse, signupError, loading } = useSelector(
-    ({ auth }) => ({
-      form: auth.signup,
-      signupResponse: auth.signupResponse.data,
-      signupError: auth.signupResponse.error,
-      loading: auth.signupResponse.loading
-    })
-  );
+  const [infoState, setInfoState] = useState({
+    id: false,
+    password: false,
+    passwordCheck: false,
+    email: false,
+    name: false,
+    nickname: false,
+    phoneNumber: false,
+    studentId: false,
+    answer: false
+  });
+
+  const { form, signupResponse, loading } = useSelector(({ auth }) => ({
+    form: auth.signup,
+    signupResponse: auth.signupResponse.data,
+    loading: auth.signupResponse.loading
+  }));
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (signupError) {
-      setError(String(signupError.message));
-      return;
-    }
     if (signupResponse) {
       const { id, password } = form;
       const value = id;
@@ -43,12 +47,95 @@ const SignupPageContainer = () => {
           value
         })
       );
-      // signup 은 password 로 받고 signin 은 pw 로받아서 에러가 뜸
       const pw = password;
       dispatch(signin({ id, pw }));
       dispatch(initializeForm('signup'));
     }
-  }, [signupResponse, signupError]);
+  }, [signupResponse]);
+
+  useEffect(() => {
+    const { id } = form;
+    if (id.length > 3 && id.length < 21) {
+      setInfoState({ ...infoState, id: true });
+    } else {
+      setInfoState({ ...infoState, id: false });
+    }
+  }, [form.id]);
+
+  useEffect(() => {
+    const { password } = form;
+    if (password.length > 7 && password.length < 21) {
+      setInfoState({ ...infoState, password: true });
+    } else {
+      setInfoState({ ...infoState, password: false });
+    }
+  }, [form.password]);
+
+  useEffect(() => {
+    const { password, passwordCheck } = form;
+    if (passwordCheck === password && passwordCheck.length !== 0) {
+      setInfoState({ ...infoState, passwordCheck: true });
+    } else {
+      setInfoState({ ...infoState, passwordCheck: false });
+    }
+  }, [form.passwordCheck]);
+
+  useEffect(() => {
+    const { email } = form;
+    const regText = /^[A-Za-z0-9]+@+[A-Za-z0-9-]+\.+[A-Za-z0-9-]/;
+
+    if (regText.test(email)) {
+      setInfoState({ ...infoState, email: true });
+    } else {
+      setInfoState({ ...infoState, email: false });
+    }
+  }, [form.email]);
+
+  useEffect(() => {
+    const { phoneNumber } = form;
+
+    if (phoneNumber.length > 8 && phoneNumber.length < 14) {
+      setInfoState({ ...infoState, phoneNumber: true });
+    } else {
+      setInfoState({ ...infoState, phoneNumber: false });
+    }
+  }, [form.phoneNumber]);
+
+  useEffect(() => {
+    const { name } = form;
+    if (name.length > 1 && name.length < 12) {
+      setInfoState({ ...infoState, name: true });
+    } else {
+      setInfoState({ ...infoState, name: false });
+    }
+  }, [form.name]);
+
+  useEffect(() => {
+    const { nickname } = form;
+    if (nickname.length > 1 && nickname.length < 21) {
+      setInfoState({ ...infoState, nickname: true });
+    } else {
+      setInfoState({ ...infoState, nickname: false });
+    }
+  }, [form.nickname]);
+
+  useEffect(() => {
+    const { studentId } = form;
+    if (studentId.length === 8) {
+      setInfoState({ ...infoState, studentId: true });
+    } else {
+      setInfoState({ ...infoState, studentId: false });
+    }
+  }, [form.studentId]);
+
+  useEffect(() => {
+    const { answer } = form;
+    if (answer.length > 1 && answer.length < 101) {
+      setInfoState({ ...infoState, answer: true });
+    } else {
+      setInfoState({ ...infoState, answer: false });
+    }
+  }, [form.answer]);
 
   const handleChange = e => {
     const { value, id } = e.target;
@@ -84,43 +171,6 @@ const SignupPageContainer = () => {
 
   const signupSubmit = e => {
     e.preventDefault();
-    const {
-      id,
-      password,
-      passwordCheck,
-      email,
-      phoneNumber,
-      studentId,
-      answer
-    } = form;
-    if (id === '') {
-      setError('ID 를 입력하세요');
-      return;
-    }
-    if (password.length < 4 || password.length > 20) {
-      setError('password 는 4자 이상 12자 이하 입니다');
-      return;
-    }
-    if (passwordCheck !== password) {
-      setError('비밀번호가 일치하지 않습니다');
-      return;
-    }
-    if (email.includes('@') === false) {
-      setError('올바른 이메일 형식이 아닙니다');
-      return;
-    }
-    if (phoneNumber.length < 10 || phoneNumber.length > 20) {
-      setError('올바른 전화번호 길이가 아닙니다');
-      return;
-    }
-    if (studentId.length !== 8) {
-      setError('올바른 학번이 아닙니다');
-      return;
-    }
-    if (answer === '') {
-      setError('나만의 질문에 답하지 않았습니다');
-      return;
-    }
     dispatch(signup(form));
   };
 
@@ -132,9 +182,11 @@ const SignupPageContainer = () => {
       signupSubmit={signupSubmit}
       loading={loading}
       inputs={form}
-      error={error}
       questionList={questionList}
       typeList={typeList}
+      infoState={infoState}
+      setInfoState={setInfoState}
+      form={form}
     />
   );
 };
