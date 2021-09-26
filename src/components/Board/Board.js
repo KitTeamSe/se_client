@@ -55,10 +55,7 @@ const InfoIcon = styled(FontAwesomeIcon)`
 
 const PostContent = styled(TableRow)`
   border-bottom: 1px solid #ddd;
-`;
-
-const NoticePost = styled(PostContent)`
-  background-color: #eeeeee;
+  background-color: #${props => props.bgcolor};
 `;
 
 const PostNumber = styled.span`
@@ -151,9 +148,8 @@ const Paginations = props => {
   );
 };
 
-const NoticePostTitle = props => {
+const PostTitle = props => {
   const { postInfo, boardNameEng } = props;
-  console.log(postInfo);
   const {
     postId,
     title,
@@ -163,70 +159,25 @@ const NoticePostTitle = props => {
     views,
     tags,
     createAt,
-    accountIdString
+    accountIdString,
+    isNotice
   } = postInfo;
-  const writeTime = `${createAt[0]}년${createAt[1]}월${createAt[2]}일 ${createAt[3]}:${createAt[4]}`;
-  return (
-    <NoticePost>
-      <NoneBorderCell nowrap="true" align="center" width="5%">
-        <PostNumber>공지</PostNumber>
-      </NoneBorderCell>
-      <NoneBorderCell width="70%">
-        <Title
-          to={
-            isSecret === 'NORMAL'
-              ? `/board/${boardNameEng}/${postId}`
-              : `/board/${boardNameEng}/${postId}?secret=true`
-          }
-        >
-          {title}
-          <IconMargin>
-            {isSecret === 'NORMAL' ? <></> : <InfoIcon icon={faLock} />}
-          </IconMargin>
-          <Tags tags={tags} />
-        </Title>
-      </NoneBorderCell>
-      <NoneBorderCell nowrap="true" width="10%" align="center">
-        <NicknameContainer
-          nickname={nickname}
-          accountIdString={accountIdString}
-        />
-      </NoneBorderCell>
-      <NoneBorderCell width="15%" align="center">
-        <InfoBox>
-          <IconMargin>{writeTime}</IconMargin>
-          <IconMargin>
-            <InfoIcon icon={faCommentAlt} />
-            {numReply}
-          </IconMargin>
-          <IconMargin>
-            <InfoIcon icon={faEye} />
-            {views}
-          </IconMargin>
-        </InfoBox>
-      </NoneBorderCell>
-    </NoticePost>
-  );
-};
 
-const NormalPostTitle = props => {
-  const { postInfo, boardNameEng } = props;
-  const {
-    postId,
-    title,
-    isSecret,
-    nickname,
-    numReply,
-    views,
-    tags,
-    createAt,
-    accountIdString
-  } = postInfo;
+  function backgroundColor() {
+    if (isNotice === 'NOTICE') {
+      return 'eeeeee';
+    }
+    return 'ffffff';
+  }
   const writeTime = `${createAt[0]}년${createAt[1]}월${createAt[2]}일 ${createAt[3]}:${createAt[4]}`;
   return (
-    <PostContent>
+    <PostContent bgcolor={backgroundColor()}>
       <NoneBorderCell nowrap="true" align="center" width="5%">
-        <PostNumber>{postId}</PostNumber>
+        {isNotice === 'NOTICE' ? (
+          <PostNumber>공지</PostNumber>
+        ) : (
+          <PostNumber>{postId}</PostNumber>
+        )}
       </NoneBorderCell>
       <NoneBorderCell width="70%">
         <Title
@@ -298,14 +249,14 @@ const MainTable = props => {
         </TableHead>
         <TableBody>
           {notice.postListItem.content.map(postInfo => (
-            <NoticePostTitle
+            <PostTitle
               key={postInfo.postId}
               postInfo={postInfo}
               boardNameEng={boardNameEng}
             />
           ))}
           {res.postListItem.content.map(postInfo => (
-            <NormalPostTitle
+            <PostTitle
               key={postInfo.postId}
               postInfo={postInfo}
               boardNameEng={boardNameEng}
@@ -375,6 +326,9 @@ const Board = props => {
     data,
     loading,
     error,
+    NoticeData,
+    NoticeLoading,
+    NoticeError,
     keyword,
     searchKeyword,
     onSearch,
@@ -383,19 +337,22 @@ const Board = props => {
     postSearchType,
     boardNameEng,
     boardPage,
-    boardDescription,
-    NoticeData
+    boardDescription
   } = props;
 
   if (error) {
     return <ErrorBoard error={error} />;
   }
 
+  if (NoticeError) {
+    return <ErrorBoard error={NoticeError} />;
+  }
+
   if (data === null || loading) {
     return <LoadingCircle />;
   }
 
-  if (NoticeData === null) {
+  if (NoticeData === null || NoticeLoading) {
     return <LoadingCircle />;
   }
 

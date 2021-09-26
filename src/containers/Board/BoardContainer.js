@@ -17,15 +17,23 @@ const BoardContainer = props => {
   const [boardPage, setBoardPage] = useState(1);
   const [boardDescription, setBoardDescription] = useState('');
   const [postSearchType, setPostSearchType] = useState('TITLE_TEXT');
-  const { data, loading, error, menuList, NoticeData } = useSelector(
-    ({ post, menu }) => ({
-      data: post.loadedNormalPostList.data,
-      loading: post.loadedNormalPostList.loading,
-      error: post.loadedNormalPostList.error,
-      menuList: menu.loadedMenuList.data,
-      NoticeData: post.loadedNoticePostList.data
-    })
-  );
+  const {
+    data,
+    loading,
+    error,
+    menuList,
+    NoticeData,
+    NoticeLoading,
+    NoticeError
+  } = useSelector(({ post, menu }) => ({
+    data: post.loadedNormalPostList.data,
+    loading: post.loadedNormalPostList.loading,
+    error: post.loadedNormalPostList.error,
+    menuList: menu.loadedMenuList.data,
+    NoticeData: post.loadedNoticePostList.data,
+    NoticeLoading: post.loadedNoticePostList.loading,
+    NoticeError: post.loadedNoticePostList.error
+  }));
 
   const pageSize = 20;
   const { boardNameEng } = match.params;
@@ -129,6 +137,8 @@ const BoardContainer = props => {
       loading={loading}
       error={error}
       NoticeData={NoticeData}
+      NoticeLoading={NoticeLoading}
+      NoticeError={NoticeError}
       onChange={onChange}
       onSearchChange={onSearchChange}
       onSearch={onSearch}
