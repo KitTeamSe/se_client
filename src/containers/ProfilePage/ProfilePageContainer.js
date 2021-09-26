@@ -234,7 +234,6 @@ const ProfilePageContainer = props => {
         infoEditObj={infoEditObj}
         anchorEl={anchorEl}
         mode={mode}
-        error={error}
         handleChange={handleChange}
         formChange={formChange}
         typeChange={typeChange}

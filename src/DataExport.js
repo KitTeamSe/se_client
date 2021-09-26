@@ -29,13 +29,7 @@ export const accountData = {
   lastSignInIp: '최근접속IP'
 };
 
-export const changebleAccount = [
-  'nickname',
-  'email',
-  'type',
-  'phoneNumber',
-  'informationOpenAgree'
-];
+export const changebleAccount = ['nickname', 'type', 'informationOpenAgree'];
 
 export const informationOpenAgreeEnum = {
   AGREE: '🟢AGREE',
