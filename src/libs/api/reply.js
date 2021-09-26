@@ -15,10 +15,6 @@ export const addReply = ({
   const data = { anonymous, isSecret, parentId, postId, text, attachmentList };
 
   return client.post(`${URL}`, data, tokenHeader(token)).catch(error => {
-    if (error.response.data.code === 'GE05') {
-      localStorage.clear();
-      window.location.reload(true);
-    }
     throw error.response.data;
   });
 };
@@ -40,9 +36,6 @@ export const updateReply = ({
   };
 
   return client.put(`${URL}`, data, tokenHeader(token)).catch(error => {
-    if (error.response.data.code === 'GE05') {
-      localStorage.clear();
-    }
     throw error.response.data;
   });
 };
@@ -51,10 +44,6 @@ export const removeReply = ({ id }) => {
   const token = localStorage.getItem('token');
 
   return client.delete(`${URL}/${id}`, tokenHeader(token)).catch(error => {
-    if (error.response.data.code === 'GE05') {
-      localStorage.clear();
-      window.location.reload(true);
-    }
     throw error.response.data;
   });
 };
@@ -63,10 +52,6 @@ export const getReplyById = ({ replyId }) => {
   const token = localStorage.getItem('token');
 
   return client.get(`${URL}/${replyId}`, tokenHeader(token)).catch(error => {
-    if (error.response.data.code === 'GE05') {
-      localStorage.clear();
-      window.location.reload(true);
-    }
     throw error.response.data;
   });
 };
@@ -78,10 +63,6 @@ export const getReplyList = ({ postId, direction, page, size }) => {
   return client
     .get(`${URL}/post/${postId}?${queryString}`, tokenHeader(token))
     .catch(error => {
-      if (error.response.data.code === 'GE05') {
-        localStorage.clear();
-        window.location.reload(true);
-      }
       throw error.response.data;
     });
 };
@@ -93,10 +74,6 @@ export const removeReplyAnony = ({ password, replyId }) => {
   return client
     .post(`${URL}/anonymous`, anonymousReplyDeleteRequest, tokenHeader(token))
     .catch(error => {
-      if (error.response.data.code === 'GE05') {
-        localStorage.clear();
-        window.location.reload(true);
-      }
       throw error.response.data;
     });
 };
@@ -108,10 +85,6 @@ export const getSecretReply = ({ password, replyId }) => {
   return client
     .get(`${URL}/secret?${queryString}`, tokenHeader(token))
     .catch(error => {
-      if (error.response.data.code === 'GE05') {
-        localStorage.clear();
-        window.location.reload(true);
-      }
       throw error.response.data;
     });
 };

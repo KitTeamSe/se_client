@@ -13,11 +13,15 @@ client.defaults.headers['Access-Control-Allow-Methods'] =
 client.defaults.headers['Access-Control-Allow-Headers'] =
   'Content-Type, Authorization, Content-Length, X-Requested-With';
 
-axios.interceptors.response.use(
+client.interceptors.response.use(
   response => {
     return response;
   },
   error => {
+    if (error.response.data.code === 'GE05') {
+      localStorage.clear();
+      window.location.reload(true);
+    }
     return Promise.reject(error);
   }
 );
