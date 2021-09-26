@@ -103,7 +103,7 @@ const SignupPageContainer = () => {
 
   useEffect(() => {
     const { name } = form;
-    if (name.length > 1 && name.length < 12) {
+    if (name.length > 1 && name.length < 13) {
       setInfoState({ ...infoState, name: true });
     } else {
       setInfoState({ ...infoState, name: false });

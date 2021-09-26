@@ -23,21 +23,21 @@ const FormField = styled.form`
 `;
 
 const Welcome = styled.div`
-  margin: 24px;
-  font-size: 24px;
+  margin-top: 1.5rem;
+  font-size: 1.5rem;
 `;
 
 const FormTextField = styled(TextField)`
-  margin: 4px;
+  margin: 0.4rem;
   margin="dense"
 `;
 
 const FormSelectField = styled(Select)`
-  margin: 6px;
-  min-width: 72px;
+  margin: 0.8rem;
+  min-width: 6rem;
 `;
 
-const NeonEffect = keyframes`
+const GreenNeonEffect = keyframes`
   0% {
     box-shadow: 0 0 #0fb049;
   }
@@ -51,23 +51,23 @@ const RedNeonEffect = keyframes`
   box-shadow: 0 0 #ff0000;
 }
 100% {
-  box-shadow: 0 0 6px 4px transparent;
+  box-shadow: 0 0 8px 6px transparent;
 }
 `;
 
-const NeonSign = styled.div`
-  margin-left: 2rem;
+const GreenNeonSign = styled.div`
+  margin: 1rem 0 0 1rem;
   border-radius: 50%;
   background: radial-gradient(#99ff99, #0fb049);
   width: 10px;
   height: 10px;
   text-align: center;
   position: relative;
-  animation: ${NeonEffect} 2s ease infinite;
+  animation: ${GreenNeonEffect} 2s ease infinite;
 `;
 
 const RedNeonSign = styled.div`
-  margin-left: 2rem;
+  margin: 1rem 0 0 1rem;
   border-radius: 50%;
   background: radial-gradient(#ff9999, #ff0000);
   width: 10px;
@@ -80,6 +80,14 @@ const RedNeonSign = styled.div`
 const FieldBox = styled.div`
   display: flex;
   align-items: center;
+`;
+
+const SelectFieldBox = styled(FieldBox)`
+  margin-top: 0.5rem;
+`;
+
+const SignupButton = styled(Button)`
+  margin-top: 1rem;
 `;
 
 const SignupPage = props => {
@@ -111,7 +119,7 @@ const SignupPage = props => {
             value={form.id}
             onChange={handleChange}
           />
-          {infoState.id ? <NeonSign /> : <RedNeonSign />}
+          {infoState.id ? <GreenNeonSign /> : <RedNeonSign />}
         </FieldBox>
         <FieldBox>
           <FormTextField
@@ -121,7 +129,7 @@ const SignupPage = props => {
             value={form.password}
             onChange={handleChange}
           />
-          {infoState.password ? <NeonSign /> : <RedNeonSign />}
+          {infoState.password ? <GreenNeonSign /> : <RedNeonSign />}
         </FieldBox>
         <FieldBox>
           <FormTextField
@@ -131,7 +139,7 @@ const SignupPage = props => {
             value={form.passwordCheck}
             onChange={handleChange}
           />
-          {infoState.passwordCheck ? <NeonSign /> : <RedNeonSign />}
+          {infoState.passwordCheck ? <GreenNeonSign /> : <RedNeonSign />}
         </FieldBox>
         <FieldBox>
           <FormTextField
@@ -140,7 +148,7 @@ const SignupPage = props => {
             value={form.email}
             onChange={handleChange}
           />
-          {infoState.email ? <NeonSign /> : <RedNeonSign />}
+          {infoState.email ? <GreenNeonSign /> : <RedNeonSign />}
         </FieldBox>
         <FieldBox>
           <FormTextField
@@ -149,7 +157,7 @@ const SignupPage = props => {
             value={form.name}
             onChange={handleChange}
           />
-          {infoState.name ? <NeonSign /> : <RedNeonSign />}
+          {infoState.name ? <GreenNeonSign /> : <RedNeonSign />}
         </FieldBox>
         <FieldBox>
           <FormTextField
@@ -158,7 +166,7 @@ const SignupPage = props => {
             value={form.nickname}
             onChange={handleChange}
           />
-          {infoState.nickname ? <NeonSign /> : <RedNeonSign />}
+          {infoState.nickname ? <GreenNeonSign /> : <RedNeonSign />}
         </FieldBox>
         <FieldBox>
           <FormTextField
@@ -169,7 +177,7 @@ const SignupPage = props => {
             value={form.phoneNumber}
             onChange={handleChange}
           />
-          {infoState.phoneNumber ? <NeonSign /> : <RedNeonSign />}
+          {infoState.phoneNumber ? <GreenNeonSign /> : <RedNeonSign />}
         </FieldBox>
         <FieldBox>
           <FormTextField
@@ -179,9 +187,9 @@ const SignupPage = props => {
             onChange={handleChange}
             type="number"
           />
-          {infoState.studentId ? <NeonSign /> : <RedNeonSign />}
+          {infoState.studentId ? <GreenNeonSign /> : <RedNeonSign />}
         </FieldBox>
-        <FieldBox>
+        <SelectFieldBox>
           <InputLabel id="demo-simple-select-label">나만의 질문</InputLabel>
           <FormSelectField
             labelId="demo-simple-select-label"
@@ -196,7 +204,7 @@ const SignupPage = props => {
               </MenuItem>
             ))}
           </FormSelectField>
-        </FieldBox>
+        </SelectFieldBox>
         <FieldBox>
           <FormTextField
             id="answer"
@@ -204,31 +212,33 @@ const SignupPage = props => {
             value={form.answer}
             onChange={handleChange}
           />
-          {infoState.answer ? <NeonSign /> : <RedNeonSign />}
+          {infoState.answer ? <GreenNeonSign /> : <RedNeonSign />}
         </FieldBox>
-        <InputLabel shrink id="demo-simple-select-placeholder-label-label">
-          신분
-        </InputLabel>
-        <FormSelectField
-          id="type"
-          value={inputs.type}
-          onChange={classChange}
-          displayEmpty
-        >
-          {typeList.map(type => (
-            <MenuItem value={type.userType} key={type.typeid}>
-              {type.userType}
-            </MenuItem>
-          ))}
-        </FormSelectField>
+        <SelectFieldBox>
+          <InputLabel id="demo-simple-select-placeholder-label-label">
+            신분
+          </InputLabel>
+          <FormSelectField
+            id="type"
+            value={inputs.type}
+            onChange={classChange}
+            displayEmpty
+          >
+            {typeList.map(type => (
+              <MenuItem value={type.userType} key={type.typeid}>
+                {type.userType}
+              </MenuItem>
+            ))}
+          </FormSelectField>
+        </SelectFieldBox>
         {Object.values(infoState).includes(false) ? (
-          <Button variant="contained" color="secondary">
+          <SignupButton variant="outlined" disabled>
             회원가입
-          </Button>
+          </SignupButton>
         ) : (
-          <Button variant="contained" color="primary" type="submit">
+          <SignupButton variant="contained" color="primary" type="submit">
             회원가입
-          </Button>
+          </SignupButton>
         )}
       </FormField>
     </>
