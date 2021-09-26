@@ -13,6 +13,6 @@ export const userSearch = async ({ id }) => {
 
 export const myinfo = ({ token }) => {
   return client.get('account/my', tokenHeader(token)).catch(error => {
-    throw error.response.data.message;
+    throw error.response.data;
   });
 };

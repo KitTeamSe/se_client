@@ -27,7 +27,6 @@ import FontSize from '@ckeditor/ckeditor5-font/src/fontsize';
 import GeneralHtmlSupport from '@ckeditor/ckeditor5-html-support/src/generalhtmlsupport';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading';
 import Highlight from '@ckeditor/ckeditor5-highlight/src/highlight';
-import HorizontalLine from '@ckeditor/ckeditor5-horizontal-line/src/horizontalline';
 import HtmlComment from '@ckeditor/ckeditor5-html-support/src/htmlcomment';
 import HtmlEmbed from '@ckeditor/ckeditor5-html-embed/src/htmlembed';
 import Image from '@ckeditor/ckeditor5-image/src/image';
@@ -59,7 +58,6 @@ import SpecialCharactersEssentials from '@ckeditor/ckeditor5-special-characters/
 import SpecialCharactersLatin from '@ckeditor/ckeditor5-special-characters/src/specialcharacterslatin';
 import SpecialCharactersMathematical from '@ckeditor/ckeditor5-special-characters/src/specialcharactersmathematical';
 import SpecialCharactersText from '@ckeditor/ckeditor5-special-characters/src/specialcharacterstext';
-import StandardEditingMode from '@ckeditor/ckeditor5-restricted-editing/src/standardeditingmode';
 import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough';
 import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript';
 import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript';
@@ -94,7 +92,6 @@ const plugins = [
   GeneralHtmlSupport,
   Heading,
   Highlight,
-  HorizontalLine,
   HtmlComment,
   HtmlEmbed,
   Image,
@@ -126,7 +123,6 @@ const plugins = [
   SpecialCharactersLatin,
   SpecialCharactersMathematical,
   SpecialCharactersText,
-  StandardEditingMode,
   Strikethrough,
   Subscript,
   Superscript,
@@ -151,11 +147,13 @@ const items = [
   '|',
   'insertTable',
   'pageBreak',
-  'horizontalLine',
   '|',
-  'restrictedEditingException',
   'code',
   'codeBlock',
+  '|',
+  'mediaEmbed',
+  'htmlEmbed',
+  'sourceEditing',
   '-',
   'bold',
   'italic',
@@ -182,11 +180,7 @@ const items = [
   'fontColor',
   'fontBackgroundColor',
   'highlight',
-  '|',
-  'specialCharacters',
-  'mediaEmbed',
-  'htmlEmbed'
-  // 'sourceEditing'
+  'specialCharacters'
 ];
 
 const toolbar = {
@@ -237,7 +231,7 @@ const heading = {
 };
 
 const fontSize = {
-  options: [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72]
+  options: [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36]
 };
 
 const alignment = {

@@ -30,7 +30,7 @@ const SignupPageContainer = () => {
 
   useEffect(() => {
     if (signupError) {
-      setError(String(signupError));
+      setError(String(signupError.message));
       return;
     }
     if (signupResponse) {
