@@ -9,6 +9,7 @@ import {
   changeField,
   accountdelete
 } from '../../modules/account';
+import { initializeAuth } from '../../modules/auth';
 import WithdrawalDialog from '../../components/ProfilePage/WithdrawalDialog';
 import PwChangeDialog from '../../components/ProfilePage/PwChangeDialog';
 
@@ -36,7 +37,8 @@ const ProfilePageContainer = props => {
     myinfoEditRes,
     myinfoEditError,
     newPwForm,
-    withDrawalForm
+    withDrawalForm,
+    accountDeleteRes
   } = useSelector(({ account }) => ({
     data: account.myinfo.data,
     loading: account.myinfo.loading,
@@ -44,13 +46,23 @@ const ProfilePageContainer = props => {
     myinfoEditRes: account.myinfoEditRes.data,
     myinfoEditError: account.myinfoEditRes.error,
     newPwForm: account.newPwForm,
-    withDrawalForm: account.withDrawalForm
+    withDrawalForm: account.withDrawalForm,
+    accountDeleteRes: account.accountDeleteRes
   }));
 
   useEffect(() => {
     const id = match.params.userId;
     dispatch(myinfo({ id }));
   }, [match.params]);
+
+  useEffect(() => {
+    if (accountDeleteRes.data) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      dispatch(initializeAuth());
+      history.push('/');
+    }
+  }, [accountDeleteRes]);
 
   const editFormRefresh = () => {
     if (data) {
@@ -84,6 +96,12 @@ const ProfilePageContainer = props => {
   const handleChange = e => {
     e.preventDefault();
     const { value, id } = e.target;
+    if (id === 'nickname') {
+      if (value.length < 21 && value.length > 1) {
+        // 알림 띄우기
+        return;
+      }
+    }
     setInfoEditObj({ ...infoEditObj, [id]: value });
   };
 
@@ -167,7 +185,6 @@ const ProfilePageContainer = props => {
     console.log(password);
     if (text === '탈퇴') {
       dispatch(accountdelete({ userId, token }));
-      setError('탈퇴가 완료되었습니다.');
     } else {
       setError('탈퇴를 입력하세요');
     }
@@ -206,7 +223,6 @@ const ProfilePageContainer = props => {
       <WithdrawalDialog
         mode={mode}
         withDrawalForm={withDrawalForm}
-        error={error}
         modeChange={modeChange}
         formChange={formChange}
         withdrawalSubmit={withdrawalSubmit}
@@ -224,7 +240,6 @@ const ProfilePageContainer = props => {
         infoEditObj={infoEditObj}
         anchorEl={anchorEl}
         mode={mode}
-        error={error}
         handleChange={handleChange}
         formChange={formChange}
         typeChange={typeChange}

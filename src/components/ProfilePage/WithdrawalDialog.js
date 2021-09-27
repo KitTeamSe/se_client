@@ -22,18 +22,6 @@ const FormTextField = styled(TextField)`
   min-width: 256px;
 `;
 
-const Wrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
-
-const ErrorText = styled.div`
-  margin: 6px;
-  font-size: 18px;
-  color: red;
-`;
-
 const ButtonWrapper = styled.div`
   display: flex;
   width: 100%;
@@ -47,14 +35,8 @@ const HalfButton = styled(Button)`
 `;
 
 const WithdrawalDialog = props => {
-  const {
-    mode,
-    error,
-    withDrawalForm,
-    modeChange,
-    formChange,
-    withdrawalSubmit
-  } = props;
+  const { mode, withDrawalForm, modeChange, formChange, withdrawalSubmit } =
+    props;
   return (
     <>
       <Dialog
@@ -82,9 +64,6 @@ const WithdrawalDialog = props => {
             onChange={formChange}
             value={withDrawalForm.text}
           />
-          <Wrapper>
-            <ErrorText style={{ fontSize: '16px' }}>{error}</ErrorText>
-          </Wrapper>
           <ButtonWrapper>
             <HalfButton onClick={modeChange} color="primary">
               취소

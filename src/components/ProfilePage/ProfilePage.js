@@ -26,6 +26,8 @@ import {
   typeList
 } from '../../DataExport';
 
+const redColor = 'ffeeeeee';
+
 const MainWrapper = styled.div`
   margin: auto;
   margin-top: 3rem;
@@ -80,8 +82,9 @@ const EditTableCell = styled.th`
 
 const FormInput = styled.input`
   size: 20;
+  background-color: #${redColor};
   height: 15px;
-  border: none;
+  border: 1px solid #e0e0e0;
   padding: 12px;
   text-align: right;
   font-size: 0.875rem;
@@ -91,12 +94,6 @@ const FormInput = styled.input`
     outline: none;
     border: none;
   }
-`;
-
-const ErrorText = styled.div`
-  margin: 6px;
-  font-size: 18px;
-  color: red;
 `;
 
 const FormSelectField = styled(Select)`
@@ -116,6 +113,10 @@ const RefreshIcon = styled(FontAwesomeIcon)`
 const LoadingCircle = styled(CircularProgress)`
   position: absolute;
   bottom: 50vh;
+`;
+
+const EditTableRow = styled(TableRow)`
+  background-color: #${redColor};
 `;
 
 const ProfileHeader = props => {
@@ -275,7 +276,7 @@ const EditRow = props => {
     typeChange
   } = props;
   return (
-    <TableRow key={`${row[0]}profileRow`}>
+    <EditTableRow key={`${row[0]}profileRow`}>
       <TableCell component="th" scope="row">
         {accountData[row[0]]}
       </TableCell>
@@ -286,7 +287,7 @@ const EditRow = props => {
         handleChange={handleChange}
         typeChange={typeChange}
       />
-    </TableRow>
+    </EditTableRow>
   );
 };
 
@@ -351,7 +352,7 @@ const ProfileBody = props => {
 };
 
 const PropfilePage = props => {
-  const { infoObj, infoEditObj, anchorEl, error, mode, loading } = props;
+  const { infoObj, infoEditObj, anchorEl, mode, loading } = props;
 
   const {
     handleChange,
@@ -395,7 +396,6 @@ const PropfilePage = props => {
         mode={mode}
         myinfoEditSubmit={myinfoEditSubmit}
       />
-      <ErrorText>{error}</ErrorText>
     </MainWrapper>
   );
 };
