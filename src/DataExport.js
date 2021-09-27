@@ -26,7 +26,8 @@ export const accountData = {
   phoneNumber: '전화번호',
   studentId: '학번',
   informationOpenAgree: '정보공유동의',
-  lastSignInIp: '최근접속IP'
+  lastSignInIp: '최근접속IP',
+  password: '비밀번호 확인'
 };
 
 export const changebleAccount = ['nickname', 'type', 'informationOpenAgree'];

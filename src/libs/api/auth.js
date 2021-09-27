@@ -1,10 +1,14 @@
 import { client } from './client';
 
 export const signin = ({ id, pw }) => {
-  const data = {
-    id: { id }.id,
-    pw: { pw }.pw
-  };
+  const data = { id, pw };
+  return client.post('signin', data).catch(error => {
+    throw error.response.data;
+  });
+};
+
+export const checkPassword = ({ pw }) => {
+  const data = { id: localStorage.getItem('userId'), pw };
   return client.post('signin', data).catch(error => {
     throw error.response.data;
   });
@@ -23,16 +27,16 @@ export const signup = ({
   type
 }) => {
   const data = {
-    answer: { answer }.answer,
-    email: { email }.email,
-    id: { id }.id,
-    name: { name }.name,
-    nickname: { nickname }.nickname,
-    password: { password }.password,
-    phoneNumber: { phoneNumber }.phoneNumber,
-    questionId: { questionId }.questionId,
-    studentId: { studentId }.studentId,
-    type: { type }.type
+    answer,
+    email,
+    id,
+    name,
+    nickname,
+    password,
+    phoneNumber,
+    questionId,
+    studentId,
+    type
   };
   return client.post('signup', data).catch(error => {
     throw error.response.data;

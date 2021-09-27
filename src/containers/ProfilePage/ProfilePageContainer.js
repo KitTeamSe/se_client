@@ -9,7 +9,7 @@ import {
   changeField,
   accountdelete
 } from '../../modules/account';
-import { initializeAuth } from '../../modules/auth';
+import { checkPassword, initializeAuth } from '../../modules/auth';
 import WithdrawalDialog from '../../components/ProfilePage/WithdrawalDialog';
 import PwChangeDialog from '../../components/ProfilePage/PwChangeDialog';
 
@@ -38,8 +38,10 @@ const ProfilePageContainer = props => {
     myinfoEditError,
     newPwForm,
     withDrawalForm,
-    accountDeleteRes
-  } = useSelector(({ account }) => ({
+    accountDeleteRes,
+    checkPwData,
+    checkPwError
+  } = useSelector(({ account, auth }) => ({
     data: account.myinfo.data,
     loading: account.myinfo.loading,
     myinfoError: account.myinfo.error,
@@ -47,7 +49,9 @@ const ProfilePageContainer = props => {
     myinfoEditError: account.myinfoEditRes.error,
     newPwForm: account.newPwForm,
     withDrawalForm: account.withDrawalForm,
-    accountDeleteRes: account.accountDeleteRes
+    accountDeleteRes: account.accountDeleteRes,
+    checkPwData: auth.loadCheckPassword.data,
+    checkPwError: auth.loadCheckPassword.error
   }));
 
   useEffect(() => {
@@ -97,9 +101,9 @@ const ProfilePageContainer = props => {
     e.preventDefault();
     const { value, id } = e.target;
     if (id === 'nickname') {
-      if (value.length < 21 && value.length > 1) {
+      if (value.length >= 20 && value.length <= 2) {
         // 알림 띄우기
-        return;
+        console.log('err');
       }
     }
     setInfoEditObj({ ...infoEditObj, [id]: value });
@@ -163,33 +167,6 @@ const ProfilePageContainer = props => {
     editFormRefresh();
   };
 
-  const pwChangeSubmit = e => {
-    e.preventDefault();
-    const { newPassword, newPasswordConfirm } = newPwForm;
-    const parameter = {};
-    // 비밀번호 확인하는 로직 필요
-
-    if (newPassword !== newPasswordConfirm) {
-      setError('새비밀번호 확인이 맞지 않습니다');
-      return;
-    }
-    parameter.password = newPassword;
-    parameter.id = userId;
-    dispatch(myinfoedit({ parameter, token }));
-  };
-
-  const withdrawalSubmit = e => {
-    e.preventDefault();
-    const { password, text } = withDrawalForm;
-    // 비밀번호 확인하는 로직 필요
-    console.log(password);
-    if (text === '탈퇴') {
-      dispatch(accountdelete({ userId, token }));
-    } else {
-      setError('탈퇴를 입력하세요');
-    }
-  };
-
   const menuClick = e => {
     if (anchorEl) {
       setAnchorEl(null);
@@ -198,8 +175,46 @@ const ProfilePageContainer = props => {
     }
   };
 
+  const pwChangeSubmit = e => {
+    e.preventDefault();
+    const { nowPassword } = newPwForm;
+    dispatch(checkPassword({ pw: nowPassword }));
+  };
+
+  const withdrawalSubmit = e => {
+    e.preventDefault();
+    const { password } = withDrawalForm;
+    dispatch(checkPassword({ pw: password }));
+  };
+
   const myinfoEditSubmit = e => {
     e.preventDefault();
+    const { password } = infoEditObj;
+    dispatch(checkPassword({ pw: password }));
+  };
+
+  const handlePwChange = () => {
+    const { newPassword, newPasswordConfirm } = newPwForm;
+
+    if (newPassword !== newPasswordConfirm) {
+      setError('새비밀번호 확인이 맞지 않습니다');
+    } else {
+      const parameter = { id: userId, password: newPassword };
+      dispatch(myinfoedit({ parameter, token }));
+    }
+  };
+
+  const handleWithdrawal = () => {
+    const { text } = withDrawalForm;
+
+    if (text === '탈퇴') {
+      dispatch(accountdelete({ userId, token }));
+    } else {
+      setError('탈퇴를 입력하세요');
+    }
+  };
+
+  const handleMyInfoEdit = () => {
     const parameter = {};
     const infoEditObjKeys = Object.keys(infoEditObj);
     for (let i = 0; i < infoEditObjKeys.length; i += 1) {
@@ -218,10 +233,22 @@ const ProfilePageContainer = props => {
     dispatch(myinfoedit({ parameter, token }));
   };
 
+  useEffect(() => {
+    if (checkPwData) {
+      if (mode === 'editMode') handleMyInfoEdit();
+      if (mode === 'pwChangeMode') handlePwChange();
+      if (mode === 'withdrawalMode') handleWithdrawal();
+    }
+    if (checkPwError) {
+      setError('현재 비밀번호 확인이 맞지 않습니다');
+    }
+  }, [checkPwData, checkPwError]);
+
   return (
     <>
       <WithdrawalDialog
         mode={mode}
+        error={error}
         withDrawalForm={withDrawalForm}
         modeChange={modeChange}
         formChange={formChange}

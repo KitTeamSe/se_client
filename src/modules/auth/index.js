@@ -19,6 +19,9 @@ const [SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAILURE] =
 const [SIGNIN, SIGNIN_SUCCESS, SIGNIN_FAILURE] =
   createRequestActionTypes('auth/SIGNIN');
 
+const [CHECK_PASSWORD, CHECK_PASSWORD_SUCCESS, CHECK_PASSWORD_FAILURE] =
+  createRequestActionTypes('auth/CHECK_PASSWORD');
+
 export const changeField = createAction(
   CHANGE_FIELD,
   ({ form, key, value }) => ({ form, key, value })
@@ -57,13 +60,17 @@ export const signup = createAction(
 
 export const signin = createAction(SIGNIN, ({ id, pw }) => ({ id, pw }));
 
+export const checkPassword = createAction(CHECK_PASSWORD, ({ pw }) => ({ pw }));
+
 // Sagas
 const signupSaga = createRequestSaga(SIGNUP, api.signup);
 const signinSaga = createRequestSaga(SIGNIN, api.signin);
+const checkPasswordSaga = createRequestSaga(CHECK_PASSWORD, api.checkPassword);
 
 export function* authSaga() {
   yield takeLatest(SIGNUP, signupSaga);
   yield takeLatest(SIGNIN, signinSaga);
+  yield takeLatest(CHECK_PASSWORD, checkPasswordSaga);
 }
 
 // reducer (handleActions => switch문 대체)
@@ -75,7 +82,7 @@ const initialState = {
     name: '',
     nickname: '',
     password: '',
-    passwordCheck: '',
+    checkPassword: '',
     phoneNumber: '',
     questionId: 1,
     studentId: '',
@@ -86,7 +93,8 @@ const initialState = {
     pw: ''
   },
   auth: reducerUtils.initial(),
-  signupResponse: reducerUtils.initial()
+  signupResponse: reducerUtils.initial(),
+  loadCheckPassword: reducerUtils.initial()
 };
 
 export default handleActions(
@@ -128,6 +136,18 @@ export default handleActions(
     [SIGNIN_FAILURE]: (state, { payload: error }) => ({
       ...state,
       auth: reducerUtils.error(error)
+    }),
+    [CHECK_PASSWORD]: state => ({
+      ...state,
+      loadCheckPassword: reducerUtils.loading(state.loadCheckPassword.data)
+    }),
+    [CHECK_PASSWORD_SUCCESS]: (state, { payload: loadCheckPassword }) => ({
+      ...state,
+      loadCheckPassword: reducerUtils.success(loadCheckPassword)
+    }),
+    [CHECK_PASSWORD_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      loadCheckPassword: reducerUtils.error(error)
     })
   },
   initialState
