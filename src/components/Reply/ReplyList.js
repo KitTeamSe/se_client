@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
 import { Pagination, PaginationItem } from '@material-ui/lab';
 import Reply from './Reply';
-import ReplyChild from './ReplyChild';
 import ReplyAddContainer from '../../containers/Reply/ReplyAddContainer';
+import ReplyChildAddContainer from '../../containers/Reply/ReplyChildAddContainer';
 
 const PaginationStyled = styled(Pagination)`
   & ul {
@@ -100,16 +100,17 @@ const ReplyEntries = props => {
 
   return !loading && data
     ? data.map((reply, idx) => (
-        <Reply
-          reply={reply}
-          replyIndex={idx}
-          handleAddReplyChild={handleAddReplyChild}
-          onUpdate={onUpdate}
-          replyReportHandle={replyReportHandle}
-        >
+        <>
+          <Reply
+            reply={reply}
+            replyIndex={idx}
+            handleAddReplyChild={handleAddReplyChild}
+            onUpdate={onUpdate}
+            replyReportHandle={replyReportHandle}
+          />
           {reply.child && reply.child.length
             ? reply.child.map((childReply, childIdx) => (
-                <ReplyChild
+                <Reply
                   reply={childReply}
                   replyIndex={childIdx}
                   parentId={reply.replyId}
@@ -120,7 +121,8 @@ const ReplyEntries = props => {
                 />
               ))
             : null}
-        </Reply>
+          <ReplyChildAddContainer parentId={reply.replyId} />
+        </>
       ))
     : null;
 };
