@@ -12,41 +12,35 @@ const ChildWrapper = styled(ReplyWrapper)`
 
 const ChildReply = props => {
   const {
+    reply,
+    replyIndex,
     parentId,
     parentIndex,
-    replyId,
-    replyIndex,
-    accountId,
-    anonymousNickname,
-    content,
-    createAt,
-    isSecret,
-    isDelete,
     handleAddReplyChild,
+    onUpdate,
     replyReportHandle
   } = props;
 
+  const replyInfoProps = {
+    accountId: reply.accountId,
+    anonymousNickname: reply.anonymousNickname,
+    createAt: reply.createAt
+  };
+
+  const replyContentProps = {
+    reply,
+    parentId,
+    parentIndex,
+    replyIndex,
+    handleAddReplyChild,
+    onUpdate,
+    replyReportHandle
+  };
+
   return (
-    <ChildWrapper isDelete={isDelete}>
-      <ReplyInfo
-        accountId={accountId}
-        anonymousNickname={anonymousNickname}
-        createAt={createAt}
-      />
-      <ReplyContent
-        parentId={parentId}
-        parentIndex={parentIndex}
-        replyId={replyId}
-        replyIndex={replyIndex}
-        accountId={accountId}
-        anonymousNickname={anonymousNickname}
-        content={content}
-        createAt={createAt}
-        isSecret={isSecret}
-        isDelete={isDelete}
-        handleAddReplyChild={handleAddReplyChild}
-        replyReportHandle={replyReportHandle}
-      />
+    <ChildWrapper isDelete={reply.isDelete}>
+      <ReplyInfo {...replyInfoProps} />
+      <ReplyContent {...replyContentProps} />
     </ChildWrapper>
   );
 };

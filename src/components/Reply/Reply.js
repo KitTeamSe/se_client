@@ -14,6 +14,7 @@ import SecretReplyContainer from '../../containers/Reply/SecretReplyContainer';
 import EditorOutput from '../Editor/EditorOutput';
 import ActionButton from './ReplyActionButton';
 import Nicknamecontainer from '../../containers/Post/NicknameContainer';
+import AttachDownloadList from '../Editor/AttachDownloadList';
 
 const ContentWrapper = styled.div`
   display: flex;
@@ -201,81 +202,77 @@ export const ReplyContent = props => {
   const {
     parentId,
     parentIndex,
-    replyId,
+    reply,
     replyIndex,
-    accountId,
-    anonymousNickname,
-    content,
-    isSecret,
-    isDelete,
     handleAddReplyChild,
     onUpdate,
     replyReportHandle
   } = props;
 
+  const replyCommentProps = {
+    content: reply.text,
+    isDelete: reply.isDelete,
+    isSecret: reply.isSecret
+  };
+
+  const replyActionProps = {
+    accountId: reply.accountId,
+    anonymousNickname: reply.anonymousNickname,
+    replyId: reply.replyId,
+    isSecret: reply.isSecret,
+    parentId,
+    parentIndex,
+    replyIndex,
+    handleAddReplyChild,
+    onUpdate,
+    replyReportHandle
+  };
+
   return (
     <ContentWrapper>
-      <ReplyComment content={content} isDelete={isDelete} isSecret={isSecret} />
-      {isDelete === 'NORMAL' && (
-        <ReplyAction
-          parentId={parentId}
-          parentIndex={parentIndex}
-          accountId={accountId}
-          replyIndex={replyIndex}
-          anonymousNickname={anonymousNickname}
-          replyId={replyId}
-          isSecret={isSecret}
-          handleAddReplyChild={handleAddReplyChild}
-          onUpdate={onUpdate}
-          replyReportHandle={replyReportHandle}
-        />
-      )}
+      <ReplyComment {...replyCommentProps} />
+      <AttachDownloadList attachList={reply.attacheList} />
+      {reply.isDelete === 'NORMAL' && <ReplyAction {...replyActionProps} />}
     </ContentWrapper>
   );
 };
 
 const Reply = props => {
   const {
-    replyId,
+    reply,
     replyIndex,
-    accountId,
-    anonymousNickname,
-    content,
-    createAt,
-    isSecret,
-    isDelete,
     handleAddReplyChild,
     onUpdate,
     children,
     replyReportHandle
   } = props;
 
+  const replyInfoProps = {
+    accountId: reply.accountId,
+    anonymousNickname: reply.anonymousNickname,
+    createAt: reply.createAt
+  };
+
+  const replyContentProps = {
+    reply,
+    replyIndex,
+    handleAddReplyChild,
+    onUpdate,
+    replyReportHandle
+  };
+
   return (
     <>
-      {replyId && (
-        <ReplyWrapper isDelete={isDelete}>
-          <ReplyInfo
-            accountId={accountId}
-            anonymousNickname={anonymousNickname}
-            createAt={createAt}
-          />
-          <ReplyContent
-            replyId={replyId}
-            replyIndex={replyIndex}
-            accountId={accountId}
-            anonymousNickname={anonymousNickname}
-            content={content}
-            createAt={createAt}
-            isSecret={isSecret}
-            isDelete={isDelete}
-            handleAddReplyChild={handleAddReplyChild}
-            onUpdate={onUpdate}
-            replyReportHandle={replyReportHandle}
-          />
+      {reply && reply.replyId && (
+        <ReplyWrapper isDelete={reply.isDelete}>
+          <ReplyInfo {...replyInfoProps} />
+          <ReplyContent {...replyContentProps} />
         </ReplyWrapper>
       )}
       {children}
-      {replyId ? <ReplyChildAddContainer parentId={replyId} /> : null}
+      {reply && reply.replyId ? (
+        <ReplyChildAddContainer parentId={reply.replyId} />
+      ) : null}
     </>
   );
 };

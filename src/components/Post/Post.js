@@ -13,6 +13,7 @@ import { ConditionClassify, menuStorage } from '../../DataExport';
 import ReplyListContainer from '../../containers/Reply/ReplyListContainer';
 import EditorOutput from '../Editor/EditorOutput';
 import Tags from './Tags';
+import AttachDownloadList from '../Editor/AttachDownloadList';
 import { getEncodeHTML } from '../../utils/format';
 
 const LoadingCircle = styled(CircularProgress)`
@@ -353,6 +354,7 @@ const Post = props => {
         userId={userId}
       />
       <PostMain res={res} />
+      <AttachDownloadList attachList={res.attaches} />
       <ReplyListContainer replyReportHandle={replyReportHandle} />
     </>
   );

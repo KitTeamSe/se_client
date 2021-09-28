@@ -15,7 +15,6 @@ const PaginationStyled = styled(Pagination)`
 `;
 
 const ReplyHeaderWrapper = styled.div`
-  border-top: 1px solid #ddd;
   padding: 10px;
 `;
 
@@ -96,20 +95,14 @@ const ReplyMessage = props => {
 };
 
 const ReplyEntries = props => {
-  const { loading, data, handleAddReplyChild, onUpdate, replyReportHandle } =
+  const { data, loading, handleAddReplyChild, onUpdate, replyReportHandle } =
     props;
 
   return !loading && data
     ? data.map((reply, idx) => (
         <Reply
-          replyId={reply.replyId}
+          reply={reply}
           replyIndex={idx}
-          accountId={reply.accountId}
-          anonymousNickname={reply.anonymousNickname}
-          content={reply.text}
-          createAt={reply.createAt}
-          isSecret={reply.isSecret}
-          isDelete={reply.isDelete}
           handleAddReplyChild={handleAddReplyChild}
           onUpdate={onUpdate}
           replyReportHandle={replyReportHandle}
@@ -117,16 +110,10 @@ const ReplyEntries = props => {
           {reply.child && reply.child.length
             ? reply.child.map((childReply, childIdx) => (
                 <ReplyChild
+                  reply={childReply}
+                  replyIndex={childIdx}
                   parentId={reply.replyId}
                   parentIndex={idx}
-                  replyId={childReply.replyId}
-                  replyIndex={childIdx}
-                  accountId={childReply.accountId}
-                  anonymousNickname={childReply.anonymousNickname}
-                  content={childReply.text}
-                  createAt={childReply.createAt}
-                  isSecret={childReply.isSecret}
-                  isDelete={childReply.isDelete}
                   handleAddReplyChild={handleAddReplyChild}
                   onUpdate={onUpdate}
                   replyReportHandle={replyReportHandle}
@@ -157,8 +144,8 @@ const ReplyList = props => {
       <ReplyHeader totalData={totalData} />
       <ReplyAddContainer />
       <ReplyEntries
-        loading={loading}
         data={data}
+        loading={loading}
         handleAddReplyChild={handleAddReplyChild}
         onUpdate={onUpdate}
         replyReportHandle={replyReportHandle}
