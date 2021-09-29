@@ -17,6 +17,9 @@ const data = {
     signupSuccess: '회원가입 성공',
     signupError: '회원가입 실패'
   },
+  checkPassword: {
+    checkPwError: '비밀번호 확인 실패'
+  },
   account: {
     editinfoSuccess: '회원정보 수정 성공',
     editinfoError: '회원정보 수정 실패',
@@ -62,6 +65,10 @@ const FeedbackContainer = props => {
       signupSuccess: auth.signupResponse.data,
       signupError: auth.signupResponse.error
     }));
+
+  const { checkPwError } = useSelector(({ auth }) => ({
+    checkPwError: auth.loadCheckPassword.error
+  }));
 
   const {
     editInfoSuccess,
@@ -138,6 +145,11 @@ const FeedbackContainer = props => {
     if (signupError)
       handleFeedback('error', signupError.message || data.auth.signupError);
   }, [signinSuccess, signupSuccess, signinError, signupError]);
+
+  useEffect(() => {
+    if (checkPwError)
+      handleFeedback('error', checkPwError.message || data.auth.signinError);
+  }, [checkPwError]);
 
   useEffect(() => {
     if (editInfoSuccess)

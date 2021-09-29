@@ -255,6 +255,19 @@ const EditRowClassifier = props => {
       </EditTableCell>
     );
   }
+  if (row[0] === 'password') {
+    return (
+      <EditTableCell>
+        <FormInput
+          name={accountData[row[0]]}
+          id={row[0]}
+          value={editRowValue}
+          onChange={handleChange}
+          type="password"
+        />
+      </EditTableCell>
+    );
+  }
   return (
     <EditTableCell>
       <FormInput
@@ -345,6 +358,15 @@ const ProfileBody = props => {
             ))}
           </TableBody>
         </Table>
+        {mode === 'editMode' ? (
+          <EditRow
+            row={['password', null]}
+            infoEditObj={infoEditObj}
+            informationOpenAgreeChange={informationOpenAgreeChange}
+            handleChange={handleChange}
+            typeChange={typeChange}
+          />
+        ) : null}
       </InfoTable>
       <SubmitButton mode={mode} myinfoEditSubmit={myinfoEditSubmit} />
     </>
