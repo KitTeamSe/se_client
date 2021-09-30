@@ -34,26 +34,24 @@ const Image = styled.img`
 
 const AttachImageList = props => {
   const { attachImgList } = props;
-  return (
+  return attachImgList.length ? (
     <AttachListWrapper>
       <ListWrapper>
         <ol>
-          {attachImgList.length
-            ? attachImgList.map(
-                e =>
-                  e.fileName && (
-                    <span>
-                      <ImageList>
-                        <Image src={e.downloadUrl} alt={e.fileName} />
-                      </ImageList>
-                    </span>
-                  )
+          {attachImgList.map(
+            e =>
+              e.fileName && (
+                <span>
+                  <ImageList>
+                    <Image src={e.downloadUrl} alt={e.fileName} />
+                  </ImageList>
+                </span>
               )
-            : null}
+          )}
         </ol>
       </ListWrapper>
     </AttachListWrapper>
-  );
+  ) : null;
 };
 
 export default AttachImageList;

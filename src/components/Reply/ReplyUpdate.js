@@ -86,16 +86,14 @@ const ReplyUpdateInput = props => {
 
   return (
     <InputWrapper>
-      {replyData && !replyData.anonymousNickname ? (
-        <>
-          <InputStyled
-            placeholder="비밀번호"
-            id="password"
-            type="password"
-            value={updateForm.password}
-            onChange={handleChange}
-          />
-        </>
+      {replyData && replyData.anonymousNickname ? (
+        <InputStyled
+          placeholder="비밀번호"
+          id="password"
+          type="password"
+          value={updateForm.password}
+          onChange={handleChange}
+        />
       ) : null}
       <SecretToggle onChange={handleSecret} />
     </InputWrapper>

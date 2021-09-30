@@ -1,26 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import {
-  ListItem,
-  ListItemSecondaryAction,
-  ListItemText
-} from '@material-ui/core';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { ListItem, ListItemText } from '@material-ui/core';
 
 const AttachListWrapper = styled.div`
   display: block;
   padding: 0 5px 0 10px;
-  border-left: 1px solid #e6e6e6;
-  border-bottom: 1px solid #e6e6e6;
+  border: 1px solid #cccccc;
 `;
 
 const ListWrapper = styled.div`
-  max-height: 160px;
-  overflow-y: scroll;
-  margin: 0 -5px;
   padding: 5px 0;
+
   & .MuiListItem-container {
     list-style: none;
   }
@@ -28,41 +18,35 @@ const ListWrapper = styled.div`
 
 const ListItemStyled = styled(ListItem)`
   padding: 0;
+  color: #000;
 `;
 
 const ListItemTextStyled = styled(ListItemText)`
   display: flex;
 
   & span {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     margin-right: 5px;
+  }
+  & p {
+    font-size: 0.75rem;
   }
 `;
 
-const AttachRemoveIcon = styled(FontAwesomeIcon)`
-  cursor: pointer;
-`;
-
-const AttachList = props => {
-  const { attachList, onDeleteAttach } = props;
+const AttachDownloadList = props => {
+  const { attachList } = props;
   return attachList.length ? (
     <AttachListWrapper>
       <ListWrapper>
         {attachList.map(
           e =>
             e.fileName && (
-              <ListItemStyled>
+              <ListItemStyled component="a" href={e.downloadUrl}>
                 <ListItemTextStyled
                   id={e.fileName}
                   primary={e.fileName}
                   secondary={`[${e.fileSize} byte]`}
                 />
-                <ListItemSecondaryAction>
-                  <AttachRemoveIcon
-                    icon={faTimes}
-                    onClick={() => onDeleteAttach(e.attachId)}
-                  />
-                </ListItemSecondaryAction>
               </ListItemStyled>
             )
         )}
@@ -71,4 +55,4 @@ const AttachList = props => {
   ) : null;
 };
 
-export default AttachList;
+export default AttachDownloadList;
