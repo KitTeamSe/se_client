@@ -75,7 +75,7 @@ const Toggle = props => {
   const { id, label, onChange } = props;
   return (
     <FormControlLabelStyled
-      control={<Switch color="secondary" id={id} onChange={onChange} />}
+      control={<Switch color="primary" id={id} onChange={onChange} />}
       labelPlacement="start"
       label={label}
       size="small"
@@ -137,17 +137,11 @@ const PostUpdateAction = props => {
   const { onSubmit, onCancel } = props;
   return (
     <ButtonWrapper>
-      <ButtonStyled
-        variant="contained"
-        color="default"
-        size="small"
-        onClick={onCancel}
-      >
+      <ButtonStyled variant="contained" size="small" onClick={onCancel}>
         취소
       </ButtonStyled>
       <ButtonStyled
         variant="contained"
-        color="default"
         size="small"
         type="submit"
         onClick={onSubmit}

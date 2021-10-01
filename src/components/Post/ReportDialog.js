@@ -42,8 +42,7 @@ const ReportDialog = props => {
             id="outlined-multiline-static"
             label="신고내용"
             multiline
-            rows={6}
-            variant="outlined"
+            minRows={6}
             value={reportDescription}
             onChange={descriptionChange}
           />
