@@ -289,6 +289,7 @@ const UpperBar = props => {
           margin="dense"
           value={postSearchType}
           onChange={onPostSearchTypeChange}
+          variant="standard"
         >
           {postSearchTypeList.map(type => (
             <MenuItem value={type.type} key={type.type}>
@@ -300,7 +301,7 @@ const UpperBar = props => {
           <TextField
             id="text"
             type="text"
-            margin="dense"
+            size="small"
             value={keyword}
             label="검색"
             onChange={onSearchChange}

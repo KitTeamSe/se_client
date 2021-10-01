@@ -50,6 +50,7 @@ const PwChangeDialog = props => {
             id="nowPassword"
             label="현재 비밀번호를 입력하세요"
             type="password"
+            variant="standard"
             onChange={formChange}
             value={newPwForm.nowPassword}
           />
@@ -57,6 +58,7 @@ const PwChangeDialog = props => {
             id="newPassword"
             label="새로운 비밀번호"
             type="password"
+            variant="standard"
             onChange={formChange}
             value={newPwForm.newPassword}
           />
@@ -64,6 +66,7 @@ const PwChangeDialog = props => {
             id="newPasswordConfirm"
             label="새로운 비밀번호 확인"
             type="password"
+            variant="standard"
             onChange={formChange}
             value={newPwForm.newPasswordConfirm}
           />

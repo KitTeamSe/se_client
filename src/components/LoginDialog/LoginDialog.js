@@ -132,6 +132,7 @@ const LoginDialog = props => {
               id="id"
               name="id"
               label="ID"
+              variant="standard"
               onChange={onChange}
               value={form.id}
               type="id"
@@ -140,6 +141,7 @@ const LoginDialog = props => {
               id="password"
               name="pw"
               label="PW"
+              variant="standard"
               onChange={onChange}
               value={form.pw}
               type="password"

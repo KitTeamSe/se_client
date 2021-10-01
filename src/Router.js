@@ -2,8 +2,8 @@ import React from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 import HeaderContainer from './containers/Header/HeaderContainer';
-// import ProfilePage from './pages/ProfilePage';
-// import SignupPageContainer from './containers/SignupPage/SignupPageContainer';
+import ProfilePage from './pages/ProfilePage';
+import SignupPageContainer from './containers/SignupPage/SignupPageContainer';
 import ReplyUpdatePage from './pages/ReplyUpdatePage';
 import PostWritePage from './pages/PostWritePage';
 import PostUpdatePage from './pages/PostUpdatePage';
@@ -20,8 +20,8 @@ const Routes = () => (
     <HeaderContainer />
     <BodyContainer>
       <Switch>
-        {/* <Route exact path="/profile/:userId" component={ProfilePage} /> */}
-        {/* <Route exact path="/signup" component={SignupPageContainer} /> */}
+        <Route exact path="/profile/:userId" component={ProfilePage} />
+        <Route exact path="/signup" component={SignupPageContainer} />
         <Route
           exact
           path="/board/:boardNameEng/write"

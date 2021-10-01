@@ -116,6 +116,7 @@ const SignupPage = props => {
           <FormTextField
             id="id"
             label="ID"
+            variant="standard"
             value={form.id}
             onChange={handleChange}
           />
@@ -126,6 +127,7 @@ const SignupPage = props => {
             id="password"
             label="Password"
             type="password"
+            variant="standard"
             value={form.password}
             onChange={handleChange}
           />
@@ -136,6 +138,7 @@ const SignupPage = props => {
             id="passwordCheck"
             label="PasswordCheck"
             type="password"
+            variant="standard"
             value={form.passwordCheck}
             onChange={handleChange}
           />
@@ -145,6 +148,7 @@ const SignupPage = props => {
           <FormTextField
             id="email"
             label="email"
+            variant="standard"
             value={form.email}
             onChange={handleChange}
           />
@@ -154,6 +158,7 @@ const SignupPage = props => {
           <FormTextField
             id="name"
             label="이름"
+            variant="standard"
             value={form.name}
             onChange={handleChange}
           />
@@ -163,6 +168,7 @@ const SignupPage = props => {
           <FormTextField
             id="nickname"
             label="닉네임"
+            variant="standard"
             value={form.nickname}
             onChange={handleChange}
           />
@@ -172,6 +178,7 @@ const SignupPage = props => {
           <FormTextField
             id="phoneNumber"
             label="전화번호"
+            variant="standard"
             helperText="-를 빼고 입력하세요"
             type="number"
             value={form.phoneNumber}
@@ -183,6 +190,7 @@ const SignupPage = props => {
           <FormTextField
             id="studentId"
             label="학번"
+            variant="standard"
             value={form.studentId}
             onChange={handleChange}
             type="number"
@@ -194,6 +202,7 @@ const SignupPage = props => {
           <FormSelectField
             labelId="demo-simple-select-label"
             id="demo-simple-select"
+            variant="standard"
             value={inputs.questionId}
             displayEmpty
             onChange={questionChange}
@@ -209,6 +218,7 @@ const SignupPage = props => {
           <FormTextField
             id="answer"
             label="질문 답"
+            variant="standard"
             value={form.answer}
             onChange={handleChange}
           />
@@ -220,6 +230,7 @@ const SignupPage = props => {
           </InputLabel>
           <FormSelectField
             id="type"
+            variant="standard"
             value={inputs.type}
             onChange={classChange}
             displayEmpty
