@@ -301,7 +301,6 @@ const UpperBar = props => {
             id="text"
             type="text"
             margin="dense"
-            variant="outlined"
             value={keyword}
             label="검색"
             onChange={onSearchChange}
@@ -310,7 +309,6 @@ const UpperBar = props => {
 
         <ButtonStyled
           variant="contained"
-          color="default"
           size="small"
           startIcon={<FontAwesomeIcon icon={faEdit} size="sm" />}
           onClick={onWritePost}
