@@ -40,7 +40,7 @@ const ReplyPagination = props => {
   return (
     <PaginationStyled
       component="div"
-      shape="rounded"
+      shape="circular"
       size="small"
       variant="outlined"
       showFirstButton

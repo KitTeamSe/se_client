@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { applyMiddleware, compose, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { StylesProvider } from '@mui/styles';
+import { StyledEngineProvider } from '@mui/material/styles';
 import { ThemeProvider } from 'styled-components';
 import createSagaMiddleware from 'redux-saga';
 import './styles/reset.css';
@@ -27,7 +27,7 @@ const store = createStore(
 sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(
-  <StylesProvider injectFirst>
+  <StyledEngineProvider injectFirst>
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <BrowserRouter>
@@ -35,7 +35,7 @@ ReactDOM.render(
         </BrowserRouter>
       </ThemeProvider>
     </Provider>
-  </StylesProvider>,
+  </StyledEngineProvider>,
   document.getElementById('root')
 );
 

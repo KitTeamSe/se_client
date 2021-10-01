@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import HeaderContainer from './containers/Header/HeaderContainer';
 // import ProfilePage from './pages/ProfilePage';
 // import SignupPageContainer from './containers/SignupPage/SignupPageContainer';
-// import ReplyUpdatePage from './pages/ReplyUpdatePage';
+import ReplyUpdatePage from './pages/ReplyUpdatePage';
 import PostWritePage from './pages/PostWritePage';
 import PostUpdatePage from './pages/PostUpdatePage';
 import PostPage from './pages/PostPage';
@@ -32,11 +32,11 @@ const Routes = () => (
           path="/board/:boardNameEng/:postId/write"
           component={PostUpdatePage}
         />
-        {/* <Route
+        <Route
           exact
           path="/board/:boardNameEng/:postId/update/:replyId"
           component={ReplyUpdatePage}
-        /> */}
+        />
         <Route exact path="/board/:boardNameEng/:postId" component={PostPage} />
         <Route exact path="/board/:boardNameEng" component={BoardPage} />
         <Route path="/">

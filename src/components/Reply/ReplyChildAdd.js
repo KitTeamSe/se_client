@@ -1,12 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {
-  FormControlLabel,
-  Switch,
-  Input,
-  Button,
-  Tooltip
-} from '@mui/material';
+import { FormControlLabel, Switch, Input, Button } from '@mui/material';
 import FileAttachDropZone from '../FileAttachDropZone/FileAttachDropZone';
 import Editor from '../Editor/Editor';
 import AttachList from '../Editor/AttachList';
@@ -62,13 +56,11 @@ const ButtonStyled = styled(Button)`
 const SecretToggle = props => {
   const { onChange } = props;
   return (
-    <Tooltip title="비밀글" aria-label="secret-child-add" place="bottom">
-      <FormControlLabelStyled
-        control={<Switch color="secondary" id="isSecret" onChange={onChange} />}
-        labelPlacement="start"
-        label="비밀글"
-      />
-    </Tooltip>
+    <FormControlLabelStyled
+      control={<Switch id="isSecret" onChange={onChange} />}
+      labelPlacement="start"
+      label="비밀글"
+    />
   );
 };
 
@@ -104,20 +96,10 @@ const ReplyAddAction = props => {
   const { onCancel } = props;
   return (
     <ButtonWrapper>
-      <ButtonStyled
-        variant="outlined"
-        color="default"
-        size="small"
-        onClick={onCancel}
-      >
+      <ButtonStyled variant="outlined" size="small" onClick={onCancel}>
         취소
       </ButtonStyled>
-      <ButtonStyled
-        variant="contained"
-        color="default"
-        size="small"
-        type="submit"
-      >
+      <ButtonStyled variant="contained" size="small" type="submit">
         작성
       </ButtonStyled>
     </ButtonWrapper>

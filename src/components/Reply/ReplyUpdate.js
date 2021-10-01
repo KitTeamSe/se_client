@@ -68,7 +68,7 @@ const SecretToggle = props => {
   const { onChange } = props;
   return (
     <FormControlLabelStyled
-      control={<Switch color="secondary" id="isSecret" onChange={onChange} />}
+      control={<Switch id="isSecret" onChange={onChange} />}
       labelPlacement="start"
       label="비밀글"
       size="small"
@@ -84,9 +84,11 @@ const ReplyUpdateHeader = () => {
 const ReplyUpdateInput = props => {
   const { replyData, updateForm, handleChange, handleSecret } = props;
 
+  console.log(replyData);
+
   return (
     <InputWrapper>
-      {replyData && replyData.anonymousNickname ? (
+      {replyData && replyData.anonymousNickname !== null ? (
         <InputStyled
           placeholder="비밀번호"
           id="password"
@@ -104,20 +106,10 @@ const ReplyUpdateAction = props => {
   const { onCancel } = props;
   return (
     <ButtonWrapper>
-      <ButtonStyled
-        variant="outlined"
-        color="default"
-        size="small"
-        onClick={onCancel}
-      >
+      <ButtonStyled variant="outlined" size="small" onClick={onCancel}>
         취소
       </ButtonStyled>
-      <ButtonStyled
-        variant="contained"
-        color="default"
-        size="small"
-        type="submit"
-      >
+      <ButtonStyled variant="contained" size="small" type="submit">
         수정
       </ButtonStyled>
     </ButtonWrapper>

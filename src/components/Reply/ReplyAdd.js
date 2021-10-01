@@ -59,7 +59,7 @@ const SecretToggle = props => {
   const { onChange } = props;
   return (
     <FormControlLabelStyled
-      control={<Switch color="secondary" id="isSecret" onChange={onChange} />}
+      control={<Switch id="isSecret" onChange={onChange} />}
       labelPlacement="start"
       label="비밀글"
       size="small"
@@ -98,12 +98,7 @@ const ReplyAddInput = props => {
 
 const ReplyAddAction = () => (
   <ButtonWrapper>
-    <ButtonStyled
-      variant="contained"
-      color="default"
-      size="small"
-      type="submit"
-    >
+    <ButtonStyled variant="contained" size="small" type="submit">
       작성
     </ButtonStyled>
   </ButtonWrapper>
