@@ -19,9 +19,10 @@ import {
   TextField,
   Select,
   MenuItem,
-  Button
-} from '@material-ui/core';
-import { Pagination, PaginationItem } from '@material-ui/lab';
+  Button,
+  Pagination,
+  PaginationItem
+} from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { postSearchTypeList } from '../../DataExport';
 import Tags from '../Post/Tags';

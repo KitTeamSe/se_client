@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Chip, TextField, Button, Paper } from '@material-ui/core';
-import { Autocomplete } from '@material-ui/lab';
+import { Chip, TextField, Button, Paper, Autocomplete } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faRedo } from '@fortawesome/free-solid-svg-icons';
 import { StateErrorMessage } from '../Action/ErrorMessage';

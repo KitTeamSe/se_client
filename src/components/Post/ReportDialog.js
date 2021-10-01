@@ -7,7 +7,7 @@ import {
   DialogContent,
   DialogTitle,
   TextField
-} from '@material-ui/core';
+} from '@mui/material';
 
 const FlexBox = styled.div`
   display: flex;

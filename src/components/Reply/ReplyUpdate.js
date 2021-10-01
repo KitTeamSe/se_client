@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Switch, FormControlLabel, Input, Button } from '@material-ui/core';
+import { Switch, FormControlLabel, Input, Button } from '@mui/material';
 import confirmFileExtension from '../../utils/confirmFileExtension';
 import AttachImageList from '../Editor/AttachImageList';
 import AttachList from '../Editor/AttachList';

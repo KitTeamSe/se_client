@@ -6,7 +6,7 @@ import {
   DialogContentText,
   TextField,
   Button
-} from '@material-ui/core';
+} from '@mui/material';
 import styled from 'styled-components';
 
 const FormField = styled.form`

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { DialogContentText, Typography } from '@material-ui/core';
+import { DialogContentText, Typography } from '@mui/material';
 
 const DialogMessage = styled(DialogContentText)`
   width: 100%;

@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { applyMiddleware, compose, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { StylesProvider } from '@material-ui/core/styles';
+import { StylesProvider } from '@mui/styles';
 import { ThemeProvider } from 'styled-components';
 import createSagaMiddleware from 'redux-saga';
 import './styles/reset.css';

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link, NavLink } from 'react-router-dom';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@mui/material';
 import LoginDialogContainer from '../../containers/LoginDialog/LoginDialogContainer';
 
 const HeaderWraper = styled.header`

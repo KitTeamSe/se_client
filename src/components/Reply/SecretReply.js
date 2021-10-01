@@ -7,7 +7,7 @@ import {
   Button,
   DialogContent,
   TextField
-} from '@material-ui/core';
+} from '@mui/material';
 import ReplyActionButton from './ReplyActionButton';
 import ActionLoading from '../Action/ActionLoading';
 import { DialogErrorMessage } from '../Action/ErrorMessage';

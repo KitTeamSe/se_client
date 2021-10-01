@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Typography } from '@material-ui/core';
-import { Pagination, PaginationItem } from '@material-ui/lab';
+import { Typography, Pagination, PaginationItem } from '@mui/material';
 import Reply from './Reply';
 import ReplyAddContainer from '../../containers/Reply/ReplyAddContainer';
 import ReplyChildAddContainer from '../../containers/Reply/ReplyChildAddContainer';

@@ -7,7 +7,7 @@ import {
   MenuItem,
   Button,
   CircularProgress
-} from '@material-ui/core';
+} from '@mui/material';
 
 const LoadingCircle = styled(CircularProgress)`
   position: absolute;

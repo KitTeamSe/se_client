@@ -1,12 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {
-  Switch,
-  FormControlLabel,
-  Input,
-  Button
-  // List,
-} from '@material-ui/core';
+import { Switch, FormControlLabel, Input, Button } from '@mui/material';
 import FileAttachDropZone from '../FileAttachDropZone/FileAttachDropZone';
 import Editor from '../Editor/Editor';
 import AttachList from '../Editor/AttachList';

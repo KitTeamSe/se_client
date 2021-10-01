@@ -1,10 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {
-  ListItem,
-  ListItemSecondaryAction,
-  ListItemText
-} from '@material-ui/core';
+import { ListItem, ListItemSecondaryAction, ListItemText } from '@mui/material';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ListItem, ListItemText } from '@material-ui/core';
+import { ListItem, ListItemText } from '@mui/material';
 
 const AttachListWrapper = styled.div`
   display: block;

@@ -7,7 +7,7 @@ import {
   TextField,
   Dialog,
   DialogTitle
-} from '@material-ui/core';
+} from '@mui/material';
 import styled from 'styled-components';
 
 const AlignCenter = styled.div`
