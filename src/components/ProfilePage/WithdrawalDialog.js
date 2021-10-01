@@ -6,7 +6,7 @@ import {
   DialogContentText,
   TextField,
   Button
-} from '@material-ui/core';
+} from '@mui/material';
 import styled from 'styled-components';
 
 const FormField = styled.form`
@@ -66,6 +66,7 @@ const WithdrawalDialog = props => {
             id="password"
             label="비밀번호를 입력하세요"
             type="password"
+            variant="standard"
             onChange={formChange}
             value={withDrawalForm.password}
           />
@@ -73,6 +74,7 @@ const WithdrawalDialog = props => {
             id="text"
             label="'탈퇴'를 입력하세요"
             type="text"
+            variant="standard"
             onChange={formChange}
             value={withDrawalForm.text}
           />

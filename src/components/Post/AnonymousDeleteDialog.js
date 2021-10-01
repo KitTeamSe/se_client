@@ -8,7 +8,7 @@ import {
   DialogContentText,
   DialogTitle,
   TextField
-} from '@material-ui/core';
+} from '@mui/material';
 
 const FormField = styled.form`
   display: flex;

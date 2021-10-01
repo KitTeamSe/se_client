@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Backdrop, CircularProgress } from '@material-ui/core';
+import { Backdrop, CircularProgress } from '@mui/material';
 
 const BackdropStyled = styled(Backdrop)`
   z-index: 9999;

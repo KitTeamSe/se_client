@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, MenuItem } from '@material-ui/core';
+import { Menu, MenuItem } from '@mui/material';
 import styled from 'styled-components';
 
 const Nick = styled.span`

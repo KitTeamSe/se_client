@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
 
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@mui/material';
 
 const getColor = props => {
   const { isDragAccept, isDragReject, isDragActive } = props;

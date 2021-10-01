@@ -7,7 +7,7 @@ import {
   DialogContent,
   DialogTitle,
   TextField
-} from '@material-ui/core';
+} from '@mui/material';
 
 const FlexBox = styled.div`
   display: flex;
@@ -42,8 +42,7 @@ const ReportDialog = props => {
             id="outlined-multiline-static"
             label="신고내용"
             multiline
-            rows={6}
-            variant="outlined"
+            minRows={6}
             value={reportDescription}
             onChange={descriptionChange}
           />

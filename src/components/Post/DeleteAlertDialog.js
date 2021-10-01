@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle
-} from '@material-ui/core';
+} from '@mui/material';
 
 const DeleteAlertDialog = props => {
   const { deleteBoxOpen, deleteBoxHandle, deleteFunction } = props;

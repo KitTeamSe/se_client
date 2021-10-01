@@ -19,9 +19,10 @@ import {
   TextField,
   Select,
   MenuItem,
-  Button
-} from '@material-ui/core';
-import { Pagination, PaginationItem } from '@material-ui/lab';
+  Button,
+  Pagination,
+  PaginationItem
+} from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { postSearchTypeList } from '../../DataExport';
 import Tags from '../Post/Tags';
@@ -288,6 +289,7 @@ const UpperBar = props => {
           margin="dense"
           value={postSearchType}
           onChange={onPostSearchTypeChange}
+          variant="standard"
         >
           {postSearchTypeList.map(type => (
             <MenuItem value={type.type} key={type.type}>
@@ -299,8 +301,7 @@ const UpperBar = props => {
           <TextField
             id="text"
             type="text"
-            margin="dense"
-            variant="outlined"
+            size="small"
             value={keyword}
             label="검색"
             onChange={onSearchChange}
@@ -309,7 +310,6 @@ const UpperBar = props => {
 
         <ButtonStyled
           variant="contained"
-          color="default"
           size="small"
           startIcon={<FontAwesomeIcon icon={faEdit} size="sm" />}
           onClick={onWritePost}

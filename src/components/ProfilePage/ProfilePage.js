@@ -7,10 +7,10 @@ import {
   TableRow,
   Button,
   Menu,
-  Select,
   MenuItem,
+  Select,
   CircularProgress
-} from '@material-ui/core';
+} from '@mui/material';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -242,6 +242,7 @@ const EditRowClassifier = props => {
       <EditTableCell>
         <FormSelectField
           name="editType"
+          variant="standard"
           id={row[0]}
           value={editRowValue}
           onChange={typeChange}

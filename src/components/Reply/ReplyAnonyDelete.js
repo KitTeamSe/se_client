@@ -1,11 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {
-  DialogActions,
-  Button,
-  DialogContent,
-  TextField
-} from '@material-ui/core';
+import { DialogActions, Button, DialogContent, TextField } from '@mui/material';
 import { ReplyDeleteTemplate } from './ReplyDelete';
 
 const FieldWrapper = styled(DialogContent)`

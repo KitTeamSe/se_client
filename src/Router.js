@@ -2,14 +2,14 @@ import React from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 import HeaderContainer from './containers/Header/HeaderContainer';
+import ProfilePage from './pages/ProfilePage';
 import SignupPageContainer from './containers/SignupPage/SignupPageContainer';
+import ReplyUpdatePage from './pages/ReplyUpdatePage';
 import PostWritePage from './pages/PostWritePage';
 import PostUpdatePage from './pages/PostUpdatePage';
-import ReplyUpdatePage from './pages/ReplyUpdatePage';
-import BoardPage from './pages/BoardPage';
 import PostPage from './pages/PostPage';
+import BoardPage from './pages/BoardPage';
 import FeedbackContainer from './containers/Feedback/FeedbackContainer';
-import ProfilePage from './pages/ProfilePage';
 
 const BodyContainer = styled.div`
   padding-top: 96px;

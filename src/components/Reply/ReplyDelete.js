@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, DialogTitle, DialogActions, Button } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogActions, Button } from '@mui/material';
 import ActionButton from './ReplyActionButton';
 import ActionLoading from '../Action/ActionLoading';
 import { DialogErrorMessage } from '../Action/ErrorMessage';

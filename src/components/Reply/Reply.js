@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Avatar, Typography } from '@material-ui/core';
+import { Avatar, Typography } from '@mui/material';
 import {
   getEncodeHTML,
   getFormatDate,
@@ -111,8 +111,10 @@ const TimeText = styled(DateText)`
 const ReplyComment = props => {
   const { content, isDelete, isSecret } = props;
   const handleContent = () => {
-    if (isDelete === 'DELETED') return { __html: `❌ ${content}` };
-    if (isSecret === 'SECRET') return { __html: `🔒 ${content}` };
+    if (isDelete === 'DELETED')
+      return { __html: `❌ ${getEncodeHTML(content)}` };
+    if (isSecret === 'SECRET')
+      return { __html: `🔒 ${getEncodeHTML(content)}` };
     return { __html: getEncodeHTML(content) };
   };
 
