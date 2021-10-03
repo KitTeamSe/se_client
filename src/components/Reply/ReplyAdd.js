@@ -122,8 +122,10 @@ const ReplyAddFooter = props => {
 const ReplyAdd = props => {
   const {
     addForm,
-    loading,
-    error,
+    addAttachLoading,
+    addAttachError,
+    replyListData,
+    replyListLoading,
     handleChange,
     handleSecret,
     handleContentText,
@@ -132,16 +134,16 @@ const ReplyAdd = props => {
     onDeleteAttach
   } = props;
 
-  return (
+  return replyListData && !replyListLoading ? (
     <form onSubmit={onSubmit}>
       <Editor
-        onChange={handleContentText}
         data={addForm.text}
+        onChange={handleContentText}
         placeholder="댓글을 입력하세요"
       />
       <FileAttachDropZone
-        loading={loading}
-        error={error}
+        loading={addAttachLoading}
+        error={addAttachError}
         handleAttachFiles={handleAttachFiles}
       />
       <AttachImageList
@@ -159,6 +161,6 @@ const ReplyAdd = props => {
         handleSecret={handleSecret}
       />
     </form>
-  );
+  ) : null;
 };
 export default ReplyAdd;

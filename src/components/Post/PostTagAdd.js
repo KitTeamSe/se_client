@@ -17,8 +17,10 @@ const TagActionWrapper = styled.div`
   display: flex;
   margin-bottom: 5px;
 `;
+
 const TagInputWrapper = styled.div`
   display: flex;
+  align-items: center;
   width: 100%;
 `;
 
@@ -43,21 +45,20 @@ const ChipStyled = styled(Chip)`
 
 const ButtonStyled = styled(Button)`
   border-radius: 50px;
-  font-size: 0.75rem;
-  height: 28px;
-  margin-right: 3px;
+  height: 32px;
+  margin-left: 5px;
   & span {
-    width: 100%;
     text-align: center;
     white-space: nowrap;
   }
   & .MuiButton-iconSizeSmall > *:first-child {
-    font-size: 12px;
+    font-size: 0.875rem;
   }
 `;
 
 const AutocompleteStyled = styled(Autocomplete)`
   width: 100%;
+  max-width: calc(100% - 180px);
   margin-bottom: 5px;
 `;
 
@@ -97,15 +98,15 @@ const PostTagInput = props => {
           variant="contained"
           size="small"
           onClick={handleAddTag}
-          startIcon={<FontAwesomeIcon size="xs" icon={faPlus} />}
+          startIcon={<FontAwesomeIcon size="sm" icon={faPlus} />}
         >
           태그 추가
         </ButtonStyled>
         <ButtonStyled
           variant="contained"
-          color="secondary"
+          color="error"
           size="small"
-          startIcon={<FontAwesomeIcon size="xs" icon={faRedo} />}
+          startIcon={<FontAwesomeIcon size="sm" icon={faRedo} />}
           onClick={handleClearTag}
         >
           초기화

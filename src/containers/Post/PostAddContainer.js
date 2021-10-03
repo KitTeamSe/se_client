@@ -15,6 +15,7 @@ import {
 } from '../../modules/post';
 import confirmFileExtension from '../../utils/confirmFileExtension';
 import { getDecodeHTML } from '../../utils/format';
+import { errorFeedback } from '../../modules/feedback';
 
 const PostAddContainer = props => {
   const { history, match } = props;
@@ -112,17 +113,21 @@ const PostAddContainer = props => {
       attachId: attach.attachId
     }));
 
-    dispatch(
-      addPost({
-        anonymous,
-        attachmentList: attachIdList,
-        boardNameEng,
-        isNotice,
-        isSecret,
-        postContent,
-        tagList
-      })
-    );
+    if (title.length < 2) {
+      dispatch(errorFeedback('게시글 제목을 입력하세요.'));
+    } else {
+      dispatch(
+        addPost({
+          anonymous,
+          attachmentList: attachIdList,
+          boardNameEng,
+          isNotice,
+          isSecret,
+          postContent,
+          tagList
+        })
+      );
+    }
   };
 
   const onGoBack = () => {
@@ -227,6 +232,10 @@ const PostAddContainer = props => {
     }
   }, [addData]);
 
+  useEffect(() => {
+    onInitialize();
+  }, [match.url]);
+
   const postTitleProps = {
     value: addForm.title,
     onChange: handleChange
@@ -247,7 +256,7 @@ const PostAddContainer = props => {
 
   const editorProps = {
     onChange: handleContentText,
-    data: addForm.text,
+    data: addForm.text ? addForm.text : '',
     placeholder: '내용을 입력하세요'
   };
 

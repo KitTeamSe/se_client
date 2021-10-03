@@ -16,15 +16,25 @@ import { getDecodeHTML } from '../../utils/format';
 const ReplyAddContainer = props => {
   const { match } = props;
   const dispatch = useDispatch();
-  const { addForm, addChildForm, addAttachData, loading, error, select } =
-    useSelector(({ reply, attach }) => ({
-      addForm: reply.addForm,
-      addChildForm: reply.addChildForm,
-      addAttachData: attach.addAttach.data,
-      loading: attach.addAttach.loading,
-      error: attach.addAttach.error,
-      select: attach.select
-    }));
+  const {
+    addForm,
+    addChildForm,
+    addAttachData,
+    addAttachLoading,
+    addAttachError,
+    replyListData,
+    replyListLoading,
+    select
+  } = useSelector(({ reply, attach }) => ({
+    addForm: reply.addForm,
+    addChildForm: reply.addChildForm,
+    addAttachData: attach.addAttach.data,
+    addAttachLoading: attach.addAttach.loading,
+    addAttachError: attach.addAttach.error,
+    replyListData: reply.loadReplyList.data,
+    replyListLoading: reply.loadReplyList.loading,
+    select: attach.select
+  }));
 
   const handleChange = e => {
     const { id, value } = e.target;
@@ -177,20 +187,25 @@ const ReplyAddContainer = props => {
     }
   }, [addChildForm.parentId]);
 
+  console.log(match.params.postId);
+  useEffect(() => {
+    initializeAdd();
+  }, [match.params.postId]);
+
   return (
-    <>
-      <ReplyAdd
-        loading={loading}
-        error={error}
-        addForm={addForm}
-        handleChange={handleChange}
-        handleSecret={handleSecret}
-        handleContentText={handleContentText}
-        handleAttachFiles={handleAttachFiles}
-        onSubmit={onSubmit}
-        onDeleteAttach={onDeleteAttach}
-      />
-    </>
+    <ReplyAdd
+      addForm={addForm}
+      addAttachLoading={addAttachLoading}
+      addAttachError={addAttachError}
+      replyListData={replyListData}
+      replyListLoading={replyListLoading}
+      handleChange={handleChange}
+      handleSecret={handleSecret}
+      handleContentText={handleContentText}
+      handleAttachFiles={handleAttachFiles}
+      onSubmit={onSubmit}
+      onDeleteAttach={onDeleteAttach}
+    />
   );
 };
 
