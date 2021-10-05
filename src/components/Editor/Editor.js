@@ -297,7 +297,7 @@ const config = placeholder => ({
 });
 
 const Editor = props => {
-  const { onChange, data, placeholder } = props;
+  const { onChange, data = '', placeholder } = props;
 
   return (
     <CKEditor

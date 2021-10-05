@@ -24,15 +24,17 @@ const BoardContainer = props => {
     menuList,
     NoticeData,
     NoticeLoading,
-    NoticeError
-  } = useSelector(({ post, menu }) => ({
+    NoticeError,
+    signin
+  } = useSelector(({ post, menu, auth }) => ({
     data: post.loadedNormalPostList.data,
     loading: post.loadedNormalPostList.loading,
     error: post.loadedNormalPostList.error,
     menuList: menu.loadedMenuList.data,
     NoticeData: post.loadedNoticePostList.data,
     NoticeLoading: post.loadedNoticePostList.loading,
-    NoticeError: post.loadedNoticePostList.error
+    NoticeError: post.loadedNoticePostList.error,
+    signin: auth.auth.data
   }));
 
   const pageSize = 20;
@@ -85,7 +87,7 @@ const BoardContainer = props => {
     };
     dispatch(loadNormalpostList(parameter));
     setBoardPage(page);
-  }, [location.search]);
+  }, [signin, match.params.boardNameEng, location.search]);
 
   const onChange = e => {
     e.preventDefault();
@@ -128,7 +130,7 @@ const BoardContainer = props => {
   };
 
   const onWritePost = () => {
-    history.push(`${match.url}/write`);
+    history.push(`/board/${match.params.boardNameEng}/write`);
   };
 
   return (

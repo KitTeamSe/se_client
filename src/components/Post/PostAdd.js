@@ -117,10 +117,12 @@ const PostAddInput = props => {
           />
         </>
       ) : null}
-      <SecretToggle onChange={handleSecret} />
+
       {localStorage.getItem('token') && localStorage.getItem('userId') ? (
         <NoticeToggle onChange={handleNotice} />
-      ) : null}
+      ) : (
+        <SecretToggle onChange={handleSecret} />
+      )}
     </InputWrapper>
   );
 };
