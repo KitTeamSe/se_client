@@ -2,30 +2,58 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link, NavLink } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import LoginDialogContainer from '../../containers/LoginDialog/LoginDialogContainer';
 
 const HeaderWraper = styled.header`
   width: 100%;
-  height: 96px;
-  align-items: center;
+  min-height: 80px;
   position: fixed;
   display: flex;
-  justify-content: space-between;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  justify-content: center;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 4px 12px;
   background-color: white;
   z-index: 10;
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    min-height: 60px;
+  }
+`;
+
+const NavWrapper = styled.nav`
+  display: flex;
+  flex-wrap: wrap;
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    width: 100%;
+  }
+`;
+
+const ContentWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: ${({ theme }) => theme.size.desktop};
+  @media ${({ theme }) => theme.sizeQuery.desktop} {
+    width: 100%;
+  }
 `;
 
 const NavigationWrapper = styled.div`
   width: auto;
-  margin-right: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
+  @media ${({ theme }) => theme.sizeQuery.desktop} {
+    margin-right: 15px;
+  }
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    margin-right: 0;
+  }
 `;
 
-const LogoWrapper = styled(Link)`
+const Logo = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -33,9 +61,16 @@ const LogoWrapper = styled(Link)`
   cursor: pointer;
   font-size: 1.75rem;
   font-weight: 700;
-  margin-left: 4rem;
   text-decoration: none;
   color: #57bee1;
+  line-height: 78px;
+  @media ${({ theme }) => theme.sizeQuery.desktop} {
+    margin-left: 15px;
+  }
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    margin-left: 30px;
+    line-height: 60px;
+  }
 `;
 
 const MenuUl = styled.ul`
@@ -44,15 +79,55 @@ const MenuUl = styled.ul`
   align-items: center;
   justify-content: center;
   align-items: center;
+  padding-left: 15px;
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0;
+    border-top: 1px rgba(0, 0, 0, 0.1) solid;
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 10%);
+  }
 `;
 
 const MenuItem = styled(NavLink)`
+  display: inline-block;
   color: gray;
-  padding: 8px 12px;
+  padding: 0 12px;
   cursor: pointer;
   font-weight: 600;
   font-size: 1rem;
   text-decoration: none;
+  line-height: 78px;
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    width: 100%;
+    text-align: center;
+    line-height: 50px;
+    padding: 0;
+    border-bottom: 1px rgba(0, 0, 0, 0.1) solid;
+  }
+`;
+
+const List = styled.li`
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    display: none;
+  }
+`;
+
+const MoblieList = styled.li`
+  display: none;
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+`;
+
+const AccountList = styled(MoblieList)`
+  display: none;
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    display: flex;
+  }
 `;
 
 const LoadingCircle = styled(CircularProgress)`
@@ -61,38 +136,112 @@ const LoadingCircle = styled(CircularProgress)`
   right: 50vw;
 `;
 
+const MenuButtonStyled = styled.button`
+  cursor: pointer;
+  display: none;
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+  padding: 24px;
+  border: none;
+  border-radius: 50%;
+  text-decoration: none;
+  background: transparent;
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
+const Icon = styled(FontAwesomeIcon)`
+  font-size: 20px;
+`;
+
+const MenuButton = props => {
+  const { menuOpen, handleMenuOpen, handleMenuClose } = props;
+
+  return (
+    <MenuButtonStyled onClick={menuOpen ? handleMenuClose : handleMenuOpen}>
+      <Icon icon={faBars} size="lg" />
+    </MenuButtonStyled>
+  );
+};
+
 const Menu = props => {
   const { data } = props;
+
   return (
     <MenuUl>
       {data.data.map(menu => (
-        <li key={menu.boardId}>
+        <List key={menu.boardId}>
           <MenuItem
             to={`/board/${menu.nameEng}`}
             activeStyle={{ color: 'black' }}
           >
             {menu.nameKor}
           </MenuItem>
-        </li>
+        </List>
       ))}
     </MenuUl>
   );
 };
 
+const MobileMenu = props => {
+  const { data } = props;
+  return (
+    <MenuUl>
+      {data.data.map(menu => (
+        <MoblieList key={menu.boardId}>
+          <MenuItem
+            to={`/board/${menu.nameEng}`}
+            activeStyle={{ color: 'black' }}
+          >
+            {menu.nameKor}
+          </MenuItem>
+        </MoblieList>
+      ))}
+      <AccountList>
+        {localStorage.getItem('userId') || localStorage.getItem('token') ? (
+          <>
+            <MenuItem to={`/profile/${localStorage.getItem('userId')}`}>
+              프로필
+            </MenuItem>
+            <MenuItem to="/signout">로그아웃</MenuItem>
+          </>
+        ) : (
+          <MenuItem to="/signin">로그인</MenuItem>
+        )}
+      </AccountList>
+    </MenuUl>
+  );
+};
+
 const Header = props => {
-  const { data, loading } = props;
+  const { data, loading, menuOpen, handleMenuOpen, handleMenuClose } = props;
   if (data === null || loading) {
     return <LoadingCircle />;
   }
   return (
     <HeaderWraper>
-      <LogoWrapper to="/board/freeboard">SE Board</LogoWrapper>
-      <nav>
-        <Menu data={data} />
-      </nav>
-      <NavigationWrapper>
-        <LoginDialogContainer />
-      </NavigationWrapper>
+      <ContentWrapper>
+        <NavWrapper>
+          <Logo to="/board/freeboard">SE Board</Logo>
+          <Menu data={data} />
+          {menuOpen && <MobileMenu data={data} />}
+        </NavWrapper>
+        <NavigationWrapper>
+          <LoginDialogContainer />
+        </NavigationWrapper>
+      </ContentWrapper>
+      <MenuButton
+        menuOpen={menuOpen}
+        handleMenuOpen={handleMenuOpen}
+        handleMenuClose={handleMenuClose}
+      />
     </HeaderWraper>
   );
 };

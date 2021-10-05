@@ -84,6 +84,9 @@ const SignupLink = styled(Link)`
 const IconWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    display: none;
+  }
 `;
 
 const LoginIcon = styled(FontAwesomeIcon)`
@@ -118,8 +121,8 @@ const LoginDialog = props => {
 
   return (
     <>
-      <IconWrapper>
-        <LoginIcon icon={faDoorClosed} onClick={handleClickOpen} size="2x" />
+      <IconWrapper onClick={handleClickOpen}>
+        <LoginIcon icon={faDoorClosed} size="2x" />
         <Typo>로그인</Typo>
       </IconWrapper>
       <Dialog open={open} onClose={handleClose}>

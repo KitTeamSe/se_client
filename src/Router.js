@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import HeaderContainer from './containers/Header/HeaderContainer';
 import ProfilePage from './pages/ProfilePage';
 import SignupPageContainer from './containers/SignupPage/SignupPageContainer';
+import SignoutContainer from './containers/Signout/SignoutContainer';
+import SigninContainer from './containers/Signin/SigninContainer';
 import ReplyUpdatePage from './pages/ReplyUpdatePage';
 import PostWritePage from './pages/PostWritePage';
 import PostUpdatePage from './pages/PostUpdatePage';
@@ -22,6 +24,8 @@ const Routes = () => (
       <Switch>
         <Route exact path="/profile/:userId" component={ProfilePage} />
         <Route exact path="/signup" component={SignupPageContainer} />
+        <Route exact path="/signout" component={SignoutContainer} />
+        <Route exact path="/signin" component={SigninContainer} />
         <Route
           exact
           path="/board/:boardNameEng/write"

@@ -9,6 +9,9 @@ const IconWrapper = styled.div`
   margin: 4px;
   padding: 2px;
   align-items: center;
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    display: none;
+  }
 `;
 
 const Typo = styled.p`
