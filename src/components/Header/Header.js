@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link, NavLink } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
@@ -90,7 +90,49 @@ const MenuUl = styled.ul`
   }
 `;
 
-const MenuItem = styled(NavLink)`
+const ChildMenuUl = styled(MenuUl)`
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    border-top: none;
+  }
+`;
+
+const MenuFolder = styled.p`
+  display: inline-block;
+  color: gray;
+  padding: 0 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  line-height: 78px;
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    width: 100%;
+    text-align: center;
+    line-height: 50px;
+    padding: 0;
+    border-bottom: 1px rgba(0, 0, 0, 0.1) solid;
+  }
+`;
+
+const MenuRedirect = styled.a`
+  display: inline-block;
+  color: gray;
+  padding: 0 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  line-height: 78px;
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    width: 100%;
+    text-align: center;
+    line-height: 50px;
+    padding: 0;
+    border-bottom: 1px rgba(0, 0, 0, 0.1) solid;
+  }
+`;
+
+const MenuLink = styled(NavLink)`
   display: inline-block;
   color: gray;
   padding: 0 12px;
@@ -178,42 +220,99 @@ const Menu = props => {
     <MenuUl>
       {data.data.map(menu => (
         <List key={menu.boardId}>
-          <MenuItem
+          <MenuLink
             to={`/board/${menu.nameEng}`}
             activeStyle={{ color: 'black' }}
           >
             {menu.nameKor}
-          </MenuItem>
+          </MenuLink>
         </List>
       ))}
     </MenuUl>
   );
 };
 
+const ChildMobileMenu = props => {
+  const { data, open } = props;
+  return (
+    open && (
+      <ChildMenuUl>
+        {data.map(menu => (
+          <MoblieList key={menu.boardId}>
+            {menu.menuType === 'BOARD' && (
+              <MenuLink
+                to={`/board/${menu.nameEng}`}
+                activeStyle={{ color: 'black' }}
+              >
+                {menu.nameKor}
+              </MenuLink>
+            )}
+
+            {menu.menuType === 'REDIRECT' && (
+              <MenuRedirect href={menu.url}>{menu.nameKor}</MenuRedirect>
+            )}
+          </MoblieList>
+        ))}
+      </ChildMenuUl>
+    )
+  );
+};
+
 const MobileMenu = props => {
   const { data } = props;
+  const [open, setOpen] = useState([]);
+
+  const handleOpen = id => {
+    const currentIndex = open.indexOf(id);
+    const newChecked = [...open];
+
+    if (currentIndex === -1) {
+      newChecked.push(id);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setOpen(newChecked);
+  };
+
   return (
     <MenuUl>
-      {data.data.map(menu => (
+      {data.data.map((menu, idx) => (
         <MoblieList key={menu.boardId}>
-          <MenuItem
-            to={`/board/${menu.nameEng}`}
-            activeStyle={{ color: 'black' }}
-          >
-            {menu.nameKor}
-          </MenuItem>
+          {menu.menuType === 'BOARD' && (
+            <MenuLink
+              to={`/board/${menu.nameEng}`}
+              activeStyle={{ color: 'black' }}
+            >
+              {menu.nameKor}
+            </MenuLink>
+          )}
+          {menu.menuType === 'FOLDER' && (
+            <>
+              <MenuFolder onClick={() => handleOpen(idx)}>
+                {menu.nameKor}
+              </MenuFolder>
+              <ChildMobileMenu
+                data={menu.child}
+                open={open.indexOf(idx) !== -1}
+              />
+            </>
+          )}
+          {menu.menuType === 'REDIRECT' && (
+            <MenuRedirect href={menu.url}>{menu.nameKor}</MenuRedirect>
+          )}
         </MoblieList>
       ))}
       <AccountList>
         {localStorage.getItem('userId') || localStorage.getItem('token') ? (
           <>
-            <MenuItem to={`/profile/${localStorage.getItem('userId')}`}>
+            <MenuLink to={`/profile/${localStorage.getItem('userId')}`}>
               프로필
-            </MenuItem>
-            <MenuItem to="/signout">로그아웃</MenuItem>
+            </MenuLink>
+            <MenuLink to="/signout">로그아웃</MenuLink>
           </>
         ) : (
-          <MenuItem to="/signin">로그인</MenuItem>
+          <MenuLink to="/signin">로그인</MenuLink>
         )}
       </AccountList>
     </MenuUl>
