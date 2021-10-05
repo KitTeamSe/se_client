@@ -10,34 +10,38 @@ export const loadPostList = async ({
   size
 }) => {
   const parameters = { boardNameEng, direction, isNotice, page, size };
-  return client.get(`/${URL}`, { params: parameters }).catch(error => {
-    throw error.response.data;
-  });
+  const token = localStorage.getItem('token');
+  return client
+    .get(`/${URL}`, { params: parameters, ...tokenHeader(token) })
+    .catch(error => {
+      throw error.response.data;
+    });
 };
 
 export const searchPost = async ({ postSearchRequest }) => {
-  return client.post(`/${URL}/search`, postSearchRequest).catch(error => {
-    throw error.response.data;
-  });
-};
-
-export const loadMenuList = async () => {
-  return client.get('/menu').catch(error => {
-    throw error.response.data;
-  });
+  const token = localStorage.getItem('token');
+  return client
+    .post(`/${URL}/search`, postSearchRequest, tokenHeader(token))
+    .catch(error => {
+      throw error.response.data;
+    });
 };
 
 export const loadPost = async ({ id }) => {
-  return client.get(`/${URL}/${id}`).catch(error => {
+  const token = localStorage.getItem('token');
+  return client.get(`/${URL}/${id}`, tokenHeader(token)).catch(error => {
     throw error.response.data;
   });
 };
 
 export const loadSecretPost = async ({ postId, password }) => {
   const parameters = { postId, password };
-  return client.get(`/${URL}/secret`, { params: parameters }).catch(error => {
-    throw error.response.data;
-  });
+  const token = localStorage.getItem('token');
+  return client
+    .get(`/${URL}/secret`, { params: parameters, ...tokenHeader(token) })
+    .catch(error => {
+      throw error.response.data;
+    });
 };
 
 export const postDelete = async ({ id }) => {
@@ -49,9 +53,12 @@ export const postDelete = async ({ id }) => {
 
 export const anonymousPostDelete = async ({ anonymousPassword, postId }) => {
   const body = { anonymousPassword, postId };
-  return client.post(`/${URL}/anonymous/${postId}`, body).catch(error => {
-    throw error.response.data;
-  });
+  const token = localStorage.getItem('token');
+  return client
+    .post(`/${URL}/anonymous/${postId}`, body, tokenHeader(token))
+    .catch(error => {
+      throw error.response.data;
+    });
 };
 
 export const addPost = ({

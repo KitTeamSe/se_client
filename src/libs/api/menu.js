@@ -1,7 +1,8 @@
-import { client } from './client';
+import { client, tokenHeader } from './client';
 
 export const loadMenuList = async () => {
-  return client.get('/menu').catch(error => {
+  const token = localStorage.getItem('token');
+  return client.get('/menu', tokenHeader(token)).catch(error => {
     throw error.response.data;
   });
 };
