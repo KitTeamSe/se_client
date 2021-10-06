@@ -132,7 +132,7 @@ const ButtonStyled = styled(Button)`
 `;
 
 const Paginations = props => {
-  const { res, boardNameEng, boardPage } = props;
+  const { res, boardPage } = props;
   const totalPage = res.postListItem.totalPages;
   return (
     <PaginationStyled
@@ -141,18 +141,14 @@ const Paginations = props => {
       count={totalPage}
       page={boardPage ? parseInt(boardPage, 10) : 1}
       renderItem={item => (
-        <PaginationItem
-          component={Link}
-          to={`/board/${boardNameEng}?page=${item.page}`}
-          {...item}
-        />
+        <PaginationItem component={Link} to={`?page=${item.page}`} {...item} />
       )}
     />
   );
 };
 
 const PostTitle = props => {
-  const { postInfo, boardNameEng } = props;
+  const { postInfo, boardNameEng, boardPage } = props;
   const {
     postId,
     title,
@@ -186,8 +182,8 @@ const PostTitle = props => {
         <Title
           to={
             isSecret === 'NORMAL'
-              ? `/board/${boardNameEng}/${postId}`
-              : `/board/${boardNameEng}/${postId}?secret=true`
+              ? `/board/${boardNameEng}/${postId}?page=${boardPage}`
+              : `/board/${boardNameEng}/${postId}?secret=true&page=${boardPage}`
           }
         >
           {title}
@@ -233,7 +229,7 @@ const NoPost = props => {
 };
 
 const MainTable = props => {
-  const { res, boardNameEng, notice, keyword } = props;
+  const { res, boardNameEng, boardPage, notice, keyword } = props;
   const tableColumns = ['번호', '제목', '닉네임', '정보'];
 
   return (
@@ -254,6 +250,7 @@ const MainTable = props => {
               key={postInfo.postId}
               postInfo={postInfo}
               boardNameEng={boardNameEng}
+              boardPage={boardPage}
             />
           ))}
           {res.postListItem.content.map(postInfo => (
@@ -261,6 +258,7 @@ const MainTable = props => {
               key={postInfo.postId}
               postInfo={postInfo}
               boardNameEng={boardNameEng}
+              boardPage={boardPage}
             />
           ))}
         </TableBody>
@@ -326,7 +324,6 @@ const UpperBar = props => {
 
 const Board = props => {
   const {
-    onChange,
     onSearchChange,
     data,
     loading,
@@ -377,6 +374,7 @@ const Board = props => {
         res={res}
         notice={notice}
         boardNameEng={boardNameEng}
+        boardPage={boardPage}
         keyword={keyword}
       />
       {res.postListItem.content.length === 0 ? (
@@ -384,7 +382,6 @@ const Board = props => {
       ) : (
         <Paginations
           res={res}
-          onChange={onChange}
           boardNameEng={boardNameEng}
           boardPage={boardPage}
         />

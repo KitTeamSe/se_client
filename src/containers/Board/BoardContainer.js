@@ -52,7 +52,7 @@ const BoardContainer = props => {
       direction: 'DESC',
       isNotice: 'NOTICE',
       page: 0,
-      size: 50
+      size: pageSize
     };
     dispatch(loadNoticepostList(params));
 
@@ -87,10 +87,6 @@ const BoardContainer = props => {
     dispatch(loadNormalpostList(parameter));
     setBoardPage(page);
   }, [signin, match.params.boardNameEng, location.search]);
-
-  const onChange = e => {
-    e.preventDefault();
-  };
 
   const onSearchChange = e => {
     const { value } = e.target;
@@ -139,7 +135,6 @@ const BoardContainer = props => {
       NoticeData={NoticeData}
       NoticeLoading={NoticeLoading}
       NoticeError={NoticeError}
-      onChange={onChange}
       onSearchChange={onSearchChange}
       onSearch={onSearch}
       onWritePost={onWritePost}

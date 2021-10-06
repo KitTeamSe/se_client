@@ -84,8 +84,6 @@ const ReplyUpdateHeader = () => {
 const ReplyUpdateInput = props => {
   const { replyData, updateForm, handleChange, handleSecret } = props;
 
-  console.log(replyData);
-
   return (
     <InputWrapper>
       {replyData && replyData.anonymousNickname !== null ? (

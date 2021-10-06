@@ -305,7 +305,6 @@ const ProfileBody = props => {
     mode,
     myinfoEditSubmit
   } = props;
-  console.log(rows);
   return (
     <>
       <InfoTable>

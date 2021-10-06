@@ -187,7 +187,6 @@ const ReplyAddContainer = props => {
     }
   }, [addChildForm.parentId]);
 
-  console.log(match.params.postId);
   useEffect(() => {
     initializeAdd();
   }, [match.params.postId]);
