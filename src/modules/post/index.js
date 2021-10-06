@@ -15,21 +15,6 @@ const INITIALIZE_FORM = 'post/INITIALIZE_FORM';
 
 const CHANGE_FIELD = 'post/CHANGE_FIELD';
 
-const [
-  LOAD_NORMAL_POST_LIST,
-  LOAD_NORMAL_POST_LIST_SUCCESS,
-  LOAD_NORMAL_POST_LIST_FAILURE
-] = createRequestActionTypes('post/LOAD_NORMAL_POST_LIST');
-
-const [
-  LOAD_NOTICE_POST_LIST,
-  LOAD_NOTICE_POST_LIST_SUCCESS,
-  LOAD_NOTICE_POST_LIST_FAILURE
-] = createRequestActionTypes('post/LOAD_NOTICE_POST_LIST');
-
-const [SEARCH_POST, SEARCH_POST_SUCCESS, SEARCH_POST_FAILURE] =
-  createRequestActionTypes('post/SEARCH_POST');
-
 const [LOAD_POST, LOAD_POST_SUCCESS, LOAD_POST_FAILURE] =
   createRequestActionTypes('post/LOAD_POST');
 
@@ -65,35 +50,6 @@ export const changeField = createAction(
     form,
     key,
     value
-  })
-);
-
-export const loadNormalpostList = createAction(
-  LOAD_NORMAL_POST_LIST,
-  ({ boardNameEng, direction, isNotice, page, size }) => ({
-    boardNameEng,
-    direction,
-    isNotice,
-    page,
-    size
-  })
-);
-
-export const loadNoticepostList = createAction(
-  LOAD_NOTICE_POST_LIST,
-  ({ boardNameEng, direction, isNotice, page, size }) => ({
-    boardNameEng,
-    direction,
-    isNotice,
-    page,
-    size
-  })
-);
-
-export const searchPost = createAction(
-  SEARCH_POST,
-  ({ postSearchRequest }) => ({
-    postSearchRequest
   })
 );
 
@@ -175,15 +131,6 @@ export const postReport = createAction(
 );
 
 // Sagas
-const loadNormalpostListSaga = createRequestSaga(
-  LOAD_NORMAL_POST_LIST,
-  api.loadPostList
-);
-const loadNoticepostListSaga = createRequestSaga(
-  LOAD_NOTICE_POST_LIST,
-  api.loadPostList
-);
-const searchPostSaga = createRequestSaga(SEARCH_POST, api.searchPost);
 const loadPostSaga = createRequestSaga(LOAD_POST, api.loadPost);
 const loadSecretPostSaga = createRequestSaga(
   LOAD_SECRET_POST,
@@ -199,9 +146,6 @@ const updatePostSaga = createRequestSaga(UPDATE_POST, api.updatePost);
 const postReportSaga = createRequestSaga(POST_REPORT, api.reportPost);
 
 export function* postSaga() {
-  yield takeLatest(LOAD_NORMAL_POST_LIST, loadNormalpostListSaga);
-  yield takeLatest(LOAD_NOTICE_POST_LIST, loadNoticepostListSaga);
-  yield takeLatest(SEARCH_POST, searchPostSaga);
   yield takeLatest(LOAD_POST, loadPostSaga);
   yield takeLatest(LOAD_SECRET_POST, loadSecretPostSaga);
   yield takeLatest(POST_DELETE, postDeleteSaga);
@@ -270,48 +214,6 @@ export default handleActions(
       produce(state, draft => {
         draft[form][key] = value;
       }),
-    [LOAD_NORMAL_POST_LIST]: state => ({
-      ...state,
-      loadedNormalPostList: reducerUtils.loading(
-        state.loadedNormalPostList.data
-      )
-    }),
-    [LOAD_NORMAL_POST_LIST_SUCCESS]: (state, { payload: response }) => ({
-      ...state,
-      loadedNormalPostList: reducerUtils.success(response)
-    }),
-    [LOAD_NORMAL_POST_LIST_FAILURE]: (state, { payload: error }) => ({
-      ...state,
-      loadedNormalPostList: reducerUtils.error(error)
-    }),
-    [LOAD_NOTICE_POST_LIST]: state => ({
-      ...state,
-      loadedNoticePostList: reducerUtils.loading(
-        state.loadedNoticePostList.data
-      )
-    }),
-    [LOAD_NOTICE_POST_LIST_SUCCESS]: (state, { payload: response }) => ({
-      ...state,
-      loadedNoticePostList: reducerUtils.success(response)
-    }),
-    [LOAD_NOTICE_POST_LIST_FAILURE]: (state, { payload: error }) => ({
-      ...state,
-      loadedNoticePostList: reducerUtils.error(error)
-    }),
-    [SEARCH_POST]: state => ({
-      ...state,
-      loadedNormalPostList: reducerUtils.loading(
-        state.loadedNormalPostList.data
-      )
-    }),
-    [SEARCH_POST_SUCCESS]: (state, { payload: response }) => ({
-      ...state,
-      loadedNormalPostList: reducerUtils.success(response)
-    }),
-    [SEARCH_POST_FAILURE]: (state, { payload: error }) => ({
-      ...state,
-      loadedNormalPostList: reducerUtils.error(error)
-    }),
     [LOAD_POST]: state => ({
       ...state,
       loadedPost: reducerUtils.loading(state.loadedPost.data)

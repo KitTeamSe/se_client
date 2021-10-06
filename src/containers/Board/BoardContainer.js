@@ -7,7 +7,7 @@ import {
   loadNormalpostList,
   loadNoticepostList,
   searchPost
-} from '../../modules/post';
+} from '../../modules/board';
 
 const BoardContainer = props => {
   const { location, match, history } = props;
@@ -26,14 +26,14 @@ const BoardContainer = props => {
     NoticeLoading,
     NoticeError,
     signin
-  } = useSelector(({ post, menu, auth }) => ({
-    data: post.loadedNormalPostList.data,
-    loading: post.loadedNormalPostList.loading,
-    error: post.loadedNormalPostList.error,
+  } = useSelector(({ board, menu, auth }) => ({
+    data: board.loadedNormalPostList.data,
+    loading: board.loadedNormalPostList.loading,
+    error: board.loadedNormalPostList.error,
     menuList: menu.loadedMenuList.data,
-    NoticeData: post.loadedNoticePostList.data,
-    NoticeLoading: post.loadedNoticePostList.loading,
-    NoticeError: post.loadedNoticePostList.error,
+    NoticeData: board.loadedNoticePostList.data,
+    NoticeLoading: board.loadedNoticePostList.loading,
+    NoticeError: board.loadedNoticePostList.error,
     signin: auth.auth.data
   }));
 
