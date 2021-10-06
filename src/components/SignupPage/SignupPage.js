@@ -95,11 +95,9 @@ const SignupPage = props => {
     loading,
     signupSubmit,
     handleChange,
-    classChange,
     questionChange,
     inputs,
     questionList,
-    typeList,
     infoState,
     form
   } = props;
@@ -224,24 +222,6 @@ const SignupPage = props => {
           />
           {infoState.answer ? <GreenNeonSign /> : <RedNeonSign />}
         </FieldBox>
-        <SelectFieldBox>
-          <InputLabel id="demo-simple-select-placeholder-label-label">
-            신분
-          </InputLabel>
-          <FormSelectField
-            id="type"
-            variant="standard"
-            value={inputs.type}
-            onChange={classChange}
-            displayEmpty
-          >
-            {typeList.map(type => (
-              <MenuItem value={type.userType} key={type.typeid}>
-                {type.userType}
-              </MenuItem>
-            ))}
-          </FormSelectField>
-        </SelectFieldBox>
         {Object.values(infoState).includes(false) ? (
           <SignupButton variant="outlined" disabled>
             회원가입

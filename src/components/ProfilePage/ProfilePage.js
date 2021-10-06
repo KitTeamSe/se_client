@@ -8,7 +8,6 @@ import {
   Button,
   Menu,
   MenuItem,
-  Select,
   CircularProgress
 } from '@mui/material';
 import styled from 'styled-components';
@@ -22,8 +21,7 @@ import {
 import {
   accountData,
   changebleAccount,
-  informationOpenAgreeEnum,
-  typeList
+  informationOpenAgreeEnum
 } from '../../DataExport';
 
 const redColor = 'ffeeeeee';
@@ -94,11 +92,6 @@ const FormInput = styled.input`
     outline: none;
     border: none;
   }
-`;
-
-const FormSelectField = styled(Select)`
-  margin-right: 2px;
-  width: 128px;
 `;
 
 const RefreshIcon = styled(FontAwesomeIcon)`
@@ -215,14 +208,9 @@ const ProfileRow = props => {
 };
 
 const EditRowClassifier = props => {
-  const {
-    row,
-    informationOpenAgreeChange,
-    infoEditObj,
-    handleChange,
-    typeChange
-  } = props;
+  const { row, informationOpenAgreeChange, infoEditObj, handleChange } = props;
   const editRowValue = infoEditObj[row[0]];
+  console.log(editRowValue);
   if (row[0] === 'informationOpenAgree') {
     return (
       <EditTableCell
@@ -237,25 +225,7 @@ const EditRowClassifier = props => {
       </EditTableCell>
     );
   }
-  if (row[0] === 'type') {
-    return (
-      <EditTableCell>
-        <FormSelectField
-          name="editType"
-          variant="standard"
-          id={row[0]}
-          value={editRowValue}
-          onChange={typeChange}
-        >
-          {typeList.map(type => (
-            <MenuItem value={type.userType} key={type.userType}>
-              {type.userType}
-            </MenuItem>
-          ))}
-        </FormSelectField>
-      </EditTableCell>
-    );
-  }
+
   if (row[0] === 'password') {
     return (
       <EditTableCell>
