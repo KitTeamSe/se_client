@@ -210,7 +210,6 @@ const ProfileRow = props => {
 const EditRowClassifier = props => {
   const { row, informationOpenAgreeChange, infoEditObj, handleChange } = props;
   const editRowValue = infoEditObj[row[0]];
-  console.log(editRowValue);
   if (row[0] === 'informationOpenAgree') {
     return (
       <EditTableCell
@@ -306,6 +305,7 @@ const ProfileBody = props => {
     mode,
     myinfoEditSubmit
   } = props;
+  console.log(rows);
   return (
     <>
       <InfoTable>
@@ -327,17 +327,22 @@ const ProfileBody = props => {
                 )}
               </>
             ))}
+            {mode === 'editMode' ? (
+              <EditTableRow key="profileRow">
+                <TableCell component="th" scope="row">
+                  {accountData.password}
+                </TableCell>
+                <EditRowClassifier
+                  row={['password', null]}
+                  infoEditObj={infoEditObj}
+                  informationOpenAgreeChange={informationOpenAgreeChange}
+                  handleChange={handleChange}
+                  typeChange={typeChange}
+                />
+              </EditTableRow>
+            ) : null}
           </TableBody>
         </Table>
-        {mode === 'editMode' ? (
-          <EditRow
-            row={['password', null]}
-            infoEditObj={infoEditObj}
-            informationOpenAgreeChange={informationOpenAgreeChange}
-            handleChange={handleChange}
-            typeChange={typeChange}
-          />
-        ) : null}
       </InfoTable>
       <SubmitButton mode={mode} myinfoEditSubmit={myinfoEditSubmit} />
     </>
