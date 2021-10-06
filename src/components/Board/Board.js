@@ -24,6 +24,7 @@ import {
   PaginationItem
 } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import qs from 'qs';
 import { postSearchTypeList } from '../../DataExport';
 import Tags from '../Post/Tags';
 import NicknameContainer from '../../containers/Post/NicknameContainer';
@@ -132,8 +133,18 @@ const ButtonStyled = styled(Button)`
 `;
 
 const Paginations = props => {
-  const { res, boardPage } = props;
+  const { res, boardPage, location } = props;
   const totalPage = res.postListItem.totalPages;
+
+  function qsMaker(item) {
+    const { replyPage } = qs.parse(location.search, {
+      ignoreQueryPrefix: true
+    });
+    const { page } = item;
+    const qsResult = qs.stringify({ page, replyPage });
+    return qsResult;
+  }
+
   return (
     <PaginationStyled
       component="div"
@@ -141,7 +152,7 @@ const Paginations = props => {
       count={totalPage}
       page={boardPage ? parseInt(boardPage, 10) : 1}
       renderItem={item => (
-        <PaginationItem component={Link} to={`?page=${item.page}`} {...item} />
+        <PaginationItem component={Link} to={`?${qsMaker(item)}`} {...item} />
       )}
     />
   );
@@ -338,7 +349,8 @@ const Board = props => {
     postSearchType,
     boardNameEng,
     boardPage,
-    boardDescription
+    boardDescription,
+    location
   } = props;
 
   if (error) {
@@ -384,6 +396,7 @@ const Board = props => {
           res={res}
           boardNameEng={boardNameEng}
           boardPage={boardPage}
+          location={location}
         />
       )}
     </>

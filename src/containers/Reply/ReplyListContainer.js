@@ -116,8 +116,9 @@ const ReplyListContainer = props => {
       error={error}
       totalPage={data && data.totalPage}
       totalData={data && data.totalData}
-      page={myReplyPage}
+      myReplyPage={myReplyPage}
       baseUrl={match.url}
+      location={location}
       handleAddReplyChild={handleAddReplyChild}
       onUpdate={onUpdate}
       replyReportHandle={replyReportHandle}

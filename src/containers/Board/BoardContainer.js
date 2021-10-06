@@ -11,6 +11,7 @@ import {
 
 const BoardContainer = props => {
   const { location, match, history } = props;
+
   const dispatch = useDispatch();
   const [keyword, setKeyword] = useState('');
   const [boardPage, setBoardPage] = useState(1);
@@ -144,6 +145,7 @@ const BoardContainer = props => {
       boardNameEng={boardNameEng}
       boardPage={boardPage}
       boardDescription={boardDescription}
+      location={location}
     />
   );
 };
