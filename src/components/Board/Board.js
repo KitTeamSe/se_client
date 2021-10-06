@@ -81,7 +81,7 @@ const NoBoardBox = styled.div`
   height: 100%;
   font-size: 2rem;
   text-align: center;
-  margin-top: 196px;
+  margin: 96px 0 96px 0;
 `;
 
 const SearchBar = styled.form`
@@ -226,16 +226,14 @@ const ErrorBoard = props => {
 };
 
 const NoPost = props => {
-  const { searchKeyword } = props;
+  const { keyword } = props;
   return (
-    <NoBoardBox>
-      <div>{`${searchKeyword}의 검색결과가 하나도 없습니다 😅`}</div>
-    </NoBoardBox>
+    <NoBoardBox>{`${keyword}의 검색결과가 하나도 없습니다 😅`}</NoBoardBox>
   );
 };
 
 const MainTable = props => {
-  const { res, boardNameEng, notice } = props;
+  const { res, boardNameEng, notice, keyword } = props;
   const tableColumns = ['번호', '제목', '닉네임', '정보'];
 
   return (
@@ -267,6 +265,11 @@ const MainTable = props => {
           ))}
         </TableBody>
       </Table>
+      {res.postListItem.content.length === 0 ? (
+        <NoPost keyword={keyword} />
+      ) : (
+        <></>
+      )}
     </TableContainer>
   );
 };
@@ -332,7 +335,6 @@ const Board = props => {
     NoticeLoading,
     NoticeError,
     keyword,
-    searchKeyword,
     onSearch,
     onPostSearchTypeChange,
     onWritePost,
@@ -371,18 +373,21 @@ const Board = props => {
         onSearchChange={onSearchChange}
         onWritePost={onWritePost}
       />
+      <MainTable
+        res={res}
+        notice={notice}
+        boardNameEng={boardNameEng}
+        keyword={keyword}
+      />
       {res.postListItem.content.length === 0 ? (
-        <NoPost searchKeyword={searchKeyword} />
+        <></>
       ) : (
-        <>
-          <MainTable res={res} notice={notice} boardNameEng={boardNameEng} />
-          <Paginations
-            res={res}
-            onChange={onChange}
-            boardNameEng={boardNameEng}
-            boardPage={boardPage}
-          />
-        </>
+        <Paginations
+          res={res}
+          onChange={onChange}
+          boardNameEng={boardNameEng}
+          boardPage={boardPage}
+        />
       )}
     </>
   );
