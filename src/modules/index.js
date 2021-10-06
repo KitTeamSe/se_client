@@ -4,6 +4,7 @@ import auth, { authSaga } from './auth';
 import account, { accountSaga } from './account';
 import reply, { replySaga } from './reply';
 import post, { postSaga } from './post';
+import board, { boardSaga } from './board';
 import attach, { attachSaga } from './attach';
 import tag, { tagSaga } from './tag';
 import menu, { menuSaga } from './menu';
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   auth,
   account,
   post,
+  board,
   reply,
   attach,
   tag,
@@ -25,6 +27,7 @@ export function* rootSaga() {
     authSaga(),
     accountSaga(),
     postSaga(),
+    boardSaga(),
     replySaga(),
     attachSaga(),
     tagSaga(),

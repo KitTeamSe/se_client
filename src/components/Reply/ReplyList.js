@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Typography, Pagination, PaginationItem } from '@mui/material';
+import qs from 'qs';
 import Reply from './Reply';
 import ReplyAddContainer from '../../containers/Reply/ReplyAddContainer';
 import ReplyChildAddContainer from '../../containers/Reply/ReplyChildAddContainer';
@@ -35,7 +36,14 @@ const ReplyHeader = props => {
 };
 
 const ReplyPagination = props => {
-  const { totalPage, page, baseUrl } = props;
+  const { totalPage, myReplyPage, baseUrl, location } = props;
+
+  function qsMaker(item) {
+    const { page } = qs.parse(location.search, { ignoreQueryPrefix: true });
+    const replyPage = item.page;
+    const qsResult = qs.stringify({ page, replyPage });
+    return qsResult;
+  }
 
   return (
     <PaginationStyled
@@ -46,11 +54,11 @@ const ReplyPagination = props => {
       showFirstButton
       showLastButton
       count={totalPage}
-      page={page ? parseInt(page, 10) : 1}
+      page={myReplyPage ? parseInt(myReplyPage, 10) : 1}
       renderItem={item => (
         <PaginationItem
           component={Link}
-          to={`${baseUrl}?replyPage=${item.page}`}
+          to={`${baseUrl}?${qsMaker(item)}`}
           {...item}
         />
       )}
@@ -133,8 +141,9 @@ const ReplyList = props => {
     totalData,
     loading,
     error,
-    page,
+    myReplyPage,
     baseUrl,
+    location,
     handleAddReplyChild,
     onUpdate,
     replyReportHandle
@@ -152,7 +161,12 @@ const ReplyList = props => {
         replyReportHandle={replyReportHandle}
       />
       <ReplyMessage data={data} loading={loading} error={error} />
-      <ReplyPagination totalPage={totalPage} page={page} baseUrl={baseUrl} />
+      <ReplyPagination
+        totalPage={totalPage}
+        myReplyPage={myReplyPage}
+        baseUrl={baseUrl}
+        location={location}
+      />
     </>
   );
 };

@@ -151,7 +151,6 @@ const PostUpdateContainer = props => {
   };
 
   const onGoBack = () => {
-    console.log('aaa');
     history.goBack();
   };
 

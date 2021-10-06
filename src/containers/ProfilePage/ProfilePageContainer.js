@@ -109,12 +109,6 @@ const ProfilePageContainer = props => {
     setInfoEditObj({ ...infoEditObj, [id]: value });
   };
 
-  const typeChange = e => {
-    e.preventDefault();
-    const { value } = e.target;
-    setInfoEditObj({ ...infoEditObj, type: value });
-  };
-
   const informationOpenAgreeChange = e => {
     e.preventDefault();
     if (infoEditObj.informationOpenAgree === 'AGREE') {
@@ -269,7 +263,6 @@ const ProfilePageContainer = props => {
         mode={mode}
         handleChange={handleChange}
         formChange={formChange}
-        typeChange={typeChange}
         informationOpenAgreeChange={informationOpenAgreeChange}
         menuClick={menuClick}
         modeChange={modeChange}

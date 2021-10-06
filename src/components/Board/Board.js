@@ -24,6 +24,7 @@ import {
   PaginationItem
 } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import qs from 'qs';
 import { postSearchTypeList } from '../../DataExport';
 import Tags from '../Post/Tags';
 import NicknameContainer from '../../containers/Post/NicknameContainer';
@@ -81,7 +82,7 @@ const NoBoardBox = styled.div`
   height: 100%;
   font-size: 2rem;
   text-align: center;
-  margin-top: 196px;
+  margin: 96px 0 96px 0;
 `;
 
 const SearchBar = styled.form`
@@ -132,8 +133,18 @@ const ButtonStyled = styled(Button)`
 `;
 
 const Paginations = props => {
-  const { res, boardNameEng, boardPage } = props;
+  const { res, boardPage, location } = props;
   const totalPage = res.postListItem.totalPages;
+
+  function qsMaker(item) {
+    const { secret, replyPage } = qs.parse(location.search, {
+      ignoreQueryPrefix: true
+    });
+    const { page } = item;
+    const qsResult = qs.stringify({ secret, page, replyPage });
+    return qsResult;
+  }
+
   return (
     <PaginationStyled
       component="div"
@@ -141,18 +152,14 @@ const Paginations = props => {
       count={totalPage}
       page={boardPage ? parseInt(boardPage, 10) : 1}
       renderItem={item => (
-        <PaginationItem
-          component={Link}
-          to={`/board/${boardNameEng}?page=${item.page}`}
-          {...item}
-        />
+        <PaginationItem component={Link} to={`?${qsMaker(item)}`} {...item} />
       )}
     />
   );
 };
 
 const PostTitle = props => {
-  const { postInfo, boardNameEng } = props;
+  const { postInfo, boardNameEng, boardPage } = props;
   const {
     postId,
     title,
@@ -186,8 +193,8 @@ const PostTitle = props => {
         <Title
           to={
             isSecret === 'NORMAL'
-              ? `/board/${boardNameEng}/${postId}`
-              : `/board/${boardNameEng}/${postId}?secret=true`
+              ? `/board/${boardNameEng}/${postId}?page=${boardPage}`
+              : `/board/${boardNameEng}/${postId}?secret=true&page=${boardPage}`
           }
         >
           {title}
@@ -226,16 +233,14 @@ const ErrorBoard = props => {
 };
 
 const NoPost = props => {
-  const { searchKeyword } = props;
+  const { keyword } = props;
   return (
-    <NoBoardBox>
-      <div>{`${searchKeyword}의 검색결과가 하나도 없습니다 😅`}</div>
-    </NoBoardBox>
+    <NoBoardBox>{`${keyword}의 검색결과가 하나도 없습니다 😅`}</NoBoardBox>
   );
 };
 
 const MainTable = props => {
-  const { res, boardNameEng, notice } = props;
+  const { res, boardNameEng, boardPage, notice, keyword } = props;
   const tableColumns = ['번호', '제목', '닉네임', '정보'];
 
   return (
@@ -256,6 +261,7 @@ const MainTable = props => {
               key={postInfo.postId}
               postInfo={postInfo}
               boardNameEng={boardNameEng}
+              boardPage={boardPage}
             />
           ))}
           {res.postListItem.content.map(postInfo => (
@@ -263,10 +269,16 @@ const MainTable = props => {
               key={postInfo.postId}
               postInfo={postInfo}
               boardNameEng={boardNameEng}
+              boardPage={boardPage}
             />
           ))}
         </TableBody>
       </Table>
+      {res.postListItem.content.length === 0 ? (
+        <NoPost keyword={keyword} />
+      ) : (
+        <></>
+      )}
     </TableContainer>
   );
 };
@@ -323,7 +335,6 @@ const UpperBar = props => {
 
 const Board = props => {
   const {
-    onChange,
     onSearchChange,
     data,
     loading,
@@ -332,14 +343,14 @@ const Board = props => {
     NoticeLoading,
     NoticeError,
     keyword,
-    searchKeyword,
     onSearch,
     onPostSearchTypeChange,
     onWritePost,
     postSearchType,
     boardNameEng,
     boardPage,
-    boardDescription
+    boardDescription,
+    location
   } = props;
 
   if (error) {
@@ -371,18 +382,22 @@ const Board = props => {
         onSearchChange={onSearchChange}
         onWritePost={onWritePost}
       />
+      <MainTable
+        res={res}
+        notice={notice}
+        boardNameEng={boardNameEng}
+        boardPage={boardPage}
+        keyword={keyword}
+      />
       {res.postListItem.content.length === 0 ? (
-        <NoPost searchKeyword={searchKeyword} />
+        <></>
       ) : (
-        <>
-          <MainTable res={res} notice={notice} boardNameEng={boardNameEng} />
-          <Paginations
-            res={res}
-            onChange={onChange}
-            boardNameEng={boardNameEng}
-            boardPage={boardPage}
-          />
-        </>
+        <Paginations
+          res={res}
+          boardNameEng={boardNameEng}
+          boardPage={boardPage}
+          location={location}
+        />
       )}
     </>
   );

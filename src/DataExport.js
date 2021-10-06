@@ -30,23 +30,12 @@ export const accountData = {
   password: '비밀번호 확인'
 };
 
-export const changebleAccount = ['nickname', 'type', 'informationOpenAgree'];
+export const changebleAccount = ['nickname', 'informationOpenAgree'];
 
 export const informationOpenAgreeEnum = {
   AGREE: '🟢AGREE',
   DISAGREE: '❌DISAGREE'
 };
-
-export const menuList = [
-  { name: 'freeboard', url: 'freeboard', boardId: 1 },
-  { name: 'archive', url: 'archive', boardId: 2 },
-  { name: '전공지식', url: 'tip', boardId: 3 },
-  { name: '지식인', url: 'naver', boardId: 4 },
-  { name: 'PC고장신고', url: 'pc', boardId: 5 },
-  { name: '학생회 재정 보고', url: 'council_info', boardId: 6 },
-  { name: '딥러닝 & iMac', url: 'imac', boardId: 7 },
-  { name: '330예약', url: 'book', boardId: 8 }
-];
 
 export const postSearchTypeList = [
   { type: 'TITLE_TEXT', name: '제목+내용' },

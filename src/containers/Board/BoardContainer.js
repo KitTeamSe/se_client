@@ -7,13 +7,13 @@ import {
   loadNormalpostList,
   loadNoticepostList,
   searchPost
-} from '../../modules/post';
+} from '../../modules/board';
 
 const BoardContainer = props => {
   const { location, match, history } = props;
+
   const dispatch = useDispatch();
   const [keyword, setKeyword] = useState('');
-  const [searchKeyword, setSearchKeyword] = useState('');
   const [boardPage, setBoardPage] = useState(1);
   const [boardDescription, setBoardDescription] = useState('');
   const [postSearchType, setPostSearchType] = useState('TITLE_TEXT');
@@ -26,14 +26,14 @@ const BoardContainer = props => {
     NoticeLoading,
     NoticeError,
     signin
-  } = useSelector(({ post, menu, auth }) => ({
-    data: post.loadedNormalPostList.data,
-    loading: post.loadedNormalPostList.loading,
-    error: post.loadedNormalPostList.error,
+  } = useSelector(({ board, menu, auth }) => ({
+    data: board.loadedNormalPostList.data,
+    loading: board.loadedNormalPostList.loading,
+    error: board.loadedNormalPostList.error,
     menuList: menu.loadedMenuList.data,
-    NoticeData: post.loadedNoticePostList.data,
-    NoticeLoading: post.loadedNoticePostList.loading,
-    NoticeError: post.loadedNoticePostList.error,
+    NoticeData: board.loadedNoticePostList.data,
+    NoticeLoading: board.loadedNoticePostList.loading,
+    NoticeError: board.loadedNoticePostList.error,
     signin: auth.auth.data
   }));
 
@@ -53,7 +53,7 @@ const BoardContainer = props => {
       direction: 'DESC',
       isNotice: 'NOTICE',
       page: 0,
-      size: 50
+      size: pageSize
     };
     dispatch(loadNoticepostList(params));
 
@@ -89,10 +89,6 @@ const BoardContainer = props => {
     setBoardPage(page);
   }, [signin, match.params.boardNameEng, location.search]);
 
-  const onChange = e => {
-    e.preventDefault();
-  };
-
   const onSearchChange = e => {
     const { value } = e.target;
     setKeyword(value);
@@ -106,7 +102,6 @@ const BoardContainer = props => {
 
   const onSearch = e => {
     e.preventDefault();
-    setSearchKeyword(keyword);
     if (keyword.length === 0) {
       console.log('한글자 이상 입력하세요');
       return;
@@ -117,7 +112,7 @@ const BoardContainer = props => {
     }
     const pageRequest = {
       direction: 'DESC',
-      page: 1,
+      page: 0,
       size: pageSize
     };
     const postSearchRequest = {
@@ -141,17 +136,16 @@ const BoardContainer = props => {
       NoticeData={NoticeData}
       NoticeLoading={NoticeLoading}
       NoticeError={NoticeError}
-      onChange={onChange}
       onSearchChange={onSearchChange}
       onSearch={onSearch}
       onWritePost={onWritePost}
       keyword={keyword}
-      searchKeyword={searchKeyword}
       onPostSearchTypeChange={onPostSearchTypeChange}
       postSearchType={postSearchType}
       boardNameEng={boardNameEng}
       boardPage={boardPage}
       boardDescription={boardDescription}
+      location={location}
     />
   );
 };

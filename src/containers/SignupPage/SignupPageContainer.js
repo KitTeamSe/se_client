@@ -8,7 +8,7 @@ import {
   initializeForm,
   signin
 } from '../../modules/auth';
-import { questionList, typeList } from '../../DataExport';
+import { questionList } from '../../DataExport';
 
 const SignupPageContainer = () => {
   const history = useHistory();
@@ -158,16 +158,6 @@ const SignupPageContainer = () => {
       })
     );
   };
-  const classChange = e => {
-    const { value } = e.target;
-    dispatch(
-      changeField({
-        form: 'signup',
-        key: 'type',
-        value
-      })
-    );
-  };
 
   const signupSubmit = e => {
     e.preventDefault();
@@ -176,14 +166,12 @@ const SignupPageContainer = () => {
 
   return (
     <SignupPage
-      classChange={classChange}
       handleChange={handleChange}
       questionChange={questionChange}
       signupSubmit={signupSubmit}
       loading={loading}
       inputs={form}
       questionList={questionList}
-      typeList={typeList}
       infoState={infoState}
       setInfoState={setInfoState}
       form={form}
