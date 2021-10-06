@@ -185,7 +185,7 @@ const items = [
 
 const toolbar = {
   items,
-  shouldNotGroupWhenFull: true
+  shouldNotGroupWhenFull: true // 에디터 도구 박스가 다음 줄 넘어가게 함
 };
 
 const heading = {
@@ -280,7 +280,7 @@ const typing = {
 };
 
 const mediaEmbed = {
-  previewsInData: true
+  previewsInData: true // 유튜브 영상 등 media 정보가 출력됨
 };
 
 const config = placeholder => ({

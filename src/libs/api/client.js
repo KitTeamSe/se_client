@@ -6,7 +6,6 @@ client.defaults.baseURL = process.env.REACT_APP_API_URL;
 client.defaults.crossDomain = true;
 client.defaults.headers.Accept = '*/*';
 client.defaults.headers.withCredentials = true;
-// client.defaults.headers.post['Content-Type'] = 'application/json';
 client.defaults.headers['Access-Control-Allow-Origin'] = '*';
 client.defaults.headers['Access-Control-Allow-Methods'] =
   'GET,PUT,POST,DELETE,PATCH,OPTIONS';

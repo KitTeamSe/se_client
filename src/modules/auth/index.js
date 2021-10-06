@@ -12,25 +12,20 @@ import reducerUtils from '../../libs/reducerUtils';
 const CHANGE_FIELD = 'auth/CHANGE_FIELD';
 const INITIALIZE_FORM = 'auth/INITIALIZE_FORM';
 const INITIALIZE_AUTH = 'auth/INITIALIZE_AUTH';
-
 const [SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAILURE] =
   createRequestActionTypes('auth/SIGNUP');
-
 const [SIGNIN, SIGNIN_SUCCESS, SIGNIN_FAILURE] =
   createRequestActionTypes('auth/SIGNIN');
-
 const [CHECK_PASSWORD, CHECK_PASSWORD_SUCCESS, CHECK_PASSWORD_FAILURE] =
   createRequestActionTypes('auth/CHECK_PASSWORD');
 
+// Action Creators
 export const changeField = createAction(
   CHANGE_FIELD,
   ({ form, key, value }) => ({ form, key, value })
 );
-
-// Action Creators
 export const initializeForm = createAction(INITIALIZE_FORM, form => form);
 export const initializeAuth = createAction(INITIALIZE_AUTH);
-
 export const signup = createAction(
   SIGNUP,
   ({
@@ -57,9 +52,7 @@ export const signup = createAction(
     type
   })
 );
-
 export const signin = createAction(SIGNIN, ({ id, pw }) => ({ id, pw }));
-
 export const checkPassword = createAction(CHECK_PASSWORD, ({ pw }) => ({ pw }));
 
 // Sagas
@@ -73,7 +66,7 @@ export function* authSaga() {
   yield takeLatest(CHECK_PASSWORD, checkPasswordSaga);
 }
 
-// reducer (handleActions => switch문 대체)
+// reducer
 const initialState = {
   signup: {
     answer: '',
