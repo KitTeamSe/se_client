@@ -137,11 +137,11 @@ const Paginations = props => {
   const totalPage = res.postListItem.totalPages;
 
   function qsMaker(item) {
-    const { replyPage } = qs.parse(location.search, {
+    const { secret, replyPage } = qs.parse(location.search, {
       ignoreQueryPrefix: true
     });
     const { page } = item;
-    const qsResult = qs.stringify({ page, replyPage });
+    const qsResult = qs.stringify({ secret, page, replyPage });
     return qsResult;
   }
 
