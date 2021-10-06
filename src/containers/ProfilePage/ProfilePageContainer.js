@@ -3,11 +3,11 @@ import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ProfilePage from '../../components/ProfilePage/ProfilePage';
 import {
-  myinfo,
-  myinfoedit,
   initializeForm,
   changeField,
-  accountdelete
+  myInfo,
+  myInfoEdit,
+  accountDelete
 } from '../../modules/account';
 import { checkPassword, initializeAuth } from '../../modules/auth';
 import WithdrawalDialog from '../../components/ProfilePage/WithdrawalDialog';
@@ -33,20 +33,20 @@ const ProfilePageContainer = props => {
   const {
     data,
     loading,
-    myinfoError,
-    myinfoEditRes,
-    myinfoEditError,
+    myInfoError,
+    myInfoEditRes,
+    myInfoEditError,
     newPwForm,
     withDrawalForm,
     accountDeleteRes,
     checkPwData,
     checkPwError
   } = useSelector(({ account, auth }) => ({
-    data: account.myinfo.data,
-    loading: account.myinfo.loading,
-    myinfoError: account.myinfo.error,
-    myinfoEditRes: account.myinfoEditRes.data,
-    myinfoEditError: account.myinfoEditRes.error,
+    data: account.myInfo.data,
+    loading: account.myInfo.loading,
+    myInfoError: account.myInfo.error,
+    myInfoEditRes: account.myInfoEditRes.data,
+    myInfoEditError: account.myInfoEditRes.error,
     newPwForm: account.newPwForm,
     withDrawalForm: account.withDrawalForm,
     accountDeleteRes: account.accountDeleteRes,
@@ -56,7 +56,7 @@ const ProfilePageContainer = props => {
 
   useEffect(() => {
     const id = match.params.userId;
-    dispatch(myinfo({ id }));
+    dispatch(myInfo({ id }));
   }, [match.params]);
 
   useEffect(() => {
@@ -81,21 +81,21 @@ const ProfilePageContainer = props => {
   }, [data]);
 
   useEffect(() => {
-    if (myinfoError) {
-      setError(String(myinfoError.message));
+    if (myInfoError) {
+      setError(String(myInfoError.message));
     }
-    if (myinfoEditError) {
-      setError(String(myinfoEditError.message));
+    if (myInfoEditError) {
+      setError(String(myInfoEditError.message));
     }
-  }, [myinfoError, myinfoEditError]);
+  }, [myInfoError, myInfoEditError]);
 
   useEffect(() => {
-    if (myinfoEditRes) {
+    if (myInfoEditRes) {
       const id = match.params.userId;
-      dispatch(myinfo({ id }));
+      dispatch(myInfo({ id }));
       setMode(null);
     }
-  }, [myinfoEditRes]);
+  }, [myInfoEditRes]);
 
   const handleChange = e => {
     e.preventDefault();
@@ -187,7 +187,7 @@ const ProfilePageContainer = props => {
     dispatch(checkPassword({ pw: password }));
   };
 
-  const myinfoEditSubmit = e => {
+  const myInfoEditSubmit = e => {
     e.preventDefault();
     const { password } = infoEditObj;
     dispatch(checkPassword({ pw: password }));
@@ -200,7 +200,7 @@ const ProfilePageContainer = props => {
       setError('새비밀번호 확인이 맞지 않습니다');
     } else {
       const parameter = { id: userId, password: newPassword };
-      dispatch(myinfoedit({ parameter, token }));
+      dispatch(myInfoEdit({ parameter }));
     }
   };
 
@@ -208,7 +208,7 @@ const ProfilePageContainer = props => {
     const { text } = withDrawalForm;
 
     if (text === '탈퇴') {
-      dispatch(accountdelete({ userId, token }));
+      dispatch(accountDelete({ userId }));
     } else {
       setError('탈퇴를 입력하세요');
     }
@@ -230,7 +230,7 @@ const ProfilePageContainer = props => {
     }
 
     parameter.id = userId;
-    dispatch(myinfoedit({ parameter, token }));
+    dispatch(myInfoEdit({ parameter }));
   };
 
   useEffect(() => {
@@ -273,7 +273,7 @@ const ProfilePageContainer = props => {
         informationOpenAgreeChange={informationOpenAgreeChange}
         menuClick={menuClick}
         modeChange={modeChange}
-        myinfoEditSubmit={myinfoEditSubmit}
+        myInfoEditSubmit={myInfoEditSubmit}
         editFormRefresh={editFormRefresh}
         loading={loading}
       />

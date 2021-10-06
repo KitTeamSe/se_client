@@ -76,8 +76,8 @@ const FeedbackContainer = props => {
     accountDeleteSuccess,
     accountDeleteError
   } = useSelector(({ account }) => ({
-    editInfoSuccess: account.myinfoEditRes.data,
-    editInfoError: account.myinfoEditRes.error,
+    editInfoSuccess: account.myInfoEditRes.data,
+    editInfoError: account.myInfoEditRes.error,
     accountDeleteSuccess: account.accountDeleteRes.data,
     accountDeleteError: account.accountDeleteRes.error
   }));

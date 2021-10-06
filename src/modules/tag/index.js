@@ -24,11 +24,12 @@ export const searchTag = createAction(SEARCH_TAG, ({ text }) => ({
 
 // Sagas
 const searchTagSaga = createRequestSaga(SEARCH_TAG, api.searchTag);
+
 export function* tagSaga() {
   yield takeLatest(SEARCH_TAG, searchTagSaga);
 }
 
-// reducer (handleActions => switch문 대체)
+// reducer
 const initialState = {
   searchText: '',
   searchTag: reducerUtils.initial()

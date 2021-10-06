@@ -32,12 +32,13 @@ export const removeAttach = createAction(REMOVE_ATTACH, ({ id }) => ({
 // Sagas
 const addAttachListSaga = createRequestSaga(ADD_ATTACH, api.addAttachList);
 const removeAttachSaga = createRequestSaga(REMOVE_ATTACH, api.removeAttach);
+
 export function* attachSaga() {
   yield takeLatest(ADD_ATTACH, addAttachListSaga);
   yield takeEvery(REMOVE_ATTACH, removeAttachSaga);
 }
 
-// reducer (handleActions => switch문 대체)
+// reducer
 const initialState = {
   select: '',
   addAttach: reducerUtils.initial(),

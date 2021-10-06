@@ -1,5 +1,10 @@
+/**
+ *
+ * @param {String} file 파일 name
+ * @returns {Boolean} 이미지 유무 확인
+ */
+
 const confirmFileExtension = file => {
-  // jpg, jpeg, png, gif, bmp 이미지파일의 확장자
   if (file.indexOf('.') < 0) return false;
   const reg = /(.*?)\.(jpg|jpeg|png|gif|bmp)$/;
 
