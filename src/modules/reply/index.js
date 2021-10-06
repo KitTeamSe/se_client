@@ -135,7 +135,7 @@ export function* replySaga() {
   yield takeLatest(LOAD_REPLY_SECRET, loadSecretReplySaga);
 }
 
-// reducer (handleActions => switch문 대체)
+// reducer
 const initialState = {
   addForm: {
     anonymousNickname: '',

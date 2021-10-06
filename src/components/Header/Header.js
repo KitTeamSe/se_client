@@ -32,8 +32,8 @@ const ContentWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: ${({ theme }) => theme.size.desktop};
-  @media ${({ theme }) => theme.sizeQuery.desktop} {
+  width: ${({ theme }) => theme.size.tablet};
+  @media ${({ theme }) => theme.sizeQuery.tablet} {
     width: 100%;
   }
 `;
@@ -45,7 +45,7 @@ const NavigationWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  @media ${({ theme }) => theme.sizeQuery.desktop} {
+  @media ${({ theme }) => theme.sizeQuery.tablet} {
     margin-right: 15px;
   }
   @media ${({ theme }) => theme.sizeQuery.mobile} {
@@ -64,7 +64,7 @@ const Logo = styled(Link)`
   text-decoration: none;
   color: #57bee1;
   line-height: 78px;
-  @media ${({ theme }) => theme.sizeQuery.desktop} {
+  @media ${({ theme }) => theme.sizeQuery.tablet} {
     margin-left: 15px;
   }
   @media ${({ theme }) => theme.sizeQuery.mobile} {
