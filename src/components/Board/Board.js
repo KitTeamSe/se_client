@@ -1,12 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import {
-  faEye,
-  faCommentAlt,
-  faLock,
-  faEdit
-} from '@fortawesome/free-solid-svg-icons';
+import { faLock, faEdit } from '@fortawesome/free-solid-svg-icons';
 import {
   CircularProgress,
   Table,
@@ -28,6 +23,8 @@ import qs from 'qs';
 import { postSearchTypeList } from '../../DataExport';
 import Tags from '../Post/Tags';
 import NicknameContainer from '../../containers/Post/NicknameContainer';
+import { MainWrapper } from '../Wrapper/Wrapper';
+import { getFormatDate, getFormatTime } from '../../utils/format';
 
 const LoadingCircle = styled(CircularProgress)`
   position: absolute;
@@ -36,7 +33,7 @@ const LoadingCircle = styled(CircularProgress)`
 
 const NoneBorderCell = styled(TableCell)`
   border: none;
-  padding: 0 1rem;
+  padding: 0;
 `;
 
 const IconMargin = styled.span`
@@ -62,13 +59,13 @@ const PostContent = styled(TableRow)`
 
 const PostNumber = styled.span`
   width: 1rem;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
 `;
 
 const Title = styled(Link)`
   display: inline-block;
   width: 100%;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   font-weight: 500;
   text-overflow: ellipsis;
   vertical-align: middle;
@@ -173,56 +170,55 @@ const PostTitle = props => {
     isNotice
   } = postInfo;
 
-  function backgroundColor() {
+  const backgroundColor = () => {
     if (isNotice === 'NOTICE') {
       return 'eeeeee';
     }
     return 'ffffff';
-  }
-  const writeTime = `${createAt[0]}년${createAt[1]}월${createAt[2]}일 ${createAt[3]}:${createAt[4]}`;
+  };
+
+  const handleTitleLink = () => {
+    if (isSecret === 'NORMAL') {
+      return `/board/${boardNameEng}/${postId}?page=${boardPage}`;
+    }
+    return `/board/${boardNameEng}/${postId}?secret=true&page=${boardPage}`;
+  };
+
   return (
-    <PostContent bgcolor={backgroundColor()}>
-      <NoneBorderCell nowrap="true" align="center" width="5%">
+    <PostContent bgcolor={backgroundColor}>
+      <NoneBorderCell nowrap="true" align="center">
         {isNotice === 'NOTICE' ? (
           <PostNumber>공지</PostNumber>
         ) : (
           <PostNumber>{postId}</PostNumber>
         )}
       </NoneBorderCell>
-      <NoneBorderCell width="70%">
-        <Title
-          to={
-            isSecret === 'NORMAL'
-              ? `/board/${boardNameEng}/${postId}?page=${boardPage}`
-              : `/board/${boardNameEng}/${postId}?secret=true&page=${boardPage}`
-          }
-        >
+      <NoneBorderCell width="100%">
+        <Title to={handleTitleLink}>
+          {isSecret === 'SECRET' && (
+            <IconMargin>
+              <InfoIcon icon={faLock} />
+            </IconMargin>
+          )}
           {title}
-          <IconMargin>
-            {isSecret === 'NORMAL' ? <></> : <InfoIcon icon={faLock} />}
-          </IconMargin>
+          {numReply ? `[${numReply}]` : null}
           <Tags tags={tags} />
         </Title>
       </NoneBorderCell>
-      <NoneBorderCell nowrap="true" width="10%" align="center">
+      <NoneBorderCell nowrap="true" align="center">
         <NicknameContainer
           nickname={nickname}
           accountIdString={accountIdString}
         />
       </NoneBorderCell>
-      <NoneBorderCell width="15%" align="center">
+      <NoneBorderCell align="center">
         <InfoBox>
-          <IconMargin>{writeTime}</IconMargin>
           <IconMargin>
-            <InfoIcon icon={faCommentAlt} />
-            {numReply}
-          </IconMargin>
-          <IconMargin>
-            <InfoIcon icon={faEye} />
-            {views}
+            {`${getFormatDate(createAt)} ${getFormatTime(createAt)}`}
           </IconMargin>
         </InfoBox>
       </NoneBorderCell>
+      <NoneBorderCell align="center">{views}</NoneBorderCell>
     </PostContent>
   );
 };
@@ -241,7 +237,7 @@ const NoPost = props => {
 
 const MainTable = props => {
   const { res, boardNameEng, boardPage, notice, keyword } = props;
-  const tableColumns = ['번호', '제목', '닉네임', '정보'];
+  const tableColumns = ['번호', '제목', '글쓴이', '작성일', '조회'];
 
   return (
     <TableContainer component={Paper}>
@@ -372,7 +368,7 @@ const Board = props => {
   const res = data.data;
   const notice = NoticeData.data;
   return (
-    <>
+    <MainWrapper>
       <UpperBar
         boardDescription={boardDescription}
         postSearchType={postSearchType}
@@ -399,7 +395,7 @@ const Board = props => {
           location={location}
         />
       )}
-    </>
+    </MainWrapper>
   );
 };
 

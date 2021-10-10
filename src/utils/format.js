@@ -14,7 +14,7 @@ export const getFormatDate = createAt => {
   month = month >= 10 ? month : `0${month}`;
   let day = date.getDate();
   day = day >= 10 ? day : `0${day}`;
-  return `${year}년 ${month}월 ${day}일`;
+  return `${year}.${month}.${day}`;
 };
 
 export const getFormatTime = createAt => {
