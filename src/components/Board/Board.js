@@ -52,21 +52,23 @@ const InfoIcon = styled(FontAwesomeIcon)`
   color: gray;
 `;
 
-const PostContent = styled(TableRow)`
+const PostTableRow = styled(TableRow)`
   border-bottom: 1px solid #ddd;
   background-color: #${props => props.bgcolor};
 `;
 
 const PostNumber = styled.span`
-  width: 1rem;
   font-size: 0.75rem;
+`;
+
+const ReplyCountNumber = styled(PostNumber)`
+  color: gray;
 `;
 
 const Title = styled(Link)`
   display: inline-block;
   width: 100%;
   font-size: 0.75rem;
-  font-weight: 500;
   text-overflow: ellipsis;
   vertical-align: middle;
   color: black;
@@ -185,23 +187,19 @@ const PostTitle = props => {
   };
 
   return (
-    <PostContent bgcolor={backgroundColor}>
+    <PostTableRow hover bgcolor={backgroundColor}>
       <NoneBorderCell nowrap="true" align="center">
-        {isNotice === 'NOTICE' ? (
-          <PostNumber>공지</PostNumber>
-        ) : (
-          <PostNumber>{postId}</PostNumber>
-        )}
+        <PostNumber>{isNotice === 'NOTICE' ? '공지' : postId}</PostNumber>
       </NoneBorderCell>
-      <NoneBorderCell width="100%">
+      <NoneBorderCell>
         <Title to={handleTitleLink}>
+          {title}
           {isSecret === 'SECRET' && (
             <IconMargin>
               <InfoIcon icon={faLock} />
             </IconMargin>
           )}
-          {title}
-          {numReply ? `[${numReply}]` : null}
+          {numReply ? <ReplyCountNumber> [{numReply}]</ReplyCountNumber> : null}
           <Tags tags={tags} />
         </Title>
       </NoneBorderCell>
@@ -219,7 +217,7 @@ const PostTitle = props => {
         </InfoBox>
       </NoneBorderCell>
       <NoneBorderCell align="center">{views}</NoneBorderCell>
-    </PostContent>
+    </PostTableRow>
   );
 };
 
@@ -235,6 +233,22 @@ const NoPost = props => {
   );
 };
 
+const NumberCol = styled.col`
+  width: 6%;
+`;
+const TitleCol = styled.col`
+  width: 64%;
+`;
+const NicknameCol = styled.col`
+  width: 12%;
+`;
+const DateCol = styled.col`
+  width: 12%;
+`;
+const ViewsCountCol = styled.col`
+  width: 6%;
+`;
+
 const MainTable = props => {
   const { res, boardNameEng, boardPage, notice, keyword } = props;
   const tableColumns = ['번호', '제목', '글쓴이', '작성일', '조회'];
@@ -242,12 +256,19 @@ const MainTable = props => {
   return (
     <TableContainer component={Paper}>
       <Table size="small">
+        <colgroup>
+          <NumberCol />
+          <TitleCol />
+          <NicknameCol />
+          <DateCol />
+          <ViewsCountCol />
+        </colgroup>
         <TableHead>
           <TableRow>
             {tableColumns.map(column => (
-              <TableCell nowrap="true" align="center" key={column}>
+              <NoneBorderCell nowrap="true" align="center" key={column}>
                 {column}
-              </TableCell>
+              </NoneBorderCell>
             ))}
           </TableRow>
         </TableHead>
@@ -272,9 +293,7 @@ const MainTable = props => {
       </Table>
       {res.postListItem.content.length === 0 ? (
         <NoPost keyword={keyword} />
-      ) : (
-        <></>
-      )}
+      ) : null}
     </TableContainer>
   );
 };
