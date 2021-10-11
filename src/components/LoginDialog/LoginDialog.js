@@ -152,7 +152,7 @@ const LoginDialog = props => {
             <ErrorText>{error}</ErrorText>
             <LinkWrapper>
               <FindButtonWrapper>
-                <FindLink onClick={handleClose} to="find">
+                <FindLink onClick={handleClose} to="/forgot">
                   forgot?
                 </FindLink>
               </FindButtonWrapper>
