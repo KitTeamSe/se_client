@@ -1,42 +1,62 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Forgot from '../../components/Forgot/Forgot';
-import { findId, findQuestion } from '../../modules/account';
+import { findId, findQuestion, changeField } from '../../modules/find';
 
 const ForgotContainer = () => {
   const dispatch = useDispatch();
 
   const {
+    emailForm,
     findIdData,
     findIdLoading,
     findIdError,
     findQuestionData,
     findQuestionLoading,
     findQuestionError
-  } = useSelector(({ account }) => ({
-    findIdData: account.findIdRes.data,
-    findIdLoading: account.findIdRes.loading,
-    findIdError: account.findIdRes.error,
-    findQuestionData: account.findQuestionRes.data,
-    findQuestionLoading: account.findQuestionRes.loading,
-    findQuestionError: account.findQuestionRes.error
+  } = useSelector(({ find }) => ({
+    emailForm: find.myEmail,
+    findIdData: find.findIdRes.data,
+    findIdLoading: find.findIdRes.loading,
+    findIdError: find.findIdRes.error,
+    findQuestionData: find.findQuestionRes.data,
+    findQuestionLoading: find.findQuestionRes.loading,
+    findQuestionError: find.findQuestionRes.error
   }));
-  const email = 'alsanrlf@naver.com';
-  const userId = 'alsanrlf';
   useEffect(() => {
-    dispatch(findId({ email }));
+    const userId = 'alsanrlf';
     dispatch(findQuestion({ userId }));
   }, []);
-  console.log(findIdData, findIdError);
-  console.log(findQuestionData, findQuestionError, findQuestionLoading);
+
+  const onChange = e => {
+    const { value, name } = e.target;
+    dispatch(
+      changeField({
+        form: 'myEmail',
+        key: name,
+        value
+      })
+    );
+  };
+
+  const onFindIdSubmit = e => {
+    e.preventDefault();
+    const { email } = emailForm;
+    dispatch(findId({ email }));
+  };
 
   return (
     <Forgot
-      yourId="가입 이메일을 조회해 주세요"
       question="내 질문 조회를 하세요"
       findIdData={findIdData}
       findIdLoading={findIdLoading}
       findIdError={findIdError}
+      findQuestionData={findQuestionData}
+      findQuestionError={findQuestionError}
+      findQuestionLoading={findQuestionLoading}
+      onChange={onChange}
+      emailForm={emailForm}
+      onFindIdSubmit={onFindIdSubmit}
     />
   );
 };

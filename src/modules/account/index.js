@@ -17,13 +17,6 @@ const [MY_INFO_EDIT, MY_INFO_EDIT_SUCCESS, MY_INFO_EDIT_FAILURE] =
   createRequestActionTypes('account/MY_INFO_EDIT');
 const [ACCOUNT_DELETE, ACCOUNT_DELETE_SUCCESS, ACCOUNT_DELETE_FAILURE] =
   createRequestActionTypes('account/ACCOUNT_DELETE');
-const [FIND_ID, FIND_ID_SUCCESS, FIND_ID_FAILURE] =
-  createRequestActionTypes('account/FIND_ID');
-const [FIND_QUESTION, FIND_QUESTION_SUCCESS, FIND_QUESTION_FAILURE] =
-  createRequestActionTypes('account/FIND_QUESTION');
-const [FIND_PASSWORD, FIND_PASSWORD_SUCCESS, FIND_PASSWORD_FAILURE] =
-  createRequestActionTypes('account/FIND_PASSWORD');
-
 // Action Creators
 export const initializeForm = createAction(INITIALIZE_FORM, form => form);
 export const changeField = createAction(
@@ -52,39 +45,15 @@ export const accountDelete = createAction(
   })
 );
 
-export const findId = createAction(FIND_ID, ({ email }) => ({
-  email
-}));
-
-export const findQuestion = createAction(FIND_QUESTION, ({ userId }) => ({
-  userId
-}));
-
-export const findPassword = createAction(
-  FIND_PASSWORD,
-  ({ answer, email, id, questionId }) => ({
-    answer,
-    email,
-    id,
-    questionId
-  })
-);
-
 // Sagas
 const myInfoSaga = createRequestSaga(MY_INFO, api.myInfo);
 const myInfoEditSaga = createRequestSaga(MY_INFO_EDIT, api.myInfoEdit);
 const accountDeleteSaga = createRequestSaga(ACCOUNT_DELETE, api.accountDelete);
-const findIdSaga = createRequestSaga(FIND_ID, api.findId);
-const findQuestionSaga = createRequestSaga(FIND_ID, api.findQuestion);
-const findPasswordSaga = createRequestSaga(FIND_PASSWORD, api.findPassword);
 
 export function* accountSaga() {
   yield takeLatest(MY_INFO, myInfoSaga);
   yield takeLatest(MY_INFO_EDIT, myInfoEditSaga);
   yield takeLatest(ACCOUNT_DELETE, accountDeleteSaga);
-  yield takeLatest(FIND_ID, findIdSaga);
-  yield takeLatest(FIND_QUESTION, findQuestionSaga);
-  yield takeLatest(FIND_PASSWORD, findPasswordSaga);
 }
 
 // reducer
@@ -100,10 +69,7 @@ const initialState = {
   },
   myInfo: reducerUtils.initial(),
   myInfoEditRes: reducerUtils.initial(),
-  accountDeleteRes: reducerUtils.initial(),
-  findIdRes: reducerUtils.initial(),
-  findQuestionRes: reducerUtils.initial(),
-  findPasswordRes: reducerUtils.initial()
+  accountDeleteRes: reducerUtils.initial()
 };
 
 export default handleActions(
@@ -151,42 +117,6 @@ export default handleActions(
     [ACCOUNT_DELETE_FAILURE]: (state, { payload: error }) => ({
       ...state,
       accountDeleteRes: reducerUtils.error(error)
-    }),
-    [FIND_ID]: state => ({
-      ...state,
-      findIdRes: reducerUtils.loading(state.findIdRes.data)
-    }),
-    [FIND_ID_SUCCESS]: (state, { payload: response }) => ({
-      ...state,
-      findIdRes: reducerUtils.success(response)
-    }),
-    [FIND_ID_FAILURE]: (state, { payload: error }) => ({
-      ...state,
-      findIdRes: reducerUtils.error(error)
-    }),
-    [FIND_QUESTION]: state => ({
-      ...state,
-      findQuestionRes: reducerUtils.loading(state.findQuestionRes.data)
-    }),
-    [FIND_QUESTION_SUCCESS]: (state, { payload: response }) => ({
-      ...state,
-      findQuestionRes: reducerUtils.success(response)
-    }),
-    [FIND_QUESTION_FAILURE]: (state, { payload: error }) => ({
-      ...state,
-      findQuestionRes: reducerUtils.error(error)
-    }),
-    [FIND_PASSWORD]: state => ({
-      ...state,
-      findPasswordRes: reducerUtils.loading(state.findPasswordRes.data)
-    }),
-    [FIND_PASSWORD_SUCCESS]: (state, { payload: response }) => ({
-      ...state,
-      findPasswordRes: reducerUtils.success(response)
-    }),
-    [FIND_PASSWORD_FAILURE]: (state, { payload: error }) => ({
-      ...state,
-      findPasswordRes: reducerUtils.error(error)
     })
   },
   initialState
