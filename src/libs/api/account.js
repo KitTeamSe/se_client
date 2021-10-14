@@ -36,3 +36,13 @@ export const findQuestion = ({ userId }) => {
     throw error.response.data;
   });
 };
+
+export const findPassword = ({ answer, email, id, questionId }) => {
+  const token = localStorage.getItem('token');
+  const parameter = { answer, email, id, questionId };
+  return client
+    .get(`/account/my/question`, parameter, tokenHeader(token))
+    .catch(error => {
+      throw error.response.data;
+    });
+};
