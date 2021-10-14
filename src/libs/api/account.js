@@ -28,3 +28,11 @@ export const findId = ({ email }) => {
     throw error.response.data;
   });
 };
+
+export const findQuestion = ({ userId }) => {
+  const token = localStorage.getItem('token');
+  console.log(userId);
+  return client.get(`/account/my/question`, tokenHeader(token)).catch(error => {
+    throw error.response.data;
+  });
+};
