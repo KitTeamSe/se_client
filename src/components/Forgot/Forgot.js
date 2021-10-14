@@ -87,13 +87,20 @@ const Forgot = props => {
             </Button>
           </TextFieldButtonBox>
           <QuestionBox>{question}</QuestionBox>
-          <FormTextField
-            id="answer"
-            name="answer"
-            label="질문에 대한 답변"
-            variant="standard"
-            type="string"
-          />
+        </FormFlex>
+        <FormFlex>
+          <TextFieldButtonBox>
+            <FormTextField
+              id="answer"
+              name="answer"
+              label="질문에 대한 답변"
+              variant="standard"
+              type="string"
+            />
+            <Button variant="contained" size="small">
+              비밀번호 조회
+            </Button>
+          </TextFieldButtonBox>
         </FormFlex>
       </FindBox>
     </MainTable>

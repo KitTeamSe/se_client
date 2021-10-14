@@ -22,3 +22,9 @@ export const accountDelete = ({ userId }) => {
     throw error.response.data;
   });
 };
+
+export const findId = ({ email }) => {
+  return client.get(`/account/email/${email}`).catch(error => {
+    throw error.response.data;
+  });
+};

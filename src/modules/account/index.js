@@ -17,6 +17,8 @@ const [MY_INFO_EDIT, MY_INFO_EDIT_SUCCESS, MY_INFO_EDIT_FAILURE] =
   createRequestActionTypes('account/MY_INFO_EDIT');
 const [ACCOUNT_DELETE, ACCOUNT_DELETE_SUCCESS, ACCOUNT_DELETE_FAILURE] =
   createRequestActionTypes('account/ACCOUNT_DELETE');
+const [FIND_ID, FIND_ID_SUCCESS, FIND_ID_FAILURE] =
+  createRequestActionTypes('account/FIND_ID');
 
 // Action Creators
 export const initializeForm = createAction(INITIALIZE_FORM, form => form);
@@ -46,15 +48,21 @@ export const accountDelete = createAction(
   })
 );
 
+export const findId = createAction(FIND_ID, ({ email }) => ({
+  email
+}));
+
 // Sagas
 const myInfoSaga = createRequestSaga(MY_INFO, api.myInfo);
 const myInfoEditSaga = createRequestSaga(MY_INFO_EDIT, api.myInfoEdit);
 const accountDeleteSaga = createRequestSaga(ACCOUNT_DELETE, api.accountDelete);
+const findIdSaga = createRequestSaga(FIND_ID, api.findId);
 
 export function* accountSaga() {
   yield takeLatest(MY_INFO, myInfoSaga);
   yield takeLatest(MY_INFO_EDIT, myInfoEditSaga);
   yield takeLatest(ACCOUNT_DELETE, accountDeleteSaga);
+  yield takeLatest(FIND_ID, findIdSaga);
 }
 
 // reducer
@@ -70,7 +78,8 @@ const initialState = {
   },
   myInfo: reducerUtils.initial(),
   myInfoEditRes: reducerUtils.initial(),
-  accountDeleteRes: reducerUtils.initial()
+  accountDeleteRes: reducerUtils.initial(),
+  findIdRes: reducerUtils.initial()
 };
 
 export default handleActions(
@@ -118,6 +127,18 @@ export default handleActions(
     [ACCOUNT_DELETE_FAILURE]: (state, { payload: error }) => ({
       ...state,
       accountDeleteRes: reducerUtils.error(error)
+    }),
+    [FIND_ID]: state => ({
+      ...state,
+      findIdRes: reducerUtils.loading(state.findIdRes.data)
+    }),
+    [FIND_ID_SUCCESS]: (state, { payload: response }) => ({
+      ...state,
+      findIdRes: reducerUtils.success(response)
+    }),
+    [FIND_ID_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      findIdRes: reducerUtils.error(error)
     })
   },
   initialState
