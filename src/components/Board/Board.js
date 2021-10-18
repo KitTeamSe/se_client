@@ -24,7 +24,7 @@ import { postSearchTypeList } from '../../DataExport';
 import Tags from '../Post/Tags';
 import NicknameContainer from '../../containers/Post/NicknameContainer';
 import { MainWrapper } from '../Wrapper/Wrapper';
-import { getFormatDate, getFormatTime } from '../../utils/format';
+import { getTimeForToday } from '../../utils/format';
 
 const LoadingCircle = styled(CircularProgress)`
   position: absolute;
@@ -33,18 +33,13 @@ const LoadingCircle = styled(CircularProgress)`
 
 const NoneBorderCell = styled(TableCell)`
   border: none;
-  padding: 0;
+  font-size: 0.75rem;
+  padding: 6px 10px;
 `;
 
 const IconMargin = styled.span`
   display: inline-block;
   margin: 2px;
-`;
-
-const InfoBox = styled.div`
-  font-size: 0.75rem;
-  width: 8rem;
-  display: inline-block;
 `;
 
 const InfoIcon = styled(FontAwesomeIcon)`
@@ -65,7 +60,7 @@ const ReplyCountNumber = styled(PostNumber)`
   color: gray;
 `;
 
-const Title = styled(Link)`
+const PostTitleLink = styled(Link)`
   display: inline-block;
   width: 100%;
   font-size: 0.75rem;
@@ -131,6 +126,29 @@ const ButtonStyled = styled(Button)`
   border-radius: 100px;
 `;
 
+const NumberCol = styled.col`
+  width: 6%;
+  align: center;
+`;
+const TitleCol = styled.col`
+  width: 65%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+const NicknameCol = styled.col`
+  width: 15%;
+  align: center;
+  text-overflow: ellipsis;
+`;
+const DateCol = styled.col`
+  width: 8%;
+  align: center;
+`;
+const ViewsCountCol = styled.col`
+  width: 6%;
+  align: center;
+`;
+
 const Paginations = props => {
   const { res, boardPage, location } = props;
   const totalPage = res.postListItem.totalPages;
@@ -157,7 +175,7 @@ const Paginations = props => {
   );
 };
 
-const PostTitle = props => {
+const PostRow = props => {
   const { postInfo, boardNameEng, boardPage } = props;
   const {
     postId,
@@ -192,7 +210,7 @@ const PostTitle = props => {
         <PostNumber>{isNotice === 'NOTICE' ? '공지' : postId}</PostNumber>
       </NoneBorderCell>
       <NoneBorderCell>
-        <Title to={handleTitleLink}>
+        <PostTitleLink to={handleTitleLink}>
           {title}
           {isSecret === 'SECRET' && (
             <IconMargin>
@@ -201,20 +219,16 @@ const PostTitle = props => {
           )}
           {numReply ? <ReplyCountNumber> [{numReply}]</ReplyCountNumber> : null}
           <Tags tags={tags} />
-        </Title>
+        </PostTitleLink>
       </NoneBorderCell>
-      <NoneBorderCell nowrap="true" align="center">
+      <NoneBorderCell align="center">
         <NicknameContainer
           nickname={nickname}
           accountIdString={accountIdString}
         />
       </NoneBorderCell>
       <NoneBorderCell align="center">
-        <InfoBox>
-          <IconMargin>
-            {`${getFormatDate(createAt)} ${getFormatTime(createAt)}`}
-          </IconMargin>
-        </InfoBox>
+        {getTimeForToday(createAt)}
       </NoneBorderCell>
       <NoneBorderCell align="center">{views}</NoneBorderCell>
     </PostTableRow>
@@ -233,23 +247,7 @@ const NoPost = props => {
   );
 };
 
-const NumberCol = styled.col`
-  width: 6%;
-`;
-const TitleCol = styled.col`
-  width: 64%;
-`;
-const NicknameCol = styled.col`
-  width: 12%;
-`;
-const DateCol = styled.col`
-  width: 12%;
-`;
-const ViewsCountCol = styled.col`
-  width: 6%;
-`;
-
-const MainTable = props => {
+const PostListTable = props => {
   const { res, boardNameEng, boardPage, notice, keyword } = props;
   const tableColumns = ['번호', '제목', '글쓴이', '작성일', '조회'];
 
@@ -274,7 +272,7 @@ const MainTable = props => {
         </TableHead>
         <TableBody>
           {notice.postListItem.content.map(postInfo => (
-            <PostTitle
+            <PostRow
               key={postInfo.postId}
               postInfo={postInfo}
               boardNameEng={boardNameEng}
@@ -282,7 +280,7 @@ const MainTable = props => {
             />
           ))}
           {res.postListItem.content.map(postInfo => (
-            <PostTitle
+            <PostRow
               key={postInfo.postId}
               postInfo={postInfo}
               boardNameEng={boardNameEng}
@@ -397,16 +395,14 @@ const Board = props => {
         onSearchChange={onSearchChange}
         onWritePost={onWritePost}
       />
-      <MainTable
+      <PostListTable
         res={res}
         notice={notice}
         boardNameEng={boardNameEng}
         boardPage={boardPage}
         keyword={keyword}
       />
-      {res.postListItem.content.length === 0 ? (
-        <></>
-      ) : (
+      {res.postListItem.content.length === 0 ? null : (
         <Paginations
           res={res}
           boardNameEng={boardNameEng}

@@ -34,6 +34,9 @@ const ContentWrapper = styled.div`
   justify-content: space-between;
   width: ${({ theme }) => theme.size.tablet};
   @media ${({ theme }) => theme.sizeQuery.tablet} {
+    width: ${({ theme }) => theme.size.mobile};
+  }
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
     width: 100%;
   }
 `;
@@ -45,12 +48,6 @@ const NavigationWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  @media ${({ theme }) => theme.sizeQuery.tablet} {
-    margin-right: 15px;
-  }
-  @media ${({ theme }) => theme.sizeQuery.mobile} {
-    margin-right: 0;
-  }
 `;
 
 const Logo = styled(Link)`
@@ -62,11 +59,8 @@ const Logo = styled(Link)`
   font-size: 1.75rem;
   font-weight: 700;
   text-decoration: none;
-  color: #57bee1;
+  color: #000000;
   line-height: 78px;
-  @media ${({ theme }) => theme.sizeQuery.tablet} {
-    margin-left: 15px;
-  }
   @media ${({ theme }) => theme.sizeQuery.mobile} {
     margin-left: 30px;
     line-height: 60px;

@@ -9,10 +9,12 @@ export const MainWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   width: ${({ theme }) => theme.size.tablet};
-  @media ${({ theme }) => theme.sizeQuery.mobile} {
-    width: calc(100vw - 1rem);
+  @media ${({ theme }) => theme.sizeQuery.tablet} {
+    width: ${({ theme }) => theme.size.mobile};
     margin-top: 1rem;
-    padding: 0.5rem;
+  }
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    width: 100%;
   }
 `;
 

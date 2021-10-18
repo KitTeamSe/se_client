@@ -5,9 +5,15 @@
  * @returns {String} 날짜 및 시간
  */
 
-export const getFormatDate = createAt => {
+const getDateTime = createAt => {
   const newCreateAt = createAt.slice(0, 6);
+  newCreateAt[1] -= 1;
   const date = new Date(...newCreateAt);
+  return date;
+};
+
+export const getFormatDate = createAt => {
+  const date = getDateTime(createAt);
 
   const year = date.getFullYear();
   let month = 1 + date.getMonth();
@@ -18,8 +24,7 @@ export const getFormatDate = createAt => {
 };
 
 export const getFormatTime = createAt => {
-  const newCreateAt = createAt.slice(0, 6);
-  const date = new Date(...newCreateAt);
+  const date = getDateTime(createAt);
 
   const hour = date.getHours();
   let minute = date.getMinutes();
@@ -27,6 +32,31 @@ export const getFormatTime = createAt => {
   let second = date.getSeconds();
   second = second >= 10 ? second : `0${second}`;
   return `${hour}:${minute}:${second}`;
+};
+
+export const getTimeForToday = createAt => {
+  const NOW_TIME = 1;
+  const RECENT_TIME = 60;
+  const RECENT_HOUR = 24;
+  const RECENT_DAY = 7;
+
+  const today = new Date();
+  const timeValue = getDateTime(createAt);
+  const betweenTime = Math.floor(
+    (today.getTime() - timeValue.getTime()) / 1000 / 60
+  );
+
+  if (betweenTime < NOW_TIME) return '방금 전';
+  if (betweenTime < RECENT_TIME) return `${betweenTime} 분 전`;
+  console.log(betweenTime);
+
+  const betweenTimeHour = Math.floor(betweenTime / 60);
+  if (betweenTimeHour < RECENT_HOUR) return `${betweenTimeHour} 시간 전`;
+
+  const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
+  if (betweenTimeDay < RECENT_DAY) return `${betweenTimeDay} 일 전`;
+
+  return `${getFormatDate(createAt)}`;
 };
 
 /**
