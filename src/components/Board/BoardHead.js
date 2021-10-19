@@ -22,7 +22,7 @@ const BoardTitleWrapper = styled.div`
   }
 `;
 
-const BoardHeadRight = styled.div`
+const BoardWriteWrapper = styled.div`
   display: flex;
   align-items: center;
   @media ${({ theme }) => theme.sizeQuery.mobile} {
@@ -30,13 +30,17 @@ const BoardHeadRight = styled.div`
   }
 `;
 
-const SearchBarWrapper = styled.div`
+const SearchBarForm = styled.form`
   display: flex;
   margin: 8px 0;
   align-items: center;
   @media ${({ theme }) => theme.sizeQuery.mobile} {
     display: none;
   }
+`;
+
+const SearchField = styled(TextField)`
+  margin-right: 8px;
 `;
 
 const FormSelectField = styled(Select)`
@@ -55,7 +59,6 @@ const ButtonStyled = styled(Button)`
   line-height: 1.5;
   padding: 6px 12px;
   border-radius: 100px;
-  margin-left: 8px;
 `;
 
 const BoardHead = props => {
@@ -74,40 +77,39 @@ const BoardHead = props => {
       <BoardTitleWrapper>
         <BoardTitle>{boardDescription}</BoardTitle>
       </BoardTitleWrapper>
-      <BoardHeadRight>
-        <form onSubmit={onSearch}>
-          <SearchBarWrapper>
-            <FormSelectField
-              margin="dense"
-              value={postSearchType}
-              onChange={onPostSearchTypeChange}
-              variant="standard"
-            >
-              {postSearchTypeList.map(type => (
-                <MenuItem value={type.type} key={type.type}>
-                  {type.name}
-                </MenuItem>
-              ))}
-            </FormSelectField>
-            <TextField
-              id="text"
-              type="text"
-              size="small"
-              value={keyword}
-              label="검색"
-              onChange={onSearchChange}
-            />
-            <ButtonStyled
-              variant="contained"
-              startIcon={<FontAwesomeIcon icon={faSearch} size="sm" />}
-              size="small"
-              type="submit"
-            >
-              검색
-            </ButtonStyled>
-          </SearchBarWrapper>
-        </form>
 
+      <SearchBarForm onSubmit={onSearch}>
+        <FormSelectField
+          margin="dense"
+          value={postSearchType}
+          onChange={onPostSearchTypeChange}
+          variant="standard"
+        >
+          {postSearchTypeList.map(type => (
+            <MenuItem value={type.type} key={type.type}>
+              {type.name}
+            </MenuItem>
+          ))}
+        </FormSelectField>
+        <SearchField
+          id="text"
+          type="text"
+          size="small"
+          value={keyword}
+          label="검색"
+          onChange={onSearchChange}
+        />
+        <ButtonStyled
+          variant="contained"
+          startIcon={<FontAwesomeIcon icon={faSearch} size="sm" />}
+          size="small"
+          type="submit"
+        >
+          검색
+        </ButtonStyled>
+      </SearchBarForm>
+
+      <BoardWriteWrapper>
         <ButtonStyled
           variant="contained"
           size="small"
@@ -116,7 +118,7 @@ const BoardHead = props => {
         >
           글쓰기
         </ButtonStyled>
-      </BoardHeadRight>
+      </BoardWriteWrapper>
     </BoardHeadWrapper>
   );
 };
