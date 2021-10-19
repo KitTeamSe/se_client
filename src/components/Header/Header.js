@@ -17,6 +17,7 @@ const HeaderWraper = styled.header`
   z-index: 10;
   @media ${({ theme }) => theme.sizeQuery.mobile} {
     min-height: 60px;
+    box-shadow: none;
   }
 `;
 
@@ -62,7 +63,7 @@ const Logo = styled(Link)`
   color: #000000;
   line-height: 78px;
   @media ${({ theme }) => theme.sizeQuery.mobile} {
-    margin-left: 30px;
+    margin-left: 20px;
     line-height: 60px;
   }
 `;

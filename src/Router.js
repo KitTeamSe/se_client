@@ -15,6 +15,9 @@ import FeedbackContainer from './containers/Feedback/FeedbackContainer';
 
 const BodyContainer = styled.div`
   padding-top: 96px;
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    padding-top: 60px;
+  }
 `;
 
 const Routes = () => (

@@ -47,7 +47,9 @@ const BoardContainer = props => {
         setBoardDescription(myMenu.description);
       }
     }
+  }, [menuList]);
 
+  useEffect(() => {
     const params = {
       boardNameEng,
       direction: 'DESC',
