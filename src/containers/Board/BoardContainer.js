@@ -8,6 +8,7 @@ import {
   loadNoticepostList,
   searchPost
 } from '../../modules/board';
+import { isSelectOpen, isSelectClose } from '../../modules/styles';
 
 const BoardContainer = props => {
   const { location, match, history } = props;
@@ -130,6 +131,14 @@ const BoardContainer = props => {
     history.push(`/board/${match.params.boardNameEng}/write`);
   };
 
+  const onSelectOpen = () => {
+    dispatch(isSelectOpen());
+  };
+
+  const onSelectClose = () => {
+    dispatch(isSelectClose());
+  };
+
   return (
     <Board
       data={data}
@@ -148,6 +157,8 @@ const BoardContainer = props => {
       boardPage={boardPage}
       boardDescription={boardDescription}
       location={location}
+      onSelectOpen={onSelectOpen}
+      onSelectClose={onSelectClose}
     />
   );
 };

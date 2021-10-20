@@ -5,6 +5,7 @@ import { CircularProgress } from '@mui/material';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import LoginDialogContainer from '../../containers/LoginDialog/LoginDialogContainer';
+import { isMobile } from '../../utils/format';
 
 const HeaderWraper = styled.header`
   width: 100%;
@@ -33,6 +34,8 @@ const ContentWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding-right: ${props =>
+    props.isSelectOpen && !isMobile() ? '17px' : null};
   width: ${({ theme }) => theme.size.tablet};
   @media ${({ theme }) => theme.sizeQuery.tablet} {
     width: ${({ theme }) => theme.size.mobile};
@@ -315,13 +318,20 @@ const MobileMenu = props => {
 };
 
 const Header = props => {
-  const { data, loading, menuOpen, handleMenuOpen, handleMenuClose } = props;
+  const {
+    data,
+    loading,
+    menuOpen,
+    handleMenuOpen,
+    handleMenuClose,
+    isSelectOpen
+  } = props;
   if (data === null || loading) {
     return <LoadingCircle />;
   }
   return (
     <HeaderWraper>
-      <ContentWrapper>
+      <ContentWrapper isSelectOpen={isSelectOpen}>
         <NavWrapper>
           <Logo to="/board/freeboard">SE Board</Logo>
           <Menu data={data} />

@@ -48,7 +48,6 @@ export const getTimeForToday = createAt => {
 
   if (betweenTime < NOW_TIME) return '방금 전';
   if (betweenTime < RECENT_TIME) return `${betweenTime} 분 전`;
-  console.log(betweenTime);
 
   const betweenTimeHour = Math.floor(betweenTime / 60);
   if (betweenTimeHour < RECENT_HOUR) return `${betweenTimeHour} 시간 전`;
@@ -94,4 +93,17 @@ export const getEncodeHTML = text => {
     return html;
   }
   return text;
+};
+
+/**
+ * 기기 환경이 모바일인지 확인
+ *
+ * @param {}
+ * @returns {Boolean} 모바일이면 true, 아니면 false
+ */
+
+export const isMobile = () => {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
 };

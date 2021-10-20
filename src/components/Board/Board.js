@@ -78,7 +78,9 @@ const Board = props => {
     boardNameEng,
     boardPage,
     boardDescription,
-    location
+    location,
+    onSelectOpen,
+    onSelectClose
   } = props;
 
   if (error) {
@@ -109,6 +111,8 @@ const Board = props => {
         onSearch={onSearch}
         onSearchChange={onSearchChange}
         onWritePost={onWritePost}
+        onSelectOpen={onSelectOpen}
+        onSelectClose={onSelectClose}
       />
       <BoardTable
         res={res}

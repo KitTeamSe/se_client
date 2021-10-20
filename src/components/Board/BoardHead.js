@@ -69,7 +69,9 @@ const BoardHead = props => {
     onSearch,
     onSearchChange,
     onWritePost,
-    boardDescription
+    boardDescription,
+    onSelectOpen,
+    onSelectClose
   } = props;
 
   return (
@@ -84,6 +86,8 @@ const BoardHead = props => {
           value={postSearchType}
           onChange={onPostSearchTypeChange}
           variant="standard"
+          onOpen={onSelectOpen}
+          onClose={onSelectClose}
         >
           {postSearchTypeList.map(type => (
             <MenuItem value={type.type} key={type.type}>
