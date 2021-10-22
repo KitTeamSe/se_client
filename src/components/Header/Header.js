@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link, NavLink } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import LoginDialogContainer from '../../containers/LoginDialog/LoginDialogContainer';
 import { isMobile } from '../../utils/format';
@@ -190,11 +190,15 @@ const MenuButtonStyled = styled.button`
   border-radius: 50%;
   text-decoration: none;
   background: transparent;
+  justify-content: center;
+  align-items: center;
   @media ${({ theme }) => theme.sizeQuery.mobile} {
     display: flex;
-    justify-content: center;
-    align-items: center;
   }
+`;
+
+const SearchButtonStyled = styled(MenuButtonStyled)`
+  right: 58px;
 `;
 
 const Icon = styled(FontAwesomeIcon)`
@@ -208,6 +212,18 @@ const MenuButton = props => {
     <MenuButtonStyled onClick={menuOpen ? handleMenuClose : handleMenuOpen}>
       <Icon icon={faBars} size="lg" />
     </MenuButtonStyled>
+  );
+};
+
+const SearchButton = props => {
+  const { searchOpen, handleSearchOpen, handleSearchClose } = props;
+
+  return (
+    <SearchButtonStyled
+      onClick={searchOpen ? handleSearchClose : handleSearchOpen}
+    >
+      <Icon icon={faSearch} size="lg" />
+    </SearchButtonStyled>
   );
 };
 
@@ -341,6 +357,7 @@ const Header = props => {
           <LoginDialogContainer />
         </NavigationWrapper>
       </ContentWrapper>
+      <SearchButton />
       <MenuButton
         menuOpen={menuOpen}
         handleMenuOpen={handleMenuOpen}
