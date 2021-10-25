@@ -1,4 +1,4 @@
-import { Dialog, DialogContent } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import styled from 'styled-components';
 import React from 'react';
 import BoardSearch from '../Board/BoardSearch';
@@ -6,13 +6,15 @@ import BoardSearch from '../Board/BoardSearch';
 const DialogContentStyled = styled(DialogContent)`
   display: flex;
   flex-direction: row;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
 `;
 
 const SearchDialog = props => {
   const { open, handleClose } = props;
   return (
     <Dialog open={open} onClose={handleClose}>
+      <DialogTitle>검색</DialogTitle>
       <DialogContentStyled>
         <BoardSearch />
       </DialogContentStyled>

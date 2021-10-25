@@ -5,14 +5,21 @@ import { TextField, Select, MenuItem, Button } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { postSearchTypeList } from '../../DataExport';
 
-const SearchField = styled(TextField)`
-  margin-right: 8px;
-`;
-
 const FormSelectField = styled(Select)`
   margin-right: 8px;
   width: auto;
   height: 2rem;
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    margin-right: 0px;
+  }
+`;
+
+const SearchField = styled(TextField)`
+  margin-right: 8px;
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    margin-top: 8px;
+    margin-right: 0px;
+  }
 `;
 
 const ButtonStyled = styled(Button)`
@@ -20,6 +27,9 @@ const ButtonStyled = styled(Button)`
   line-height: 1.5;
   padding: 6px 12px;
   border-radius: 100px;
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    margin-top: 8px;
+  }
 `;
 
 const BoardSearch = props => {
