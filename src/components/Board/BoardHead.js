@@ -1,34 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { faEdit, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { TextField, Select, MenuItem, Button } from '@mui/material';
-import { postSearchTypeList } from '../../DataExport';
-
-const BoardHeadWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  @media ${({ theme }) => theme.sizeQuery.mobile} {
-    margin: 10px;
-  }
-`;
-
-const BoardTitleWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  @media ${({ theme }) => theme.sizeQuery.mobile} {
-    margin-left: 10px;
-  }
-`;
-
-const BoardWriteWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  @media ${({ theme }) => theme.sizeQuery.mobile} {
-    margin-right: 10px;
-  }
-`;
+import { Button } from '@mui/material';
+import BoardSearch from './BoardSearch';
 
 const SearchBarForm = styled.form`
   display: flex;
@@ -39,14 +15,35 @@ const SearchBarForm = styled.form`
   }
 `;
 
-const SearchField = styled(TextField)`
-  margin-right: 8px;
+const BoardHeadWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    margin: 16px;
+  }
 `;
 
-const FormSelectField = styled(Select)`
-  margin-right: 8px;
-  width: auto;
-  height: 2rem;
+const BoardTitleWrapper = styled.div`
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    margin-left: 16px;
+  }
+`;
+
+const BoardWriteWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    margin-right: 16px;
+  }
+`;
+
+const BoardTiteLink = styled(Link)`
+  text-decoration: none;
+  color: #000;
 `;
 
 const BoardTitle = styled.h1`
@@ -63,6 +60,7 @@ const ButtonStyled = styled(Button)`
 
 const BoardHead = props => {
   const {
+    boardNameEng,
     postSearchType,
     onPostSearchTypeChange,
     keyword,
@@ -77,40 +75,20 @@ const BoardHead = props => {
   return (
     <BoardHeadWrapper>
       <BoardTitleWrapper>
-        <BoardTitle>{boardDescription}</BoardTitle>
+        <BoardTitle>
+          <BoardTiteLink to={boardNameEng}>{boardDescription}</BoardTiteLink>
+        </BoardTitle>
       </BoardTitleWrapper>
 
       <SearchBarForm onSubmit={onSearch}>
-        <FormSelectField
-          margin="dense"
-          value={postSearchType}
-          onChange={onPostSearchTypeChange}
-          variant="standard"
-          onOpen={onSelectOpen}
-          onClose={onSelectClose}
-        >
-          {postSearchTypeList.map(type => (
-            <MenuItem value={type.type} key={type.type}>
-              {type.name}
-            </MenuItem>
-          ))}
-        </FormSelectField>
-        <SearchField
-          id="text"
-          type="text"
-          size="small"
-          value={keyword}
-          label="검색"
-          onChange={onSearchChange}
+        <BoardSearch
+          postSearchType={postSearchType}
+          onPostSearchTypeChange={onPostSearchTypeChange}
+          keyword={keyword}
+          onSearchChange={onSearchChange}
+          onSelectOpen={onSelectOpen}
+          onSelectClose={onSelectClose}
         />
-        <ButtonStyled
-          variant="contained"
-          startIcon={<FontAwesomeIcon icon={faSearch} size="sm" />}
-          size="small"
-          type="submit"
-        >
-          검색
-        </ButtonStyled>
       </SearchBarForm>
 
       <BoardWriteWrapper>

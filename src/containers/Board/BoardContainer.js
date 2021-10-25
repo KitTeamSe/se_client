@@ -8,7 +8,7 @@ import {
   loadNoticepostList,
   searchPost
 } from '../../modules/board';
-import { isSelectOpen, isSelectClose } from '../../modules/styles';
+import { isPopoverOpen, isPopoverClose } from '../../modules/styles';
 
 const BoardContainer = props => {
   const { location, match, history } = props;
@@ -132,11 +132,11 @@ const BoardContainer = props => {
   };
 
   const onSelectOpen = () => {
-    dispatch(isSelectOpen());
+    dispatch(isPopoverOpen());
   };
 
   const onSelectClose = () => {
-    dispatch(isSelectClose());
+    dispatch(isPopoverClose());
   };
 
   return (

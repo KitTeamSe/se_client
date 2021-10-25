@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 export const MainWrapper = styled.div`
   margin: auto;
-  margin-top: 1rem;
   margin-bottom: 2rem;
   max-width: 100%;
   display: flex;

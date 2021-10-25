@@ -104,6 +104,7 @@ const Board = props => {
   return (
     <MainWrapper>
       <BoardHead
+        boardNameEng={boardNameEng}
         boardDescription={boardDescription}
         postSearchType={postSearchType}
         onPostSearchTypeChange={onPostSearchTypeChange}

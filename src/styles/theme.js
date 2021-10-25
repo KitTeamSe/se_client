@@ -4,8 +4,8 @@ const width = {
 };
 
 const size = {
-  mobile: `${width.mobile}px`,
-  tablet: `${width.tablet}px`
+  mobile: `${width.mobile - 32}px`,
+  tablet: `${width.tablet - 24}px`
 };
 
 /*

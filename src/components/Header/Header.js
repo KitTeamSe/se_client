@@ -6,19 +6,21 @@ import { faBars, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import LoginDialogContainer from '../../containers/LoginDialog/LoginDialogContainer';
 import { isMobile } from '../../utils/format';
+import SearchDialog from './SearchDialog';
 
 const HeaderWraper = styled.header`
-  width: 100%;
+  width: 100vw;
   min-height: 80px;
   position: fixed;
   display: flex;
   justify-content: center;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 4px 12px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 2px 6px;
   background-color: white;
   z-index: 10;
   @media ${({ theme }) => theme.sizeQuery.mobile} {
     min-height: 60px;
     box-shadow: none;
+    width: 100%;
   }
 `;
 
@@ -35,7 +37,7 @@ const ContentWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   padding-right: ${props =>
-    props.isSelectOpen && !isMobile() ? '17px' : null};
+    props.isPopoverOpen && !isMobile() ? '17px' : null};
   width: ${({ theme }) => theme.size.tablet};
   @media ${({ theme }) => theme.sizeQuery.tablet} {
     width: ${({ theme }) => theme.size.mobile};
@@ -66,7 +68,7 @@ const Logo = styled(Link)`
   color: #000000;
   line-height: 78px;
   @media ${({ theme }) => theme.sizeQuery.mobile} {
-    margin-left: 20px;
+    margin-left: 16px;
     line-height: 60px;
   }
 `;
@@ -85,12 +87,6 @@ const MenuUl = styled.ul`
     padding: 0;
     border-top: 1px rgba(0, 0, 0, 0.1) solid;
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 10%);
-  }
-`;
-
-const ChildMenuUl = styled(MenuUl)`
-  @media ${({ theme }) => theme.sizeQuery.mobile} {
-    border-top: none;
   }
 `;
 
@@ -164,9 +160,9 @@ const MoblieList = styled.li`
 `;
 
 const AccountList = styled(MoblieList)`
-  display: none;
   @media ${({ theme }) => theme.sizeQuery.mobile} {
     display: flex;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 2px 6px;
   }
 `;
 
@@ -250,7 +246,7 @@ const ChildMobileMenu = props => {
   const { data, open } = props;
   return (
     open && (
-      <ChildMenuUl>
+      <MenuUl>
         {data.map(menu => (
           <MoblieList key={menu.boardId}>
             {menu.menuType === 'BOARD' && (
@@ -267,7 +263,7 @@ const ChildMobileMenu = props => {
             )}
           </MoblieList>
         ))}
-      </ChildMenuUl>
+      </MenuUl>
     )
   );
 };
@@ -338,32 +334,44 @@ const Header = props => {
     data,
     loading,
     menuOpen,
+    searchOpen,
     handleMenuOpen,
     handleMenuClose,
-    isSelectOpen
+    handleSearchOpen,
+    handleSearchClose,
+    isPopoverOpen
   } = props;
   if (data === null || loading) {
     return <LoadingCircle />;
   }
+
   return (
-    <HeaderWraper>
-      <ContentWrapper isSelectOpen={isSelectOpen}>
-        <NavWrapper>
-          <Logo to="/board/freeboard">SE Board</Logo>
-          <Menu data={data} />
-          {menuOpen && <MobileMenu data={data} />}
-        </NavWrapper>
-        <NavigationWrapper>
-          <LoginDialogContainer />
-        </NavigationWrapper>
-      </ContentWrapper>
-      <SearchButton />
-      <MenuButton
-        menuOpen={menuOpen}
-        handleMenuOpen={handleMenuOpen}
-        handleMenuClose={handleMenuClose}
-      />
-    </HeaderWraper>
+    <>
+      <HeaderWraper>
+        <ContentWrapper isPopoverOpen={isPopoverOpen}>
+          <NavWrapper>
+            <Logo to="/board/freeboard">SE Board</Logo>
+            <Menu data={data} />
+            {menuOpen && <MobileMenu data={data} />}
+          </NavWrapper>
+          <NavigationWrapper>
+            <LoginDialogContainer />
+          </NavigationWrapper>
+        </ContentWrapper>
+
+        <SearchButton
+          searchOpen={searchOpen}
+          handleSearchOpen={handleSearchOpen}
+          handleSearchClose={handleSearchClose}
+        />
+        <MenuButton
+          menuOpen={menuOpen}
+          handleMenuOpen={handleMenuOpen}
+          handleMenuClose={handleMenuClose}
+        />
+      </HeaderWraper>
+      <SearchDialog open={searchOpen} handleClose={handleSearchClose} />
+    </>
   );
 };
 

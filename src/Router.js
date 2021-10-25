@@ -13,7 +13,7 @@ import PostPage from './pages/PostPage';
 import BoardPage from './pages/BoardPage';
 import FeedbackContainer from './containers/Feedback/FeedbackContainer';
 
-const BodyContainer = styled.div`
+const BodyWrapper = styled.div`
   padding-top: 96px;
   @media ${({ theme }) => theme.sizeQuery.mobile} {
     padding-top: 60px;
@@ -23,7 +23,7 @@ const BodyContainer = styled.div`
 const Routes = () => (
   <>
     <HeaderContainer />
-    <BodyContainer>
+    <BodyWrapper>
       <Switch>
         <Route exact path="/profile/:userId" component={ProfilePage} />
         <Route exact path="/signup" component={SignupPageContainer} />
@@ -50,7 +50,7 @@ const Routes = () => (
           <Redirect to="/board/freeboard" />
         </Route>
       </Switch>
-    </BodyContainer>
+    </BodyWrapper>
     <FeedbackContainer />
   </>
 );
