@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import BoardContainer from '../containers/Board/BoardContainer';
+import BoardHeadContainer from '../containers/Board/BoardHeadContainer';
+import BoardPaginationContainer from '../containers/Board/BoardPaginationContainer';
+import BoardPostListContainer from '../containers/Board/BoardPostListContainer';
 import PostContainer from '../containers/Post/PostContainer';
 
 const MainWrapper = styled.div`
@@ -26,7 +28,9 @@ const PostPage = () => {
         <PostContainer />
       </MainWrapper>
       <MainWrapper>
-        <BoardContainer />
+        <BoardHeadContainer />
+        <BoardPostListContainer />
+        <BoardPaginationContainer />
       </MainWrapper>
     </>
   );

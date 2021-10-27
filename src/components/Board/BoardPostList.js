@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  CircularProgress,
   Table,
   TableHead,
   TableBody,
@@ -15,6 +16,19 @@ import {
 import Tags from '../Post/Tags';
 import NicknameContainer from '../../containers/Post/NicknameContainer';
 import { getTimeForToday } from '../../utils/format';
+
+const LoadingCircle = styled(CircularProgress)`
+  position: absolute;
+  bottom: 50vh;
+`;
+
+const NoBoardBox = styled.div`
+  width: 100%;
+  height: 100%;
+  font-size: 2rem;
+  text-align: center;
+  margin: 96px 0 96px 0;
+`;
 
 const NoneBorderCell = styled(TableCell)`
   border: none;
@@ -39,7 +53,7 @@ const InfoIcon = styled(FontAwesomeIcon)`
 
 const PostTableRow = styled(TableRow)`
   border-bottom: 1px solid #ddd;
-  background-color: #${props => props.bgcolor};
+  background-color: #${props => (props.isNotice === 'NOTICE' ? 'eeeeee' : 'ffffff')};
 `;
 
 const ReplyCountNumber = styled.span`
@@ -78,6 +92,11 @@ const ViewsCountCol = styled.col`
   width: 6%;
 `;
 
+const ErrorBoard = props => {
+  const { error } = props;
+  return <NoBoardBox>{error.message}</NoBoardBox>;
+};
+
 const PostRow = props => {
   const { postInfo, boardNameEng, boardPage } = props;
   const {
@@ -93,13 +112,6 @@ const PostRow = props => {
     isNotice
   } = postInfo;
 
-  const backgroundColor = () => {
-    if (isNotice === 'NOTICE') {
-      return 'eeeeee';
-    }
-    return 'ffffff';
-  };
-
   const handleTitleLink = () => {
     if (isSecret === 'NORMAL') {
       return `/board/${boardNameEng}/${postId}?page=${boardPage}`;
@@ -108,7 +120,7 @@ const PostRow = props => {
   };
 
   return (
-    <PostTableRow hover bgcolor={backgroundColor}>
+    <PostTableRow hover isNotice={isNotice}>
       <NoneBorderCell nowrap="true">
         {isNotice === 'NOTICE' ? '공지' : postId}
       </NoneBorderCell>
@@ -138,9 +150,36 @@ const PostRow = props => {
   );
 };
 
-const BoardTable = props => {
-  const { res, boardNameEng, boardPage, notice } = props;
+const BoardPostList = props => {
+  const {
+    postData,
+    postLoading,
+    postError,
+    noticeData,
+    noticeLoading,
+    noticeError,
+    boardNameEng,
+    boardPage
+  } = props;
+
   const tableColumns = ['번호', '제목', '글쓴이', '작성일', '조회'];
+
+  if (postError) {
+    return <ErrorBoard error={postError} />;
+  }
+
+  if (noticeError) {
+    return <ErrorBoard error={noticeError} />;
+  }
+
+  if (
+    postData === null ||
+    noticeData === null ||
+    postLoading ||
+    noticeLoading
+  ) {
+    return <LoadingCircle />;
+  }
 
   return (
     <TableContainer component={Paper}>
@@ -162,7 +201,7 @@ const BoardTable = props => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {notice.postListItem.content.map(postInfo => (
+          {noticeData.data.postListItem.content.map(postInfo => (
             <PostRow
               key={postInfo.postId}
               postInfo={postInfo}
@@ -170,7 +209,7 @@ const BoardTable = props => {
               boardPage={boardPage}
             />
           ))}
-          {res.postListItem.content.map(postInfo => (
+          {postData.data.postListItem.content.map(postInfo => (
             <PostRow
               key={postInfo.postId}
               postInfo={postInfo}
@@ -184,4 +223,4 @@ const BoardTable = props => {
   );
 };
 
-export default BoardTable;
+export default BoardPostList;

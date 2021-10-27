@@ -18,6 +18,7 @@ const BoardContainer = props => {
   const [boardPage, setBoardPage] = useState(1);
   const [boardDescription, setBoardDescription] = useState('');
   const [postSearchType, setPostSearchType] = useState('TITLE_TEXT');
+  const pageSize = 20;
   const {
     data,
     loading,
@@ -38,7 +39,6 @@ const BoardContainer = props => {
     signin: auth.auth.data
   }));
 
-  const pageSize = 20;
   const { boardNameEng } = match.params;
 
   useEffect(() => {

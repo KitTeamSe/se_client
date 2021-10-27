@@ -76,7 +76,9 @@ const BoardHead = props => {
     <BoardHeadWrapper>
       <BoardTitleWrapper>
         <BoardTitle>
-          <BoardTiteLink to={boardNameEng}>{boardDescription}</BoardTiteLink>
+          <BoardTiteLink to={`/board/${boardNameEng}`}>
+            {boardDescription}
+          </BoardTiteLink>
         </BoardTitle>
       </BoardTitleWrapper>
 
