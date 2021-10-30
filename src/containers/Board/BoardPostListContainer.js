@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { loadNormalpostList, loadNoticepostList } from '../../modules/board';
 import BoardPostList from '../../components/Board/BoardPostList';
+import BoardMobilePostList from '../../components/Board/BoardMobilePostList';
 
 const BoardPostListContainer = props => {
   const { location, match } = props;
@@ -73,17 +74,34 @@ const BoardPostListContainer = props => {
     setBoardPage(page);
   }, [signin, match.params.boardNameEng, location.search]);
 
+  const handlePostLink = (postId, isSecret) => {
+    if (isSecret === 'NORMAL') {
+      return `/board/${boardNameEng}/${postId}?page=${boardPage}`;
+    }
+    return `/board/${boardNameEng}/${postId}?secret=true&page=${boardPage}`;
+  };
+
   return (
-    <BoardPostList
-      postData={postData}
-      postLoading={postLoading}
-      postError={postError}
-      noticeData={noticeData}
-      noticeLoading={noticeLoading}
-      noticeError={noticeError}
-      boardNameEng={boardNameEng}
-      boardPage={boardPage}
-    />
+    <>
+      <BoardPostList
+        postData={postData}
+        postLoading={postLoading}
+        postError={postError}
+        noticeData={noticeData}
+        noticeLoading={noticeLoading}
+        noticeError={noticeError}
+        handlePostLink={handlePostLink}
+      />
+      <BoardMobilePostList
+        postData={postData}
+        postLoading={postLoading}
+        postError={postError}
+        noticeData={noticeData}
+        noticeLoading={noticeLoading}
+        noticeError={noticeError}
+        handlePostLink={handlePostLink}
+      />
+    </>
   );
 };
 

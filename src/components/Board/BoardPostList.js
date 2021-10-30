@@ -17,6 +17,12 @@ import Tags from '../Post/Tags';
 import NicknameContainer from '../../containers/Post/NicknameContainer';
 import { getTimeForToday } from '../../utils/format';
 
+const TableWrapper = styled(TableContainer)`
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    display: none;
+  }
+`;
+
 const LoadingCircle = styled(CircularProgress)`
   position: absolute;
   bottom: 50vh;
@@ -98,7 +104,7 @@ const ErrorBoard = props => {
 };
 
 const PostRow = props => {
-  const { postInfo, boardNameEng, boardPage } = props;
+  const { postInfo, handlePostLink } = props;
   const {
     postId,
     title,
@@ -112,12 +118,7 @@ const PostRow = props => {
     isNotice
   } = postInfo;
 
-  const handleTitleLink = () => {
-    if (isSecret === 'NORMAL') {
-      return `/board/${boardNameEng}/${postId}?page=${boardPage}`;
-    }
-    return `/board/${boardNameEng}/${postId}?secret=true&page=${boardPage}`;
-  };
+  const handleLink = () => handlePostLink(postId, isSecret);
 
   return (
     <PostTableRow hover isNotice={isNotice}>
@@ -125,7 +126,7 @@ const PostRow = props => {
         {isNotice === 'NOTICE' ? '공지' : postId}
       </NoneBorderCell>
       <NoneBorderTitleCell>
-        <PostTitleLink to={handleTitleLink}>
+        <PostTitleLink to={handleLink}>
           {title}
           {isSecret === 'SECRET' && (
             <IconMargin>
@@ -158,8 +159,7 @@ const BoardPostList = props => {
     noticeData,
     noticeLoading,
     noticeError,
-    boardNameEng,
-    boardPage
+    handlePostLink
   } = props;
 
   const tableColumns = ['번호', '제목', '글쓴이', '작성일', '조회'];
@@ -182,7 +182,7 @@ const BoardPostList = props => {
   }
 
   return (
-    <TableContainer component={Paper}>
+    <TableWrapper component={Paper}>
       <Table size="small">
         <colgroup>
           <NumberCol />
@@ -205,21 +205,19 @@ const BoardPostList = props => {
             <PostRow
               key={postInfo.postId}
               postInfo={postInfo}
-              boardNameEng={boardNameEng}
-              boardPage={boardPage}
+              handlePostLink={handlePostLink}
             />
           ))}
           {postData.data.postListItem.content.map(postInfo => (
             <PostRow
               key={postInfo.postId}
               postInfo={postInfo}
-              boardNameEng={boardNameEng}
-              boardPage={boardPage}
+              handlePostLink={handlePostLink}
             />
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
+    </TableWrapper>
   );
 };
 
