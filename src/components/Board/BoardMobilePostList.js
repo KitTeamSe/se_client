@@ -41,7 +41,27 @@ const PostLink = styled(Link)`
 
 const ReplyCountNumber = styled.span`
   color: gray;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+`;
+
+const ListStyled = styled(List)`
+  padding: 0;
+`;
+
+const ListItemStyled = styled(ListItem)`
+  padding: 2px 8px;
+`;
+
+const ListItemTextStyled = styled(ListItemText)`
+  & .MuiListItemText-primary {
+    font-size: 0.875rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  & .MuiListItemText-secondary {
+    font-size: 0.75rem;
+  }
 `;
 
 const ListSubItem = styled.span`
@@ -72,8 +92,8 @@ const PostListItem = props => {
 
   return (
     <PostLink to={handleLink}>
-      <ListItem>
-        <ListItemText
+      <ListItemStyled>
+        <ListItemTextStyled
           primary={
             <>
               {isNotice === 'NOTICE' ? '[공지]' : ''} {title}
@@ -90,7 +110,7 @@ const PostListItem = props => {
             </>
           }
         />
-      </ListItem>
+      </ListItemStyled>
     </PostLink>
   );
 };
@@ -99,7 +119,7 @@ const PostList = props => {
   const { postData, noticeData, handlePostLink } = props;
   return (
     <Card variant="outlined">
-      <List>
+      <ListStyled>
         {noticeData.data.postListItem.content.map((postInfo, idx) => (
           <>
             {idx !== 0 && <Divider />}
@@ -120,7 +140,7 @@ const PostList = props => {
             />
           </>
         ))}
-      </List>
+      </ListStyled>
     </Card>
   );
 };
