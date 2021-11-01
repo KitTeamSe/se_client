@@ -6,10 +6,10 @@ import { faBars, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import LoginDialogContainer from '../../containers/LoginDialog/LoginDialogContainer';
 import { isMobile } from '../../utils/format';
-import SearchDialog from './SearchDialog';
+import BoardSearchDialog from './BoardSearchDialog';
 
 const HeaderWraper = styled.header`
-  width: 100vw;
+  width: 100%;
   min-height: 80px;
   position: fixed;
   display: flex;
@@ -370,7 +370,7 @@ const Header = props => {
           handleMenuClose={handleMenuClose}
         />
       </HeaderWraper>
-      <SearchDialog open={searchOpen} handleClose={handleSearchClose} />
+      <BoardSearchDialog open={searchOpen} handleClose={handleSearchClose} />
     </>
   );
 };

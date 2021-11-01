@@ -10,7 +10,7 @@ const DialogContentStyled = styled(DialogContent)`
   align-items: stretch;
 `;
 
-const SearchDialog = props => {
+const BoardSearchDialog = props => {
   const { open, handleClose } = props;
   return (
     <Dialog open={open} onClose={handleClose}>
@@ -22,4 +22,4 @@ const SearchDialog = props => {
   );
 };
 
-export default SearchDialog;
+export default BoardSearchDialog;
