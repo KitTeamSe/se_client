@@ -8,8 +8,8 @@ import BoardSearch from './BoardSearch';
 
 const SearchBarForm = styled.form`
   display: flex;
-  margin: 8px 0;
   align-items: center;
+  margin: 8px 0;
   @media ${({ theme }) => theme.sizeQuery.mobile} {
     display: none;
   }

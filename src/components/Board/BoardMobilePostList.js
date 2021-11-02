@@ -9,6 +9,8 @@ import {
   Divider,
   CircularProgress
 } from '@mui/material';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getTimeForToday } from '../../utils/format';
 
 const PostListWrapper = styled.div`
@@ -39,9 +41,21 @@ const PostLink = styled(Link)`
   color: black;
 `;
 
-const ReplyCountNumber = styled.span`
-  color: gray;
+const NoticeSpan = styled.span`
+  background: #1976d2;
+  color: #fff;
   font-size: 0.75rem;
+  padding: 0 5px;
+  border-radius: 10px;
+`;
+
+const ReplyCountNumber = styled.span`
+  color: #808080;
+  font-size: 0.75rem;
+`;
+
+const ListCard = styled(Card)`
+  border-radius: 0;
 `;
 
 const ListStyled = styled(List)`
@@ -49,15 +63,15 @@ const ListStyled = styled(List)`
 `;
 
 const ListItemStyled = styled(ListItem)`
-  padding: 2px 8px;
+  padding: 0 8px;
+  background-color: ${props =>
+    props.isNotice === 'NOTICE' ? '#e0e0e0' : '#ffffff'};
 `;
 
 const ListItemTextStyled = styled(ListItemText)`
   & .MuiListItemText-primary {
     font-size: 0.875rem;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
+    ${({ theme }) => theme.common.textEllipsis}
   }
   & .MuiListItemText-secondary {
     font-size: 0.75rem;
@@ -65,7 +79,21 @@ const ListItemTextStyled = styled(ListItemText)`
 `;
 
 const ListSubItem = styled.span`
-  padding-right: 5px;
+  line-height: 1.75;
+`;
+
+const ListNicknameItem = styled(ListSubItem)`
+  padding-right: 3px;
+  color: #000000;
+`;
+
+const ListUserIconItem = styled(ListSubItem)`
+  padding-right: 3px;
+`;
+
+const ListPostInfoItem = styled(ListSubItem)`
+  padding-left: 3px;
+  padding-right: 3px;
 `;
 
 const ErrorBoard = props => {
@@ -84,7 +112,7 @@ const PostListItem = props => {
     views,
     // tags,
     createAt,
-    // accountIdString,
+    accountIdString,
     isNotice
   } = postInfo;
 
@@ -92,11 +120,12 @@ const PostListItem = props => {
 
   return (
     <PostLink to={handleLink}>
-      <ListItemStyled>
+      <ListItemStyled isNotice={isNotice}>
         <ListItemTextStyled
           primary={
             <>
-              {isNotice === 'NOTICE' ? '[공지]' : ''} {title}
+              {isNotice === 'NOTICE' ? <NoticeSpan>공지</NoticeSpan> : null}
+              {` ${title}`}
               {numReply ? (
                 <ReplyCountNumber> {`[${numReply}]`}</ReplyCountNumber>
               ) : null}
@@ -104,9 +133,14 @@ const PostListItem = props => {
           }
           secondary={
             <>
-              <ListSubItem>{nickname}</ListSubItem>
-              <ListSubItem>{getTimeForToday(createAt)}</ListSubItem>
-              <ListSubItem>조회수 {views}</ListSubItem>
+              <ListUserIconItem>
+                {accountIdString ? (
+                  <FontAwesomeIcon icon={faUserCircle} />
+                ) : null}
+              </ListUserIconItem>
+              <ListNicknameItem>{nickname}</ListNicknameItem>
+              <ListPostInfoItem>{getTimeForToday(createAt)}</ListPostInfoItem>
+              <ListPostInfoItem>조회수 {views}</ListPostInfoItem>
             </>
           }
         />
@@ -118,7 +152,7 @@ const PostListItem = props => {
 const PostList = props => {
   const { postData, noticeData, handlePostLink } = props;
   return (
-    <Card variant="outlined">
+    <ListCard variant="outlined">
       <ListStyled>
         {noticeData.data.postListItem.content.map((postInfo, idx) => (
           <>
@@ -141,7 +175,7 @@ const PostList = props => {
           </>
         ))}
       </ListStyled>
-    </Card>
+    </ListCard>
   );
 };
 

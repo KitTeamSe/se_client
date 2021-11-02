@@ -7,7 +7,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { StyledEngineProvider } from '@mui/material/styles';
 import { ThemeProvider } from 'styled-components';
 import createSagaMiddleware from 'redux-saga';
-import './styles/reset.css';
 import App from './App';
 import rootReducer, { rootSaga } from './modules';
 import theme from './styles/theme';

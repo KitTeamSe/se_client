@@ -70,11 +70,11 @@ const PostTitleLink = styled(Link)`
   display: inline-block;
   width: 100%;
   font-size: 0.75rem;
-  text-overflow: ellipsis;
   vertical-align: middle;
   color: black;
   text-decoration: none;
   cursor: pointer;
+  ${({ theme }) => theme.common.textEllipsis}
 `;
 
 /**
