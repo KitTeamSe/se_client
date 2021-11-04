@@ -65,7 +65,7 @@ const ListStyled = styled(List)`
 const ListItemStyled = styled(ListItem)`
   padding: 0 8px;
   background-color: ${props =>
-    props.isNotice === 'NOTICE' ? '#e0e0e0' : '#ffffff'};
+    props.isNotice === 'NOTICE' ? '#f2f2f2' : '#ffffff'};
 `;
 
 const ListItemTextStyled = styled(ListItemText)`
