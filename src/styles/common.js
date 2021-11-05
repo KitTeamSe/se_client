@@ -4,4 +4,10 @@ const textEllipsis = `
     white-space: nowrap;
 `;
 
-export default { textEllipsis };
+const flexCenter = `
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+export default { textEllipsis, flexCenter };

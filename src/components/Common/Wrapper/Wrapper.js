@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 
 export const MainWrapper = styled.div`
@@ -18,4 +19,9 @@ export const MainWrapper = styled.div`
   }
 `;
 
-export default null;
+const Wrapper = props => {
+  const { pages } = props;
+  return <MainWrapper>{pages}</MainWrapper>;
+};
+
+export default Wrapper;

@@ -15,7 +15,7 @@ const HeaderWraper = styled.header`
   display: flex;
   justify-content: center;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 2px 6px;
-  background-color: white;
+  background: ${({ theme }) => theme.themeColor.bgColor};
   z-index: 10;
   @media ${({ theme }) => theme.sizeQuery.mobile} {
     min-height: 60px;
@@ -24,15 +24,7 @@ const HeaderWraper = styled.header`
   }
 `;
 
-const NavWrapper = styled.nav`
-  display: flex;
-  flex-wrap: wrap;
-  @media ${({ theme }) => theme.sizeQuery.mobile} {
-    width: 100%;
-  }
-`;
-
-const ContentWrapper = styled.div`
+const NavigationWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -47,7 +39,15 @@ const ContentWrapper = styled.div`
   }
 `;
 
-const NavigationWrapper = styled.div`
+const LeftNavWrapper = styled.nav`
+  display: flex;
+  flex-wrap: wrap;
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    width: 100%;
+  }
+`;
+
+const RightNavWrapper = styled.div`
   width: auto;
   display: flex;
   align-items: center;
@@ -65,7 +65,7 @@ const Logo = styled(Link)`
   font-size: 1.75rem;
   font-weight: 700;
   text-decoration: none;
-  color: #000000;
+  color: ${({ theme }) => theme.themeColor.mainColor};
   line-height: 78px;
   @media ${({ theme }) => theme.sizeQuery.mobile} {
     margin-left: 16px;
@@ -201,28 +201,6 @@ const Icon = styled(FontAwesomeIcon)`
   font-size: 20px;
 `;
 
-const MenuButton = props => {
-  const { menuOpen, handleMenuOpen, handleMenuClose } = props;
-
-  return (
-    <MenuButtonStyled onClick={menuOpen ? handleMenuClose : handleMenuOpen}>
-      <Icon icon={faBars} size="lg" />
-    </MenuButtonStyled>
-  );
-};
-
-const SearchButton = props => {
-  const { searchOpen, handleSearchOpen, handleSearchClose } = props;
-
-  return (
-    <SearchButtonStyled
-      onClick={searchOpen ? handleSearchClose : handleSearchOpen}
-    >
-      <Icon icon={faSearch} size="lg" />
-    </SearchButtonStyled>
-  );
-};
-
 const Menu = props => {
   const { data } = props;
 
@@ -244,6 +222,7 @@ const Menu = props => {
 
 const ChildMobileMenu = props => {
   const { data, open } = props;
+
   return (
     open && (
       <MenuUl>
@@ -341,6 +320,12 @@ const Header = props => {
     handleSearchClose,
     isPopoverOpen
   } = props;
+
+  const handleMobileMenuOpen = () =>
+    menuOpen ? handleMenuClose() : handleMenuOpen();
+  const handleMobileSearchOpen = () =>
+    searchOpen ? handleSearchClose() : handleSearchOpen();
+
   if (data === null || loading) {
     return <LoadingCircle />;
   }
@@ -348,27 +333,24 @@ const Header = props => {
   return (
     <>
       <HeaderWraper>
-        <ContentWrapper isPopoverOpen={isPopoverOpen}>
-          <NavWrapper>
+        <NavigationWrapper isPopoverOpen={isPopoverOpen}>
+          <LeftNavWrapper>
             <Logo to="/board/freeboard">SE Board</Logo>
             <Menu data={data} />
             {menuOpen && <MobileMenu data={data} />}
-          </NavWrapper>
-          <NavigationWrapper>
+          </LeftNavWrapper>
+          <RightNavWrapper>
             <LoginDialogContainer />
-          </NavigationWrapper>
-        </ContentWrapper>
+          </RightNavWrapper>
+        </NavigationWrapper>
 
-        <SearchButton
-          searchOpen={searchOpen}
-          handleSearchOpen={handleSearchOpen}
-          handleSearchClose={handleSearchClose}
-        />
-        <MenuButton
-          menuOpen={menuOpen}
-          handleMenuOpen={handleMenuOpen}
-          handleMenuClose={handleMenuClose}
-        />
+        <MenuButtonStyled onClick={handleMobileMenuOpen}>
+          <Icon icon={faBars} size="lg" />
+        </MenuButtonStyled>
+
+        <SearchButtonStyled onClick={handleMobileSearchOpen}>
+          <Icon icon={faSearch} size="lg" />
+        </SearchButtonStyled>
       </HeaderWraper>
       <BoardSearchDialog open={searchOpen} handleClose={handleSearchClose} />
     </>
