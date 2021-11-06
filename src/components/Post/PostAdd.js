@@ -19,6 +19,19 @@ const Wrapper = styled.div`
   }
 `;
 
+const ContentWrapper = styled.div`
+  width: 100%;
+  padding: 2rem;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffff;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  @media ${props => props.theme.mobile} {
+    width: calc(100% - 1rem);
+    padding: 0.5rem;
+  }
+`;
+
 const TitleInput = styled.input`
   width: 100%;
   font-size: 1.5rem;
@@ -199,7 +212,7 @@ const PostAdd = props => {
     errorMessageProps
   } = props;
   return (
-    <>
+    <ContentWrapper>
       <PostTitle {...postTitleProps} />
       <PostTagAdd {...postTagAddProps} />
       <Editor {...editorProps} />
@@ -208,7 +221,7 @@ const PostAdd = props => {
       <AttachList {...attachListProps} />
       <PostAddFooter {...postAddFooterProps} />
       <ErrorMessage {...errorMessageProps} />
-    </>
+    </ContentWrapper>
   );
 };
 
