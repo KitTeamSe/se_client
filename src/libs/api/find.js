@@ -9,12 +9,9 @@ export const findId = ({ email }) => {
 };
 
 export const findQuestion = ({ userId }) => {
-  const token = localStorage.getItem('token');
-  return client
-    .get(`/${URL}/my/question`, userId, tokenHeader(token))
-    .catch(error => {
-      throw error.response.data;
-    });
+  return client.get(`/${URL}/my/question`, userId).catch(error => {
+    throw error.response.data;
+  });
 };
 
 export const findPassword = ({ answer, email, id, questionId }) => {

@@ -49,7 +49,7 @@ export const findPassword = createAction(
 
 // Sagas
 const findIdSaga = createRequestSaga(FIND_ID, api.findId);
-const findQuestionSaga = createRequestSaga(FIND_ID, api.findQuestion);
+const findQuestionSaga = createRequestSaga(FIND_QUESTION, api.findQuestion);
 const findPasswordSaga = createRequestSaga(FIND_PASSWORD, api.findPassword);
 
 export function* findSaga() {
@@ -60,8 +60,9 @@ export function* findSaga() {
 
 // reducer
 const initialState = {
-  myEmail: {
-    email: ''
+  myInfo: {
+    email: '',
+    userId: ''
   },
   findIdRes: reducerUtils.initial(),
   findQuestionRes: reducerUtils.initial(),

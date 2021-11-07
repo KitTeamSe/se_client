@@ -7,7 +7,7 @@ const ForgotContainer = () => {
   const dispatch = useDispatch();
 
   const {
-    emailForm,
+    myInfoForm,
     findIdData,
     findIdLoading,
     findIdError,
@@ -15,7 +15,7 @@ const ForgotContainer = () => {
     findQuestionLoading,
     findQuestionError
   } = useSelector(({ find }) => ({
-    emailForm: find.myEmail,
+    myInfoForm: find.myInfo,
     findIdData: find.findIdRes.data,
     findIdLoading: find.findIdRes.loading,
     findIdError: find.findIdRes.error,
@@ -32,7 +32,7 @@ const ForgotContainer = () => {
     const { value, name } = e.target;
     dispatch(
       changeField({
-        form: 'myEmail',
+        form: 'myInfo',
         key: name,
         value
       })
@@ -41,13 +41,18 @@ const ForgotContainer = () => {
 
   const onFindIdSubmit = e => {
     e.preventDefault();
-    const { email } = emailForm;
+    const { email } = myInfoForm;
     dispatch(findId({ email }));
+  };
+
+  const onFindQuestionSubmit = e => {
+    e.preventDefault();
+    const { userId } = myInfoForm;
+    dispatch(findQuestion({ userId }));
   };
 
   return (
     <Forgot
-      question="내 질문 조회를 하세요"
       findIdData={findIdData}
       findIdLoading={findIdLoading}
       findIdError={findIdError}
@@ -55,8 +60,9 @@ const ForgotContainer = () => {
       findQuestionError={findQuestionError}
       findQuestionLoading={findQuestionLoading}
       onChange={onChange}
-      emailForm={emailForm}
+      myInfoForm={myInfoForm}
       onFindIdSubmit={onFindIdSubmit}
+      onFindQuestionSubmit={onFindQuestionSubmit}
     />
   );
 };

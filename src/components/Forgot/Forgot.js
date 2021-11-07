@@ -61,7 +61,7 @@ const BoxTitle = styled.h2`
 `;
 
 const FindIdBox = props => {
-  const { onFindIdSubmit, onChange, emailForm, findIdData, findIdLoading } =
+  const { onFindIdSubmit, onChange, myInfoForm, findIdData, findIdLoading } =
     props;
 
   return (
@@ -77,7 +77,7 @@ const FindIdBox = props => {
             label="가입 이메일"
             variant="standard"
             onChange={onChange}
-            value={emailForm.id}
+            value={myInfoForm.email}
             type="email"
           />
           <Button variant="contained" size="small" type="submit">
@@ -95,25 +95,38 @@ const FindIdBox = props => {
 };
 
 const FindPwBox = props => {
-  const { question } = props;
+  const {
+    myInfoForm,
+    onChange,
+    onFindQuestionSubmit,
+    findQuestionData,
+    findQuestionLoading
+  } = props;
   return (
     <FindBox>
+      {findQuestionLoading && <LoadingCircle />}
       <BoxTitle> 비밀번호 찾기</BoxTitle>
-      <FormFlex>
+      <FormFlex onSubmit={onFindQuestionSubmit}>
         <TextFieldButtonBox>
           <FormTextField
             autoFocus
-            id="id"
-            name="id"
+            id="userId"
+            name="userId"
             label="ID"
+            onChange={onChange}
+            value={myInfoForm.userId}
             variant="standard"
             type="id"
           />
-          <Button variant="contained" size="small">
+          <Button variant="contained" size="small" type="submit">
             내 질문 조회
           </Button>
         </TextFieldButtonBox>
-        <QuestionBox>{question}</QuestionBox>
+        {findQuestionData ? (
+          <YourIdBox>{findQuestionData.data.userId} 입니다</YourIdBox>
+        ) : (
+          <QuestionBox>아이디 조회를 하세요</QuestionBox>
+        )}
       </FormFlex>
       <FormFlex>
         <TextFieldButtonBox>
@@ -125,7 +138,7 @@ const FindPwBox = props => {
             type="string"
           />
           <Button variant="contained" size="small">
-            비밀번호 조회
+            비밀번호 전송
           </Button>
         </TextFieldButtonBox>
       </FormFlex>
@@ -135,23 +148,31 @@ const FindPwBox = props => {
 
 const Forgot = props => {
   const {
-    question,
     findIdData,
     findIdLoading,
+    findQuestionData,
+    findQuestionLoading,
     onChange,
-    emailForm,
-    onFindIdSubmit
+    myInfoForm,
+    onFindIdSubmit,
+    onFindQuestionSubmit
   } = props;
   return (
     <MainTable>
       <FindIdBox
         onFindIdSubmit={onFindIdSubmit}
         onChange={onChange}
-        emailForm={emailForm}
+        myInfoForm={myInfoForm}
         findIdData={findIdData}
         findIdLoading={findIdLoading}
       />
-      <FindPwBox question={question} />
+      <FindPwBox
+        myInfoForm={myInfoForm}
+        onChange={onChange}
+        onFindQuestionSubmit={onFindQuestionSubmit}
+        findQuestionData={findQuestionData}
+        findQuestionLoading={findQuestionLoading}
+      />
     </MainTable>
   );
 };
