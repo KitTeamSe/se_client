@@ -51,6 +51,14 @@ const ForgotContainer = () => {
     dispatch(findQuestion({ userId }));
   };
 
+  const onFindPwSubmit = e => {
+    e.preventDefault();
+    const { answer, email } = myInfoForm;
+    const { questionId } = findQuestionData.data;
+    const id = myInfoForm.userId;
+    dispatch(findQuestion({ answer, email, id, questionId }));
+  };
+
   return (
     <Forgot
       findIdData={findIdData}
@@ -63,6 +71,7 @@ const ForgotContainer = () => {
       myInfoForm={myInfoForm}
       onFindIdSubmit={onFindIdSubmit}
       onFindQuestionSubmit={onFindQuestionSubmit}
+      onFindPwSubmit={onFindPwSubmit}
     />
   );
 };

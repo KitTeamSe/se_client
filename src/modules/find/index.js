@@ -62,7 +62,8 @@ export function* findSaga() {
 const initialState = {
   myInfo: {
     email: '',
-    userId: ''
+    userId: '',
+    answer: ''
   },
   findIdRes: reducerUtils.initial(),
   findQuestionRes: reducerUtils.initial(),

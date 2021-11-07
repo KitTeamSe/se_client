@@ -1,4 +1,4 @@
-import { client, tokenHeader } from './client';
+import { client } from './client';
 
 const URL = 'account';
 
@@ -15,11 +15,8 @@ export const findQuestion = ({ userId }) => {
 };
 
 export const findPassword = ({ answer, email, id, questionId }) => {
-  const token = localStorage.getItem('token');
   const parameter = { answer, email, id, questionId };
-  return client
-    .get(`/${URL}/my/question`, parameter, tokenHeader(token))
-    .catch(error => {
-      throw error.response.data;
-    });
+  return client.post(`/${URL}/my/question`, parameter).catch(error => {
+    throw error.response.data;
+  });
 };

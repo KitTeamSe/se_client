@@ -100,7 +100,8 @@ const FindPwBox = props => {
     onChange,
     onFindQuestionSubmit,
     findQuestionData,
-    findQuestionLoading
+    findQuestionLoading,
+    onFindPwSubmit
   } = props;
   return (
     <FindBox>
@@ -125,21 +126,29 @@ const FindPwBox = props => {
         {findQuestionData ? (
           <YourIdBox>{findQuestionData.data.userId} 입니다</YourIdBox>
         ) : (
-          <QuestionBox>아이디 조회를 하세요</QuestionBox>
+          <QuestionBox>아이디를 입력하여 내 질문을 조회 하세요</QuestionBox>
         )}
       </FormFlex>
-      <FormFlex>
+      <FormFlex onSubmit={onFindPwSubmit}>
         <TextFieldButtonBox>
           <FormTextField
             id="answer"
             name="answer"
             label="질문에 대한 답변"
+            onChange={onChange}
+            value={myInfoForm.answer}
             variant="standard"
             type="string"
           />
-          <Button variant="contained" size="small">
-            비밀번호 전송
-          </Button>
+          {findQuestionData ? (
+            <Button variant="contained" size="small" type="submit">
+              비밀번호 전송
+            </Button>
+          ) : (
+            <Button variant="contained" size="small" disabled>
+              내 질문 조회를 하세요
+            </Button>
+          )}
         </TextFieldButtonBox>
       </FormFlex>
     </FindBox>
@@ -155,7 +164,8 @@ const Forgot = props => {
     onChange,
     myInfoForm,
     onFindIdSubmit,
-    onFindQuestionSubmit
+    onFindQuestionSubmit,
+    onFindPwSubmit
   } = props;
   return (
     <MainTable>
@@ -172,6 +182,7 @@ const Forgot = props => {
         onFindQuestionSubmit={onFindQuestionSubmit}
         findQuestionData={findQuestionData}
         findQuestionLoading={findQuestionLoading}
+        onFindPwSubmit={onFindPwSubmit}
       />
     </MainTable>
   );
