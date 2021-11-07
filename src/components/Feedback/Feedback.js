@@ -1,5 +1,9 @@
 import React from 'react';
-import { Snackbar, Alert } from '@mui/material';
+import { Snackbar, Alert as MuiAlert } from '@mui/material';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const SuccessFeedback = props => {
   const { open, handleClose, autoHideDuration, message } = props;
@@ -55,7 +59,7 @@ const Feedback = props => {
 
   return (
     <Snackbar
-      open={open}
+      open={!!open} // open 은 boolean 값이어야 함
       onClose={handleClose}
       anchorOrigin={anchorOrigin}
       autoHideDuration={autoHideDuration}

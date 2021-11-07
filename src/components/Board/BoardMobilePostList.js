@@ -1,14 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import {
-  Card,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
-  CircularProgress
-} from '@mui/material';
+import { Card, List, ListItem, ListItemText, Divider } from '@mui/material';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getTimeForToday } from '../../utils/format';
@@ -19,19 +12,6 @@ const PostListWrapper = styled.div`
   @media ${({ theme }) => theme.sizeQuery.mobile} {
     display: block;
   }
-`;
-
-const NoBoardBox = styled.div`
-  width: 100%;
-  height: 100%;
-  font-size: 2rem;
-  text-align: center;
-  margin: 96px 0 96px 0;
-`;
-
-const LoadingCircle = styled(CircularProgress)`
-  position: absolute;
-  bottom: 50vh;
 `;
 
 const PostLink = styled(Link)`
@@ -65,7 +45,7 @@ const ListStyled = styled(List)`
 const ListItemStyled = styled(ListItem)`
   padding: 0 8px;
   background-color: ${props =>
-    props.isNotice === 'NOTICE' ? '#f2f2f2' : '#ffffff'};
+    props.notice === 'NOTICE' ? '#f2f2f2' : '#ffffff'};
 `;
 
 const ListItemTextStyled = styled(ListItemText)`
@@ -96,15 +76,9 @@ const ListPostInfoItem = styled(ListSubItem)`
   padding-right: 3px;
 `;
 
-const ErrorBoard = props => {
-  const { error } = props;
-  return <NoBoardBox>{error.message}</NoBoardBox>;
-};
-
 const PostListItem = props => {
-  const { postInfo, handlePostLink } = props;
+  const { id, postInfo, handlePostLink } = props;
   const {
-    postId,
     title,
     isSecret,
     nickname,
@@ -116,11 +90,11 @@ const PostListItem = props => {
     isNotice
   } = postInfo;
 
-  const handleLink = () => handlePostLink(postId, isSecret);
+  const handleLink = () => handlePostLink(id, isSecret);
 
   return (
     <PostLink to={handleLink}>
-      <ListItemStyled isNotice={isNotice}>
+      <ListItemStyled key={id} notice={isNotice}>
         <ListItemTextStyled
           primary={
             <>
@@ -133,11 +107,11 @@ const PostListItem = props => {
           }
           secondary={
             <>
-              <ListUserIconItem>
-                {accountIdString ? (
+              {accountIdString ? (
+                <ListUserIconItem>
                   <FontAwesomeIcon icon={faUserCircle} />
-                ) : null}
-              </ListUserIconItem>
+                </ListUserIconItem>
+              ) : null}
               <ListNicknameItem>{nickname}</ListNicknameItem>
               <ListPostInfoItem>{getTimeForToday(createAt)}</ListPostInfoItem>
               <ListPostInfoItem>조회수 {views}</ListPostInfoItem>
@@ -146,36 +120,6 @@ const PostListItem = props => {
         />
       </ListItemStyled>
     </PostLink>
-  );
-};
-
-const PostList = props => {
-  const { postData, noticeData, handlePostLink } = props;
-  return (
-    <ListCard variant="outlined">
-      <ListStyled>
-        {noticeData.data.postListItem.content.map((postInfo, idx) => (
-          <>
-            {idx !== 0 && <Divider />}
-            <PostListItem
-              key={postInfo.postId}
-              postInfo={postInfo}
-              handlePostLink={handlePostLink}
-            />
-          </>
-        ))}
-        {postData.data.postListItem.content.map(postInfo => (
-          <>
-            <Divider />
-            <PostListItem
-              key={postInfo.postId}
-              postInfo={postInfo}
-              handlePostLink={handlePostLink}
-            />
-          </>
-        ))}
-      </ListStyled>
-    </ListCard>
   );
 };
 
@@ -190,26 +134,40 @@ const BoardMobilePostList = props => {
     handlePostLink
   } = props;
 
-  if (postError || noticeError) {
-    return <ErrorBoard error={postError} />;
-  }
-
-  if (
-    postData === null ||
-    noticeData === null ||
-    postLoading ||
-    noticeLoading
-  ) {
-    return <LoadingCircle />;
-  }
+  if (postError || noticeError) return null;
 
   return (
     <PostListWrapper>
-      <PostList
-        postData={postData}
-        noticeData={noticeData}
-        handlePostLink={handlePostLink}
-      />
+      <ListCard variant="outlined">
+        <ListStyled>
+          {!noticeLoading && noticeData
+            ? noticeData.data.postListItem.content.map((postInfo, index) => (
+                <>
+                  {index !== 0 && <Divider />}
+                  <PostListItem
+                    id={postInfo.postId}
+                    postInfo={postInfo}
+                    handlePostLink={handlePostLink}
+                  />
+                </>
+              ))
+            : null}
+        </ListStyled>
+        <ListStyled>
+          {!postLoading && postData
+            ? postData.data.postListItem.content.map(postInfo => (
+                <>
+                  <Divider />
+                  <PostListItem
+                    id={postInfo.postId}
+                    postInfo={postInfo}
+                    handlePostLink={handlePostLink}
+                  />
+                </>
+              ))
+            : null}
+        </ListStyled>
+      </ListCard>
     </PostListWrapper>
   );
 };

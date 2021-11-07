@@ -39,12 +39,24 @@ const NoBoardBox = styled.div`
 const NoneBorderCell = styled(TableCell)`
   border: none;
   font-size: 0.75rem;
-  padding: 6px 10px;
+  padding: 6px 0;
   text-align: center;
 `;
 
-const NoneBorderTitleCell = styled(NoneBorderCell)`
+const PostNumberCell = styled(NoneBorderCell)`
+  font-size: 0.6875rem;
+`;
+
+const PostTitleCell = styled(NoneBorderCell)`
   text-align: left;
+`;
+
+const PostWriterCell = styled(NoneBorderCell)``;
+
+const PostDateCell = styled(NoneBorderCell)``;
+
+const PostViewCell = styled(NoneBorderCell)`
+  font-size: 0.6875rem;
 `;
 
 const IconMargin = styled.span`
@@ -59,7 +71,7 @@ const InfoIcon = styled(FontAwesomeIcon)`
 
 const PostTableRow = styled(TableRow)`
   border-bottom: 1px solid #ddd;
-  background-color: #${props => (props.isNotice === 'NOTICE' ? 'eeeeee' : 'ffffff')};
+  background-color: #${props => (props.notice === 'NOTICE' ? 'eeeeee' : 'ffffff')};
 `;
 
 const ReplyCountNumber = styled.span`
@@ -82,20 +94,17 @@ const PostTitleLink = styled(Link)`
  * col : 열에 속성을 정의
  */
 const NumberCol = styled.col`
-  width: 6%;
+  width: 60px;
 `;
 const TitleCol = styled.col``;
 const NicknameCol = styled.col`
-  width: 14%;
-  @media ${({ theme }) => theme.sizeQuery.tablet} {
-    width: 19%;
-  }
+  width: 140px;
 `;
 const DateCol = styled.col`
-  width: 8%;
+  width: 100px;
 `;
 const ViewsCountCol = styled.col`
-  width: 6%;
+  width: 60px;
 `;
 
 const ErrorBoard = props => {
@@ -121,11 +130,9 @@ const PostRow = props => {
   const handleLink = () => handlePostLink(postId, isSecret);
 
   return (
-    <PostTableRow hover isNotice={isNotice}>
-      <NoneBorderCell nowrap="true">
-        {isNotice === 'NOTICE' ? '공지' : postId}
-      </NoneBorderCell>
-      <NoneBorderTitleCell>
+    <PostTableRow key={`postId-notice-${postId}`} hover notice={isNotice}>
+      <PostNumberCell>{isNotice === 'NOTICE' ? '공지' : postId}</PostNumberCell>
+      <PostTitleCell>
         <PostTitleLink to={handleLink}>
           {title}
           {isSecret === 'SECRET' && (
@@ -138,15 +145,15 @@ const PostRow = props => {
           ) : null}
           <Tags tags={tags} />
         </PostTitleLink>
-      </NoneBorderTitleCell>
-      <NoneBorderCell>
+      </PostTitleCell>
+      <PostWriterCell>
         <NicknameContainer
           nickname={nickname}
           accountIdString={accountIdString}
         />
-      </NoneBorderCell>
-      <NoneBorderCell>{`${getTimeForToday(createAt)}`}</NoneBorderCell>
-      <NoneBorderCell>{views}</NoneBorderCell>
+      </PostWriterCell>
+      <PostDateCell>{`${getTimeForToday(createAt)}`}</PostDateCell>
+      <PostViewCell>{views}</PostViewCell>
     </PostTableRow>
   );
 };
@@ -162,7 +169,13 @@ const BoardPostList = props => {
     handlePostLink
   } = props;
 
-  const tableColumns = ['번호', '제목', '글쓴이', '작성일', '조회'];
+  const tableColumns = [
+    { key: 'postId', value: '번호' },
+    { key: 'title', value: '제목' },
+    { key: 'writer', value: '글쓴이' },
+    { key: 'date', value: '작성일' },
+    { key: 'view', value: '조회' }
+  ];
 
   if (postError) {
     return <ErrorBoard error={postError} />;
@@ -193,9 +206,9 @@ const BoardPostList = props => {
         </colgroup>
         <TableHead>
           <TableRow>
-            {tableColumns.map(column => (
-              <NoneBorderCell nowrap="true" align="center" key={column}>
-                {column}
+            {tableColumns.map(e => (
+              <NoneBorderCell nowrap="true" align="center" key={e.key}>
+                {e.value}
               </NoneBorderCell>
             ))}
           </TableRow>
