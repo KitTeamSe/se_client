@@ -97,20 +97,22 @@ const FindIdBox = props => {
 const FindPwBox = props => {
   const {
     myInfoForm,
+    findIdData,
     onChange,
     onFindQuestionSubmit,
     findQuestionData,
     findQuestionLoading,
-    onFindPwSubmit
+    findPasswordLoading,
+    findPasswordSubmit
   } = props;
   return (
     <FindBox>
       {findQuestionLoading && <LoadingCircle />}
+      {findPasswordLoading && <LoadingCircle />}
       <BoxTitle> 비밀번호 찾기</BoxTitle>
       <FormFlex onSubmit={onFindQuestionSubmit}>
         <TextFieldButtonBox>
           <FormTextField
-            autoFocus
             id="userId"
             name="userId"
             label="ID"
@@ -119,17 +121,23 @@ const FindPwBox = props => {
             variant="standard"
             type="id"
           />
-          <Button variant="contained" size="small" type="submit">
-            내 질문 조회
-          </Button>
+          {findIdData ? (
+            <Button variant="contained" size="small" type="submit">
+              내 질문 조회
+            </Button>
+          ) : (
+            <Button variant="contained" size="small" disabled>
+              내 질문 조회
+            </Button>
+          )}
         </TextFieldButtonBox>
         {findQuestionData ? (
-          <YourIdBox>{findQuestionData.data.userId} 입니다</YourIdBox>
+          <YourIdBox>{findQuestionData.data.text}</YourIdBox>
         ) : (
           <QuestionBox>아이디를 입력하여 내 질문을 조회 하세요</QuestionBox>
         )}
       </FormFlex>
-      <FormFlex onSubmit={onFindPwSubmit}>
+      <FormFlex onSubmit={findPasswordSubmit}>
         <TextFieldButtonBox>
           <FormTextField
             id="answer"
@@ -146,7 +154,7 @@ const FindPwBox = props => {
             </Button>
           ) : (
             <Button variant="contained" size="small" disabled>
-              내 질문 조회를 하세요
+              비밀번호 전송
             </Button>
           )}
         </TextFieldButtonBox>
@@ -161,11 +169,12 @@ const Forgot = props => {
     findIdLoading,
     findQuestionData,
     findQuestionLoading,
+    findPasswordLoading,
     onChange,
     myInfoForm,
     onFindIdSubmit,
     onFindQuestionSubmit,
-    onFindPwSubmit
+    findPasswordSubmit
   } = props;
   return (
     <MainTable>
@@ -179,10 +188,12 @@ const Forgot = props => {
       <FindPwBox
         myInfoForm={myInfoForm}
         onChange={onChange}
+        findIdData={findIdData}
         onFindQuestionSubmit={onFindQuestionSubmit}
         findQuestionData={findQuestionData}
         findQuestionLoading={findQuestionLoading}
-        onFindPwSubmit={onFindPwSubmit}
+        findPasswordSubmit={findPasswordSubmit}
+        findPasswordLoading={findPasswordLoading}
       />
     </MainTable>
   );

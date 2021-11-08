@@ -9,14 +9,14 @@ export const findId = ({ email }) => {
 };
 
 export const findQuestion = ({ userId }) => {
-  return client.get(`/${URL}/my/question`, userId).catch(error => {
+  return client.get(`/${URL}/question/${userId}`).catch(error => {
     throw error.response.data;
   });
 };
 
 export const findPassword = ({ answer, email, id, questionId }) => {
   const parameter = { answer, email, id, questionId };
-  return client.post(`/${URL}/my/question`, parameter).catch(error => {
+  return client.post(`/${URL}/password`, parameter).catch(error => {
     throw error.response.data;
   });
 };

@@ -1,7 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Forgot from '../../components/Forgot/Forgot';
-import { findId, findQuestion, changeField } from '../../modules/find';
+import {
+  findId,
+  findQuestion,
+  findPassword,
+  changeField
+} from '../../modules/find';
 
 const ForgotContainer = () => {
   const dispatch = useDispatch();
@@ -13,7 +18,10 @@ const ForgotContainer = () => {
     findIdError,
     findQuestionData,
     findQuestionLoading,
-    findQuestionError
+    findQuestionError,
+    findPasswordData,
+    findPasswordLoading,
+    findPasswordError
   } = useSelector(({ find }) => ({
     myInfoForm: find.myInfo,
     findIdData: find.findIdRes.data,
@@ -21,12 +29,11 @@ const ForgotContainer = () => {
     findIdError: find.findIdRes.error,
     findQuestionData: find.findQuestionRes.data,
     findQuestionLoading: find.findQuestionRes.loading,
-    findQuestionError: find.findQuestionRes.error
+    findQuestionError: find.findQuestionRes.error,
+    findPasswordData: find.findPasswordRes.data,
+    findPasswordLoading: find.findPasswordRes.loading,
+    findPasswordError: find.findPasswordRes.error
   }));
-  useEffect(() => {
-    const userId = 'alsanrlf';
-    dispatch(findQuestion({ userId }));
-  }, []);
 
   const onChange = e => {
     const { value, name } = e.target;
@@ -51,12 +58,12 @@ const ForgotContainer = () => {
     dispatch(findQuestion({ userId }));
   };
 
-  const onFindPwSubmit = e => {
+  const findPasswordSubmit = e => {
     e.preventDefault();
     const { answer, email } = myInfoForm;
     const { questionId } = findQuestionData.data;
     const id = myInfoForm.userId;
-    dispatch(findQuestion({ answer, email, id, questionId }));
+    dispatch(findPassword({ answer, email, id, questionId }));
   };
 
   return (
@@ -67,11 +74,14 @@ const ForgotContainer = () => {
       findQuestionData={findQuestionData}
       findQuestionError={findQuestionError}
       findQuestionLoading={findQuestionLoading}
+      findPasswordData={findPasswordData}
+      findPasswordLoading={findPasswordLoading}
+      findPasswordError={findPasswordError}
       onChange={onChange}
       myInfoForm={myInfoForm}
       onFindIdSubmit={onFindIdSubmit}
       onFindQuestionSubmit={onFindQuestionSubmit}
-      onFindPwSubmit={onFindPwSubmit}
+      findPasswordSubmit={findPasswordSubmit}
     />
   );
 };
