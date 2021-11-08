@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import { all } from 'redux-saga/effects';
 import auth, { authSaga } from './auth';
 import account, { accountSaga } from './account';
+import find, { findSaga } from './find';
 import reply, { replySaga } from './reply';
 import post, { postSaga } from './post';
 import board, { boardSaga } from './board';
@@ -14,6 +15,7 @@ import styles from './styles';
 const rootReducer = combineReducers({
   auth,
   account,
+  find,
   post,
   board,
   reply,
@@ -28,6 +30,7 @@ export function* rootSaga() {
   yield all([
     authSaga(),
     accountSaga(),
+    findSaga(),
     postSaga(),
     boardSaga(),
     replySaga(),
