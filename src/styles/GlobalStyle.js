@@ -5,6 +5,21 @@ const GlobalStyle = createGlobalStyle`
         font-family: 'Noto Sans KR' !important;
     }
 
+    ::selection {
+        background: rgba(45,170,219,.3);
+        color: #25282b;
+    }
+
+    ::-moz-selection {
+        background: rgba(45,170,219,.3);
+        color: #25282b;
+    }
+
+    ::-webkit-selection {
+        background: rgba(45,170,219,.3);
+        color: #25282b;
+    }
+
     html, body, div, span, applet, object, iframe,
     h1, h2, h3, h4, h5, h6, p, blockquote, pre,
     a, abbr, acronym, address, big, cite, code,
