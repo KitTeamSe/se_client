@@ -6,9 +6,7 @@
 
 const confirmFileExtension = file => {
   if (file.indexOf('.') < 0) return false;
-  const reg = /(.*?)\.(jpg|jpeg|png|gif|bmp)$/;
-
-  if (file.match(reg)) return true;
+  if (file.match(/(.*?)\.(jpg|jpeg|png|gif|bmp)$/)) return true;
   return false;
 };
 

@@ -17,7 +17,6 @@ const [MY_INFO_EDIT, MY_INFO_EDIT_SUCCESS, MY_INFO_EDIT_FAILURE] =
   createRequestActionTypes('account/MY_INFO_EDIT');
 const [ACCOUNT_DELETE, ACCOUNT_DELETE_SUCCESS, ACCOUNT_DELETE_FAILURE] =
   createRequestActionTypes('account/ACCOUNT_DELETE');
-
 // Action Creators
 export const initializeForm = createAction(INITIALIZE_FORM, form => form);
 export const changeField = createAction(

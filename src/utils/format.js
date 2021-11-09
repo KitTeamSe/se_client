@@ -1,61 +1,74 @@
+const getDateTime = createAt => {
+  return {
+    year: createAt[0],
+    month: createAt[1],
+    day: createAt[2],
+    hour: createAt[3],
+    minute: createAt[4],
+    second: createAt[5]
+  };
+};
+
+const getTimeLessThen = num => {
+  return num >= 10 ? num : `0${num}`;
+};
+
+const getMyDate = dateTime => {
+  return `${dateTime.year}.${getTimeLessThen(dateTime.month)}.${getTimeLessThen(
+    dateTime.day
+  )}`;
+};
+
+const getMyTime = dateTime => {
+  return `${dateTime.hour}:${getTimeLessThen(
+    dateTime.minute
+  )}:${getTimeLessThen(dateTime.second)}`;
+};
+
 /**
  * 게시글, 댓글 api 로 받아오는 날짜와 시간 포멧
  *
  * @param {Array} createAt [year, month, day, hour, minute, second, ...]
  * @returns {String} 날짜 및 시간
+ * @returns {Object} date, time, datetime
  */
 
-const getDateTime = createAt => {
-  const newCreateAt = createAt.slice(0, 6);
-  newCreateAt[1] -= 1;
-  const date = new Date(...newCreateAt);
-  return date;
+export const getFormatMyDate = createAt => {
+  const myDateTime = getDateTime(createAt);
+
+  return {
+    date: getMyDate(myDateTime), // YY.MM.DD
+    time: getMyTime(myDateTime), // HH:MM:SS
+    datetime: `${getMyDate(myDateTime)} ${getMyTime(myDateTime)}` // YY.MM.DD HH:MM:SS
+  };
 };
 
-export const getFormatDate = createAt => {
-  const date = getDateTime(createAt);
-  const year = date.getFullYear();
-  let month = 1 + date.getMonth();
-  let day = date.getDate();
-
-  month = month >= 10 ? month : `0${month}`;
-  day = day >= 10 ? day : `0${day}`;
-  return `${year}.${month}.${day}`;
-};
-
-export const getFormatTime = createAt => {
-  const date = getDateTime(createAt);
-  const hour = date.getHours();
-  let minute = date.getMinutes();
-  let second = date.getSeconds();
-
-  minute = minute < 10 ? `0${minute}` : minute;
-  second = second < 10 ? `0${second}` : second;
-  return `${hour}:${minute}:${second}`;
-};
-
-export const getTimeForToday = createAt => {
+export const getTimeForToday = (createAt, type = 'date') => {
   const NOW_TIME = 1;
   const RECENT_TIME = 60;
   const RECENT_HOUR = 24;
   const RECENT_DAY = 7;
 
   const today = new Date();
-  const timeValue = getDateTime(createAt);
+  const timeValue = new Date(
+    createAt[0],
+    createAt[1] - 1,
+    createAt[2],
+    createAt[3],
+    createAt[4],
+    createAt[5]
+  );
   const betweenTime = Math.floor(
     (today.getTime() - timeValue.getTime()) / 1000 / 60
   );
+  const betweenTimeHour = Math.floor(betweenTime / 60);
+  const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
 
   if (betweenTime < NOW_TIME) return '방금 전';
   if (betweenTime < RECENT_TIME) return `${betweenTime} 분 전`;
-
-  const betweenTimeHour = Math.floor(betweenTime / 60);
   if (betweenTimeHour < RECENT_HOUR) return `${betweenTimeHour} 시간 전`;
-
-  const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
   if (betweenTimeDay < RECENT_DAY) return `${betweenTimeDay} 일 전`;
-
-  return `${getFormatDate(createAt)}`;
+  return `${getFormatMyDate(createAt)[type]}`;
 };
 
 /**
@@ -67,7 +80,7 @@ export const getTimeForToday = createAt => {
 
 export const getDecodeHTML = html => {
   if (html !== undefined && html) {
-    const text = html
+    return html
       .replace(/<script[^>]*>([\S\s]*?)<\/script>/gim, '')
       .replaceAll('&lt;', '')
       .replaceAll('&gt;', '')
@@ -75,7 +88,6 @@ export const getDecodeHTML = html => {
       .replaceAll('<p></p>;', '')
       .replaceAll('<', '&lt;')
       .replaceAll('>', '&gt;');
-    return text;
   }
   return html;
 };
@@ -89,8 +101,7 @@ export const getDecodeHTML = html => {
 
 export const getEncodeHTML = text => {
   if (text !== undefined && text) {
-    const html = text.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
-    return html;
+    return text.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
   }
   return text;
 };
