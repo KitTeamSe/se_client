@@ -143,7 +143,7 @@ const BoardMobilePostList = props => {
           {!noticeLoading && noticeData
             ? noticeData.data.postListItem.content.map((postInfo, index) => (
                 <>
-                  {index !== 0 && <Divider />}
+                  {index ? <Divider /> : null}
                   <PostListItem
                     id={postInfo.postId}
                     postInfo={postInfo}
@@ -155,9 +155,11 @@ const BoardMobilePostList = props => {
         </ListStyled>
         <ListStyled>
           {!postLoading && postData
-            ? postData.data.postListItem.content.map(postInfo => (
+            ? postData.data.postListItem.content.map((postInfo, index) => (
                 <>
-                  <Divider />
+                  {index || noticeData.data.postListItem.content.length ? (
+                    <Divider />
+                  ) : null}
                   <PostListItem
                     id={postInfo.postId}
                     postInfo={postInfo}
