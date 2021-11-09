@@ -248,7 +248,7 @@ const ChildMobileMenu = props => {
 };
 
 const MobileMenu = props => {
-  const { data } = props;
+  const { data, menuOpen } = props;
   const [open, setOpen] = useState([]);
 
   const handleOpen = id => {
@@ -264,47 +264,56 @@ const MobileMenu = props => {
     setOpen(newChecked);
   };
 
-  return (
-    <MenuUl>
-      {data.data.map((menu, idx) => (
-        <MoblieList key={menu.boardId}>
-          {menu.menuType === 'BOARD' && (
-            <MenuLink
-              to={`/board/${menu.nameEng}`}
-              activeStyle={{ color: 'black' }}
-            >
-              {menu.nameKor}
-            </MenuLink>
-          )}
-          {menu.menuType === 'FOLDER' && (
-            <>
-              <MenuFolder onClick={() => handleOpen(idx)}>
-                {menu.nameKor}
-              </MenuFolder>
-              <ChildMobileMenu
-                data={menu.child}
-                open={open.indexOf(idx) !== -1}
-              />
-            </>
-          )}
-          {menu.menuType === 'REDIRECT' && (
-            <MenuRedirect href={menu.url}>{menu.nameKor}</MenuRedirect>
-          )}
-        </MoblieList>
-      ))}
-      <AccountList>
-        {localStorage.getItem('userId') || localStorage.getItem('token') ? (
+  const getMenuItem = (menu, type, index) => {
+    switch (menu.menuType) {
+      case 'BOARD':
+        return (
+          <MenuLink
+            to={`/board/${menu.nameEng}`}
+            activeStyle={{ color: 'black' }}
+          >
+            {menu.nameKor}
+          </MenuLink>
+        );
+      case 'FLODER':
+        return (
           <>
-            <MenuLink to={`/profile/${localStorage.getItem('userId')}`}>
-              프로필
-            </MenuLink>
-            <MenuLink to="/signout">로그아웃</MenuLink>
+            <MenuFolder onClick={() => handleOpen(index)}>
+              {menu.nameKor}
+            </MenuFolder>
+            <ChildMobileMenu
+              data={menu.child}
+              open={open.indexOf(index) !== -1}
+            />
           </>
-        ) : (
-          <MenuLink to="/signin">로그인</MenuLink>
-        )}
-      </AccountList>
-    </MenuUl>
+        );
+      case 'REDIRECT':
+        return <MenuRedirect href={menu.url}>{menu.nameKor}</MenuRedirect>;
+      default:
+        return null;
+    }
+  };
+
+  return (
+    menuOpen && (
+      <MenuUl>
+        {data.data.map((menu, index) => (
+          <MoblieList key={menu.boardId}>{getMenuItem(menu, index)}</MoblieList>
+        ))}
+        <AccountList>
+          {localStorage.getItem('userId') || localStorage.getItem('token') ? (
+            <>
+              <MenuLink to={`/profile/${localStorage.getItem('userId')}`}>
+                프로필
+              </MenuLink>
+              <MenuLink to="/signout">로그아웃</MenuLink>
+            </>
+          ) : (
+            <MenuLink to="/signin">로그인</MenuLink>
+          )}
+        </AccountList>
+      </MenuUl>
+    )
   );
 };
 
@@ -335,9 +344,9 @@ const Header = props => {
       <HeaderWraper>
         <NavigationWrapper isPopoverOpen={isPopoverOpen}>
           <LeftNavWrapper>
-            <Logo to="/board/freeboard">SE Board</Logo>
+            <Logo to="/">SE Board</Logo>
             <Menu data={data} />
-            {menuOpen && <MobileMenu data={data} />}
+            {menuOpen && <MobileMenu data={data} menuOpen={menuOpen} />}
           </LeftNavWrapper>
           <RightNavWrapper>
             <LoginDialogContainer />
