@@ -45,6 +45,14 @@ const data = {
     deleteError: '게시글 삭제 실패',
     secretSuccess: '비밀 게시글 조회 성공',
     secretError: '비밀 게시글 조회실패공'
+  },
+  find: {
+    idSuccess: '아이디 찾기 성공',
+    idError: '아이디 찾기 실패',
+    questionSuccess: '내 질문 찾기 성공',
+    questionError: '내 질문 찾기 실패',
+    passwordSuccess: '이메일로 전송 되었습니다',
+    passwordError: '비밀번호 찾기 실패'
   }
 };
 
@@ -120,6 +128,22 @@ const FeedbackContainer = props => {
     postDeleteError: post.postDeleteRes.error,
     postDataSuccess: post.loadedPost.data,
     postDataError: post.loadedPost.errora
+  }));
+
+  const {
+    findIdSuccess,
+    findIdError,
+    findQuestionSuccess,
+    findQuestionError,
+    findPasswordSuccess,
+    findPasswordError
+  } = useSelector(({ find }) => ({
+    findIdSuccess: find.findIdRes.data,
+    findIdError: find.findIdRes.error,
+    findQuestionSuccess: find.findQuestionRes.data,
+    findQuestionError: find.findQuestionRes.error,
+    findPasswordSuccess: find.findPasswordRes.data,
+    findPasswordError: find.findPasswordRes.error
   }));
 
   const handleClose = () => {
@@ -203,6 +227,34 @@ const FeedbackContainer = props => {
     replyUpdateError,
     replyDeleteError,
     replySecretCheckError
+  ]);
+
+  useEffect(() => {
+    if (findIdSuccess) handleFeedback('success', data.find.idSuccess);
+    if (findQuestionSuccess)
+      handleFeedback('success', data.find.questionSuccess);
+    if (findPasswordSuccess)
+      handleFeedback('success', data.find.passwordSuccess);
+
+    if (findIdError)
+      handleFeedback('error', findIdError.message || data.find.idError);
+    if (findQuestionError)
+      handleFeedback(
+        'error',
+        findQuestionError.message || data.find.questionError
+      );
+    if (findPasswordError)
+      handleFeedback(
+        'error',
+        findPasswordError.message || data.find.passwordError
+      );
+  }, [
+    findIdSuccess,
+    findQuestionSuccess,
+    findPasswordSuccess,
+    findIdError,
+    findQuestionError,
+    findPasswordError
   ]);
 
   useEffect(() => {
