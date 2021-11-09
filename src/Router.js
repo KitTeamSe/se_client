@@ -17,6 +17,10 @@ import ThemeBoard from './components/Common/ThemeBoard';
 
 const BlankBox = styled.div`
   height: 96px;
+
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    height: 60px;
+  }
 `;
 
 const Routes = () => (
