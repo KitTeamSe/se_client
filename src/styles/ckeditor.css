@@ -30,6 +30,7 @@
 }
 .ck-content {
   font-family: sans-serif;
+  min-height: 150px;
 }
 .ck-content p {
   font-size: 0.8125rem;

@@ -7,10 +7,9 @@ const Tag = styled.span`
 `;
 
 const TagIcon = styled.span`
-  padding: 0px 4px;
-  margin: 2px;
-  font-size: 0.7em;
-  vertical-align: middle;
+  margin-left: 0.125rem;
+  font-size: 0.625em;
+  padding: 0 0.5em;
   border-radius: 1rem;
   background-image: linear-gradient(
     to right,

@@ -36,46 +36,57 @@ const NoBoardBox = styled.div`
 
 const PostHeaderWrapper = styled.div`
   width: 100%;
-  padding: 1rem 0.5rem;
 `;
 
 const PostHeadTitle = styled.div`
-  width: 100%;
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  padding: 1rem;
+  ${({ theme }) => theme.common.textEllipsis}
 `;
 
 const PostHeadInfo = styled.div`
   display: flex;
+  padding: 0 1rem 0.5rem 1rem;
   align-items: center;
   justify-content: space-between;
 `;
 
+const WriteTimeSpan = styled.span`
+  margin-right: 0.5rem;
+  font-size: 0.875rem;
+  color: #464646;
+`;
+
+const ViewerSpan = styled.span`
+  margin-right: 0.5rem;
+  font-size: 0.875rem;
+  color: #464646;
+`;
+
 const PostHeadInfoComponent = styled.span`
-  margin: 0px 0.3rem;
+  margin-right: 0.5rem;
+  font-size: 0.875rem;
 `;
 
 const WriterIcon = styled.span`
-  margin: 0px 0.3rem;
+  margin-right: 0.5rem;
   cursor: pointer;
 `;
 
 const AnonymousIcon = styled.span`
-  margin: 0px 0.3rem;
+  margin-right: 0.3rem;
 `;
 
 const EditorOutputWrapper = styled.div`
   width: 100%;
-  padding: 3rem 0.6em;
   font-size: 1rem;
   border-top: 1px solid #cccccc;
   border-bottom: 1px solid #cccccc;
 `;
 
 const Icon = styled(FontAwesomeIcon)`
-  margin: 1px;
+  margin-right: 0.3rem;
   color: gray;
-  margin: 2px;
 `;
 
 const MoreButton = styled(FontAwesomeIcon)`
@@ -179,15 +190,14 @@ const PostHeaderInfo = props => {
           keepMounted
           open={Boolean(writerEl)}
           onClose={menuClick}
-          style={{ marginLeft: '4rem' }}
         >
           {menuItem('writer')}
         </Menu>
-        <PostHeadInfoComponent>{writeTime}</PostHeadInfoComponent>
-        <PostHeadInfoComponent>
+        <WriteTimeSpan>{writeTime}</WriteTimeSpan>
+        <ViewerSpan>
           <Icon icon={faEye} />
-          {views}
-        </PostHeadInfoComponent>
+          조회수 : {views}
+        </ViewerSpan>
         {isNotice === 'NORMAL' ? (
           <></>
         ) : (
@@ -215,7 +225,14 @@ const PostHeaderInfo = props => {
           keepMounted
           open={Boolean(moremenuEl)}
           onClose={menuClick}
-          style={{ marginLeft: '1.75rem' }}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right'
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right'
+          }}
         >
           {menuItem('menu')}
         </Menu>
