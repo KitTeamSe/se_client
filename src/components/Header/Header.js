@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link, NavLink } from 'react-router-dom';
-import { CircularProgress } from '@mui/material';
+import { AppBar, CircularProgress } from '@mui/material';
 import { faBars, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import LoginDialogContainer from '../../containers/LoginDialog/LoginDialogContainer';
-import { isMobile } from '../../utils/format';
 import BoardSearchDialog from './BoardSearchDialog';
 
-const HeaderWraper = styled.header`
+const HeaderWraper = styled(AppBar)`
   width: 100%;
   min-height: 80px;
   position: fixed;
   display: flex;
   justify-content: center;
+  flex-direction: row;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 2px 6px;
   background: ${({ theme }) => theme.themeColor.bgColor};
+  color: #000000;
   z-index: 10;
   @media ${({ theme }) => theme.sizeQuery.mobile} {
     min-height: 60px;
@@ -28,8 +29,6 @@ const NavigationWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-right: ${props =>
-    props.isPopoverOpen && !isMobile() ? '17px' : null};
   width: ${({ theme }) => theme.size.tablet};
   @media ${({ theme }) => theme.sizeQuery.tablet} {
     width: ${({ theme }) => theme.size.mobile};
@@ -326,8 +325,7 @@ const Header = props => {
     handleMenuOpen,
     handleMenuClose,
     handleSearchOpen,
-    handleSearchClose,
-    isPopoverOpen
+    handleSearchClose
   } = props;
 
   const handleMobileMenuOpen = () =>
@@ -341,8 +339,8 @@ const Header = props => {
 
   return (
     <>
-      <HeaderWraper>
-        <NavigationWrapper isPopoverOpen={isPopoverOpen}>
+      <HeaderWraper position="fixed">
+        <NavigationWrapper>
           <LeftNavWrapper>
             <Logo to="/">SE Board</Logo>
             <Menu data={data} />

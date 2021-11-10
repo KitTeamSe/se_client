@@ -3,7 +3,6 @@ import qs from 'qs';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { searchPost } from '../../modules/board';
-import { isPopoverOpen, isPopoverClose } from '../../modules/styles';
 import BoardHead from '../../components/Board/BoardHead';
 
 const BoardHeadContainer = props => {
@@ -82,14 +81,6 @@ const BoardHeadContainer = props => {
     history.push(`/board/${match.params.boardNameEng}/write`);
   };
 
-  const onSelectOpen = () => {
-    dispatch(isPopoverOpen());
-  };
-
-  const onSelectClose = () => {
-    dispatch(isPopoverClose());
-  };
-
   return (
     <BoardHead
       boardDescription={boardDescription}
@@ -99,8 +90,6 @@ const BoardHeadContainer = props => {
       onSearch={onSearch}
       onSearchChange={onSearchChange}
       onWritePost={onWritePost}
-      onSelectOpen={onSelectOpen}
-      onSelectClose={onSelectClose}
       onPostSearchTypeChange={onPostSearchTypeChange}
     />
   );
