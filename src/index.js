@@ -5,11 +5,9 @@ import { applyMiddleware, compose, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { StyledEngineProvider } from '@mui/material/styles';
-import { ThemeProvider } from 'styled-components';
 import createSagaMiddleware from 'redux-saga';
 import App from './App';
 import rootReducer, { rootSaga } from './modules';
-import theme from './styles/theme';
 import reportWebVitals from './reportWebVitals';
 
 const sagaMiddleware = createSagaMiddleware();
@@ -28,11 +26,9 @@ sagaMiddleware.run(rootSaga);
 ReactDOM.render(
   <StyledEngineProvider injectFirst>
     <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </ThemeProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </Provider>
   </StyledEngineProvider>,
   document.getElementById('root')

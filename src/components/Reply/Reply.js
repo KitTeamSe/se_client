@@ -2,11 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Avatar, Typography } from '@mui/material';
-import {
-  getEncodeHTML,
-  getFormatDate,
-  getFormatTime
-} from '../../utils/format';
+import { getEncodeHTML, getFormatMyDate } from '../../utils/format';
 import ReplyDeleteContainer from '../../containers/Reply/ReplyDeleteContainer';
 import ReplyAnonyDeleteContainer from '../../containers/Reply/ReplyAnonyDeleteContainer';
 import SecretReplyContainer from '../../containers/Reply/SecretReplyContainer';
@@ -193,8 +189,8 @@ const ReplyInfo = props => {
           <AnonyNickName>{anonymousNickname}</AnonyNickName>
         )}
         <DateWrapper>
-          <DateText>{getFormatDate(createAt)}</DateText>
-          <TimeText>{getFormatTime(createAt)}</TimeText>
+          <DateText>{getFormatMyDate(createAt).date}</DateText>
+          <TimeText>{getFormatMyDate(createAt).time}</TimeText>
         </DateWrapper>
       </UserInfoWrapper>
     </ReplyInfoWrapper>

@@ -4,7 +4,7 @@ import { Route, Redirect, Switch } from 'react-router-dom';
 import HeaderContainer from './containers/Header/HeaderContainer';
 import ProfilePage from './pages/ProfilePage';
 import ForgotPage from './pages/ForgotPage';
-import SignupPageContainer from './containers/SignupPage/SignupPageContainer';
+import SignupPageContainer from './containers/Signup/SignupContainer';
 import SignoutContainer from './containers/Signout/SignoutContainer';
 import SigninContainer from './containers/Signin/SigninContainer';
 import ReplyUpdatePage from './pages/ReplyUpdatePage';
@@ -13,9 +13,14 @@ import PostUpdatePage from './pages/PostUpdatePage';
 import PostPage from './pages/PostPage';
 import BoardPage from './pages/BoardPage';
 import FeedbackContainer from './containers/Feedback/FeedbackContainer';
+import ThemeBoard from './components/Common/ThemeBoard';
 
 const BlankBox = styled.div`
   height: 96px;
+
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    height: 60px;
+  }
 `;
 
 const Routes = () => (
@@ -45,6 +50,7 @@ const Routes = () => (
       />
       <Route exact path="/board/:boardNameEng/:postId" component={PostPage} />
       <Route exact path="/board/:boardNameEng" component={BoardPage} />
+      <Route exact path="/test/theme" component={ThemeBoard} />
       <Route path="/">
         <Redirect to="/board/freeboard" />
       </Route>

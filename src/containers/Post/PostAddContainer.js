@@ -47,25 +47,13 @@ const PostAddContainer = props => {
   }));
   const [tagAddMessage, setTagAddMessage] = useState('');
 
-  const handlePostForm = (form, key, value) => {
-    dispatch(changeField({ form, key, value }));
+  const handlePostForm = ({ key, value }) => {
+    dispatch(changeField({ form: 'addForm', key, value }));
   };
 
   const handleToggle = (e, values) => {
     const { id, checked } = e.target;
-    const form = 'addForm';
-    const key = id;
-    const value = checked ? values[0] : values[1];
-
-    handlePostForm(form, key, value);
-  };
-
-  const handleChange = e => {
-    const { id, value } = e.target;
-    const form = 'addForm';
-    const key = id;
-
-    handlePostForm(form, key, value);
+    handlePostForm({ key: id, value: checked ? values[0] : values[1] });
   };
 
   const handleSecret = e => {
@@ -76,17 +64,17 @@ const PostAddContainer = props => {
     handleToggle(e, ['NOTICE', 'NORMAL']);
   };
 
-  const handleContentText = (e, editor) => {
-    const form = 'addForm';
-    const key = 'text';
-    const value = editor.getData();
+  const handleChange = e => {
+    const { id, value } = e.target;
+    handlePostForm({ key: id, value });
+  };
 
-    handlePostForm(form, key, value);
+  const handleContentText = (e, editor) => {
+    handlePostForm({ key: 'text', value: editor.getData() });
   };
 
   const handleSearchTag = (e, value) => {
-    const newSearchText = value || '';
-    dispatch(changeText({ searchText: newSearchText }));
+    dispatch(changeText({ searchText: value || '' }));
   };
 
   const handleAttachFiles = files => {
@@ -105,9 +93,7 @@ const PostAddContainer = props => {
       tagList,
       attachmentList
     } = addForm;
-    const anonymous = { anonymousNickname, anonymousPassword };
     const replaceText = getDecodeHTML(text);
-    const postContent = { title, text: replaceText };
     const { boardNameEng } = match.params;
     const attachIdList = attachmentList.map(attach => ({
       attachId: attach.attachId
@@ -115,19 +101,34 @@ const PostAddContainer = props => {
 
     if (title.length < 2) {
       dispatch(errorFeedback('게시글 제목을 입력하세요.'));
-    } else {
+      return;
+    }
+
+    if (localStorage.getItem('userId') && localStorage.getItem('token')) {
       dispatch(
         addPost({
-          anonymous,
           attachmentList: attachIdList,
           boardNameEng,
           isNotice,
           isSecret,
-          postContent,
+          postContent: { title, text: replaceText },
           tagList
         })
       );
+      return;
     }
+
+    dispatch(
+      addPost({
+        anonymous: { anonymousNickname, anonymousPassword },
+        attachmentList: attachIdList,
+        boardNameEng,
+        isNotice,
+        isSecret,
+        postContent: { title, text: replaceText },
+        tagList
+      })
+    );
   };
 
   const onGoBack = () => {
@@ -146,46 +147,43 @@ const PostAddContainer = props => {
   };
 
   const onDeleteAttach = attachId => {
-    const form = 'addForm';
-    const key = 'attachmentList';
-    const value = addForm.attachmentList.filter(e => e.attachId !== attachId);
-
-    handlePostForm(form, key, value);
+    handlePostForm({
+      key: 'attachmentList',
+      value: addForm.attachmentList.filter(e => e.attachId !== attachId)
+    });
   };
 
   const handleEditorImg = ({ downloadUrl, fileName }) => {
-    const $p = document.createElement('p');
-    const $img = document.createElement('img');
-    $img.setAttribute('src', downloadUrl);
-    $img.setAttribute('alt', fileName);
-    $p.appendChild($img);
-    return $p.outerHTML;
+    const $img = document
+      .createElement('img')
+      .setAttribute('src', downloadUrl)
+      .setAttribute('alt', fileName);
+    return document.createElement('p').appendChild($img).outerHTML;
   };
 
   const handleReplyImage = () => {
-    const form = 'addForm';
-    const attachListData = addForm.attachmentList.concat(addAttachData.data);
-    const editorText = `${addForm.text}${addAttachData.data
-      .filter(e => confirmFileExtension(e.fileName))
-      .map(e => handleEditorImg(e))
-      .join('')}`;
-
-    handlePostForm(form, 'text', editorText);
-    handlePostForm(form, 'attachmentList', attachListData);
+    handlePostForm({
+      key: 'text',
+      value: `${addForm.text}${addAttachData.data
+        .filter(e => confirmFileExtension(e.fileName))
+        .map(e => handleEditorImg(e))
+        .join('')}`
+    });
+    handlePostForm({
+      key: 'attachmentList',
+      value: addForm.attachmentList.concat(addAttachData.data)
+    });
   };
 
   const handleRemoveTag = tag => {
-    const form = 'addForm';
-    const key = 'tagList';
-    const tagListData = addForm.tagList.filter(e => e.tagId !== tag.tagId);
-    handlePostForm(form, key, tagListData);
+    handlePostForm({
+      key: 'tagList',
+      value: addForm.tagList.filter(e => e.tagId !== tag.tagId)
+    });
   };
 
   const handleClearTag = () => {
-    const form = 'addForm';
-    const key = 'tagList';
-    const tagListData = [];
-    handlePostForm(form, key, tagListData);
+    handlePostForm({ key: 'tagList', value: [] });
     dispatch(changeText({ searchText: '' }));
   };
 
@@ -202,14 +200,13 @@ const PostAddContainer = props => {
     if (addForm.tagList.find(e => e.text === searchText)) {
       return setTagAddMessage('이미 추가된 태그입니다.');
     }
-    const form = 'addForm';
-    const key = 'tagList';
-    const newTag = searchTagData.data.find(e => e.text === searchText);
-    const tagListData = newTag
-      ? addForm.tagList.concat(newTag)
-      : addForm.tagList;
 
-    handlePostForm(form, key, tagListData);
+    const newTag = searchTagData.data.find(e => e.text === searchText);
+
+    handlePostForm({
+      key: 'tagList',
+      value: newTag ? addForm.tagList.concat(newTag) : addForm.tagList
+    });
     return setTagAddMessage('');
   };
 

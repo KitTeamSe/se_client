@@ -1,5 +1,5 @@
 import React from 'react';
-import { MainWrapper } from '../components/Wrapper/Wrapper';
+import { MainWrapper } from '../components/Common/Wrapper/Wrapper';
 import BoardHeadContainer from '../containers/Board/BoardHeadContainer';
 import BoardPaginationContainer from '../containers/Board/BoardPaginationContainer';
 import BoardPostListContainer from '../containers/Board/BoardPostListContainer';

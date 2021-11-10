@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import SignupPage from '../../components/SignupPage/SignupPage';
+import Signup from '../../components/Signup/Signup';
 import {
   changeField,
   signup,
@@ -10,7 +10,7 @@ import {
 } from '../../modules/auth';
 import { questionList } from '../../DataExport';
 
-const SignupPageContainer = () => {
+const SignunContainer = () => {
   const history = useHistory();
   if (localStorage.token) {
     history.push('/');
@@ -165,7 +165,7 @@ const SignupPageContainer = () => {
   };
 
   return (
-    <SignupPage
+    <Signup
       handleChange={handleChange}
       questionChange={questionChange}
       signupSubmit={signupSubmit}
@@ -178,4 +178,4 @@ const SignupPageContainer = () => {
     />
   );
 };
-export default SignupPageContainer;
+export default SignunContainer;

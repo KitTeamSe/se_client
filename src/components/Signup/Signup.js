@@ -90,7 +90,7 @@ const SignupButton = styled(Button)`
   margin-top: 1rem;
 `;
 
-const SignupPage = props => {
+const Signup = props => {
   const {
     loading,
     signupSubmit,
@@ -236,4 +236,4 @@ const SignupPage = props => {
   );
 };
 
-export default SignupPage;
+export default Signup;
