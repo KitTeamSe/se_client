@@ -34,7 +34,8 @@ const NoBoardBox = styled.div`
   margin-top: 196px;
 `;
 
-const PostHead = styled.div`
+const PostHeaderWrapper = styled.div`
+  width: 100%;
   padding: 1rem 0.5rem;
 `;
 
@@ -63,7 +64,8 @@ const AnonymousIcon = styled.span`
   margin: 0px 0.3rem;
 `;
 
-const PostText = styled.div`
+const EditorOutputWrapper = styled.div`
+  width: 100%;
   padding: 3rem 0.6em;
   font-size: 1rem;
   border-top: 1px solid #cccccc;
@@ -159,68 +161,66 @@ const PostHeaderInfo = props => {
   }
 
   return (
-    <>
-      <PostHeadInfo>
+    <PostHeadInfo>
+      <PostHeadInfoComponent>
+        {accountIdString ? (
+          <WriterIcon onClick={menuClick} id="writer">
+            <Icon icon={faUser} />
+            {nickname}
+          </WriterIcon>
+        ) : (
+          <AnonymousIcon id="writer">
+            <Icon icon={faUser} />
+            {nickname}
+          </AnonymousIcon>
+        )}
+        <Menu
+          anchorEl={writerEl}
+          keepMounted
+          open={Boolean(writerEl)}
+          onClose={menuClick}
+          style={{ marginLeft: '4rem' }}
+        >
+          {menuItem('writer')}
+        </Menu>
+        <PostHeadInfoComponent>{writeTime}</PostHeadInfoComponent>
         <PostHeadInfoComponent>
-          {accountIdString ? (
-            <WriterIcon onClick={menuClick} id="writer">
-              <Icon icon={faUser} />
-              {nickname}
-            </WriterIcon>
-          ) : (
-            <AnonymousIcon id="writer">
-              <Icon icon={faUser} />
-              {nickname}
-            </AnonymousIcon>
-          )}
-          <Menu
-            anchorEl={writerEl}
-            keepMounted
-            open={Boolean(writerEl)}
-            onClose={menuClick}
-            style={{ marginLeft: '4rem' }}
-          >
-            {menuItem('writer')}
-          </Menu>
-          <PostHeadInfoComponent>{writeTime}</PostHeadInfoComponent>
+          <Icon icon={faEye} />
+          {views}
+        </PostHeadInfoComponent>
+        {isNotice === 'NORMAL' ? (
+          <></>
+        ) : (
           <PostHeadInfoComponent>
-            <Icon icon={faEye} />
-            {views}
+            <Icon icon={faFlag} />
           </PostHeadInfoComponent>
-          {isNotice === 'NORMAL' ? (
-            <></>
-          ) : (
-            <PostHeadInfoComponent>
-              <Icon icon={faFlag} />
-            </PostHeadInfoComponent>
-          )}
-          {isSecret === 'NORMAL' ? (
-            <></>
-          ) : (
-            <PostHeadInfoComponent>
-              <Icon icon={faLock} />
-            </PostHeadInfoComponent>
-          )}
-        </PostHeadInfoComponent>
-        <PostHeadInfoComponent>
-          <MoreButton
-            icon={faEllipsisH}
-            size="lg"
-            onClick={menuClick}
-            id="more"
-          />
-          <Menu
-            anchorEl={moremenuEl}
-            keepMounted
-            open={Boolean(moremenuEl)}
-            onClose={menuClick}
-            style={{ marginLeft: '1.75rem' }}
-          >
-            {menuItem('menu')}
-          </Menu>
-        </PostHeadInfoComponent>
-      </PostHeadInfo>
-    </>
+        )}
+        {isSecret === 'NORMAL' ? (
+          <></>
+        ) : (
+          <PostHeadInfoComponent>
+            <Icon icon={faLock} />
+          </PostHeadInfoComponent>
+        )}
+      </PostHeadInfoComponent>
+      <PostHeadInfoComponent>
+        <MoreButton
+          icon={faEllipsisH}
+          size="lg"
+          onClick={menuClick}
+          id="more"
+        />
+        <Menu
+          anchorEl={moremenuEl}
+          keepMounted
+          open={Boolean(moremenuEl)}
+          onClose={menuClick}
+          style={{ marginLeft: '1.75rem' }}
+        >
+          {menuItem('menu')}
+        </Menu>
+      </PostHeadInfoComponent>
+    </PostHeadInfo>
   );
 };
 
@@ -239,7 +239,7 @@ const PostHeader = props => {
   } = res;
   const writeTime = `${createdAt[0]}년${createdAt[1]}월${createdAt[2]}일 ${createdAt[3]}:${createdAt[4]}`;
   return (
-    <PostHead>
+    <PostHeaderWrapper>
       <PostHeadTitle>
         {postContent.title}
         <Tags tags={tags} />
@@ -257,7 +257,7 @@ const PostHeader = props => {
         menuClick={menuClick}
         functionExcute={functionExcute}
       />
-    </PostHead>
+    </PostHeaderWrapper>
   );
 };
 
@@ -268,9 +268,9 @@ const PostMain = props => {
     return { __html: getEncodeHTML(postContent.text) };
   };
   return (
-    <PostText>
+    <EditorOutputWrapper>
       <EditorOutput content={handleContent()} />
-    </PostText>
+    </EditorOutputWrapper>
   );
 };
 

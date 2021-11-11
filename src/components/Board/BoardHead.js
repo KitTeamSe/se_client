@@ -67,9 +67,7 @@ const BoardHead = props => {
     onSearch,
     onSearchChange,
     onWritePost,
-    boardDescription,
-    onSelectOpen,
-    onSelectClose
+    boardDescription
   } = props;
 
   return (
@@ -88,8 +86,6 @@ const BoardHead = props => {
           onPostSearchTypeChange={onPostSearchTypeChange}
           keyword={keyword}
           onSearchChange={onSearchChange}
-          onSelectOpen={onSelectOpen}
-          onSelectClose={onSelectClose}
         />
       </SearchBarForm>
 

@@ -7,14 +7,11 @@ import Header from '../../components/Header/Header';
 const HeaderContainer = props => {
   const { location } = props;
   const dispatch = useDispatch();
-  const { data, loading, signin, isPopoverOpen } = useSelector(
-    ({ menu, auth, styles }) => ({
-      data: menu.loadedMenuList.data,
-      loading: menu.loadedMenuList.loading,
-      signin: auth.auth.data,
-      isPopoverOpen: styles.isPopoverOpen
-    })
-  );
+  const { data, loading, signin } = useSelector(({ menu, auth }) => ({
+    data: menu.loadedMenuList.data,
+    loading: menu.loadedMenuList.loading,
+    signin: auth.auth.data
+  }));
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -52,7 +49,6 @@ const HeaderContainer = props => {
       handleMenuClose={handleMenuClose}
       handleSearchOpen={handleSearchOpen}
       handleSearchClose={handleSearchClose}
-      isPopoverOpen={isPopoverOpen}
     />
   );
 };

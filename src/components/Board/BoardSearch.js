@@ -33,14 +33,8 @@ const ButtonStyled = styled(Button)`
 `;
 
 const BoardSearch = props => {
-  const {
-    postSearchType,
-    onPostSearchTypeChange,
-    keyword,
-    onSearchChange,
-    onSelectOpen,
-    onSelectClose
-  } = props;
+  const { postSearchType, onPostSearchTypeChange, keyword, onSearchChange } =
+    props;
 
   return (
     <>
@@ -49,8 +43,6 @@ const BoardSearch = props => {
         value={postSearchType}
         onChange={onPostSearchTypeChange}
         variant="standard"
-        onOpen={onSelectOpen}
-        onClose={onSelectClose}
       >
         {postSearchTypeList.map(type => (
           <MenuItem value={type.type} key={type.type}>
