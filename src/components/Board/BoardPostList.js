@@ -10,14 +10,15 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  TableContainer,
-  Paper
+  TableContainer
 } from '@mui/material';
 import Tags from '../Post/Tags';
 import NicknameContainer from '../../containers/Post/NicknameContainer';
 import { getTimeForToday } from '../../utils/format';
 
 const TableWrapper = styled(TableContainer)`
+  width: calc(100% - 32px);
+  padding: 0 16px;
   @media ${({ theme }) => theme.sizeQuery.mobile} {
     display: none;
   }
@@ -39,12 +40,19 @@ const NoBoardBox = styled.div`
 const NoneBorderCell = styled(TableCell)`
   border: none;
   font-size: 0.75rem;
-  padding: 6px 0;
+  padding: 6px;
   text-align: center;
+  height: 26px;
 `;
 
 const PostNumberCell = styled(NoneBorderCell)`
   font-size: 0.6875rem;
+`;
+const NoticeNumber = styled.span`
+  padding: 0 0.5em;
+  border-radius: 1rem;
+  color: #f4f4f4f;
+  background: #e0e0e0;
 `;
 
 const PostTitleCell = styled(NoneBorderCell)`
@@ -72,7 +80,16 @@ const InfoIcon = styled(FontAwesomeIcon)`
 const PostTableRow = styled(TableRow)`
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
-  background-color: #${props => (props.notice === 'NOTICE' ? 'eeeeee' : 'ffffff')};
+`;
+
+const TitleWrapper = styled.div`
+  display: flex;
+  align-items: baseline;
+`;
+
+const TitleSpan = styled.span`
+  margin-right: 0.25rem;
+  ${({ theme }) => theme.common.textEllipsis}
 `;
 
 const ReplyCountNumber = styled.span`
@@ -81,13 +98,15 @@ const ReplyCountNumber = styled.span`
 
 const PostTitleLink = styled(Link)`
   display: inline-block;
-  width: 100%;
+  width: 640px;
   font-size: 0.75rem;
   vertical-align: middle;
   color: black;
   text-decoration: none;
   cursor: pointer;
-  ${({ theme }) => theme.common.textEllipsis}
+  @media ${({ theme }) => theme.sizeQuery.tablet} {
+    width: 376px;
+  }
 `;
 
 /**
@@ -132,18 +151,22 @@ const PostRow = props => {
 
   return (
     <PostTableRow key={`postId-notice-${postId}`} hover notice={isNotice}>
-      <PostNumberCell>{isNotice === 'NOTICE' ? '공지' : postId}</PostNumberCell>
+      <PostNumberCell>
+        {isNotice === 'NOTICE' ? <NoticeNumber>공지</NoticeNumber> : postId}
+      </PostNumberCell>
       <PostTitleCell>
         <PostTitleLink to={handleLink}>
-          {title}
-          {isSecret === 'SECRET' && (
-            <IconMargin>
-              <InfoIcon icon={faLock} />
-            </IconMargin>
-          )}
-          {numReply ? (
-            <ReplyCountNumber> {`[${numReply}]`}</ReplyCountNumber>
-          ) : null}
+          <TitleWrapper>
+            <TitleSpan>{` ${title}`}</TitleSpan>
+            {isSecret === 'SECRET' && (
+              <IconMargin>
+                <InfoIcon icon={faLock} />
+              </IconMargin>
+            )}
+            {numReply ? (
+              <ReplyCountNumber> {`[${numReply}]`}</ReplyCountNumber>
+            ) : null}
+          </TitleWrapper>
           <Tags tags={tags} />
         </PostTitleLink>
       </PostTitleCell>
@@ -196,7 +219,7 @@ const BoardPostList = props => {
   }
 
   return (
-    <TableWrapper component={Paper}>
+    <TableWrapper>
       <Table size="small">
         <colgroup>
           <NumberCol />

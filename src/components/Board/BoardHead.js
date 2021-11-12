@@ -18,7 +18,8 @@ const SearchBarForm = styled.form`
 const BoardHeadWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  width: calc(100% - 32px);
+  padding: 16px;
   @media ${({ theme }) => theme.sizeQuery.mobile} {
     margin: 16px;
   }

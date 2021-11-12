@@ -15,13 +15,13 @@ const PaginationStyled = styled(Pagination)`
 
 const BoardPagination = props => {
   const { postData, boardPage, qsMaker } = props;
-  const totalPage = postData ? postData.data.postListItem.totalPages : null;
+  const totalPage = postData ? postData.data.postListItem.totalPages : 1;
 
   return (
     <PaginationStyled
       component="div"
       size="small"
-      count={totalPage || 1}
+      count={parseInt(totalPage, 10)}
       page={boardPage ? parseInt(boardPage, 10) : 1}
       renderItem={item => (
         <PaginationItem component={Link} to={`?${qsMaker(item)}`} {...item} />

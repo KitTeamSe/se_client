@@ -16,6 +16,10 @@ import Tags from './Tags';
 import AttachDownloadList from '../Editor/AttachDownloadList';
 import { getEncodeHTML } from '../../utils/format';
 
+const PostWrapper = styled.div`
+  width: 100%;
+`;
+
 const LoadingCircle = styled(CircularProgress)`
   position: absolute;
   bottom: 50vh;
@@ -41,7 +45,10 @@ const PostHeaderWrapper = styled.div`
 const PostHeadTitle = styled.div`
   font-size: 1.5rem;
   padding: 1rem;
-  ${({ theme }) => theme.common.textEllipsis}
+  word-break: break-all;
+  line-height: normal;
+  display: flex;
+  flex-direction: column;
 `;
 
 const PostHeadInfo = styled.div`
@@ -361,7 +368,7 @@ const Post = props => {
   const res = data.data;
 
   return (
-    <>
+    <PostWrapper>
       <PostHeader
         res={res}
         moremenuEl={moremenuEl}
@@ -373,7 +380,7 @@ const Post = props => {
       <PostMain res={res} />
       <AttachDownloadList attachList={res.attaches} />
       <ReplyListContainer replyReportHandle={replyReportHandle} />
-    </>
+    </PostWrapper>
   );
 };
 
