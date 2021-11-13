@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import HeaderContainer from './containers/Header/HeaderContainer';
+import FooterContainer from './containers/Footer/FooterContainer';
 import ProfilePage from './pages/ProfilePage';
 import ForgotPage from './pages/ForgotPage';
 import SignupPageContainer from './containers/Signup/SignupContainer';
@@ -61,6 +62,7 @@ const Routes = () => (
         <Redirect to="/board/freeboard" />
       </Route>
     </Switch>
+    <FooterContainer />
     <FeedbackContainer />
   </ContentWrapper>
 );

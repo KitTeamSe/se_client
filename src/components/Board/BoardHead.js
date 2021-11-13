@@ -19,9 +19,9 @@ const BoardHeadWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   width: calc(100% - 32px);
-  padding: 16px;
+  margin: 16px;
   @media ${({ theme }) => theme.sizeQuery.mobile} {
-    margin: 16px;
+    width: 100%;
   }
 `;
 

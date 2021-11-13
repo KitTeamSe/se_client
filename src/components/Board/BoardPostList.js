@@ -51,8 +51,8 @@ const PostNumberCell = styled(NoneBorderCell)`
 const NoticeNumber = styled.span`
   padding: 0 0.5em;
   border-radius: 1rem;
-  color: #f4f4f4f;
-  background: #e0e0e0;
+  color: #ffffff;
+  background: #1976d2;
 `;
 
 const PostTitleCell = styled(NoneBorderCell)`
