@@ -17,6 +17,7 @@ import FeedbackContainer from './containers/Feedback/FeedbackContainer';
 import ThemeBoard from './components/Common/ThemeBoard';
 
 const ContentWrapper = styled.div`
+  min-height: 100vh;
   background: linear-gradient(90deg, #fff 19px, transparent 1%) center,
     linear-gradient(#fff 19px, transparent 1%) center, #e0e0e0;
   background-size: 22px 22px;

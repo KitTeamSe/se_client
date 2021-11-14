@@ -80,6 +80,7 @@ const InfoIcon = styled(FontAwesomeIcon)`
 const PostTableRow = styled(TableRow)`
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
+  background-color: #${props => (props.notice === 'NOTICE' ? 'eeeeee' : 'ffffff')};
 `;
 
 const TitleWrapper = styled.div`
@@ -151,7 +152,7 @@ const PostRow = props => {
   const handleLink = () => handlePostLink(postId, isSecret);
 
   return (
-    <PostTableRow key={`postId-notice-${postId}`} hover>
+    <PostTableRow key={`postId-notice-${postId}`} hover notice={isNotice}>
       <PostNumberCell>
         {isNotice === 'NOTICE' ? <NoticeNumber>공지</NoticeNumber> : postId}
       </PostNumberCell>
