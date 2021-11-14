@@ -53,9 +53,13 @@ const ReportDialog = props => {
         <Button onClick={reportBoxHandle} color="primary">
           취소
         </Button>
-        <Button onClick={reportSubmit} color="error">
-          신고
-        </Button>
+        {reportDescription.length > 4 ? (
+          <Button onClick={reportSubmit} color="error">
+            신고
+          </Button>
+        ) : (
+          <Button disabled>신고</Button>
+        )}
       </DialogActions>
     </Dialog>
   );
