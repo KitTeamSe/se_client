@@ -1,23 +1,23 @@
 /* eslint import/no-unresolved: [2, { ignore: ['\.woff2$', '\.woff$', '\.otf$'] }] */
 import { createGlobalStyle } from 'styled-components';
-import NotoSansKRThinWoff2 from './NotoSansKR/NotoSansKR-Thin.woff2';
-import NotoSansKRThinWoff from './NotoSansKR/NotoSansKR-Thin.woff';
-import NotoSansKRThinOtf from './NotoSansKR/NotoSansKR-Thin.otf';
-import NotoSansKRLightWoff2 from './NotoSansKR/NotoSansKR-Light.woff2';
-import NotoSansKRLightWoff from './NotoSansKR/NotoSansKR-Light.woff';
-import NotoSansKRLightOtf from './NotoSansKR/NotoSansKR-Light.otf';
-import NotoSansKRRegularWoff2 from './NotoSansKR/NotoSansKR-Regular.woff2';
-import NotoSansKRRegularWoff from './NotoSansKR/NotoSansKR-Regular.woff';
-import NotoSansKRRegularOtf from './NotoSansKR/NotoSansKR-Regular.otf';
-import NotoSansKRMediumWoff2 from './NotoSansKR/NotoSansKR-Medium.woff2';
-import NotoSansKRMediumWoff from './NotoSansKR/NotoSansKR-Medium.woff';
-import NotoSansKRMediumOtf from './NotoSansKR/NotoSansKR-Medium.otf';
-import NotoSansKRBoldWoff2 from './NotoSansKR/NotoSansKR-Bold.woff2';
-import NotoSansKRBoldWoff from './NotoSansKR/NotoSansKR-Bold.woff';
-import NotoSansKRBoldOtf from './NotoSansKR/NotoSansKR-Bold.otf';
-import NotoSansKRBlackWoff2 from './NotoSansKR/NotoSansKR-Black.woff2';
-import NotoSansKRBlackWoff from './NotoSansKR/NotoSansKR-Black.woff';
-import NotoSansKRBlackOtf from './NotoSansKR/NotoSansKR-Black.otf';
+import NotoSansKRThinWoff2 from './NotoSansKr/NotoSansKR-Thin.woff2';
+import NotoSansKRThinWoff from './NotoSansKr/NotoSansKR-Thin.woff';
+import NotoSansKRThinOtf from './NotoSansKr/NotoSansKR-Thin.otf';
+import NotoSansKRLightWoff2 from './NotoSansKr/NotoSansKR-Light.woff2';
+import NotoSansKRLightWoff from './NotoSansKr/NotoSansKR-Light.woff';
+import NotoSansKRLightOtf from './NotoSansKr/NotoSansKR-Light.otf';
+import NotoSansKRRegularWoff2 from './NotoSansKr/NotoSansKR-Regular.woff2';
+import NotoSansKRRegularWoff from './NotoSansKr/NotoSansKR-Regular.woff';
+import NotoSansKRRegularOtf from './NotoSansKr/NotoSansKR-Regular.otf';
+import NotoSansKRMediumWoff2 from './NotoSansKr/NotoSansKR-Medium.woff2';
+import NotoSansKRMediumWoff from './NotoSansKr/NotoSansKR-Medium.woff';
+import NotoSansKRMediumOtf from './NotoSansKr/NotoSansKR-Medium.otf';
+import NotoSansKRBoldWoff2 from './NotoSansKr/NotoSansKR-Bold.woff2';
+import NotoSansKRBoldWoff from './NotoSansKr/NotoSansKR-Bold.woff';
+import NotoSansKRBoldOtf from './NotoSansKr/NotoSansKR-Bold.otf';
+import NotoSansKRBlackWoff2 from './NotoSansKr/NotoSansKR-Black.woff2';
+import NotoSansKRBlackWoff from './NotoSansKr/NotoSansKR-Black.woff';
+import NotoSansKRBlackOtf from './NotoSansKr/NotoSansKR-Black.otf';
 
 const FontStyle = createGlobalStyle`
     @font-face {
