@@ -34,27 +34,19 @@ const PostContainer = props => {
     error,
     postDeleteData,
     postDeleteLoading,
-    postDeleteError,
-    reportResponse
+    postDeleteError
   } = useSelector(({ post }) => ({
     data: post.loadedPost.data,
     loading: post.loadedPost.loading,
     error: post.loadedPost.error,
     postDeleteData: post.postDeleteRes.data,
     postDeleteLoading: post.postDeleteRes.loading,
-    postDeleteError: post.postDeleteRes.error,
-    reportResponse: post.reportRes
+    postDeleteError: post.postDeleteRes.error
   }));
 
   const [deleteBoxOpen, setDeleteBoxOpen] = useState(false);
   const [anonymousDeleteBoxOpen, setAnonymousDeleteBoxOpen] = useState(false);
   const userId = localStorage.getItem('userId');
-
-  useEffect(() => {
-    if (reportResponse.error) {
-      console.log(reportResponse);
-    }
-  }, [reportResponse.error]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
