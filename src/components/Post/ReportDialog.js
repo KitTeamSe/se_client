@@ -14,6 +14,7 @@ const FlexBox = styled.div`
   flex-direction: column;
   text-align: left;
   width: 20rem;
+  margin-top: 1rem;
 `;
 
 const ReportDialog = props => {
@@ -52,9 +53,13 @@ const ReportDialog = props => {
         <Button onClick={reportBoxHandle} color="primary">
           취소
         </Button>
-        <Button onClick={reportSubmit} color="secondary">
-          신고
-        </Button>
+        {reportDescription.length > 4 ? (
+          <Button onClick={reportSubmit} color="error">
+            신고
+          </Button>
+        ) : (
+          <Button disabled>신고</Button>
+        )}
       </DialogActions>
     </Dialog>
   );

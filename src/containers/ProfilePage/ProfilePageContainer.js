@@ -57,7 +57,7 @@ const ProfilePageContainer = props => {
   useEffect(() => {
     const id = match.params.userId;
     dispatch(myInfo({ id }));
-  }, [match.params]);
+  }, [match.params.userId]);
 
   useEffect(() => {
     if (accountDeleteRes.data) {
