@@ -21,12 +21,23 @@ const PostLink = styled(Link)`
   color: black;
 `;
 
+const TitleWrapper = styled.div`
+  display: flex;
+  align-items: baseline;
+`;
+
 const NoticeSpan = styled.span`
   background: #1976d2;
   color: #fff;
   font-size: 0.75rem;
   padding: 0 5px;
+  margin-right: 0.375rem;
   border-radius: 10px;
+`;
+
+const TitleSpan = styled.span`
+  margin-right: 0.25rem;
+  ${({ theme }) => theme.common.textEllipsis}
 `;
 
 const ReplyCountNumber = styled.span`
@@ -36,6 +47,7 @@ const ReplyCountNumber = styled.span`
 
 const ListCard = styled(Card)`
   border-radius: 0;
+  border-top: none;
 `;
 
 const ListStyled = styled(List)`
@@ -51,7 +63,6 @@ const ListItemStyled = styled(ListItem)`
 const ListItemTextStyled = styled(ListItemText)`
   & .MuiListItemText-primary {
     font-size: 0.875rem;
-    ${({ theme }) => theme.common.textEllipsis}
   }
   & .MuiListItemText-secondary {
     font-size: 0.75rem;
@@ -77,7 +88,7 @@ const ListPostInfoItem = styled(ListSubItem)`
 `;
 
 const PostListItem = props => {
-  const { id, postInfo, handlePostLink } = props;
+  const { postInfo, handlePostLink } = props;
   const {
     title,
     isSecret,
@@ -90,36 +101,39 @@ const PostListItem = props => {
     isNotice
   } = postInfo;
 
-  const handleLink = () => handlePostLink(id, isSecret);
+  const handleLink = () => handlePostLink(postInfo.postId, isSecret);
 
   return (
-    <PostLink to={handleLink}>
-      <ListItemStyled key={id} notice={isNotice}>
-        <ListItemTextStyled
-          primary={
-            <>
-              {isNotice === 'NOTICE' ? <NoticeSpan>공지</NoticeSpan> : null}
-              {` ${title}`}
-              {numReply ? (
-                <ReplyCountNumber> {`[${numReply}]`}</ReplyCountNumber>
-              ) : null}
-            </>
-          }
-          secondary={
-            <>
-              {accountIdString ? (
-                <ListUserIconItem>
-                  <FontAwesomeIcon icon={faUserCircle} />
-                </ListUserIconItem>
-              ) : null}
-              <ListNicknameItem>{nickname}</ListNicknameItem>
-              <ListPostInfoItem>{getTimeForToday(createAt)}</ListPostInfoItem>
-              <ListPostInfoItem>조회수 {views}</ListPostInfoItem>
-            </>
-          }
-        />
-      </ListItemStyled>
-    </PostLink>
+    <>
+      <Divider />
+      <PostLink to={handleLink}>
+        <ListItemStyled notice={isNotice}>
+          <ListItemTextStyled
+            primary={
+              <TitleWrapper>
+                {isNotice === 'NOTICE' ? <NoticeSpan>공지</NoticeSpan> : null}
+                <TitleSpan>{` ${title}`}</TitleSpan>
+                {numReply ? (
+                  <ReplyCountNumber> {`[${numReply}]`}</ReplyCountNumber>
+                ) : null}
+              </TitleWrapper>
+            }
+            secondary={
+              <>
+                {accountIdString ? (
+                  <ListUserIconItem>
+                    <FontAwesomeIcon icon={faUserCircle} />
+                  </ListUserIconItem>
+                ) : null}
+                <ListNicknameItem>{nickname}</ListNicknameItem>
+                <ListPostInfoItem>{getTimeForToday(createAt)}</ListPostInfoItem>
+                <ListPostInfoItem>조회수 {views}</ListPostInfoItem>
+              </>
+            }
+          />
+        </ListItemStyled>
+      </PostLink>
+    </>
   );
 };
 
@@ -141,31 +155,23 @@ const BoardMobilePostList = props => {
       <ListCard variant="outlined">
         <ListStyled>
           {!noticeLoading && noticeData
-            ? noticeData.data.postListItem.content.map((postInfo, index) => (
-                <>
-                  {index ? <Divider /> : null}
-                  <PostListItem
-                    id={postInfo.postId}
-                    postInfo={postInfo}
-                    handlePostLink={handlePostLink}
-                  />
-                </>
+            ? noticeData.data.postListItem.content.map(postInfo => (
+                <PostListItem
+                  key={postInfo.postId}
+                  postInfo={postInfo}
+                  handlePostLink={handlePostLink}
+                />
               ))
             : null}
         </ListStyled>
         <ListStyled>
           {!postLoading && postData
-            ? postData.data.postListItem.content.map((postInfo, index) => (
-                <>
-                  {index || noticeData.data.postListItem.content.length ? (
-                    <Divider />
-                  ) : null}
-                  <PostListItem
-                    id={postInfo.postId}
-                    postInfo={postInfo}
-                    handlePostLink={handlePostLink}
-                  />
-                </>
+            ? postData.data.postListItem.content.map(postInfo => (
+                <PostListItem
+                  key={postInfo.postId}
+                  postInfo={postInfo}
+                  handlePostLink={handlePostLink}
+                />
               ))
             : null}
         </ListStyled>

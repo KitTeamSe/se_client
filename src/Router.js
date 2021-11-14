@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import HeaderContainer from './containers/Header/HeaderContainer';
+import FooterContainer from './containers/Footer/FooterContainer';
 import ProfilePage from './pages/ProfilePage';
 import ForgotPage from './pages/ForgotPage';
 import SignupPageContainer from './containers/Signup/SignupContainer';
@@ -15,6 +16,13 @@ import BoardPage from './pages/BoardPage';
 import FeedbackContainer from './containers/Feedback/FeedbackContainer';
 import ThemeBoard from './components/Common/ThemeBoard';
 
+const ContentWrapper = styled.div`
+  min-height: 100vh;
+  background: linear-gradient(90deg, #fff 19px, transparent 1%) center,
+    linear-gradient(#fff 19px, transparent 1%) center, #e0e0e0;
+  background-size: 22px 22px;
+`;
+
 const BlankBox = styled.div`
   height: 96px;
 
@@ -24,7 +32,7 @@ const BlankBox = styled.div`
 `;
 
 const Routes = () => (
-  <>
+  <ContentWrapper>
     <HeaderContainer />
     <BlankBox />
     <Switch>
@@ -55,8 +63,9 @@ const Routes = () => (
         <Redirect to="/board/freeboard" />
       </Route>
     </Switch>
+    <FooterContainer />
     <FeedbackContainer />
-  </>
+  </ContentWrapper>
 );
 
 export default Routes;

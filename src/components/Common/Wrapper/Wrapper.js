@@ -8,6 +8,8 @@ export const MainWrapper = styled.div`
   max-width: 100%;
   margin: auto;
   margin-bottom: 2rem;
+  background: white;
+  box-shadow: 0 0 5px #ccc;
   width: ${({ theme }) => theme.size.tablet};
   @media ${({ theme }) => theme.sizeQuery.tablet} {
     width: ${({ theme }) => theme.size.mobile};

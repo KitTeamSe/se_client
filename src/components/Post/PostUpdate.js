@@ -35,7 +35,7 @@ const ContentWrapper = styled.div`
 const TitleInput = styled.input`
   width: 100%;
   font-size: 1.5rem;
-  pupdateing: 0;
+  padding: 0;
   border-width: 0;
   margin-bottom: 5px;
   border-bottom: 2px solid #ccc;

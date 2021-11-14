@@ -20,6 +20,9 @@
   --ck-inline-image-style-spacing: calc(var(--ck-image-style-spacing) / 2);
   --ck-todo-list-checkmark-size: 16px;
 }
+.ck-editor__editable {
+  min-height: 100px;
+}
 .ck-content pre code {
   font-family: Monaco, Menlo, Consolas, 'Roboto Mono', 'Courier New',
     'Ubuntu Mono', monospace;
