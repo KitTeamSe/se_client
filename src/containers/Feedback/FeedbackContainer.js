@@ -44,7 +44,9 @@ const data = {
     deleteSuccess: '게시글 삭제 완료',
     deleteError: '게시글 삭제 실패',
     secretSuccess: '비밀 게시글 조회 성공',
-    secretError: '비밀 게시글 조회실패공'
+    secretError: '비밀 게시글 조회실패공',
+    reportSuccess: '신고 성공',
+    reportError: '신고 실패'
   },
   find: {
     idSuccess: '아이디 찾기 성공',
@@ -118,7 +120,9 @@ const FeedbackContainer = props => {
     postDeleteSuccess,
     postDeleteError,
     postDataSuccess,
-    postDataError
+    postDataError,
+    postReportSuccess,
+    postReportError
   } = useSelector(({ post }) => ({
     postAddSuccess: post.addPost.data,
     postAddError: post.addPost.error,
@@ -127,7 +131,9 @@ const FeedbackContainer = props => {
     postDeleteSuccess: post.postDeleteRes.data,
     postDeleteError: post.postDeleteRes.error,
     postDataSuccess: post.loadedPost.data,
-    postDataError: post.loadedPost.errora
+    postDataError: post.loadedPost.error,
+    postReportSuccess: post.reportRes.data,
+    postReportError: post.reportRes.error
   }));
 
   const {
@@ -267,6 +273,7 @@ const FeedbackContainer = props => {
       });
       if (secret === 'true') handleFeedback('success', data.post.secretSuccess);
     }
+    if (postReportSuccess) handleFeedback('success', data.post.reportSuccess);
 
     if (postAddError)
       handleFeedback('error', postAddError.message || data.post.addError);
@@ -281,6 +288,11 @@ const FeedbackContainer = props => {
       if (secret === 'true')
         handleFeedback('error', postDataError.message || data.post.secretError);
     }
+    if (postReportError)
+      handleFeedback(
+        'error',
+        postReportError.message || data.post.postReportError
+      );
   }, [
     postAddSuccess,
     postUpdateSuccess,
@@ -289,7 +301,9 @@ const FeedbackContainer = props => {
     postAddError,
     postUpdateError,
     postDeleteError,
-    postDataError
+    postDataError,
+    postReportSuccess,
+    postReportError
   ]);
 
   return (
