@@ -90,6 +90,7 @@ const TitleWrapper = styled.div`
 const TitleSpan = styled.span`
   margin-right: 0.25rem;
   ${({ theme }) => theme.common.textEllipsis}
+  font-weight: ${props => (props.notice === 'NOTICE' ? 500 : null)};
 `;
 
 const ReplyCountNumber = styled.span`
@@ -150,14 +151,14 @@ const PostRow = props => {
   const handleLink = () => handlePostLink(postId, isSecret);
 
   return (
-    <PostTableRow key={`postId-notice-${postId}`} hover notice={isNotice}>
+    <PostTableRow key={`postId-notice-${postId}`} hover>
       <PostNumberCell>
         {isNotice === 'NOTICE' ? <NoticeNumber>공지</NoticeNumber> : postId}
       </PostNumberCell>
       <PostTitleCell>
         <PostTitleLink to={handleLink}>
           <TitleWrapper>
-            <TitleSpan>{` ${title}`}</TitleSpan>
+            <TitleSpan notice={isNotice}>{` ${title}`}</TitleSpan>
             {isSecret === 'SECRET' && (
               <IconMargin>
                 <InfoIcon icon={faLock} />
