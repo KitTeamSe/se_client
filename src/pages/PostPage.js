@@ -4,12 +4,18 @@ import BoardHeadContainer from '../containers/Board/BoardHeadContainer';
 import BoardPaginationContainer from '../containers/Board/BoardPaginationContainer';
 import BoardPostListContainer from '../containers/Board/BoardPostListContainer';
 import PostContainer from '../containers/Post/PostContainer';
+import ReplyListContainer from '../containers/Reply/ReplyListContainer';
+import ReplyPaginationContainer from '../containers/Reply/ReplyPaginationContainer';
+import ReportDialogContainer from '../containers/Report/ReportDialogContainer';
 
 const PostPage = () => {
   return (
     <>
       <MainWrapper>
         <PostContainer />
+        <ReplyListContainer />
+        <ReplyPaginationContainer />
+        <ReportDialogContainer />
       </MainWrapper>
       <MainWrapper>
         <BoardHeadContainer />

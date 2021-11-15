@@ -27,8 +27,6 @@ const [ADD_POST, ADD_POST_SUCCESS, ADD_POST_FAILURE] =
   createRequestActionTypes('post/ADD_POST');
 const [UPDATE_POST, UPDATE_POST_SUCCESS, UPDATE_POST_FAILURE] =
   createRequestActionTypes('post/UPDATE_POST');
-const [POST_REPORT, POST_REPORT_SUCCESS, POST_REPORT_FAILURE] =
-  createRequestActionTypes('post/POST_REPORT');
 
 // Action Creators
 export const initialize = createAction(INITIALIZE);
@@ -103,14 +101,6 @@ export const updatePost = createAction(
     tagList
   })
 );
-export const postReport = createAction(
-  POST_REPORT,
-  ({ description, reportType, targetId }) => ({
-    description,
-    reportType,
-    targetId
-  })
-);
 
 // Sagas
 const loadPostSaga = createRequestSaga(LOAD_POST, api.loadPost);
@@ -125,7 +115,6 @@ const anonymousPostDeleteSaga = createRequestSaga(
 );
 const addPostSaga = createRequestSaga(ADD_POST, api.addPost);
 const updatePostSaga = createRequestSaga(UPDATE_POST, api.updatePost);
-const postReportSaga = createRequestSaga(POST_REPORT, api.reportPost);
 
 export function* postSaga() {
   yield takeLatest(LOAD_POST, loadPostSaga);
@@ -134,7 +123,6 @@ export function* postSaga() {
   yield takeLatest(ANONYMOUS_POST_DELETE, anonymousPostDeleteSaga);
   yield takeLatest(ADD_POST, addPostSaga);
   yield takeLatest(UPDATE_POST, updatePostSaga);
-  yield takeLatest(POST_REPORT, postReportSaga);
 }
 
 // reducer
@@ -267,18 +255,6 @@ export default handleActions(
     [UPDATE_POST_FAILURE]: (state, { payload: error }) => ({
       ...state,
       updatePost: reducerUtils.error(error)
-    }),
-    [POST_REPORT]: state => ({
-      ...state,
-      reportRes: reducerUtils.loading(state.reportRes.data)
-    }),
-    [POST_REPORT_SUCCESS]: (state, { payload: response }) => ({
-      ...state,
-      reportRes: reducerUtils.success(response)
-    }),
-    [POST_REPORT_FAILURE]: (state, { payload: error }) => ({
-      ...state,
-      reportRes: reducerUtils.error(error)
     })
   },
   initialState

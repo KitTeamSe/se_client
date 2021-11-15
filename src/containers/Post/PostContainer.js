@@ -8,12 +8,15 @@ import {
   loadSecretPost,
   postDelete,
   anonymousPostDelete,
-  postReport,
   initialize
 } from '../../modules/post';
 import DeleteAlertDialog from '../../components/Post/DeleteAlertDialog';
 import AnonymousDeleteDialog from '../../components/Post/AnonymousDeleteDialog';
-import ReportDialog from '../../components/Post/ReportDialog';
+import {
+  changeTargetId,
+  changeTargetName,
+  changeType
+} from '../../modules/report';
 
 const PostContainer = props => {
   const { location, match, history } = props;
@@ -21,12 +24,7 @@ const PostContainer = props => {
   const [writerEl, setWriterEl] = useState(null);
   const [secretPost, setSecretPost] = useState(false);
   const [password, setPassword] = useState('');
-  const [reportOpen, setReportOpen] = useState(false);
-  const [reportType, setReportType] = useState(null);
-  const [targetId, setTargetId] = useState(null);
-  const [targetName, setTargetName] = useState(null);
   const [anonymousPassword, setAnonymousPassword] = useState('');
-  const [reportDescription, setReportDescription] = useState('');
   const dispatch = useDispatch();
   const {
     data,
@@ -107,42 +105,10 @@ const PostContainer = props => {
   };
 
   // 신고 관련
-  const replyReportHandle = (replyId, accountId, anonymousNickname) => {
-    setReportType('REPLY');
-    setTargetId(replyId);
-    if (accountId) {
-      setTargetName(accountId);
-    } else {
-      setTargetName(anonymousNickname);
-    }
-    setReportOpen(!reportOpen);
-  };
-
   const reportBoxHandle = () => {
-    setReportType('POST');
-    const postId = Number(match.params.postId);
-    setTargetId(postId);
-    setTargetName(data.data.nickname);
-    setReportOpen(!reportOpen);
-  };
-
-  const descriptionChange = e => {
-    e.preventDefault();
-    const { value } = e.target;
-    setReportDescription(value);
-  };
-
-  const reportSubmit = e => {
-    e.preventDefault();
-    dispatch(
-      postReport({
-        description: reportDescription,
-        reportType,
-        targetId
-      })
-    );
-    setReportOpen(false);
-    setReportDescription('');
+    dispatch(changeType('POST'));
+    dispatch(changeTargetId(Number(match.params.postId)));
+    dispatch(changeTargetName(data.data.nickname));
   };
 
   // 유저 정보 조회
@@ -221,15 +187,6 @@ const PostContainer = props => {
 
   return (
     <>
-      <ReportDialog
-        reportOpen={reportOpen}
-        reportBoxHandle={reportBoxHandle}
-        reportSubmit={reportSubmit}
-        reportDescription={reportDescription}
-        descriptionChange={descriptionChange}
-        reportType={reportType}
-        targetName={targetName}
-      />
       <DeleteAlertDialog
         deleteBoxOpen={deleteBoxOpen}
         deleteBoxHandle={deleteBoxHandle}
@@ -258,7 +215,6 @@ const PostContainer = props => {
         functionExcute={functionExcute}
         menuClick={menuClick}
         PasswordSubmit={PasswordSubmit}
-        replyReportHandle={replyReportHandle}
       />
     </>
   );

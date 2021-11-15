@@ -10,7 +10,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ConditionClassify, menuStorage } from '../../DataExport';
-import ReplyListContainer from '../../containers/Reply/ReplyListContainer';
 import EditorOutput from '../Editor/EditorOutput';
 import Tags from './Tags';
 import AttachDownloadList from '../Editor/AttachDownloadList';
@@ -336,8 +335,7 @@ const Post = props => {
     userId,
     postDeleteData,
     postDeleteLoading,
-    postDeleteError,
-    replyReportHandle
+    postDeleteError
   } = props;
 
   if (error) {
@@ -379,7 +377,6 @@ const Post = props => {
       />
       <PostMain res={res} />
       <AttachDownloadList attachList={res.attaches} />
-      <ReplyListContainer replyReportHandle={replyReportHandle} />
     </PostWrapper>
   );
 };
