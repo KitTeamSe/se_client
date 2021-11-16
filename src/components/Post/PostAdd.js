@@ -7,28 +7,16 @@ import Editor from '../Editor/Editor';
 import FileAttachDropZone from '../FileAttachDropZone/FileAttachDropZone';
 import ErrorMessage from '../Action/ErrorMessage';
 import PostTagAdd from './PostTagAdd';
+import { ContentWrapper } from '../Common/Wrapper/Wrapper';
 
-const Wrapper = styled.div`
+const FooterWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @media ${props => props.theme.mobile} {
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
     flex-direction: column;
     align-items: flex-start;
     transition: all 3s ease;
-  }
-`;
-
-const ContentWrapper = styled.div`
-  width: 100%;
-  padding: 2rem;
-  flex-direction: column;
-  align-items: center;
-  background-color: #ffffff;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-  @media ${props => props.theme.mobile} {
-    width: calc(100% - 1rem);
-    padding: 0.5rem;
   }
 `;
 
@@ -69,7 +57,7 @@ const InputStyled = styled(Input)`
 `;
 
 const ButtonWrapper = styled.div`
-  @media ${props => props.theme.mobile} {
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
     width: 100%;
     display: flex;
     justify-content: flex-end;
@@ -187,7 +175,7 @@ const PostAddFooter = props => {
   } = props;
 
   return (
-    <Wrapper>
+    <FooterWrapper>
       <PostAddInput
         addForm={addForm}
         handleChange={handleChange}
@@ -196,7 +184,7 @@ const PostAddFooter = props => {
         onSubmit={onSubmit}
       />
       <PostAddAction onSubmit={onSubmit} onCancel={onCancel} />
-    </Wrapper>
+    </FooterWrapper>
   );
 };
 

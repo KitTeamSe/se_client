@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Content = styled.div`
-  padding: 1rem;
+  padding: 0 1rem 1rem;
   font-size: 0.875rem;
   word-break: break-all;
   @media ${props => props.theme.mobile} {

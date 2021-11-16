@@ -7,13 +7,16 @@ import PostContainer from '../containers/Post/PostContainer';
 import ReplyListContainer from '../containers/Reply/ReplyListContainer';
 import ReplyPaginationContainer from '../containers/Reply/ReplyPaginationContainer';
 import ReportDialogContainer from '../containers/Report/ReportDialogContainer';
+import ReplyAddContainer from '../containers/Reply/ReplyAddContainer';
 
 const PostPage = () => {
   return (
     <>
       <MainWrapper>
         <PostContainer />
-        <ReplyListContainer />
+        <ReplyListContainer>
+          <ReplyAddContainer />
+        </ReplyListContainer>
         <ReplyPaginationContainer />
         <ReportDialogContainer />
       </MainWrapper>

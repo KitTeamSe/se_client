@@ -85,6 +85,7 @@ const AnonymousIcon = styled.span`
 
 const EditorOutputWrapper = styled.div`
   width: 100%;
+  padding-top: 1rem;
   font-size: 1rem;
   border-top: 1px solid #cccccc;
   border-bottom: 1px solid #cccccc;
