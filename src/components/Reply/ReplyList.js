@@ -2,15 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import { Typography } from '@mui/material';
 import Reply from './Reply';
-import ReplyAddContainer from '../../containers/Reply/ReplyAddContainer';
 import ReplyChildAddContainer from '../../containers/Reply/ReplyChildAddContainer';
 
+const ReplyListWrapper = styled.div`
+  width: 100%;
+`;
+
 const ReplyHeaderWrapper = styled.div`
-  padding: 10px;
+  padding: 1rem;
 `;
 
 const CommentWrapper = styled.div`
-  padding: 10px;
+  padding: 1rem;
 `;
 
 const ReplyHeader = props => {
@@ -102,13 +105,14 @@ const ReplyList = props => {
     error,
     handleAddReplyChild,
     onUpdate,
-    replyReportHandle
+    replyReportHandle,
+    children
   } = props;
 
   return (
-    <>
+    <ReplyListWrapper>
       <ReplyHeader totalData={totalData} />
-      <ReplyAddContainer />
+      {children}
       <ReplyEntries
         data={data}
         loading={loading}
@@ -117,7 +121,7 @@ const ReplyList = props => {
         replyReportHandle={replyReportHandle}
       />
       <ReplyMessage data={data} loading={loading} error={error} />
-    </>
+    </ReplyListWrapper>
   );
 };
 export default ReplyList;

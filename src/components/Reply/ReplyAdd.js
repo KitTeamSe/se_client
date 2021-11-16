@@ -7,11 +7,17 @@ import AttachList from '../Editor/AttachList';
 import AttachImageList from '../Editor/AttachImageList';
 import confirmFileExtension from '../../utils/confirmFileExtension';
 
-const Wrapper = styled.div`
+const ReplyAddWrapper = styled.div`
+  padding: 0 1rem;
+`;
+
+const FooterWrapper = styled.div`
   display: flex;
+  padding: 0.5rem 0;
   justify-content: space-between;
   align-items: center;
-  @media ${props => props.theme.mobile} {
+  border-bottom: 1px solid #e9e9e9;
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -40,7 +46,7 @@ const FormControlLabelStyled = styled(FormControlLabel)`
 `;
 
 const ButtonWrapper = styled.div`
-  @media ${props => props.theme.mobile} {
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
     width: 100%;
     display: flex;
     justify-content: flex-end;
@@ -108,14 +114,14 @@ const ReplyAddFooter = props => {
   const { addForm, handleChange, handleSecret } = props;
 
   return (
-    <Wrapper>
+    <FooterWrapper>
       <ReplyAddInput
         addForm={addForm}
         handleChange={handleChange}
         handleSecret={handleSecret}
       />
       <ReplyAddAction />
-    </Wrapper>
+    </FooterWrapper>
   );
 };
 
@@ -136,30 +142,32 @@ const ReplyAdd = props => {
 
   return replyListData && !replyListLoading ? (
     <form onSubmit={onSubmit}>
-      <Editor
-        data={addForm.text}
-        onChange={handleContentText}
-        placeholder="댓글을 입력하세요"
-      />
-      <FileAttachDropZone
-        loading={addAttachLoading}
-        error={addAttachError}
-        handleAttachFiles={handleAttachFiles}
-      />
-      <AttachImageList
-        attachImgList={addForm.attachmentList.filter(e =>
-          confirmFileExtension(e.fileName)
-        )}
-      />
-      <AttachList
-        attachList={addForm.attachmentList}
-        onDeleteAttach={onDeleteAttach}
-      />
-      <ReplyAddFooter
-        addForm={addForm}
-        handleChange={handleChange}
-        handleSecret={handleSecret}
-      />
+      <ReplyAddWrapper>
+        <Editor
+          data={addForm.text}
+          onChange={handleContentText}
+          placeholder="댓글을 입력하세요"
+        />
+        <FileAttachDropZone
+          loading={addAttachLoading}
+          error={addAttachError}
+          handleAttachFiles={handleAttachFiles}
+        />
+        <AttachImageList
+          attachImgList={addForm.attachmentList.filter(e =>
+            confirmFileExtension(e.fileName)
+          )}
+        />
+        <AttachList
+          attachList={addForm.attachmentList}
+          onDeleteAttach={onDeleteAttach}
+        />
+        <ReplyAddFooter
+          addForm={addForm}
+          handleChange={handleChange}
+          handleSecret={handleSecret}
+        />
+      </ReplyAddWrapper>
     </form>
   ) : null;
 };

@@ -20,7 +20,7 @@ import {
 } from '../../modules/report';
 
 const ReplyListContainer = props => {
-  const { location, match, history } = props;
+  const { location, match, history, children } = props;
   const dispatch = useDispatch();
   const {
     data,
@@ -133,7 +133,9 @@ const ReplyListContainer = props => {
       handleAddReplyChild={handleAddReplyChild}
       onUpdate={onUpdate}
       replyReportHandle={replyReportHandle}
-    />
+    >
+      {children}
+    </ReplyList>
   );
 };
 export default withRouter(ReplyListContainer);
