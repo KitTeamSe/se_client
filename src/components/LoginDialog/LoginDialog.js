@@ -1,6 +1,4 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDoorClosed } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import {
   CircularProgress,
@@ -81,24 +79,18 @@ const SignupLink = styled(Link)`
   align-items: center;
 `;
 
-const IconWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
+const TransparentButton = styled.button`
+  padding: 6px 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.125rem;
+  background: transparent;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
   @media ${({ theme }) => theme.sizeQuery.mobile} {
     display: none;
   }
-`;
-
-const LoginIcon = styled(FontAwesomeIcon)`
-  cursor: pointer;
-  type="submit";
-`;
-
-const Typo = styled.p`
-  text-align: center;
-  align-items: bottom;
-  font-size: 13px;
-  margin-top: 4px;
 `;
 
 const LoadingCircle = styled(CircularProgress)`
@@ -121,10 +113,7 @@ const LoginDialog = props => {
 
   return (
     <>
-      <IconWrapper onClick={handleClickOpen}>
-        <LoginIcon icon={faDoorClosed} size="2x" />
-        <Typo>로그인</Typo>
-      </IconWrapper>
+      <TransparentButton onClick={handleClickOpen}>로그인</TransparentButton>
       <Dialog open={open} onClose={handleClose}>
         <AlignCenter>
           {loading === true && <LoadingCircle />}

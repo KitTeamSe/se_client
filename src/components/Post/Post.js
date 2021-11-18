@@ -10,7 +10,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ConditionClassify, menuStorage } from '../../DataExport';
-import ReplyListContainer from '../../containers/Reply/ReplyListContainer';
 import EditorOutput from '../Editor/EditorOutput';
 import Tags from './Tags';
 import AttachDownloadList from '../Editor/AttachDownloadList';
@@ -86,6 +85,7 @@ const AnonymousIcon = styled.span`
 
 const EditorOutputWrapper = styled.div`
   width: 100%;
+  padding-top: 1rem;
   font-size: 1rem;
   border-top: 1px solid #cccccc;
   border-bottom: 1px solid #cccccc;
@@ -336,8 +336,7 @@ const Post = props => {
     userId,
     postDeleteData,
     postDeleteLoading,
-    postDeleteError,
-    replyReportHandle
+    postDeleteError
   } = props;
 
   if (error) {
@@ -379,7 +378,6 @@ const Post = props => {
       />
       <PostMain res={res} />
       <AttachDownloadList attachList={res.attaches} />
-      <ReplyListContainer replyReportHandle={replyReportHandle} />
     </PostWrapper>
   );
 };

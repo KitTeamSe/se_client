@@ -9,6 +9,7 @@ import board, { boardSaga } from './board';
 import attach, { attachSaga } from './attach';
 import tag, { tagSaga } from './tag';
 import menu, { menuSaga } from './menu';
+import report, { reportSaga } from './report';
 import feedback from './feedback';
 import styles from './styles';
 
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   tag,
   menu,
   feedback,
+  report,
   styles
 });
 
@@ -36,6 +38,7 @@ export function* rootSaga() {
     replySaga(),
     attachSaga(),
     tagSaga(),
+    reportSaga(),
     menuSaga()
   ]);
 }

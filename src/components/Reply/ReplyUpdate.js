@@ -7,12 +7,12 @@ import AttachList from '../Editor/AttachList';
 import Editor from '../Editor/Editor';
 import FileAttachDropZone from '../FileAttachDropZone/FileAttachDropZone';
 import ErrorMessage from '../Action/ErrorMessage';
+import { ContentWrapper } from '../Common/Wrapper/Wrapper';
 
 const PostHeadTitle = styled.div`
-  width: 100%;
   font-size: 1.5rem;
   margin-bottom: 1rem;
-  padding-bottom: 1rem;
+  padding: 1rem 0;
   border-bottom: 1px solid #ddd;
 `;
 
@@ -20,7 +20,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @media ${props => props.theme.mobile} {
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -49,7 +49,7 @@ const FormControlLabelStyled = styled(FormControlLabel)`
 `;
 
 const ButtonWrapper = styled.div`
-  @media ${props => props.theme.mobile} {
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
     width: 100%;
     display: flex;
     justify-content: flex-end;
@@ -148,36 +148,38 @@ const ReplyUpdate = props => {
   } = props;
 
   return (
-    <form onSubmit={onSubmit}>
-      <ReplyUpdateHeader />
-      <Editor
-        onChange={handleContentText}
-        data={updateForm.text}
-        placeholder="댓글을 입력하세요"
-      />
-      <FileAttachDropZone
-        loading={attachLoading}
-        error={attachError}
-        handleAttachFiles={handleAttachFiles}
-      />
-      <AttachImageList
-        attachImgList={updateForm.attachmentList.filter(e =>
-          confirmFileExtension(e.fileName)
-        )}
-      />
-      <AttachList
-        attachList={updateForm.attachmentList}
-        onDeleteAttach={onDeleteAttach}
-      />
-      <ReplyUpdateFooter
-        updateForm={updateForm}
-        handleChange={handleChange}
-        handleSecret={handleSecret}
-        replyData={replyData}
-        onCancel={onCancel}
-      />
-      <ErrorMessage loading={updateLoading} error={updateError} />
-    </form>
+    <ContentWrapper>
+      <form onSubmit={onSubmit}>
+        <ReplyUpdateHeader />
+        <Editor
+          onChange={handleContentText}
+          data={updateForm.text}
+          placeholder="댓글을 입력하세요"
+        />
+        <FileAttachDropZone
+          loading={attachLoading}
+          error={attachError}
+          handleAttachFiles={handleAttachFiles}
+        />
+        <AttachImageList
+          attachImgList={updateForm.attachmentList.filter(e =>
+            confirmFileExtension(e.fileName)
+          )}
+        />
+        <AttachList
+          attachList={updateForm.attachmentList}
+          onDeleteAttach={onDeleteAttach}
+        />
+        <ReplyUpdateFooter
+          updateForm={updateForm}
+          handleChange={handleChange}
+          handleSecret={handleSecret}
+          replyData={replyData}
+          onCancel={onCancel}
+        />
+        <ErrorMessage loading={updateLoading} error={updateError} />
+      </form>
+    </ContentWrapper>
   );
 };
 export default ReplyUpdate;

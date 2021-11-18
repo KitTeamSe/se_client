@@ -19,6 +19,13 @@ export const MainWrapper = styled.div`
   }
 `;
 
+export const ContentWrapper = styled.div`
+  width: calc(100% - 2rem);
+  padding: 1rem;
+  flex-direction: column;
+  align-items: center;
+`;
+
 const Wrapper = props => {
   const { pages } = props;
   return <MainWrapper>{pages}</MainWrapper>;

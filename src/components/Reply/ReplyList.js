@@ -1,25 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import { Typography, Pagination, PaginationItem } from '@mui/material';
-import qs from 'qs';
+import { Typography } from '@mui/material';
 import Reply from './Reply';
-import ReplyAddContainer from '../../containers/Reply/ReplyAddContainer';
 import ReplyChildAddContainer from '../../containers/Reply/ReplyChildAddContainer';
 
-const PaginationStyled = styled(Pagination)`
-  & ul {
-    justify-content: center;
-    padding: 10px;
-  }
+const ReplyListWrapper = styled.div`
+  width: 100%;
 `;
 
 const ReplyHeaderWrapper = styled.div`
-  padding: 10px;
+  padding: 1rem;
 `;
 
 const CommentWrapper = styled.div`
-  padding: 10px;
+  padding: 1rem;
 `;
 
 const ReplyHeader = props => {
@@ -32,37 +26,6 @@ const ReplyHeader = props => {
         <Typography variant="h6">댓글 없음</Typography>
       )}
     </ReplyHeaderWrapper>
-  );
-};
-
-const ReplyPagination = props => {
-  const { totalPage, myReplyPage, baseUrl, location } = props;
-
-  function qsMaker(item) {
-    const { page } = qs.parse(location.search, { ignoreQueryPrefix: true });
-    const replyPage = item.page;
-    const qsResult = qs.stringify({ page, replyPage });
-    return qsResult;
-  }
-
-  return (
-    <PaginationStyled
-      component="div"
-      shape="circular"
-      size="small"
-      variant="outlined"
-      showFirstButton
-      showLastButton
-      count={totalPage}
-      page={myReplyPage ? parseInt(myReplyPage, 10) : 1}
-      renderItem={item => (
-        <PaginationItem
-          component={Link}
-          to={`${baseUrl}?${qsMaker(item)}`}
-          {...item}
-        />
-      )}
-    />
   );
 };
 
@@ -107,7 +70,7 @@ const ReplyEntries = props => {
 
   return !loading && data
     ? data.map((reply, idx) => (
-        <>
+        <React.Fragment key={reply.replyId}>
           <Reply
             reply={reply}
             replyIndex={idx}
@@ -129,7 +92,7 @@ const ReplyEntries = props => {
               ))
             : null}
           <ReplyChildAddContainer parentId={reply.replyId} />
-        </>
+        </React.Fragment>
       ))
     : null;
 };
@@ -137,22 +100,19 @@ const ReplyEntries = props => {
 const ReplyList = props => {
   const {
     data,
-    totalPage,
     totalData,
     loading,
     error,
-    myReplyPage,
-    baseUrl,
-    location,
     handleAddReplyChild,
     onUpdate,
-    replyReportHandle
+    replyReportHandle,
+    children
   } = props;
 
   return (
-    <>
+    <ReplyListWrapper>
       <ReplyHeader totalData={totalData} />
-      <ReplyAddContainer />
+      {children}
       <ReplyEntries
         data={data}
         loading={loading}
@@ -161,13 +121,7 @@ const ReplyList = props => {
         replyReportHandle={replyReportHandle}
       />
       <ReplyMessage data={data} loading={loading} error={error} />
-      <ReplyPagination
-        totalPage={totalPage}
-        myReplyPage={myReplyPage}
-        baseUrl={baseUrl}
-        location={location}
-      />
-    </>
+    </ReplyListWrapper>
   );
 };
 export default ReplyList;

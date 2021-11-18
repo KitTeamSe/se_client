@@ -2,7 +2,7 @@ import React from 'react';
 import qs from 'qs';
 import { useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import BoardPagination from '../../components/Board/BoardPagination';
+import Pagination from '../../components/Common/Pagination/Pagination';
 
 const BoardPaginationContainer = props => {
   const { location } = props;
@@ -13,22 +13,17 @@ const BoardPaginationContainer = props => {
     ignoreQueryPrefix: true
   }).page;
   const boardPage = myPage !== undefined ? myPage : 1;
+  const totalPage = postData ? postData.data.postListItem.totalPages : 1;
 
   const qsMaker = item => {
     const { secret, replyPage } = qs.parse(location.search, {
       ignoreQueryPrefix: true
     });
-    const { page } = item;
-    const qsResult = qs.stringify({ secret, page, replyPage });
-    return qsResult;
+    return qs.stringify({ secret, page: item.page, replyPage });
   };
 
   return (
-    <BoardPagination
-      postData={postData}
-      boardPage={boardPage}
-      qsMaker={qsMaker}
-    />
+    <Pagination page={boardPage} totalPage={totalPage} qsMaker={qsMaker} />
   );
 };
 

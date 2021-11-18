@@ -19,13 +19,12 @@ const ContentWrapper = styled.div`
 
 const ReplyWrapper = styled.div`
   display: flex;
-  padding: 10px 10px 20px 10px;
+  padding: 1rem;
   border-bottom: 1px solid #e9e9e9;
   background: ${props => props.isDelete === 'DELETED' && '#eeeeee'};
   padding-left: ${props => props.isChild && '30px'};
-  @media ${props => props.theme.mobile} {
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
     flex-direction: column;
-    padding-left: ${props => props.isChild && '20px'};
   }
 `;
 
@@ -33,7 +32,7 @@ const AvatarWrapper = styled.div`
   width: 40px;
   height: 40px;
   padding-right: 10px;
-  @media ${props => props.theme.mobile} {
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
     width: 35px;
     height: 35px;
   }
@@ -42,7 +41,7 @@ const AvatarWrapper = styled.div`
 const AnonyAvatar = styled(Avatar)`
   width: 40px;
   height: 40px;
-  @media ${props => props.theme.mobile} {
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
     width: 35px;
     height: 35px;
   }
@@ -56,7 +55,7 @@ const ReplyInfoWrapper = styled.div`
   display: flex;
   width: 180px;
   min-width: 180px;
-  @media ${props => props.theme.mobile} {
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
     width: 180px;
     min-width: 130px;
   }
@@ -88,7 +87,7 @@ const UserNickName = styled(AnonyNickName)`
 `;
 
 const DateWrapper = styled.div`
-  @media ${props => props.theme.mobile} {
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
     display: flex;
     margin-bottom: 10px;
   }

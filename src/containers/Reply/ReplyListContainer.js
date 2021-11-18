@@ -13,9 +13,14 @@ import {
   initializeSecret,
   initializeRemove
 } from '../../modules/reply';
+import {
+  changeTargetName,
+  changeTargetId,
+  changeType
+} from '../../modules/report';
 
 const ReplyListContainer = props => {
-  const { location, match, history, replyReportHandle } = props;
+  const { location, match, history, children } = props;
   const dispatch = useDispatch();
   const {
     data,
@@ -39,6 +44,12 @@ const ReplyListContainer = props => {
     replyIndex: reply.loadSecretForm.replyIndex
   }));
   const [myReplyPage, setMyReplyPage] = useState(1);
+
+  const replyReportHandle = (replyId, accountId, anonymousNickname) => {
+    dispatch(changeType('REPLY'));
+    dispatch(changeTargetId(replyId));
+    dispatch(changeTargetName(accountId || anonymousNickname));
+  };
 
   const handleReplyList = () => {
     const {
@@ -122,7 +133,9 @@ const ReplyListContainer = props => {
       handleAddReplyChild={handleAddReplyChild}
       onUpdate={onUpdate}
       replyReportHandle={replyReportHandle}
-    />
+    >
+      {children}
+    </ReplyList>
   );
 };
 export default withRouter(ReplyListContainer);
