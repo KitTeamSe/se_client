@@ -19,6 +19,19 @@ export const MainWrapper = styled.div`
   }
 `;
 
+export const GridWrapper = styled.div`
+  display: grid;
+  max-width: 100%;
+  margin: auto;
+  width: ${({ theme }) => theme.size.tablet};
+  @media ${({ theme }) => theme.sizeQuery.tablet} {
+    width: ${({ theme }) => theme.size.mobile};
+  }
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    width: 100%;
+  }
+`;
+
 export const ContentWrapper = styled.div`
   width: calc(100% - 2rem);
   padding: 1rem;
