@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import qs from 'qs';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { searchPost } from '../../modules/board';
 import BoardHead from '../../components/Board/BoardHead';
 
 const BoardHeadContainer = props => {
   const { match, history } = props;
 
-  const dispatch = useDispatch();
-  const pageSize = 20;
   const [keyword, setKeyword] = useState('');
   const [boardDescription, setBoardDescription] = useState('');
   const [postSearchType, setPostSearchType] = useState('TITLE_TEXT');
@@ -60,21 +57,6 @@ const BoardHeadContainer = props => {
       pathname: `/board/${boardNameEng}`,
       search: qs.stringify(search)
     });
-
-    const pageRequest = {
-      page: 1,
-      direction: 'DESC',
-      type: postSearchType,
-      size: pageSize
-    };
-
-    const postSearchRequest = {
-      pageRequest,
-      boardNameEng,
-      keyword,
-      postSearchType
-    };
-    dispatch(searchPost({ postSearchRequest }));
   };
 
   const onWritePost = () => {
