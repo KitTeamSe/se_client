@@ -9,17 +9,16 @@ const LoadingCircle = styled(CircularProgress)`
 
 const FindBox = styled.div`
   text-align: center;
-  padding: 48px;
+  padding: 48px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   background: white;
   box-shadow: 0 0 5px #ccc;
   @media ${({ theme }) => theme.sizeQuery.tablet} {
-    width: 496px;
+    width: 100%;
   }
   @media ${({ theme }) => theme.sizeQuery.mobile} {
-    width: 100%;
     padding-left: 0;
     padding-right: 0;
     box-shadow: none;

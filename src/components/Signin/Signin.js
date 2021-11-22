@@ -19,10 +19,7 @@ const FormFlex = styled.form`
 const FormTextField = styled(TextField)`
   min-width: 280px;
   margin: 4px;
-  margin="dense"
-  variant="standard"
-  fullWidth
-  `;
+`;
 const ErrorText = styled.div`
   margin: 6px;
   font-size: 18px;

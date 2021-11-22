@@ -20,6 +20,7 @@ const FormField = styled.form`
   flex-direction: column;
   width: 100%;
   align-items: center;
+  transition: all 0.3s;
 `;
 
 const SignupHeader = styled.div`
