@@ -5,7 +5,7 @@ import HeaderContainer from './containers/Header/HeaderContainer';
 import FooterContainer from './containers/Footer/FooterContainer';
 import ProfilePage from './pages/ProfilePage';
 import ForgotPage from './pages/ForgotPage';
-import SignupPageContainer from './containers/Signup/SignupContainer';
+import SignupPage from './pages/SignupPage';
 import SignoutContainer from './containers/Signout/SignoutContainer';
 import SigninContainer from './containers/Signin/SigninContainer';
 import ReplyUpdatePage from './pages/ReplyUpdatePage';
@@ -37,7 +37,7 @@ const Routes = () => (
     <BlankBox />
     <Switch>
       <Route exact path="/profile/:userId" component={ProfilePage} />
-      <Route exact path="/signup" component={SignupPageContainer} />
+      <Route exact path="/signup" component={SignupPage} />
       <Route exact path="/forgot" component={ForgotPage} />
       <Route exact path="/signout" component={SignoutContainer} />
       <Route exact path="/signin" component={SigninContainer} />
