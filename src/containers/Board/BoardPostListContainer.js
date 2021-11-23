@@ -38,7 +38,6 @@ const BoardPostListContainer = props => {
   const { boardNameEng } = match.params;
 
   useEffect(() => {
-    console.log(match);
     const params = {
       boardNameEng,
       direction: 'DESC',

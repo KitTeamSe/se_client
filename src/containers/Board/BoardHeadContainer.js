@@ -54,9 +54,9 @@ const BoardHeadContainer = props => {
     };
 
     history.push({
-      pathname: `/board/${boardNameEng}`,
       search: qs.stringify(search)
     });
+    setKeyword('');
   };
 
   const onWritePost = () => {

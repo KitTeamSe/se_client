@@ -62,7 +62,6 @@ const PostContainer = props => {
     }
   }, [match.params.postId]);
 
-  // 비밀글 관련
   const PasswordSubmit = e => {
     e.preventDefault();
     const postId = Number(match.params.postId);
