@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react';
 import qs from 'qs';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { loadNormalpostList, loadNoticepostList } from '../../modules/board';
+import {
+  searchPost,
+  loadNormalpostList,
+  loadNoticepostList
+} from '../../modules/board';
+
 import BoardPostList from '../../components/Board/BoardPostList';
 import BoardMobilePostList from '../../components/Board/BoardMobilePostList';
 
@@ -45,10 +50,30 @@ const BoardPostListContainer = props => {
     const {
       page,
       size = pageSize,
-      direction = 'DESC'
+      direction = 'DESC',
+      postSearchType,
+      keyword
     } = qs.parse(location.search, {
       ignoreQueryPrefix: true
     });
+
+    if (postSearchType && keyword) {
+      const pageRequest = {
+        page: 0,
+        direction: 'DESC',
+        type: postSearchType,
+        size: pageSize
+      };
+
+      const postSearchRequest = {
+        pageRequest,
+        boardNameEng,
+        keyword,
+        postSearchType
+      };
+      dispatch(searchPost({ postSearchRequest }));
+      return;
+    }
 
     if (page === undefined) {
       const parameter = {
