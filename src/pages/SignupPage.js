@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import ProfilePageContainer from '../containers/ProfilePage/ProfilePageContainer';
 import { MainWrapper } from '../components/Common/Wrapper/Wrapper';
+import SignupContainer from '../containers/Signup/SignupContainer';
 
-const ProfilePageWrapper = styled(MainWrapper)`
+const SignupPageWrapper = styled(MainWrapper)`
   width: ${({ theme }) => theme.size.mobile};
   @media ${({ theme }) => theme.sizeQuery.tablet} {
     width: 600px;
@@ -13,12 +13,12 @@ const ProfilePageWrapper = styled(MainWrapper)`
   }
 `;
 
-const ProfilePage = () => {
+const SignupPage = () => {
   return (
-    <ProfilePageWrapper>
-      <ProfilePageContainer />
-    </ProfilePageWrapper>
+    <SignupPageWrapper>
+      <SignupContainer />
+    </SignupPageWrapper>
   );
 };
 
-export default ProfilePage;
+export default SignupPage;

@@ -7,17 +7,22 @@ const LoadingCircle = styled(CircularProgress)`
   bottom: 50vh;
 `;
 
-const MainTable = styled.div`
-  padding: 12px;
-  margin: 8px;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-  display: flex;
-  justify-content: center;
-`;
-
 const FindBox = styled.div`
   text-align: center;
-  margin: 48px;
+  padding: 48px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  box-shadow: 0 0 5px #ccc;
+  @media ${({ theme }) => theme.sizeQuery.tablet} {
+    width: 100%;
+  }
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    padding-left: 0;
+    padding-right: 0;
+    box-shadow: none;
+  }
 `;
 
 const FormFlex = styled.form`
@@ -27,12 +32,10 @@ const FormFlex = styled.form`
 `;
 
 const FormTextField = styled(TextField)`
-  min-width: 280px;
+  width: 240px;
+  min-width: 215px;
   margin: 4px;
-  margin="dense"
-  variant="standard"
-  fullWidth
-  `;
+`;
 
 const TextFieldButtonBox = styled.div`
   display: flex;
@@ -177,7 +180,7 @@ const Forgot = props => {
     findPasswordSubmit
   } = props;
   return (
-    <MainTable>
+    <>
       <FindIdBox
         onFindIdSubmit={onFindIdSubmit}
         onChange={onChange}
@@ -195,7 +198,7 @@ const Forgot = props => {
         findPasswordSubmit={findPasswordSubmit}
         findPasswordLoading={findPasswordLoading}
       />
-    </MainTable>
+    </>
   );
 };
 

@@ -27,19 +27,11 @@ import {
 const redColor = 'ffeeeeee';
 
 const MainWrapper = styled.div`
-  margin: auto;
-  margin-top: 3rem;
-  width: 30vw;
-  padding: 1.5rem;
+  width: calc(100% - 2rem);
+  padding: 1rem;
   display: display;
   align-items: center;
-  background-color: #ffffff;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-  @media ${props => props.theme.mobile} {
-    width: calc(100vw - 1rem);
-    margin-top: 1rem;
-    padding: 0.5rem;
-  }
 `;
 
 const Wrapper = styled.div`
@@ -60,9 +52,14 @@ const Welcome = styled.div`
 const MyinfoHeader = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
   width: 100%;
   position: relative;
+`;
+
+const ModeIconWrapper = styled.div`
+  position: absolute;
+  right: 1rem;
 `;
 
 const EditTableCell = styled.th`
@@ -112,6 +109,18 @@ const EditTableRow = styled(TableRow)`
   background-color: #${redColor};
 `;
 
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 1rem;
+`;
+
+const ButtonStyeld = styled(Button)`
+  padding: 6px 24px;
+  border-radius: 2rem;
+  margin-left: 1rem;
+`;
+
 const ProfileHeader = props => {
   const {
     mode,
@@ -133,11 +142,11 @@ const ProfileHeader = props => {
 
   return (
     <MyinfoHeader>
+      <div />
+      <Welcome>내 정보</Welcome>
       {mode === 'editMode' ? (
         <>
-          <div />
-          <Welcome>내 정보</Welcome>
-          <div>
+          <ModeIconWrapper>
             <FontAwesomeIcon
               icon={faTimesCircle}
               size="lg"
@@ -151,25 +160,32 @@ const ProfileHeader = props => {
               style={{ cursor: 'pointer' }}
               onClick={editFormRefresh}
             />
-          </div>
+          </ModeIconWrapper>
         </>
       ) : (
         <>
-          <div />
-          <Welcome>내 정보</Welcome>
-          <FontAwesomeIcon
-            icon={faTools}
-            size="lg"
-            style={{ cursor: 'pointer' }}
-            onClick={menuClick}
-          />
+          <ModeIconWrapper>
+            <FontAwesomeIcon
+              icon={faTools}
+              size="lg"
+              style={{ cursor: 'pointer' }}
+              onClick={menuClick}
+            />
+          </ModeIconWrapper>
           <Menu
             id="editMode"
             anchorEl={anchorEl}
             keepMounted
             open={Boolean(anchorEl)}
             onClose={menuClick}
-            style={{ marginLeft: '36px' }}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right'
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right'
+            }}
           >
             <MenuItem id="editMode" onClick={modeChange}>
               개인정보 수정
@@ -275,23 +291,21 @@ const EditRow = props => {
 };
 
 const SubmitButton = props => {
-  const { mode, myinfoEditSubmit } = props;
+  const { modeChange, myinfoEditSubmit } = props;
   return (
-    <>
-      {mode === 'editMode' ? (
-        <Button
-          variant="contained"
-          color="primary"
-          type="submit"
-          style={{ margin: '24px', cursor: 'pointer' }}
-          onClick={myinfoEditSubmit}
-        >
-          수정
-        </Button>
-      ) : (
-        <></>
-      )}
-    </>
+    <ButtonWrapper>
+      <ButtonStyeld variant="contained" color="error" onClick={modeChange}>
+        취소
+      </ButtonStyeld>
+      <ButtonStyeld
+        variant="contained"
+        color="primary"
+        type="submit"
+        onClick={myinfoEditSubmit}
+      >
+        수정
+      </ButtonStyeld>
+    </ButtonWrapper>
   );
 };
 
@@ -302,6 +316,7 @@ const ProfileBody = props => {
     informationOpenAgreeChange,
     handleChange,
     typeChange,
+    modeChange,
     mode,
     myinfoEditSubmit
   } = props;
@@ -343,7 +358,12 @@ const ProfileBody = props => {
           </TableBody>
         </Table>
       </InfoTable>
-      <SubmitButton mode={mode} myinfoEditSubmit={myinfoEditSubmit} />
+      {mode === 'editMode' && (
+        <SubmitButton
+          modeChange={modeChange}
+          myinfoEditSubmit={myinfoEditSubmit}
+        />
+      )}
     </>
   );
 };
@@ -390,6 +410,7 @@ const PropfilePage = props => {
         informationOpenAgreeChange={informationOpenAgreeChange}
         handleChange={handleChange}
         typeChange={typeChange}
+        modeChange={modeChange}
         mode={mode}
         myinfoEditSubmit={myinfoEditSubmit}
       />

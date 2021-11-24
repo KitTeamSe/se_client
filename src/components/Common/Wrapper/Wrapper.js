@@ -10,6 +10,20 @@ export const MainWrapper = styled.div`
   margin-bottom: 2rem;
   background: white;
   box-shadow: 0 0 5px #ccc;
+  transition: all 0.3s;
+  width: ${({ theme }) => theme.size.tablet};
+  @media ${({ theme }) => theme.sizeQuery.tablet} {
+    width: ${({ theme }) => theme.size.mobile};
+  }
+  @media ${({ theme }) => theme.sizeQuery.mobile} {
+    width: 100%;
+  }
+`;
+
+export const GridWrapper = styled.div`
+  display: grid;
+  max-width: 100%;
+  margin: auto;
   width: ${({ theme }) => theme.size.tablet};
   @media ${({ theme }) => theme.sizeQuery.tablet} {
     width: ${({ theme }) => theme.size.mobile};
