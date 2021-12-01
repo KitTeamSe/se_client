@@ -100,7 +100,6 @@ const FindIdBox = props => {
 const FindPwBox = props => {
   const {
     myInfoForm,
-    findIdData,
     onChange,
     onFindQuestionSubmit,
     findQuestionData,
@@ -124,15 +123,9 @@ const FindPwBox = props => {
             variant="standard"
             type="id"
           />
-          {findIdData ? (
-            <Button variant="contained" size="small" type="submit">
-              내 질문 조회
-            </Button>
-          ) : (
-            <Button variant="contained" size="small" disabled>
-              내 질문 조회
-            </Button>
-          )}
+          <Button variant="contained" size="small" type="submit">
+            내 질문 조회
+          </Button>
         </TextFieldButtonBox>
         {findQuestionData ? (
           <YourIdBox>{findQuestionData.data.text}</YourIdBox>
@@ -191,7 +184,6 @@ const Forgot = props => {
       <FindPwBox
         myInfoForm={myInfoForm}
         onChange={onChange}
-        findIdData={findIdData}
         onFindQuestionSubmit={onFindQuestionSubmit}
         findQuestionData={findQuestionData}
         findQuestionLoading={findQuestionLoading}
