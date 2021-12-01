@@ -60,6 +60,9 @@ const ForgotContainer = () => {
 
   const findPasswordSubmit = e => {
     e.preventDefault();
+    if (findQuestionData === null) {
+      return;
+    }
     const { answer, email } = myInfoForm;
     const { questionId } = findQuestionData.data;
     const id = myInfoForm.userId;

@@ -63,8 +63,7 @@ const initialState = {
   myInfo: {
     email: '',
     userId: '',
-    answer: '',
-    questionId: 0
+    answer: ''
   },
   findIdRes: reducerUtils.initial(),
   findQuestionRes: reducerUtils.initial(),
