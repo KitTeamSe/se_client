@@ -1,6 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
 import { takeLatest } from 'redux-saga/effects';
-import produce from 'immer';
 import * as api from '../../libs/api/account';
 import {
   createRequestActionTypes,
@@ -9,114 +8,168 @@ import {
 import reducerUtils from '../../libs/reducerUtils';
 
 // Actions
-const INITIALIZE_FORM = 'account/INITIALIZE_FORM';
-const CHANGE_FIELD = 'account/CHANGE_FIELD';
-const [MY_INFO, MY_INFO_SUCCESS, MY_INFO_FAILURE] =
-  createRequestActionTypes('account/MY_INFO');
-const [MY_INFO_EDIT, MY_INFO_EDIT_SUCCESS, MY_INFO_EDIT_FAILURE] =
-  createRequestActionTypes('account/MY_INFO_EDIT');
-const [ACCOUNT_DELETE, ACCOUNT_DELETE_SUCCESS, ACCOUNT_DELETE_FAILURE] =
-  createRequestActionTypes('account/ACCOUNT_DELETE');
+const INITIALIZE = 'account/INITIALIZE';
+const [LOAD_ACCOUNT, LOAD_ACCOUNT_SUCCESS, LOAD_ACCOUNT_FAILURE] =
+  createRequestActionTypes('account/LOAD_ACCOUNT');
+const [UPDATE_ACCOUNT, UPDATE_ACCOUNT_SUCCESS, UPDATE_ACCOUNT_FAILURE] =
+  createRequestActionTypes('account/UPDATE_ACCOUNT');
+const [REMOVE_ACCOUNT, REMOVE_ACCOUNT_SUCCESS, REMOVE_ACCOUNT_FAILURE] =
+  createRequestActionTypes('account/REMOVE_ACCOUNT');
+const [FIND_USER_ID, FIND_USER_ID_SUCCESS, FIND_USER_ID_FAILURE] =
+  createRequestActionTypes('find/FIND_USER_ID');
+const [GET_QUESTION_ID, GET_QUESTION_ID_SUCCESS, GET_QUESTION_ID_FAILURE] =
+  createRequestActionTypes('find/GET_QUESTION_ID');
+const [FIND_PASSWORD, FIND_PASSWORD_SUCCESS, FIND_PASSWORD_FAILURE] =
+  createRequestActionTypes('find/FIND_PASSWORD');
+
 // Action Creators
-export const initializeForm = createAction(INITIALIZE_FORM, form => form);
-export const changeField = createAction(
-  CHANGE_FIELD,
-  ({ form, key, value }) => ({
-    form,
-    key,
-    value
-  })
-);
-export const myInfo = createAction(MY_INFO, ({ id }) => ({
+export const initialize = createAction(INITIALIZE);
+export const loadAccount = createAction(LOAD_ACCOUNT, ({ id }) => ({
   id
 }));
-export const myInfoEdit = createAction(
-  MY_INFO_EDIT,
+export const updateAccount = createAction(
+  UPDATE_ACCOUNT,
   ({ parameter, token }) => ({
     parameter,
     token
   })
 );
-export const accountDelete = createAction(
-  ACCOUNT_DELETE,
+export const removeAccount = createAction(
+  REMOVE_ACCOUNT,
   ({ userId, token }) => ({
     userId,
     token
   })
 );
+export const findUserIdByEmail = createAction(FIND_USER_ID, ({ email }) => ({
+  email
+}));
+export const getQuestionIdByUserId = createAction(
+  GET_QUESTION_ID,
+  ({ userId }) => ({
+    userId
+  })
+);
+export const findPassword = createAction(
+  FIND_PASSWORD,
+  ({ answer, email, id, questionId }) => ({
+    answer,
+    email,
+    id,
+    questionId
+  })
+);
 
 // Sagas
-const myInfoSaga = createRequestSaga(MY_INFO, api.myInfo);
-const myInfoEditSaga = createRequestSaga(MY_INFO_EDIT, api.myInfoEdit);
-const accountDeleteSaga = createRequestSaga(ACCOUNT_DELETE, api.accountDelete);
+const loadAccountSaga = createRequestSaga(LOAD_ACCOUNT, api.getAccount);
+const updateAccountSaga = createRequestSaga(UPDATE_ACCOUNT, api.updateAccount);
+const removeAccountSaga = createRequestSaga(REMOVE_ACCOUNT, api.removeAccount);
+const findIdSaga = createRequestSaga(FIND_USER_ID, api.findUserIdByEmail);
+const getQuestionSaga = createRequestSaga(
+  GET_QUESTION_ID,
+  api.getQuestionIdByUserId
+);
+const findPasswordSaga = createRequestSaga(FIND_PASSWORD, api.findPassword);
 
 export function* accountSaga() {
-  yield takeLatest(MY_INFO, myInfoSaga);
-  yield takeLatest(MY_INFO_EDIT, myInfoEditSaga);
-  yield takeLatest(ACCOUNT_DELETE, accountDeleteSaga);
+  yield takeLatest(LOAD_ACCOUNT, loadAccountSaga);
+  yield takeLatest(UPDATE_ACCOUNT, updateAccountSaga);
+  yield takeLatest(REMOVE_ACCOUNT, removeAccountSaga);
+  yield takeLatest(FIND_USER_ID, findIdSaga);
+  yield takeLatest(GET_QUESTION_ID, getQuestionSaga);
+  yield takeLatest(FIND_PASSWORD, findPasswordSaga);
 }
 
 // reducer
 const initialState = {
-  newPwForm: {
-    nowPassword: '',
-    newPassword: '',
-    newPasswordConfirm: ''
-  },
-  withDrawalForm: {
-    password: '',
-    text: ''
-  },
-  myInfo: reducerUtils.initial(),
-  myInfoEditRes: reducerUtils.initial(),
-  accountDeleteRes: reducerUtils.initial()
+  loadAccount: reducerUtils.initial(),
+  updateAccount: reducerUtils.initial(),
+  removeAccount: reducerUtils.initial(),
+  findId: reducerUtils.initial(),
+  getQuestion: reducerUtils.initial(),
+  findPassword: reducerUtils.initial()
 };
 
 export default handleActions(
   {
-    [INITIALIZE_FORM]: (state, { payload: form }) => ({
+    [INITIALIZE]: () => initialState,
+
+    [LOAD_ACCOUNT]: state => ({
       ...state,
-      [form]: initialState[form]
+      loadAccount: reducerUtils.loading(state.loadAccount.data)
     }),
-    [CHANGE_FIELD]: (state, { payload: { form, key, value } }) =>
-      produce(state, draft => {
-        draft[form][key] = value;
-      }),
-    [MY_INFO]: state => ({
+    [LOAD_ACCOUNT_SUCCESS]: (state, { payload: response }) => ({
       ...state,
-      myInfo: reducerUtils.loading(state.myInfo.data)
+      loadAccount: reducerUtils.success(response)
     }),
-    [MY_INFO_SUCCESS]: (state, { payload: response }) => ({
+    [LOAD_ACCOUNT_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      myInfo: reducerUtils.success(response)
+      loadAccount: reducerUtils.error(error)
     }),
-    [MY_INFO_FAILURE]: (state, { payload: error }) => ({
+
+    [UPDATE_ACCOUNT]: state => ({
       ...state,
-      myInfo: reducerUtils.error(error)
+      updateAccount: reducerUtils.loading(state.updateAccount.data)
     }),
-    [MY_INFO_EDIT]: state => ({
+    [UPDATE_ACCOUNT_SUCCESS]: (state, { payload: response }) => ({
       ...state,
-      myInfoEditRes: reducerUtils.loading(state.myInfoEditRes.data)
+      updateAccount: reducerUtils.success(response)
     }),
-    [MY_INFO_EDIT_SUCCESS]: (state, { payload: response }) => ({
+    [UPDATE_ACCOUNT_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      myInfoEditRes: reducerUtils.success(response)
+      updateAccount: reducerUtils.error(error)
     }),
-    [MY_INFO_EDIT_FAILURE]: (state, { payload: error }) => ({
+
+    [REMOVE_ACCOUNT]: state => ({
       ...state,
-      myInfoEditRes: reducerUtils.error(error)
+      removeAccount: reducerUtils.loading(state.removeAccount.data)
     }),
-    [ACCOUNT_DELETE]: state => ({
+    [REMOVE_ACCOUNT_SUCCESS]: (state, { payload: response }) => ({
       ...state,
-      accountDeleteRes: reducerUtils.loading(state.accountDeleteRes.data)
+      removeAccount: reducerUtils.success(response)
     }),
-    [ACCOUNT_DELETE_SUCCESS]: (state, { payload: response }) => ({
+    [REMOVE_ACCOUNT_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      accountDeleteRes: reducerUtils.success(response)
+      removeAccount: reducerUtils.error(error)
     }),
-    [ACCOUNT_DELETE_FAILURE]: (state, { payload: error }) => ({
+
+    [FIND_USER_ID]: state => ({
       ...state,
-      accountDeleteRes: reducerUtils.error(error)
+      findId: reducerUtils.loading(state.findId.data)
+    }),
+    [FIND_USER_ID_SUCCESS]: (state, { payload: response }) => ({
+      ...state,
+      findId: reducerUtils.success(response)
+    }),
+    [FIND_USER_ID_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      findId: reducerUtils.error(error)
+    }),
+
+    [GET_QUESTION_ID]: state => ({
+      ...state,
+      getQuestion: reducerUtils.loading(state.getQuestion.data)
+    }),
+    [GET_QUESTION_ID_SUCCESS]: (state, { payload: response }) => ({
+      ...state,
+      getQuestion: reducerUtils.success(response)
+    }),
+    [GET_QUESTION_ID_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      getQuestion: reducerUtils.error(error)
+    }),
+
+    [FIND_PASSWORD]: state => ({
+      ...state,
+      findPassword: reducerUtils.loading(state.findPassword.data)
+    }),
+    [FIND_PASSWORD_SUCCESS]: (state, { payload: response }) => ({
+      ...state,
+      findPassword: reducerUtils.success(response)
+    }),
+    [FIND_PASSWORD_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      findPassword: reducerUtils.error(error)
     })
   },
   initialState

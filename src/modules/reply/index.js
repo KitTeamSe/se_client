@@ -1,6 +1,6 @@
+import produce from 'immer';
 import { createAction, handleActions } from 'redux-actions';
 import { takeLatest } from 'redux-saga/effects';
-import produce from 'immer';
 import * as api from '../../libs/api/reply';
 import {
   createRequestActionTypes,
@@ -10,14 +10,6 @@ import reducerUtils from '../../libs/reducerUtils';
 
 // Actions
 const INITIALIZE = 'reply/INITIALIZE';
-const INITIALIZE_FIELD = 'reply/INITIALIZE_FIELD';
-const INITIALIZE_ADD = 'reply/INITIALIZE_ADD';
-const INITIALIZE_UPDATE = 'reply/INITIALIZE_UPDATE';
-const INITIALIZE_DELETE = 'reply/INITIALIZE_DELETE';
-const INITIALIZE_SECRET = 'reply/INITIALIZE_SECRET';
-const CHANGE_FIELD = 'reply/CHANGE_FIELD';
-const CHANGE_UPDATE = 'reply/CHANGE_UPDATE';
-const CHANGE_SECRET_REPLY = 'reply/CHANGE_SECRET_REPLY';
 const [ADD_REPLY, ADD_REPLY_SUCCESS, ADD_REPLY_FAILURE] =
   createRequestActionTypes('reply/ADD_REPLY');
 const [UPDATE_REPLY, UPDATE_REPLY_SUCCESS, UPDATE_REPLY_FAILURE] =
@@ -38,30 +30,10 @@ const [
   LOAD_REPLY_SECRET_SUCCESS,
   LOAD_REPLY_SECRET_FAILURE
 ] = createRequestActionTypes('reply/LOAD_REPLY_SECRET');
+const CHANGE_SECRET_REPLY = 'reply/CHANGE_SECRET_REPLY';
 
 // Action Creators
 export const initialize = createAction(INITIALIZE);
-export const initializeField = createAction(INITIALIZE_FIELD);
-export const changeField = createAction(
-  CHANGE_FIELD,
-  ({ form, key, value }) => ({
-    form,
-    key,
-    value
-  })
-);
-export const changeUpdate = createAction(
-  CHANGE_UPDATE,
-  ({ isSecret, text, attachmentList }) => ({ isSecret, text, attachmentList })
-);
-export const changeSecretReply = createAction(
-  CHANGE_SECRET_REPLY,
-  ({ parentIndex, replyIndex }) => ({ parentIndex, replyIndex })
-);
-export const initializeRemove = createAction(INITIALIZE_DELETE);
-export const initializeAdd = createAction(INITIALIZE_ADD);
-export const initializeUpdate = createAction(INITIALIZE_UPDATE);
-export const initializeSecret = createAction(INITIALIZE_SECRET);
 export const addReply = createAction(
   ADD_REPLY,
   ({ anonymous, isSecret, parentId, postId, text, attachmentList }) => ({
@@ -109,6 +81,10 @@ export const loadSecretReply = createAction(
     replyId
   })
 );
+export const changeSecretReply = createAction(
+  CHANGE_SECRET_REPLY,
+  ({ parentIndex, replyIndex }) => ({ parentIndex, replyIndex })
+);
 
 // Sagas
 const addReplySaga = createRequestSaga(ADD_REPLY, api.addReply);
@@ -137,37 +113,6 @@ export function* replySaga() {
 
 // reducer
 const initialState = {
-  addForm: {
-    anonymousNickname: '',
-    anonymousPassword: '',
-    isSecret: 'NORMAL',
-    text: '',
-    attachmentList: []
-  },
-  addChildForm: {
-    parentId: '',
-    anonymousNickname: '',
-    anonymousPassword: '',
-    isSecret: 'NORMAL',
-    text: '',
-    attachmentList: []
-  },
-  updateForm: {
-    password: '',
-    isSecret: '',
-    parentId: 1,
-    postId: null,
-    text: '',
-    attachmentList: []
-  },
-  removeForm: {
-    password: ''
-  },
-  loadSecretForm: {
-    password: '',
-    parentIndex: '',
-    replyIndex: ''
-  },
   addReply: reducerUtils.initial(),
   updateReply: reducerUtils.initial(),
   removeReply: reducerUtils.initial(),
@@ -179,91 +124,6 @@ const initialState = {
 export default handleActions(
   {
     [INITIALIZE]: () => initialState,
-    [INITIALIZE_FIELD]: state => ({
-      ...state,
-      addForm: {
-        anonymousNickname: '',
-        anonymousPassword: '',
-        isSecret: 'NORMAL',
-        text: '',
-        attachmentList: []
-      },
-      addChildForm: {
-        parentId: '',
-        anonymousNickname: '',
-        anonymousPassword: '',
-        isSecret: 'NORMAL',
-        text: '',
-        attachmentList: []
-      },
-      updateForm: {
-        password: '',
-        parentId: null,
-        postId: null,
-        isSecret: '',
-        text: '',
-        attachmentList: []
-      },
-      removeForm: {
-        password: ''
-      },
-      loadSecretForm: {
-        password: '',
-        parentIndex: '',
-        replyIndex: ''
-      }
-    }),
-    [INITIALIZE_DELETE]: state => ({
-      ...state,
-      removeReply: reducerUtils.initial()
-    }),
-    [INITIALIZE_ADD]: state => ({
-      ...state,
-      addReply: reducerUtils.initial()
-    }),
-    [INITIALIZE_UPDATE]: state => ({
-      ...state,
-      updateReply: reducerUtils.initial()
-    }),
-    [INITIALIZE_SECRET]: state => ({
-      ...state,
-      loadSecretReply: reducerUtils.initial()
-    }),
-    [CHANGE_FIELD]: (state, { payload: { key, form, value } }) =>
-      produce(state, draft => {
-        draft[form][key] = value;
-      }),
-    [CHANGE_UPDATE]: (
-      state,
-      { payload: { isSecret, text, attachmentList } }
-    ) => ({
-      ...state,
-      updateForm: {
-        ...state.updateForm,
-        isSecret,
-        text,
-        attachmentList
-      }
-    }),
-    [CHANGE_SECRET_REPLY]: (
-      state,
-      { payload: { parentIndex, replyIndex } }
-    ) => {
-      if (parentIndex !== '') {
-        return produce(state, draft => {
-          draft.loadReplyList.data.data[parentIndex].child[replyIndex].text =
-            state.loadSecretReply.data.data.text;
-          draft.loadReplyList.data.data[parentIndex].child[
-            replyIndex
-          ].isSecret = 'NORMAL';
-        });
-      }
-      return produce(state, draft => {
-        draft.loadReplyList.data.data[replyIndex].text =
-          state.loadSecretReply.data.data.text;
-        draft.loadReplyList.data.data[replyIndex].isSecret = 'NORMAL';
-      });
-    },
     [ADD_REPLY]: state => ({
       ...state,
       addReply: reducerUtils.loading(state.addReply.data)
@@ -353,7 +213,27 @@ export default handleActions(
     [LOAD_REPLY_SECRET_FAILURE]: (state, { payload: error }) => ({
       ...state,
       loadSecretReply: reducerUtils.error(error)
-    })
+    }),
+
+    [CHANGE_SECRET_REPLY]: (
+      state,
+      { payload: { parentIndex, replyIndex } }
+    ) => {
+      if (parentIndex !== '') {
+        return produce(state, draft => {
+          draft.loadReplyList.data.data[parentIndex].child[replyIndex].text =
+            state.loadSecretReply.data.data.text;
+          draft.loadReplyList.data.data[parentIndex].child[
+            replyIndex
+          ].isSecret = 'NORMAL';
+        });
+      }
+      return produce(state, draft => {
+        draft.loadReplyList.data.data[replyIndex].text =
+          state.loadSecretReply.data.data.text;
+        draft.loadReplyList.data.data[replyIndex].isSecret = 'NORMAL';
+      });
+    }
   },
   initialState
 );

@@ -9,15 +9,11 @@ import reducerUtils from '../../libs/reducerUtils';
 
 // Actions
 const INITIALIZE = 'tag/INITIALIZE';
-const CHANGE_TEXT = 'tag/CHANGE_TEXT';
 const [SEARCH_TAG, SEARCH_TAG_SUCCESS, SEARCH_TAG_FAILURE] =
   createRequestActionTypes('tag/SEARCH_TAG');
 
 // Action Creators
 export const initialize = createAction(INITIALIZE);
-export const changeText = createAction(CHANGE_TEXT, ({ searchText }) => ({
-  searchText
-}));
 export const searchTag = createAction(SEARCH_TAG, ({ text }) => ({
   text
 }));
@@ -31,17 +27,12 @@ export function* tagSaga() {
 
 // reducer
 const initialState = {
-  searchText: '',
   searchTag: reducerUtils.initial()
 };
 
 export default handleActions(
   {
     [INITIALIZE]: () => initialState,
-    [CHANGE_TEXT]: (state, { payload: { searchText } }) => ({
-      ...state,
-      searchText
-    }),
 
     [SEARCH_TAG]: state => ({
       ...state,

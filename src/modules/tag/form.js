@@ -2,8 +2,8 @@ import { createAction, handleActions } from 'redux-actions';
 import produce from 'immer';
 
 // Actions
-const INITIALIZE_FORM = 'reportForm/INITIALIZE_FORM';
-const CHANGE_FIELD = 'reportForm/CHANGE_FIELD';
+const INITIALIZE_FORM = 'tagForm/INITIALIZE_FORM';
+const CHANGE_FIELD = 'tagForm/CHANGE_FIELD';
 
 // Action Creators
 export const initialize = createAction(INITIALIZE_FORM);
@@ -20,13 +20,8 @@ export const changeField = createAction(
 
 // reducer
 const initialState = {
-  form1: {
-    state1: '',
-    state2: ''
-  },
-  form2: {
-    state1: '',
-    state2: ''
+  search: {
+    text: ''
   }
 };
 

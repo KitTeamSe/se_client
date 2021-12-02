@@ -1,6 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
 import { takeLatest } from 'redux-saga/effects';
-import produce from 'immer';
 import * as api from '../../libs/api/board';
 import {
   createRequestActionTypes,
@@ -10,40 +9,21 @@ import reducerUtils from '../../libs/reducerUtils';
 
 // Actions
 const INITIALIZE = 'board/INITIALIZE';
-
-const INITIALIZE_FORM = 'board/INITIALIZE_FORM';
-
-const CHANGE_FIELD = 'board/CHANGE_FIELD';
-
 const [
   LOAD_NORMAL_POST_LIST,
   LOAD_NORMAL_POST_LIST_SUCCESS,
   LOAD_NORMAL_POST_LIST_FAILURE
 ] = createRequestActionTypes('board/LOAD_NORMAL_POST_LIST');
-
 const [
   LOAD_NOTICE_POST_LIST,
   LOAD_NOTICE_POST_LIST_SUCCESS,
   LOAD_NOTICE_POST_LIST_FAILURE
 ] = createRequestActionTypes('board/LOAD_NOTICE_POST_LIST');
-
 const [SEARCH_POST, SEARCH_POST_SUCCESS, SEARCH_POST_FAILURE] =
   createRequestActionTypes('board/SEARCH_POST');
 
 // Action Creators
 export const initialize = createAction(INITIALIZE);
-
-export const initializeForm = createAction(INITIALIZE_FORM);
-
-export const changeField = createAction(
-  CHANGE_FIELD,
-  ({ form, key, value }) => ({
-    form,
-    key,
-    value
-  })
-);
-
 export const loadNormalpostList = createAction(
   LOAD_NORMAL_POST_LIST,
   ({ boardNameEng, direction, isNotice, page, size }) => ({
@@ -54,7 +34,6 @@ export const loadNormalpostList = createAction(
     size
   })
 );
-
 export const loadNoticepostList = createAction(
   LOAD_NOTICE_POST_LIST,
   ({ boardNameEng, direction, isNotice, page, size }) => ({
@@ -65,7 +44,6 @@ export const loadNoticepostList = createAction(
     size
   })
 );
-
 export const searchPost = createAction(
   SEARCH_POST,
   ({ postSearchRequest }) => ({
@@ -92,59 +70,14 @@ export function* boardSaga() {
 
 // reducer (handleActions => switch문 대체)
 const initialState = {
-  addForm: {
-    anonymousNickname: '',
-    anonymousPassword: '',
-    attachmentList: [],
-    isNotice: 'NORMAL',
-    isSecret: 'NORMAL',
-    text: '',
-    title: '',
-    tagList: []
-  },
-  updateForm: {
-    anonymousPassword: '',
-    attachmentList: [],
-    isNotice: 'NORMAL',
-    isSecret: 'NORMAL',
-    text: '',
-    title: '',
-    tagList: []
-  },
   loadedNormalPostList: reducerUtils.initial(),
-  loadedNoticePostList: reducerUtils.initial(),
-  reportRes: reducerUtils.initial()
+  loadedNoticePostList: reducerUtils.initial()
 };
 
 export default handleActions(
   {
     [INITIALIZE]: () => initialState,
-    [INITIALIZE_FORM]: state => ({
-      ...state,
-      addForm: {
-        anonymousNickname: '',
-        anonymousPassword: '',
-        attachmentList: [],
-        isNotice: 'NORMAL',
-        isSecret: 'NORMAL',
-        text: '',
-        title: '',
-        tagList: []
-      },
-      updateForm: {
-        anonymousPassword: '',
-        attachmentList: [],
-        isNotice: 'NORMAL',
-        isSecret: 'NORMAL',
-        text: '',
-        title: '',
-        tagList: []
-      }
-    }),
-    [CHANGE_FIELD]: (state, { payload: { key, form, value } }) =>
-      produce(state, draft => {
-        draft[form][key] = value;
-      }),
+
     [LOAD_NORMAL_POST_LIST]: state => ({
       ...state,
       loadedNormalPostList: reducerUtils.loading(

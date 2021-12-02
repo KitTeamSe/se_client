@@ -2,8 +2,8 @@ import { createAction, handleActions } from 'redux-actions';
 import produce from 'immer';
 
 // Actions
-const INITIALIZE_FORM = 'reportForm/INITIALIZE_FORM';
-const CHANGE_FIELD = 'reportForm/CHANGE_FIELD';
+const INITIALIZE_FORM = 'postForm/INITIALIZE_FORM';
+const CHANGE_FIELD = 'postForm/CHANGE_FIELD';
 
 // Action Creators
 export const initialize = createAction(INITIALIZE_FORM);
@@ -20,20 +20,31 @@ export const changeField = createAction(
 
 // reducer
 const initialState = {
-  form1: {
-    state1: '',
-    state2: ''
+  addForm: {
+    anonymousNickname: '',
+    anonymousPassword: '',
+    attachmentList: [],
+    isNotice: 'NORMAL',
+    isSecret: 'NORMAL',
+    text: '',
+    title: '',
+    tagList: []
   },
-  form2: {
-    state1: '',
-    state2: ''
+  updateForm: {
+    anonymousPassword: '',
+    attachmentList: [],
+    isNotice: 'NORMAL',
+    isSecret: 'NORMAL',
+    text: '',
+    title: '',
+    tagList: []
   }
 };
 
 export default handleActions(
   {
     [INITIALIZE_FORM]: () => initialState,
-    [CHANGE_FIELD]: (state, { payload: { form, key, value } }) =>
+    [CHANGE_FIELD]: (state, { payload: { key, form, value } }) =>
       produce(state, draft => {
         draft[form][key] = value;
       })

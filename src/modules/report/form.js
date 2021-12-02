@@ -20,20 +20,17 @@ export const changeField = createAction(
 
 // reducer
 const initialState = {
-  form1: {
-    state1: '',
-    state2: ''
-  },
-  form2: {
-    state1: '',
-    state2: ''
+  reportForm: {
+    reportType: '', // POST, REPLY
+    targetName: '',
+    targetId: ''
   }
 };
 
 export default handleActions(
   {
     [INITIALIZE_FORM]: () => initialState,
-    [CHANGE_FIELD]: (state, { payload: { form, key, value } }) =>
+    [CHANGE_FIELD]: (state, { payload: { key, form, value } }) =>
       produce(state, draft => {
         draft[form][key] = value;
       })

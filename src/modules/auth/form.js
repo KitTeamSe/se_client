@@ -2,31 +2,35 @@ import { createAction, handleActions } from 'redux-actions';
 import produce from 'immer';
 
 // Actions
-const INITIALIZE_FORM = 'reportForm/INITIALIZE_FORM';
-const CHANGE_FIELD = 'reportForm/CHANGE_FIELD';
+const INITIALIZE_FORM = 'authForm/INITIALIZE_FORM';
+const CHANGE_FIELD = 'authForm/CHANGE_FIELD';
 
 // Action Creators
-export const initialize = createAction(INITIALIZE_FORM);
+export const initializeForm = createAction(INITIALIZE_FORM, form => form);
 export const changeField = createAction(
   CHANGE_FIELD,
-  ({ form, key, value }) => ({
-    form,
-    key,
-    value
-  })
+  ({ form, key, value }) => ({ form, key, value })
 );
-
 // Sagas
 
 // reducer
 const initialState = {
-  form1: {
-    state1: '',
-    state2: ''
+  signupForm: {
+    answer: '',
+    email: '',
+    id: '',
+    name: '',
+    nickname: '',
+    password: '',
+    checkPassword: '',
+    phoneNumber: '',
+    questionId: 1,
+    studentId: '',
+    type: 'STUDENT'
   },
-  form2: {
-    state1: '',
-    state2: ''
+  signinForm: {
+    id: '',
+    pw: ''
   }
 };
 

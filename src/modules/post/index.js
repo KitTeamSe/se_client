@@ -1,6 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
 import { takeLatest } from 'redux-saga/effects';
-import produce from 'immer';
 import * as api from '../../libs/api/post';
 import {
   createRequestActionTypes,
@@ -10,8 +9,6 @@ import reducerUtils from '../../libs/reducerUtils';
 
 // Actions
 const INITIALIZE = 'post/INITIALIZE';
-const INITIALIZE_FORM = 'post/INITIALIZE_FORM';
-const CHANGE_FIELD = 'post/CHANGE_FIELD';
 const [LOAD_POST, LOAD_POST_SUCCESS, LOAD_POST_FAILURE] =
   createRequestActionTypes('post/LOAD_POST');
 const [LOAD_SECRET_POST, LOAD_SECRET_POST_SUCCESS, LOAD_SECRET_POST_FAILURE] =
@@ -30,15 +27,6 @@ const [UPDATE_POST, UPDATE_POST_SUCCESS, UPDATE_POST_FAILURE] =
 
 // Action Creators
 export const initialize = createAction(INITIALIZE);
-export const initializeForm = createAction(INITIALIZE_FORM);
-export const changeField = createAction(
-  CHANGE_FIELD,
-  ({ form, key, value }) => ({
-    form,
-    key,
-    value
-  })
-);
 export const loadPost = createAction(LOAD_POST, ({ id }) => ({
   id
 }));
@@ -127,28 +115,9 @@ export function* postSaga() {
 
 // reducer
 const initialState = {
-  addForm: {
-    anonymousNickname: '',
-    anonymousPassword: '',
-    attachmentList: [],
-    isNotice: 'NORMAL',
-    isSecret: 'NORMAL',
-    text: '',
-    title: '',
-    tagList: []
-  },
-  updateForm: {
-    anonymousPassword: '',
-    attachmentList: [],
-    isNotice: 'NORMAL',
-    isSecret: 'NORMAL',
-    text: '',
-    title: '',
-    tagList: []
-  },
-  loadedNormalPostList: reducerUtils.initial(),
-  loadedNoticePostList: reducerUtils.initial(),
-  loadedPost: reducerUtils.initial(),
+  loadNormalPostList: reducerUtils.initial(),
+  loadNoticePostList: reducerUtils.initial(),
+  loadPost: reducerUtils.initial(),
   postDeleteRes: reducerUtils.initial(),
   addPost: reducerUtils.initial(),
   updatePost: reducerUtils.initial(),
@@ -158,56 +127,33 @@ const initialState = {
 export default handleActions(
   {
     [INITIALIZE]: () => initialState,
-    [INITIALIZE_FORM]: state => ({
-      ...state,
-      addForm: {
-        anonymousNickname: '',
-        anonymousPassword: '',
-        attachmentList: [],
-        isNotice: 'NORMAL',
-        isSecret: 'NORMAL',
-        text: '',
-        title: '',
-        tagList: []
-      },
-      updateForm: {
-        anonymousPassword: '',
-        attachmentList: [],
-        isNotice: 'NORMAL',
-        isSecret: 'NORMAL',
-        text: '',
-        title: '',
-        tagList: []
-      }
-    }),
-    [CHANGE_FIELD]: (state, { payload: { key, form, value } }) =>
-      produce(state, draft => {
-        draft[form][key] = value;
-      }),
+
     [LOAD_POST]: state => ({
       ...state,
-      loadedPost: reducerUtils.loading(state.loadedPost.data)
+      loadPost: reducerUtils.loading(state.loadPost.data)
     }),
     [LOAD_POST_SUCCESS]: (state, { payload: response }) => ({
       ...state,
-      loadedPost: reducerUtils.success(response)
+      loadPost: reducerUtils.success(response)
     }),
     [LOAD_POST_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      loadedPost: reducerUtils.error(error)
+      loadPost: reducerUtils.error(error)
     }),
+
     [LOAD_SECRET_POST]: state => ({
       ...state,
-      loadedPost: reducerUtils.loading(state.loadedPost.data)
+      loadPost: reducerUtils.loading(state.loadPost.data)
     }),
     [LOAD_SECRET_POST_SUCCESS]: (state, { payload: response }) => ({
       ...state,
-      loadedPost: reducerUtils.success(response)
+      loadPost: reducerUtils.success(response)
     }),
     [LOAD_SECRET_POST_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      loadedPost: reducerUtils.error(error)
+      loadPost: reducerUtils.error(error)
     }),
+
     [POST_DELETE]: state => ({
       ...state,
       postDeleteRes: reducerUtils.loading(state.postDeleteRes.data)
@@ -220,6 +166,7 @@ export default handleActions(
       ...state,
       postDeleteRes: reducerUtils.error(error)
     }),
+
     [ANONYMOUS_POST_DELETE]: state => ({
       ...state,
       postDeleteRes: reducerUtils.loading(state.postDeleteRes.data)
@@ -232,6 +179,7 @@ export default handleActions(
       ...state,
       postDeleteRes: reducerUtils.error(error)
     }),
+
     [ADD_POST]: state => ({
       ...state,
       addPost: reducerUtils.loading(state.addPost.data)
@@ -244,6 +192,7 @@ export default handleActions(
       ...state,
       addPost: reducerUtils.error(error)
     }),
+
     [UPDATE_POST]: state => ({
       ...state,
       updatePost: reducerUtils.loading(state.updatePost.data)

@@ -10,7 +10,6 @@ import reducerUtils from '../../libs/reducerUtils';
 // Actions
 const INITIALIZE = 'attach/INITIALIZE';
 const INITIALIZE_ADD = 'attach/INITIALIZE_ADD';
-const CHANGE_SELECT = 'attach/CHANGE_SELECT';
 const [ADD_ATTACH, ADD_ATTACH_SUCCESS, ADD_ATTACH_FAILURE] =
   createRequestActionTypes('attach/ADD_ATTACH');
 const [REMOVE_ATTACH, REMOVE_ATTACH_SUCCESS, REMOVE_ATTACH_FAILURE] =
@@ -19,9 +18,6 @@ const [REMOVE_ATTACH, REMOVE_ATTACH_SUCCESS, REMOVE_ATTACH_FAILURE] =
 // Action Creators
 export const initialize = createAction(INITIALIZE);
 export const initializeAdd = createAction(INITIALIZE_ADD);
-export const changeSelect = createAction(CHANGE_SELECT, ({ select }) => ({
-  select
-}));
 export const addAttachList = createAction(ADD_ATTACH, ({ files }) => ({
   files
 }));
@@ -40,7 +36,6 @@ export function* attachSaga() {
 
 // reducer
 const initialState = {
-  select: '',
   addAttach: reducerUtils.initial(),
   removeAttach: reducerUtils.initial()
 };
@@ -51,10 +46,6 @@ export default handleActions(
     [INITIALIZE_ADD]: state => ({
       ...state,
       addAttach: reducerUtils.initial()
-    }),
-    [CHANGE_SELECT]: (state, { payload: { select } }) => ({
-      ...state,
-      select
     }),
 
     [ADD_ATTACH]: state => ({

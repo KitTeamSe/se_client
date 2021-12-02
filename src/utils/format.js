@@ -9,20 +9,20 @@ const getDateTime = createAt => {
   };
 };
 
-const getTimeLessThen = num => {
+const getTimeFormat = num => {
   return num >= 10 ? num : `0${num}`;
 };
 
 const getMyDate = dateTime => {
-  return `${dateTime.year}.${getTimeLessThen(dateTime.month)}.${getTimeLessThen(
+  return `${dateTime.year}.${getTimeFormat(dateTime.month)}.${getTimeFormat(
     dateTime.day
   )}`;
 };
 
 const getMyTime = dateTime => {
-  return `${dateTime.hour}:${getTimeLessThen(
-    dateTime.minute
-  )}:${getTimeLessThen(dateTime.second)}`;
+  return `${dateTime.hour}:${getTimeFormat(dateTime.minute)}:${getTimeFormat(
+    dateTime.second
+  )}`;
 };
 
 /**
@@ -61,14 +61,46 @@ export const getTimeForToday = (createAt, type = 'date') => {
   const betweenTime = Math.floor(
     (today.getTime() - timeValue.getTime()) / 1000 / 60
   );
-  const betweenTimeHour = Math.floor(betweenTime / 60);
-  const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
 
   if (betweenTime < NOW_TIME) return '방금 전';
   if (betweenTime < RECENT_TIME) return `${betweenTime} 분 전`;
+  const betweenTimeHour = Math.floor(betweenTime / 60);
   if (betweenTimeHour < RECENT_HOUR) return `${betweenTimeHour} 시간 전`;
+  const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
   if (betweenTimeDay < RECENT_DAY) return `${betweenTimeDay} 일 전`;
   return `${getFormatMyDate(createAt)[type]}`;
+};
+
+/**
+ * http url 을 받아 https 로 변경
+ *
+ * @param {String} httpUrl
+ * @returns {String} httpsUrl
+ */
+
+export const getHttpToHttps = httpUrl => {
+  if (httpUrl.indexOf('https') < 0) {
+    return httpUrl.replace('http', 'https');
+  }
+  return httpUrl;
+};
+
+/**
+ * 이미지 데이터를 받아 img 태그 생성
+ *
+ * @param {Object} { downloadUrl, fileName }
+ * @returns {String} 에디터 이미지 태그
+ */
+
+const getImageTag = ({ src, alt }) => {
+  return `<img src="${src}" alt="${alt}">`;
+};
+
+export const getEditorImgTag = ({ downloadUrl, fileName }) => {
+  return `<p>${getImageTag({
+    src: getHttpToHttps(downloadUrl),
+    alt: fileName
+  })}</p>`;
 };
 
 /**
@@ -104,17 +136,4 @@ export const getEncodeHTML = text => {
     return text.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
   }
   return text;
-};
-
-/**
- * 기기 환경이 모바일인지 확인
- *
- * @param {}
- * @returns {Boolean} 모바일이면 true, 아니면 false
- */
-
-export const isMobile = () => {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-    navigator.userAgent
-  );
 };

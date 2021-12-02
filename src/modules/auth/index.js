@@ -1,6 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
 import { takeLatest } from 'redux-saga/effects';
-import produce from 'immer';
 import * as api from '../../libs/api/auth';
 import {
   createRequestSaga,
@@ -9,23 +8,16 @@ import {
 import reducerUtils from '../../libs/reducerUtils';
 
 // Actions
-const CHANGE_FIELD = 'auth/CHANGE_FIELD';
-const INITIALIZE_FORM = 'auth/INITIALIZE_FORM';
-const INITIALIZE_AUTH = 'auth/INITIALIZE_AUTH';
+const INITIALIZE = 'account/INITIALIZE';
 const [SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAILURE] =
-  createRequestActionTypes('auth/SIGNUP');
+  createRequestActionTypes('signin/SIGNUP');
 const [SIGNIN, SIGNIN_SUCCESS, SIGNIN_FAILURE] =
-  createRequestActionTypes('auth/SIGNIN');
+  createRequestActionTypes('signin/SIGNIN');
 const [CHECK_PASSWORD, CHECK_PASSWORD_SUCCESS, CHECK_PASSWORD_FAILURE] =
-  createRequestActionTypes('auth/CHECK_PASSWORD');
+  createRequestActionTypes('signin/CHECK_PASSWORD');
 
 // Action Creators
-export const changeField = createAction(
-  CHANGE_FIELD,
-  ({ form, key, value }) => ({ form, key, value })
-);
-export const initializeForm = createAction(INITIALIZE_FORM, form => form);
-export const initializeAuth = createAction(INITIALIZE_AUTH);
+export const initialize = createAction(INITIALIZE);
 export const signup = createAction(
   SIGNUP,
   ({
@@ -68,79 +60,52 @@ export function* authSaga() {
 
 // reducer
 const initialState = {
-  signup: {
-    answer: '',
-    email: '',
-    id: '',
-    name: '',
-    nickname: '',
-    password: '',
-    checkPassword: '',
-    phoneNumber: '',
-    questionId: 1,
-    studentId: '',
-    type: 'STUDENT'
-  },
-  signin: {
-    id: '',
-    pw: ''
-  },
-  auth: reducerUtils.initial(),
-  signupResponse: reducerUtils.initial(),
-  loadCheckPassword: reducerUtils.initial()
+  signup: reducerUtils.initial(),
+  signin: reducerUtils.initial(),
+  checkPassword: reducerUtils.initial()
 };
 
 export default handleActions(
   {
-    [CHANGE_FIELD]: (state, { payload: { form, key, value } }) =>
-      produce(state, draft => {
-        draft[form][key] = value;
-      }),
-    [INITIALIZE_FORM]: (state, { payload: form }) => ({
-      ...state,
-      [form]: initialState[form],
-      auth: reducerUtils.initial()
-    }),
-    [INITIALIZE_AUTH]: state => ({
-      ...state,
-      auth: reducerUtils.initial(),
-      signupResponse: reducerUtils.initial()
-    }),
+    [INITIALIZE]: () => initialState,
+
     [SIGNUP]: state => ({
       ...state,
-      signupResponse: reducerUtils.loading(state.signupResponse.data)
+      signup: reducerUtils.loading(state.signup.data)
     }),
-    [SIGNUP_SUCCESS]: (state, { payload: signupResponse }) => ({
+    [SIGNUP_SUCCESS]: (state, { payload: response }) => ({
       ...state,
-      signupResponse: reducerUtils.success(signupResponse)
+      signup: reducerUtils.success(response)
     }),
     [SIGNUP_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      signupResponse: reducerUtils.error(error)
+      signup: reducerUtils.error(error)
     }),
+
     [SIGNIN]: state => ({
       ...state,
-      auth: reducerUtils.loading(state.auth.data)
+      signin: reducerUtils.loading(state.signin.data)
     }),
-    [SIGNIN_SUCCESS]: (state, { payload: auth }) => ({
+    [SIGNIN_SUCCESS]: (state, { payload: response }) => ({
       ...state,
-      auth: reducerUtils.success(auth)
+      signin: reducerUtils.success(response)
     }),
     [SIGNIN_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      auth: reducerUtils.error(error)
+      signin: reducerUtils.error(error)
     }),
+
     [CHECK_PASSWORD]: state => ({
       ...state,
-      loadCheckPassword: reducerUtils.loading(state.loadCheckPassword.data)
+      checkPassword: reducerUtils.loading(state.checkPassword.data)
     }),
-    [CHECK_PASSWORD_SUCCESS]: (state, { payload: loadCheckPassword }) => ({
+    [CHECK_PASSWORD_SUCCESS]: (state, { payload: response }) => ({
       ...state,
-      loadCheckPassword: reducerUtils.success(loadCheckPassword)
+      checkPassword: reducerUtils.success(response)
     }),
     [CHECK_PASSWORD_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      loadCheckPassword: reducerUtils.error(error)
+      checkPassword: reducerUtils.error(error)
     })
   },
   initialState

@@ -31,6 +31,7 @@ const initialState = {
 export default handleActions(
   {
     [INITIALIZE]: () => initialState,
+
     [LOAD_MENU_LIST]: state => ({
       ...state,
       loadedMenuList: reducerUtils.loading(state.loadedMenuList.data)
