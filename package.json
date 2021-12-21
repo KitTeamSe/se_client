@@ -51,6 +51,9 @@
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.21.1",
     "craco": "^0.0.3",
+    "enzyme": "^3.11.0",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
+    "enzyme-to-json": "^3.6.2",
     "immer": "^9.0.5",
     "prop-types": "^15.7.2",
     "qs": "^6.10.1",
@@ -92,6 +95,11 @@
           "import/no-anonymous-default-export": "off"
         }
       }
+    ]
+  },
+  "jest": {
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
     ]
   },
   "browserslist": {
