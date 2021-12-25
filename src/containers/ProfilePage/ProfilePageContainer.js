@@ -72,7 +72,8 @@ const ProfilePageContainer = props => {
     if (data) {
       const res = data.data;
       setInfoObj(res);
-      setInfoEditObj(res);
+      const pw = { password: '' };
+      setInfoEditObj(Object.assign(res, pw));
     }
   };
 
