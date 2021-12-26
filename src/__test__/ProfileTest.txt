@@ -6,22 +6,8 @@ Profile Page 테스트
 
   Mode = "editMode" => 닉네임, 정보공유동의란, 비밀번호 확인칸 셀 바뀌었는지  O
 
-  Mode = "pwChangeMode" => Dialog, input 3개, 버튼2개
+  Mode = "pwChangeMode" => Dialog, input 3개, 버튼2개  O
 
-  Mode = "withdrawalMode" => Dialog, input 2ro, 버튼2개
+  Mode = "withdrawalMode" => Dialog, input 2ro, 버튼2개  O
 
-ProfilePage Container 테스트
-  Mode = "editMode" 
-    => X 클릭
-    => 새로고침 클릭
-    => 취소
-    => 한개 수정
-    => 여러개 수정
-
-  Mode = "pwChangeMode"
-    => 틀린 비밀번호 입력
-    => 정상 입력 후 확인
-
-  Mode = "withdrawalMode
-    => 틀린 입력 후 확인
-    => 정상 입력 후 확인
+  Mode = null => 요소들 렌더링 하는지  O

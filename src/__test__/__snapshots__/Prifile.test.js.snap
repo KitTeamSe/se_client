@@ -1,49 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ProfilePage Container rendering test 1`] = `
-<Provider
-  store={
-    Object {
-      "@@observable": [Function],
-      "dispatch": [Function],
-      "getState": [Function],
-      "replaceReducer": [Function],
-      "subscribe": [Function],
-    }
-  }
->
-  <BrowserRouter>
-    <Router
-      history={
-        Object {
-          "action": "POP",
-          "block": [Function],
-          "createHref": [Function],
-          "go": [Function],
-          "goBack": [Function],
-          "goForward": [Function],
-          "length": 1,
-          "listen": [Function],
-          "location": Object {
-            "hash": "",
-            "pathname": "/",
-            "search": "",
-            "state": undefined,
-          },
-          "push": [Function],
-          "replace": [Function],
-        }
-      }
-    >
-      <Route
-        exact={true}
-        path="/profile/test"
-      />
-    </Router>
-  </BrowserRouter>
-</Provider>
-`;
-
 exports[`ProfilePage 로딩화면 테스트 1`] = `
 Object {
   "asFragment": [Function],

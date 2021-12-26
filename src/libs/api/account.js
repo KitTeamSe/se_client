@@ -4,7 +4,6 @@ const URL = 'account';
 
 export const myInfo = ({ id }) => {
   const token = localStorage.getItem('token');
-  console.log(id, token);
   return client.get(`/${URL}/${id}`, tokenHeader(token)).catch(error => {
     throw error.response.data;
   });
