@@ -294,7 +294,12 @@ const SubmitButton = props => {
   const { modeChange, myinfoEditSubmit } = props;
   return (
     <ButtonWrapper>
-      <ButtonStyeld variant="contained" color="error" onClick={modeChange}>
+      <ButtonStyeld
+        className="CancelBtn"
+        variant="contained"
+        color="error"
+        onClick={modeChange}
+      >
         취소
       </ButtonStyeld>
       <ButtonStyeld

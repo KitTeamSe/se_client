@@ -1,21 +1,27 @@
-Profile Page 테스트 요소
+Profile Page 테스트
 
-  loading = true => LoadingCircle
+  loading = true => LoadingCircle  O
 
-  infoObj 전달 => 요소들 렌더링 하는지
+  infoObj 전달 => 요소들 렌더링 하는지  O
 
+  Mode = "editMode" => 닉네임, 정보공유동의란, 비밀번호 확인칸 셀 바뀌었는지  O
+
+  Mode = "pwChangeMode" => Dialog, input 3개, 버튼2개
+
+  Mode = "withdrawalMode" => Dialog, input 2ro, 버튼2개
+
+ProfilePage Container 테스트
   Mode = "editMode" 
-    => 닉네임, 정보공유동의란, 비밀번호 확인칸 셀 바뀌었는지
     => X 클릭
     => 새로고침 클릭
     => 취소
     => 한개 수정
     => 여러개 수정
 
-  비밀번호 변경
+  Mode = "pwChangeMode"
     => 틀린 비밀번호 입력
     => 정상 입력 후 확인
 
-  회원탈퇴
+  Mode = "withdrawalMode
     => 틀린 입력 후 확인
     => 정상 입력 후 확인

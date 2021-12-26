@@ -15,7 +15,7 @@ import PwChangeDialog from '../../components/ProfilePage/PwChangeDialog';
 
 const ProfilePageContainer = props => {
   const { match, history } = props;
-
+  console.log(match);
   const [infoObj, setInfoObj] = useState(null);
   const [infoEditObj, setInfoEditObj] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
