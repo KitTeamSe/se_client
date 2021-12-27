@@ -12,11 +12,7 @@ import {
 } from '@mui/material';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTools,
-  faTimesCircle,
-  faSyncAlt
-} from '@fortawesome/free-solid-svg-icons';
+import { faTools, faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 
 import {
   accountData,
@@ -147,13 +143,6 @@ const ProfileHeader = props => {
       {mode === 'editMode' ? (
         <>
           <ModeIconWrapper>
-            <FontAwesomeIcon
-              icon={faTimesCircle}
-              size="lg"
-              color="#DC143C"
-              style={{ cursor: 'pointer' }}
-              onClick={modeChange}
-            />
             <RefreshIcon
               icon={faSyncAlt}
               size="lg"
@@ -207,7 +196,7 @@ const ProfileRow = props => {
   const { row } = props;
   return (
     <>
-      <TableRow key={`${row[0]}profileRow`}>
+      <TableRow>
         <TableCell component="th" scope="row">
           {accountData[row[0]]}
         </TableCell>
@@ -241,7 +230,7 @@ const EditRowClassifier = props => {
     );
   }
 
-  if (row[0] === 'password') {
+  if (row[0] === 'nickname') {
     return (
       <EditTableCell>
         <FormInput
@@ -249,7 +238,6 @@ const EditRowClassifier = props => {
           id={row[0]}
           value={editRowValue}
           onChange={handleChange}
-          type="password"
         />
       </EditTableCell>
     );
@@ -261,6 +249,7 @@ const EditRowClassifier = props => {
         id={row[0]}
         value={editRowValue}
         onChange={handleChange}
+        type="password"
       />
     </EditTableCell>
   );
@@ -275,7 +264,7 @@ const EditRow = props => {
     typeChange
   } = props;
   return (
-    <EditTableRow key={`${row[0]}profileRow`}>
+    <EditTableRow>
       <TableCell component="th" scope="row">
         {accountData[row[0]]}
       </TableCell>
@@ -334,7 +323,6 @@ const ProfileBody = props => {
                     informationOpenAgreeChange={informationOpenAgreeChange}
                     handleChange={handleChange}
                     typeChange={typeChange}
-                    key={`${row[0]}editRow`}
                   />
                 ) : (
                   <ProfileRow row={row} />
@@ -342,12 +330,12 @@ const ProfileBody = props => {
               </React.Fragment>
             ))}
             {mode === 'editMode' ? (
-              <EditTableRow key="profileRow">
+              <EditTableRow>
                 <TableCell component="th" scope="row">
                   {accountData.password}
                 </TableCell>
                 <EditRowClassifier
-                  row={['password', null]}
+                  row={['password', '']}
                   infoEditObj={infoEditObj}
                   informationOpenAgreeChange={informationOpenAgreeChange}
                   handleChange={handleChange}
@@ -390,6 +378,13 @@ const PropfilePage = props => {
     );
   }
   const rows = Object.entries(infoObj);
+
+  // profile res data에 password가 있어서 필터링함
+  const profileKeys = Object.keys(infoObj);
+  const index = profileKeys.indexOf('password');
+  if (index > -1) {
+    rows.splice(index, 1);
+  }
   const profileUserId = infoObj.idString;
   const userId = localStorage.getItem('userId');
   return (

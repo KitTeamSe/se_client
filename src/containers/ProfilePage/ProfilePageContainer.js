@@ -45,10 +45,9 @@ const ProfilePageContainer = props => {
     newPwForm: account.newPwForm,
     withDrawalForm: account.withDrawalForm,
     accountDeleteRes: account.accountDeleteRes,
-    checkPwData: auth.loadCheckPassword.data
+    checkPwData: auth.loadCheckPassword.data,
+    checkPwError: auth.loadCheckPassword.error
   }));
-
-  console.log(data);
 
   useEffect(() => {
     const id = match.params.userId;
@@ -246,6 +245,7 @@ const ProfilePageContainer = props => {
         infoEditObj={infoEditObj}
         anchorEl={anchorEl}
         mode={mode}
+        loading={loading}
         handleChange={handleChange}
         formChange={formChange}
         informationOpenAgreeChange={informationOpenAgreeChange}
@@ -253,7 +253,6 @@ const ProfilePageContainer = props => {
         modeChange={modeChange}
         myInfoEditSubmit={myInfoEditSubmit}
         editFormRefresh={editFormRefresh}
-        loading={loading}
       />
     </>
   );
