@@ -298,6 +298,42 @@ const SubmitButton = props => {
   );
 };
 
+const EditModeProfilePage = props => {
+  const {
+    rows,
+    infoEditObj,
+    informationOpenAgreeChange,
+    handleChange,
+    typeChange
+  } = props;
+  return (
+    <>
+      {rows.map(row => (
+        <React.Fragment key={`${row[0]}profileRow`}>
+          {changebleAccount.includes(row[0]) ? (
+            <EditRow
+              row={row}
+              infoEditObj={infoEditObj}
+              informationOpenAgreeChange={informationOpenAgreeChange}
+              handleChange={handleChange}
+              typeChange={typeChange}
+            />
+          ) : (
+            <ProfileRow row={row} />
+          )}
+        </React.Fragment>
+      ))}
+      <EditRow
+        row={['password', '']}
+        infoEditObj={infoEditObj}
+        informationOpenAgreeChange={informationOpenAgreeChange}
+        handleChange={handleChange}
+        typeChange={typeChange}
+      />
+    </>
+  );
+};
+
 const ProfileBody = props => {
   const {
     rows,
@@ -314,35 +350,23 @@ const ProfileBody = props => {
       <InfoTable>
         <Table>
           <TableBody>
-            {rows.map(row => (
-              <React.Fragment key={`${row[0]}profileRow`}>
-                {changebleAccount.includes(row[0]) && mode === 'editMode' ? (
-                  <EditRow
-                    row={row}
-                    infoEditObj={infoEditObj}
-                    informationOpenAgreeChange={informationOpenAgreeChange}
-                    handleChange={handleChange}
-                    typeChange={typeChange}
-                  />
-                ) : (
-                  <ProfileRow row={row} />
-                )}
-              </React.Fragment>
-            ))}
             {mode === 'editMode' ? (
-              <EditTableRow>
-                <TableCell component="th" scope="row">
-                  {accountData.password}
-                </TableCell>
-                <EditRowClassifier
-                  row={['password', '']}
-                  infoEditObj={infoEditObj}
-                  informationOpenAgreeChange={informationOpenAgreeChange}
-                  handleChange={handleChange}
-                  typeChange={typeChange}
-                />
-              </EditTableRow>
-            ) : null}
+              <EditModeProfilePage
+                rows={rows}
+                infoEditObj={infoEditObj}
+                informationOpenAgreeChange={informationOpenAgreeChange}
+                handleChange={handleChange}
+                typeChange={typeChange}
+                modeChange={modeChange}
+                myinfoEditSubmit={myinfoEditSubmit}
+              />
+            ) : (
+              <>
+                {rows.map(row => (
+                  <ProfileRow row={row} key={`${row[0]}profile`} />
+                ))}
+              </>
+            )}
           </TableBody>
         </Table>
       </InfoTable>
