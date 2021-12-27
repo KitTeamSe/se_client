@@ -280,20 +280,25 @@ const EditRow = props => {
 };
 
 const SubmitButton = props => {
-  const { modeChange, myinfoEditSubmit } = props;
+  const { modeChange, myInfoEditSubmit, pwLength } = props;
   return (
     <ButtonWrapper>
       <ButtonStyeld variant="contained" color="error" onClick={modeChange}>
         취소
       </ButtonStyeld>
-      <ButtonStyeld
-        variant="contained"
-        color="primary"
-        type="submit"
-        onClick={myinfoEditSubmit}
-      >
-        수정
-      </ButtonStyeld>
+      {pwLength > 7 ? (
+        <ButtonStyeld
+          variant="contained"
+          color="primary"
+          onClick={myInfoEditSubmit}
+        >
+          수정
+        </ButtonStyeld>
+      ) : (
+        <ButtonStyeld variant="contained" disabled>
+          수정
+        </ButtonStyeld>
+      )}
     </ButtonWrapper>
   );
 };
@@ -343,8 +348,9 @@ const ProfileBody = props => {
     typeChange,
     modeChange,
     mode,
-    myinfoEditSubmit
+    myInfoEditSubmit
   } = props;
+  const pwLength = infoEditObj.password.length;
   return (
     <>
       <InfoTable>
@@ -358,7 +364,7 @@ const ProfileBody = props => {
                 handleChange={handleChange}
                 typeChange={typeChange}
                 modeChange={modeChange}
-                myinfoEditSubmit={myinfoEditSubmit}
+                myInfoEditSubmit={myInfoEditSubmit}
               />
             ) : (
               <>
@@ -373,7 +379,8 @@ const ProfileBody = props => {
       {mode === 'editMode' && (
         <SubmitButton
           modeChange={modeChange}
-          myinfoEditSubmit={myinfoEditSubmit}
+          myInfoEditSubmit={myInfoEditSubmit}
+          pwLength={pwLength}
         />
       )}
     </>
@@ -387,7 +394,7 @@ const PropfilePage = props => {
     handleChange,
     modeChange,
     informationOpenAgreeChange,
-    myinfoEditSubmit,
+    myInfoEditSubmit,
     menuClick,
     formChange,
     typeChange,
@@ -431,7 +438,7 @@ const PropfilePage = props => {
         typeChange={typeChange}
         modeChange={modeChange}
         mode={mode}
-        myinfoEditSubmit={myinfoEditSubmit}
+        myInfoEditSubmit={myInfoEditSubmit}
       />
     </MainWrapper>
   );

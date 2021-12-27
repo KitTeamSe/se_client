@@ -36,8 +36,7 @@ const ProfilePageContainer = props => {
     newPwForm,
     withDrawalForm,
     accountDeleteRes,
-    checkPwData,
-    checkPwError
+    checkPwData
   } = useSelector(({ account, auth }) => ({
     data: account.myInfo.data,
     loading: account.myInfo.loading,
@@ -45,8 +44,7 @@ const ProfilePageContainer = props => {
     newPwForm: account.newPwForm,
     withDrawalForm: account.withDrawalForm,
     accountDeleteRes: account.accountDeleteRes,
-    checkPwData: auth.loadCheckPassword.data,
-    checkPwError: auth.loadCheckPassword.error
+    checkPwData: auth.loadCheckPassword.data
   }));
 
   useEffect(() => {
@@ -157,6 +155,7 @@ const ProfilePageContainer = props => {
 
   const pwChangeSubmit = e => {
     e.preventDefault();
+
     const { nowPassword } = newPwForm;
     dispatch(checkPassword({ pw: nowPassword }));
   };
@@ -204,7 +203,7 @@ const ProfilePageContainer = props => {
       }
     }
 
-    if (parameter && Object.keys(parameter).length === 0) {
+    if (Object.keys(parameter).length === 1) {
       console.log('수정사항이 없습니다');
       return;
     }
@@ -219,10 +218,7 @@ const ProfilePageContainer = props => {
       if (mode === 'pwChangeMode') handlePwChange();
       if (mode === 'withdrawalMode') handleWithdrawal();
     }
-    if (checkPwError) {
-      console.log('현재 비밀번호 확인이 맞지 않습니다');
-    }
-  }, [checkPwData, checkPwError]);
+  }, [checkPwData]);
 
   return (
     <>
