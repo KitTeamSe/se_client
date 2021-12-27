@@ -15,12 +15,6 @@ const FormTextField = styled(TextField)`
   min-width: 256px;
 `;
 
-const ErrorText = styled.div`
-  margin: 6px;
-  font-size: 18px;
-  color: red;
-`;
-
 const ButtonWrapper = styled.div`
   display: flex;
   width: 100%;
@@ -34,8 +28,7 @@ const HalfButton = styled(Button)`
 `;
 
 const PwChangeDialog = props => {
-  const { mode, error, newPwForm, modeChange, pwChangeSubmit, formChange } =
-    props;
+  const { mode, newPwForm, modeChange, pwChangeSubmit, formChange } = props;
   return (
     <>
       <Dialog
@@ -70,7 +63,6 @@ const PwChangeDialog = props => {
             onChange={formChange}
             value={newPwForm.newPasswordConfirm}
           />
-          <ErrorText>{error}</ErrorText>
           <ButtonWrapper>
             <HalfButton onClick={modeChange} color="primary">
               취소

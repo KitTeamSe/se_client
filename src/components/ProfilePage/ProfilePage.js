@@ -326,7 +326,7 @@ const ProfileBody = props => {
         <Table>
           <TableBody>
             {rows.map(row => (
-              <>
+              <React.Fragment key={`${row[0]}profileRow`}>
                 {changebleAccount.includes(row[0]) && mode === 'editMode' ? (
                   <EditRow
                     row={row}
@@ -339,7 +339,7 @@ const ProfileBody = props => {
                 ) : (
                   <ProfileRow row={row} />
                 )}
-              </>
+              </React.Fragment>
             ))}
             {mode === 'editMode' ? (
               <EditTableRow key="profileRow">
