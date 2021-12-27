@@ -294,7 +294,12 @@ const SubmitButton = props => {
   const { modeChange, myinfoEditSubmit } = props;
   return (
     <ButtonWrapper>
-      <ButtonStyeld variant="contained" color="error" onClick={modeChange}>
+      <ButtonStyeld
+        className="CancelBtn"
+        variant="contained"
+        color="error"
+        onClick={modeChange}
+      >
         취소
       </ButtonStyeld>
       <ButtonStyeld
@@ -320,13 +325,14 @@ const ProfileBody = props => {
     mode,
     myinfoEditSubmit
   } = props;
+
   return (
     <>
       <InfoTable>
         <Table>
           <TableBody>
             {rows.map(row => (
-              <>
+              <React.Fragment key={`${row[0]}profileRow`}>
                 {changebleAccount.includes(row[0]) && mode === 'editMode' ? (
                   <EditRow
                     row={row}
@@ -334,12 +340,11 @@ const ProfileBody = props => {
                     informationOpenAgreeChange={informationOpenAgreeChange}
                     handleChange={handleChange}
                     typeChange={typeChange}
-                    key={`${row[0]}editRow`}
                   />
                 ) : (
                   <ProfileRow row={row} />
                 )}
-              </>
+              </React.Fragment>
             ))}
             {mode === 'editMode' ? (
               <EditTableRow key="profileRow">

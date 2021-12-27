@@ -15,7 +15,6 @@ import PwChangeDialog from '../../components/ProfilePage/PwChangeDialog';
 
 const ProfilePageContainer = props => {
   const { match, history } = props;
-
   const [infoObj, setInfoObj] = useState(null);
   const [infoEditObj, setInfoEditObj] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
@@ -72,7 +71,8 @@ const ProfilePageContainer = props => {
     if (data) {
       const res = data.data;
       setInfoObj(res);
-      setInfoEditObj(res);
+      const pw = { password: '' };
+      setInfoEditObj(Object.assign(res, pw));
     }
   };
 
