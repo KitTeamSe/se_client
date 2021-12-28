@@ -19,38 +19,32 @@ const ProfilePageContainer = props => {
   const [infoEditObj, setInfoEditObj] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
   const [mode, setMode] = useState(null);
-  const [error, setError] = useState(null);
 
   const dispatch = useDispatch();
   const token = localStorage.getItem('token');
   const userId = localStorage.getItem('userId');
 
   if (token === null) {
+    console.log('login 한 유저만 Profile 에 접근 할 수 있습니다');
     history.push('/');
   }
 
   const {
     data,
     loading,
-    myInfoError,
     myInfoEditRes,
-    myInfoEditError,
     newPwForm,
     withDrawalForm,
     accountDeleteRes,
-    checkPwData,
-    checkPwError
+    checkPwData
   } = useSelector(({ account, auth }) => ({
     data: account.myInfo.data,
     loading: account.myInfo.loading,
-    myInfoError: account.myInfo.error,
     myInfoEditRes: account.myInfoEditRes.data,
-    myInfoEditError: account.myInfoEditRes.error,
     newPwForm: account.newPwForm,
     withDrawalForm: account.withDrawalForm,
     accountDeleteRes: account.accountDeleteRes,
-    checkPwData: auth.loadCheckPassword.data,
-    checkPwError: auth.loadCheckPassword.error
+    checkPwData: auth.loadCheckPassword.data
   }));
 
   useEffect(() => {
@@ -79,15 +73,6 @@ const ProfilePageContainer = props => {
   useEffect(() => {
     editFormRefresh();
   }, [data]);
-
-  useEffect(() => {
-    if (myInfoError) {
-      setError(String(myInfoError.message));
-    }
-    if (myInfoEditError) {
-      setError(String(myInfoEditError.message));
-    }
-  }, [myInfoError, myInfoEditError]);
 
   useEffect(() => {
     if (myInfoEditRes) {
@@ -151,7 +136,6 @@ const ProfilePageContainer = props => {
     e.preventDefault();
     const value = e.target.id;
     setAnchorEl(null);
-    setError(null);
     if (mode === value) {
       setMode(null);
     } else {
@@ -171,6 +155,7 @@ const ProfilePageContainer = props => {
 
   const pwChangeSubmit = e => {
     e.preventDefault();
+
     const { nowPassword } = newPwForm;
     dispatch(checkPassword({ pw: nowPassword }));
   };
@@ -191,7 +176,7 @@ const ProfilePageContainer = props => {
     const { newPassword, newPasswordConfirm } = newPwForm;
 
     if (newPassword !== newPasswordConfirm) {
-      setError('새비밀번호 확인이 맞지 않습니다');
+      console.log('새비밀번호 확인이 맞지 않습니다');
     } else {
       const parameter = { id: userId, password: newPassword };
       dispatch(myInfoEdit({ parameter }));
@@ -204,7 +189,7 @@ const ProfilePageContainer = props => {
     if (text === '탈퇴') {
       dispatch(accountDelete({ userId }));
     } else {
-      setError('탈퇴를 입력하세요');
+      console.log('탈퇴를 입력하세요');
     }
   };
 
@@ -218,8 +203,8 @@ const ProfilePageContainer = props => {
       }
     }
 
-    if (parameter && Object.keys(parameter).length === 0) {
-      setError('수정사항이 없습니다');
+    if (Object.keys(parameter).length === 1) {
+      console.log('수정사항이 없습니다');
       return;
     }
 
@@ -233,16 +218,12 @@ const ProfilePageContainer = props => {
       if (mode === 'pwChangeMode') handlePwChange();
       if (mode === 'withdrawalMode') handleWithdrawal();
     }
-    if (checkPwError) {
-      setError('현재 비밀번호 확인이 맞지 않습니다');
-    }
-  }, [checkPwData, checkPwError]);
+  }, [checkPwData]);
 
   return (
     <>
       <WithdrawalDialog
         mode={mode}
-        error={error}
         withDrawalForm={withDrawalForm}
         modeChange={modeChange}
         formChange={formChange}
@@ -250,7 +231,6 @@ const ProfilePageContainer = props => {
       />
       <PwChangeDialog
         mode={mode}
-        error={error}
         newPwForm={newPwForm}
         modeChange={modeChange}
         pwChangeSubmit={pwChangeSubmit}
@@ -261,14 +241,13 @@ const ProfilePageContainer = props => {
         infoEditObj={infoEditObj}
         anchorEl={anchorEl}
         mode={mode}
+        loading={loading}
         handleChange={handleChange}
-        formChange={formChange}
         informationOpenAgreeChange={informationOpenAgreeChange}
         menuClick={menuClick}
         modeChange={modeChange}
         myInfoEditSubmit={myInfoEditSubmit}
         editFormRefresh={editFormRefresh}
-        loading={loading}
       />
     </>
   );

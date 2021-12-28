@@ -18,7 +18,7 @@ const data = {
     signupError: '회원가입 실패'
   },
   checkPassword: {
-    checkPwError: '비밀번호 확인 실패'
+    pwError: '비밀번호 확인 실패'
   },
   account: {
     editinfoSuccess: '회원정보 수정 성공',
@@ -55,6 +55,14 @@ const data = {
     questionError: '내 질문 찾기 실패',
     passwordSuccess: '이메일로 전송 되었습니다',
     passwordError: '비밀번호 찾기 실패'
+  },
+  profile: {
+    reqSuccess: '프로필 화면 조회 성공',
+    reqError: '프로필 화면 조회 실패',
+    editSuccess: '개인정보 수정 성공',
+    editError: '개인정보 수정 실패',
+    dropSuccess: '회원 탈퇴 성공',
+    dropError: '회원 탈퇴 실패'
   }
 };
 
@@ -81,15 +89,19 @@ const FeedbackContainer = props => {
   }));
 
   const {
-    editInfoSuccess,
-    editInfoError,
-    accountDeleteSuccess,
-    accountDeleteError
+    profileSuccess,
+    profileError,
+    editProfileSuccess,
+    editProfileError,
+    withDrawSuccess,
+    withDrawError
   } = useSelector(({ account }) => ({
-    editInfoSuccess: account.myInfoEditRes.data,
-    editInfoError: account.myInfoEditRes.error,
-    accountDeleteSuccess: account.accountDeleteRes.data,
-    accountDeleteError: account.accountDeleteRes.error
+    profileSuccess: account.myInfo.data,
+    profileError: account.myInfo.error,
+    editProfileSuccess: account.myInfoEditRes.data,
+    editProfileError: account.myInfoEditRes.error,
+    withDrawSuccess: account.accountDeleteRes.data,
+    withDrawError: account.accountDeleteRes.error
   }));
 
   const {
@@ -167,6 +179,29 @@ const FeedbackContainer = props => {
   }, []);
 
   useEffect(() => {
+    if (profileSuccess) handleFeedback('success', data.profile.reqSuccess);
+    if (editProfileSuccess) handleFeedback('success', data.profile.editSuccess);
+    if (withDrawSuccess) handleFeedback('success', data.profile.dropSuccess);
+
+    if (profileError)
+      handleFeedback('error', profileError.message || data.profile.reqError);
+    if (editProfileError)
+      handleFeedback(
+        'error',
+        editProfileError.message || data.profile.editError
+      );
+    if (withDrawError)
+      handleFeedback('error', withDrawError.message || data.profile.dropError);
+  }, [
+    profileSuccess,
+    editProfileSuccess,
+    withDrawSuccess,
+    editProfileError,
+    withDrawSuccess,
+    withDrawError
+  ]);
+
+  useEffect(() => {
     if (signinSuccess) handleFeedback('success', data.auth.signinSuccess);
     if (signupSuccess) handleFeedback('success', data.auth.signupSuccess);
 
@@ -178,27 +213,11 @@ const FeedbackContainer = props => {
 
   useEffect(() => {
     if (checkPwError)
-      handleFeedback('error', checkPwError.message || data.auth.signinError);
-  }, [checkPwError]);
-
-  useEffect(() => {
-    if (editInfoSuccess)
-      handleFeedback('success', data.account.editinfoSuccess);
-    if (editInfoError)
       handleFeedback(
         'error',
-        editInfoError.message || data.account.editinfoError
+        checkPwError.message || data.checkPassword.pwError
       );
-    if (accountDeleteSuccess)
-      handleFeedback('success', data.account.accountDeleteSuccess);
-    if (accountDeleteError)
-      handleFeedback('error', data.account.accountDeleteError);
-  }, [
-    editInfoSuccess,
-    editInfoError,
-    accountDeleteSuccess,
-    accountDeleteError
-  ]);
+  }, [checkPwError]);
 
   useEffect(() => {
     if (replyAddSuccess) handleFeedback('success', data.reply.addSuccess);

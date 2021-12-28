@@ -34,21 +34,9 @@ const HalfButton = styled(Button)`
   margin: 8px;
 `;
 
-const ErrorText = styled.div`
-  margin: 6px;
-  font-size: 18px;
-  color: red;
-`;
-
 const WithdrawalDialog = props => {
-  const {
-    mode,
-    error,
-    withDrawalForm,
-    modeChange,
-    formChange,
-    withdrawalSubmit
-  } = props;
+  const { mode, withDrawalForm, modeChange, formChange, withdrawalSubmit } =
+    props;
   return (
     <>
       <Dialog
@@ -78,7 +66,6 @@ const WithdrawalDialog = props => {
             onChange={formChange}
             value={withDrawalForm.text}
           />
-          <ErrorText>{error}</ErrorText>
           <ButtonWrapper>
             <HalfButton onClick={modeChange} color="primary">
               취소

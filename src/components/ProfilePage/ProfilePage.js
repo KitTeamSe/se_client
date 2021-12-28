@@ -12,11 +12,7 @@ import {
 } from '@mui/material';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTools,
-  faTimesCircle,
-  faSyncAlt
-} from '@fortawesome/free-solid-svg-icons';
+import { faTools, faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 
 import {
   accountData,
@@ -147,13 +143,6 @@ const ProfileHeader = props => {
       {mode === 'editMode' ? (
         <>
           <ModeIconWrapper>
-            <FontAwesomeIcon
-              icon={faTimesCircle}
-              size="lg"
-              color="#DC143C"
-              style={{ cursor: 'pointer' }}
-              onClick={modeChange}
-            />
             <RefreshIcon
               icon={faSyncAlt}
               size="lg"
@@ -207,7 +196,7 @@ const ProfileRow = props => {
   const { row } = props;
   return (
     <>
-      <TableRow key={`${row[0]}profileRow`}>
+      <TableRow>
         <TableCell component="th" scope="row">
           {accountData[row[0]]}
         </TableCell>
@@ -241,7 +230,7 @@ const EditRowClassifier = props => {
     );
   }
 
-  if (row[0] === 'password') {
+  if (row[0] === 'nickname') {
     return (
       <EditTableCell>
         <FormInput
@@ -249,7 +238,6 @@ const EditRowClassifier = props => {
           id={row[0]}
           value={editRowValue}
           onChange={handleChange}
-          type="password"
         />
       </EditTableCell>
     );
@@ -261,21 +249,16 @@ const EditRowClassifier = props => {
         id={row[0]}
         value={editRowValue}
         onChange={handleChange}
+        type="password"
       />
     </EditTableCell>
   );
 };
 
 const EditRow = props => {
-  const {
-    row,
-    infoEditObj,
-    informationOpenAgreeChange,
-    handleChange,
-    typeChange
-  } = props;
+  const { row, infoEditObj, informationOpenAgreeChange, handleChange } = props;
   return (
-    <EditTableRow key={`${row[0]}profileRow`}>
+    <EditTableRow>
       <TableCell component="th" scope="row">
         {accountData[row[0]]}
       </TableCell>
@@ -284,14 +267,13 @@ const EditRow = props => {
         infoEditObj={infoEditObj}
         informationOpenAgreeChange={informationOpenAgreeChange}
         handleChange={handleChange}
-        typeChange={typeChange}
       />
     </EditTableRow>
   );
 };
 
 const SubmitButton = props => {
-  const { modeChange, myinfoEditSubmit } = props;
+  const { modeChange, myInfoEditSubmit, pwLength } = props;
   return (
     <ButtonWrapper>
       <ButtonStyeld
@@ -302,15 +284,48 @@ const SubmitButton = props => {
       >
         취소
       </ButtonStyeld>
-      <ButtonStyeld
-        variant="contained"
-        color="primary"
-        type="submit"
-        onClick={myinfoEditSubmit}
-      >
-        수정
-      </ButtonStyeld>
+      {pwLength > 7 ? (
+        <ButtonStyeld
+          variant="contained"
+          color="primary"
+          onClick={myInfoEditSubmit}
+        >
+          수정
+        </ButtonStyeld>
+      ) : (
+        <ButtonStyeld variant="contained" disabled>
+          수정
+        </ButtonStyeld>
+      )}
     </ButtonWrapper>
+  );
+};
+
+const EditModeProfilePage = props => {
+  const { rows, infoEditObj, informationOpenAgreeChange, handleChange } = props;
+  return (
+    <>
+      {rows.map(row => (
+        <React.Fragment key={`${row[0]}profileRow`}>
+          {changebleAccount.includes(row[0]) ? (
+            <EditRow
+              row={row}
+              infoEditObj={infoEditObj}
+              informationOpenAgreeChange={informationOpenAgreeChange}
+              handleChange={handleChange}
+            />
+          ) : (
+            <ProfileRow row={row} />
+          )}
+        </React.Fragment>
+      ))}
+      <EditRow
+        row={['password', '']}
+        infoEditObj={infoEditObj}
+        informationOpenAgreeChange={informationOpenAgreeChange}
+        handleChange={handleChange}
+      />
+    </>
   );
 };
 
@@ -320,53 +335,41 @@ const ProfileBody = props => {
     infoEditObj,
     informationOpenAgreeChange,
     handleChange,
-    typeChange,
     modeChange,
     mode,
-    myinfoEditSubmit
+    myInfoEditSubmit
   } = props;
+  const pwLength = infoEditObj.password.length;
 
   return (
     <>
       <InfoTable>
         <Table>
           <TableBody>
-            {rows.map(row => (
-              <React.Fragment key={`${row[0]}profileRow`}>
-                {changebleAccount.includes(row[0]) && mode === 'editMode' ? (
-                  <EditRow
-                    row={row}
-                    infoEditObj={infoEditObj}
-                    informationOpenAgreeChange={informationOpenAgreeChange}
-                    handleChange={handleChange}
-                    typeChange={typeChange}
-                  />
-                ) : (
-                  <ProfileRow row={row} />
-                )}
-              </React.Fragment>
-            ))}
             {mode === 'editMode' ? (
-              <EditTableRow key="profileRow">
-                <TableCell component="th" scope="row">
-                  {accountData.password}
-                </TableCell>
-                <EditRowClassifier
-                  row={['password', null]}
-                  infoEditObj={infoEditObj}
-                  informationOpenAgreeChange={informationOpenAgreeChange}
-                  handleChange={handleChange}
-                  typeChange={typeChange}
-                />
-              </EditTableRow>
-            ) : null}
+              <EditModeProfilePage
+                rows={rows}
+                infoEditObj={infoEditObj}
+                informationOpenAgreeChange={informationOpenAgreeChange}
+                handleChange={handleChange}
+                modeChange={modeChange}
+                myInfoEditSubmit={myInfoEditSubmit}
+              />
+            ) : (
+              <>
+                {rows.map(row => (
+                  <ProfileRow row={row} key={`${row[0]}profile`} />
+                ))}
+              </>
+            )}
           </TableBody>
         </Table>
       </InfoTable>
       {mode === 'editMode' && (
         <SubmitButton
           modeChange={modeChange}
-          myinfoEditSubmit={myinfoEditSubmit}
+          myInfoEditSubmit={myInfoEditSubmit}
+          pwLength={pwLength}
         />
       )}
     </>
@@ -378,12 +381,10 @@ const PropfilePage = props => {
 
   const {
     handleChange,
-    modeChange,
     informationOpenAgreeChange,
-    myinfoEditSubmit,
     menuClick,
-    formChange,
-    typeChange,
+    modeChange,
+    myInfoEditSubmit,
     editFormRefresh
   } = props;
 
@@ -395,6 +396,13 @@ const PropfilePage = props => {
     );
   }
   const rows = Object.entries(infoObj);
+
+  // profile res data에 password가 있어서 필터링함
+  const profileKeys = Object.keys(infoObj);
+  const index = profileKeys.indexOf('password');
+  if (index > -1) {
+    rows.splice(index, 1);
+  }
   const profileUserId = infoObj.idString;
   const userId = localStorage.getItem('userId');
   return (
@@ -404,7 +412,6 @@ const PropfilePage = props => {
         anchorEl={anchorEl}
         profileUserId={profileUserId}
         userId={userId}
-        formChange={formChange}
         modeChange={modeChange}
         menuClick={menuClick}
         editFormRefresh={editFormRefresh}
@@ -414,10 +421,9 @@ const PropfilePage = props => {
         infoEditObj={infoEditObj}
         informationOpenAgreeChange={informationOpenAgreeChange}
         handleChange={handleChange}
-        typeChange={typeChange}
         modeChange={modeChange}
         mode={mode}
-        myinfoEditSubmit={myinfoEditSubmit}
+        myInfoEditSubmit={myInfoEditSubmit}
       />
     </MainWrapper>
   );
