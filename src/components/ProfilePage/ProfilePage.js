@@ -256,13 +256,7 @@ const EditRowClassifier = props => {
 };
 
 const EditRow = props => {
-  const {
-    row,
-    infoEditObj,
-    informationOpenAgreeChange,
-    handleChange,
-    typeChange
-  } = props;
+  const { row, infoEditObj, informationOpenAgreeChange, handleChange } = props;
   return (
     <EditTableRow>
       <TableCell component="th" scope="row">
@@ -273,7 +267,6 @@ const EditRow = props => {
         infoEditObj={infoEditObj}
         informationOpenAgreeChange={informationOpenAgreeChange}
         handleChange={handleChange}
-        typeChange={typeChange}
       />
     </EditTableRow>
   );
@@ -304,13 +297,7 @@ const SubmitButton = props => {
 };
 
 const EditModeProfilePage = props => {
-  const {
-    rows,
-    infoEditObj,
-    informationOpenAgreeChange,
-    handleChange,
-    typeChange
-  } = props;
+  const { rows, infoEditObj, informationOpenAgreeChange, handleChange } = props;
   return (
     <>
       {rows.map(row => (
@@ -321,7 +308,6 @@ const EditModeProfilePage = props => {
               infoEditObj={infoEditObj}
               informationOpenAgreeChange={informationOpenAgreeChange}
               handleChange={handleChange}
-              typeChange={typeChange}
             />
           ) : (
             <ProfileRow row={row} />
@@ -333,7 +319,6 @@ const EditModeProfilePage = props => {
         infoEditObj={infoEditObj}
         informationOpenAgreeChange={informationOpenAgreeChange}
         handleChange={handleChange}
-        typeChange={typeChange}
       />
     </>
   );
@@ -345,7 +330,6 @@ const ProfileBody = props => {
     infoEditObj,
     informationOpenAgreeChange,
     handleChange,
-    typeChange,
     modeChange,
     mode,
     myInfoEditSubmit
@@ -362,7 +346,6 @@ const ProfileBody = props => {
                 infoEditObj={infoEditObj}
                 informationOpenAgreeChange={informationOpenAgreeChange}
                 handleChange={handleChange}
-                typeChange={typeChange}
                 modeChange={modeChange}
                 myInfoEditSubmit={myInfoEditSubmit}
               />
@@ -392,12 +375,10 @@ const PropfilePage = props => {
 
   const {
     handleChange,
-    modeChange,
     informationOpenAgreeChange,
-    myInfoEditSubmit,
     menuClick,
-    formChange,
-    typeChange,
+    modeChange,
+    myInfoEditSubmit,
     editFormRefresh
   } = props;
 
@@ -425,7 +406,6 @@ const PropfilePage = props => {
         anchorEl={anchorEl}
         profileUserId={profileUserId}
         userId={userId}
-        formChange={formChange}
         modeChange={modeChange}
         menuClick={menuClick}
         editFormRefresh={editFormRefresh}
@@ -435,7 +415,6 @@ const PropfilePage = props => {
         infoEditObj={infoEditObj}
         informationOpenAgreeChange={informationOpenAgreeChange}
         handleChange={handleChange}
-        typeChange={typeChange}
         modeChange={modeChange}
         mode={mode}
         myInfoEditSubmit={myInfoEditSubmit}

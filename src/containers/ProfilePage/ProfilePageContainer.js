@@ -243,7 +243,6 @@ const ProfilePageContainer = props => {
         mode={mode}
         loading={loading}
         handleChange={handleChange}
-        formChange={formChange}
         informationOpenAgreeChange={informationOpenAgreeChange}
         menuClick={menuClick}
         modeChange={modeChange}
