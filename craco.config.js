@@ -3,7 +3,7 @@ const { styles } = require('@ckeditor/ckeditor5-dev-utils');
 
 module.exports = {
   webpack: {
-    configure: (config, { env, paths }) => {
+    configure: config => {
       config.plugins.push(
         new CKEditorWebpackPlugin({
           language: 'ko',

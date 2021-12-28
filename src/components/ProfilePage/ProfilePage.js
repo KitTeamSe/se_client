@@ -276,7 +276,12 @@ const SubmitButton = props => {
   const { modeChange, myInfoEditSubmit, pwLength } = props;
   return (
     <ButtonWrapper>
-      <ButtonStyeld variant="contained" color="error" onClick={modeChange}>
+      <ButtonStyeld
+        className="CancelBtn"
+        variant="contained"
+        color="error"
+        onClick={modeChange}
+      >
         취소
       </ButtonStyeld>
       {pwLength > 7 ? (
@@ -335,6 +340,7 @@ const ProfileBody = props => {
     myInfoEditSubmit
   } = props;
   const pwLength = infoEditObj.password.length;
+
   return (
     <>
       <InfoTable>
