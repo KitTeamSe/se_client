@@ -30,10 +30,10 @@ const LogoutDialog = props => {
   const { onLogout, ProfileClick } = props;
 
   return (
-    <>
+    <div className="LoginDialog">
       <TransparentButton onClick={ProfileClick}>프로필</TransparentButton>
       <TransparentButton onClick={onLogout}>로그아웃</TransparentButton>
-    </>
+    </div>
   );
 };
 

@@ -8,7 +8,8 @@ module.exports = {
     'airbnb',
     'prettier',
     'eslint:recommended',
-    'plugin:prettier/recommended'
+    'plugin:prettier/recommended',
+    'plugin:cypress/recommended'
   ],
   parserOptions: {
     ecmaVersion: 2018
