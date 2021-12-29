@@ -1,9 +1,21 @@
+function LogoutCheck() {
+  cy.get('.LogedIn > button').should($btn => {
+    expect($btn).to.have.length(2);
+  });
+}
+
+function LoginCheck() {
+  cy.get('.LogedOut > button').should($btn => {
+    expect($btn).to.have.length(1);
+  });
+}
+
 describe('Signup test', () => {
   beforeEach(() => {
     cy.visit('/');
   });
 
-  it('Signup and Logout', () => {
+  it('Signup and Withdrawal', () => {
     cy.contains('로그인').click();
     cy.contains('회원가입').click();
     cy.url().should(url => {
@@ -32,15 +44,26 @@ describe('Signup test', () => {
     cy.get('#studentId').type(randomStudentId, { delay: 10 });
     cy.get('#answer').type(randomAns, { delay: 10 });
     cy.get('button[type=submit').click();
-    cy.get('.LogedIn > button').should($btn => {
-      expect($btn).to.have.length(2);
-    });
+    LogoutCheck();
     // 회원가입 후 자동로그인 테스트
 
     cy.contains('로그아웃').click();
-    cy.get('.LogedOut > button').should($btn => {
-      expect($btn).to.have.length(1);
-    });
+    LoginCheck();
     // 로그아웃 테스트
+
+    cy.contains('로그인').click();
+    cy.get('#id').type(randomId, { delay: 10 });
+    cy.get('#password').type(randomPw, { delay: 10 }).type('{enter}');
+    cy.contains('프로필').click();
+    cy.get('#modeChanger').click();
+    cy.get('#withdrawalMode').click();
+    cy.get('h2').should('have.text', '회원 탈퇴');
+    // 회원탈퇴 화면 테스트
+
+    cy.get('#password').type(randomPw, { delay: 10 });
+    cy.get('#text').type('탈퇴', { delay: 10 });
+    cy.get('button[type=submit').click();
+    LogoutCheck();
+    // 회원 탈퇴 테스트
   });
 });
