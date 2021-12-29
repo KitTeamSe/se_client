@@ -10,7 +10,7 @@ describe('cypress test', () => {
       .type('asdfasdf', { delay: 50 })
       .should('have.value', 'asdfasdf')
       .type('{enter}');
-    cy.get('.LoginDialog > button').should($btn => {
+    cy.get('.LogedIn > button').should($btn => {
       expect($btn).to.have.length(2);
     });
   });
