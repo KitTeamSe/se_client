@@ -153,7 +153,7 @@ const ProfileHeader = props => {
         </>
       ) : (
         <>
-          <ModeIconWrapper>
+          <ModeIconWrapper id="modeChanger">
             <FontAwesomeIcon
               icon={faTools}
               size="lg"

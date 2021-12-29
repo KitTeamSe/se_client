@@ -112,7 +112,7 @@ const LoginDialog = props => {
   } = props;
 
   return (
-    <>
+    <div className="LogedOut">
       <TransparentButton onClick={handleClickOpen}>로그인</TransparentButton>
       <Dialog open={open} onClose={handleClose}>
         <AlignCenter>
@@ -153,7 +153,7 @@ const LoginDialog = props => {
           </FormFlex>
         </AlignCenter>
       </Dialog>
-    </>
+    </div>
   );
 };
 
