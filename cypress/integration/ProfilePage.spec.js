@@ -1,4 +1,4 @@
-import { Login, Logout } from './modules';
+import { Login, Logout } from '../modules';
 import { informationOpenAgreeEnum } from '../../src/DataExport';
 
 it('Profile Page E2E test', () => {

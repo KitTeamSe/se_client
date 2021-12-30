@@ -1,4 +1,4 @@
-import { Login, LoginCheck, Logout, LogoutCheck } from './modules';
+import { Login, LoginCheck, Logout, LogoutCheck } from '../modules';
 
 it('Signup and Withdrawal', () => {
   cy.visit('/');
