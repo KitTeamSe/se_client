@@ -36,8 +36,8 @@ it('Signup and Withdrawal', () => {
 
   Login(randomId, randomPw);
   cy.contains('프로필').click();
-  cy.get('#modeChanger').click();
-  cy.get('#withdrawalMode').click();
+  cy.get('#modeChanger').find('svg').click();
+  cy.contains('회원탈퇴').click();
   cy.get('h2').should('have.text', '회원 탈퇴');
   // 회원탈퇴 화면 테스트
 
