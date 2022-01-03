@@ -43,9 +43,10 @@ const BoardSearch = props => {
         value={postSearchType}
         onChange={onPostSearchTypeChange}
         variant="standard"
+        id="formSelectField"
       >
         {postSearchTypeList.map(type => (
-          <MenuItem value={type.type} key={type.type}>
+          <MenuItem value={type.type} key={type.type} id={type.type}>
             {type.name}
           </MenuItem>
         ))}
