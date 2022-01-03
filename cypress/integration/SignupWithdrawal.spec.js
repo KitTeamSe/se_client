@@ -9,7 +9,7 @@ const randomPhone = `010${String(Math.random()).substring(2, 10)}`;
 const randomStudentId = String(Math.random()).substring(2, 10);
 const randomAns = Math.random().toString(36).substring(2, 11);
 
-describe('Signup and Withdrawal', () => {
+describe('Signup and Withdrawal Test', () => {
   beforeEach(() => {
     cy.visit('/');
   });
