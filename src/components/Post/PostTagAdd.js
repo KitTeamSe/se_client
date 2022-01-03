@@ -97,6 +97,7 @@ const PostTagInput = props => {
         <ButtonStyled
           variant="contained"
           size="small"
+          id="addTagBtn"
           onClick={handleAddTag}
           startIcon={<FontAwesomeIcon size="sm" icon={faPlus} />}
         >
@@ -104,6 +105,7 @@ const PostTagInput = props => {
         </ButtonStyled>
         <ButtonStyled
           variant="contained"
+          id="resetTagBtn"
           color="error"
           size="small"
           startIcon={<FontAwesomeIcon size="sm" icon={faRedo} />}
@@ -119,7 +121,7 @@ const PostTagInput = props => {
 const PostTagList = props => {
   const { data, handleRemoveTag } = props;
   return (
-    <TagListWrapper>
+    <TagListWrapper id="tagList">
       {data.length
         ? data.map(e => {
             const onDelete = () => handleRemoveTag(e);
