@@ -142,7 +142,7 @@ const ProfileHeader = props => {
       <Welcome>내 정보</Welcome>
       {mode === 'editMode' ? (
         <>
-          <ModeIconWrapper>
+          <ModeIconWrapper id="refreshIcon">
             <RefreshIcon
               icon={faSyncAlt}
               size="lg"
@@ -162,7 +162,7 @@ const ProfileHeader = props => {
             />
           </ModeIconWrapper>
           <Menu
-            id="editMode"
+            id="ModeMenu"
             anchorEl={anchorEl}
             keepMounted
             open={Boolean(anchorEl)}
@@ -224,6 +224,7 @@ const EditRowClassifier = props => {
           paddingRight: '16px',
           cursor: 'pointer'
         }}
+        id="infoAgree"
       >
         {informationOpenAgreeEnum[editRowValue]}
       </EditTableCell>

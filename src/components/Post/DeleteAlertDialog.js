@@ -24,10 +24,10 @@ const DeleteAlertDialog = props => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={deleteBoxHandle} color="primary">
+        <Button id="cancelBtn" onClick={deleteBoxHandle} color="primary">
           취소
         </Button>
-        <Button onClick={deleteFunction} color="secondary">
+        <Button id="delBtn" onClick={deleteFunction} color="secondary">
           삭제
         </Button>
       </DialogActions>

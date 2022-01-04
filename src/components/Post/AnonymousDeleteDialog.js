@@ -55,10 +55,14 @@ const AnonymousDeleteDialog = props => {
         />
       </FormField>
       <DialogActions>
-        <Button onClick={anonymousDeleteBoxHandle} color="primary">
+        <Button
+          id="cancelBtn"
+          onClick={anonymousDeleteBoxHandle}
+          color="primary"
+        >
           취소
         </Button>
-        <Button onClick={anonymousDeleteFunction} color="secondary">
+        <Button id="delBtn" onClick={anonymousDeleteFunction} color="secondary">
           삭제
         </Button>
       </DialogActions>
