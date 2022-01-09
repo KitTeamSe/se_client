@@ -50,6 +50,37 @@ SE 게시판은 커뮤니티로써 갖추어야 할 기능들을 만들었다.
 
 ### Sprint회의
 
-## 테스트
+## 테스트 <img alt="cypress" src="https://img.shields.io/badge/cypress-17202C?style=for-the-badge&logo=cypress&logoColor=white">
+E2E 테스트란 실제 사용자의 행동을 고려하여 화면 UI부터 API통신까지 모든것을 연결한 통합테스트 이다
+Cypress를 사용해 E2E 테스트를 진행하였다
 
 ### E2E 테스트
+#### npm run test
+            npm run start
+            npm run test //test는 cypress run
+먼저 서버를 실행 시키고 test를 실행한다
+test는 headless 하게 실행되고 console에 결과가 표시된다
+![npmruntest실패](https://user-images.githubusercontent.com/40172373/148684547-40527819-e194-46a8-9ced-78164e980cd9.png)
+실패한 케이스 이다 테스트 코드의 어느부분에서 어떻게 오류가 났는지 console에 출력된다
+위 케이스 에서는 search anonymous post에서 '0810_Test Post Add Anonymous User'를 4초안에 찾지 못해서 실패했다
+![npmruntestend](https://user-images.githubusercontent.com/40172373/148684549-9e3fef52-92c9-4054-8f62-e5fd3ecb5dc1.png)
+테스트 코드가 종료되면 최종 결과가 출력된다
+총 3개의 테스트 코드가 작성되었고 그 중 PostAddSearch가 실패했다
+각 테스트의 실행시간, 총 테스트 함수, 실패한 함수의 갯수가 출력된다
+
+#### npm run cypress
+            npm run start
+            npm run cypress  //cypress는 cypress open
+먼저 서버를 실행 시키고 cypress를 실행한다
+
+![cypressopen](https://user-images.githubusercontent.com/40172373/148684797-b5a9efe6-38fa-4b3a-bc27-9d7f01faad54.png)
+
+테스트 코드 파일이 표시된다 클릭하면 해당 파일만 실행된다
+
+![cypress에러](https://user-images.githubusercontent.com/40172373/148684878-ec13d3d3-21a4-47d9-a4c1-a78a7abb687d.png)
+테스트가 실패하면 해당 내용이 출력된다
+위 예시에서는 '7196_Test Post Add Anonymous User'을 찾을수 없어서 실패했다
+![test성공](https://user-images.githubusercontent.com/40172373/148684881-82a7a2ae-b4b7-4637-950b-2b53fb2e30f4.png)
+테스트가 성공한 경우이다
+
+테스트 코드 작성중에는 npm run cypress를 사용하고 최종 테스트에는 npm run test를 사용하는것을 추천한다
