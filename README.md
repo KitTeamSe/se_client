@@ -157,6 +157,40 @@ SE 게시판은 금오공대 컴퓨터 소프트웨어 공학과의 학과 홈�
 
 ## 코드구조
 
+    ├── cypress
+    ├── node_modules
+    ├── public
+    ├── src
+    │ ├── assets
+    │ │ └── fonts
+    │ ├── components
+    │ ├── containers
+    │ ├── libs
+    │ ├── modules
+    │ ├── pages
+    │ ├── styles
+    │ ├── utils
+    │ ├── App.js
+    │ ├── DataExport.js
+    │ ├── index.js
+    │ ├── reportWebVitals.js
+    │ ├── Router.js
+    │ └── setupTests.js
+    ├── package.json
+    └── README.md
+
+<p align="center">se_client Tree</p>
+
+<p align="center">
+  <img alt="se code structure1" src="https://user-images.githubusercontent.com/40172373/149257974-d6ce6a1b-52ec-4b2a-be2b-b97065d20846.png" width="70%"/>
+  <p align="center">se_client Router 구조</p>
+</p>
+
+<p align="center">
+  <img alt="se code structure2" src="https://user-images.githubusercontent.com/40172373/149263621-b9ab7cde-d87b-46b1-9fcb-e4b1c2789c21.png" width="70%"/>
+  <p align="center">se_client Component 구조</p>
+</p>
+
 ## 개발방법
 
 ### Jira
