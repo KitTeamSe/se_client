@@ -143,6 +143,51 @@ SE 게시판은 금오공대 컴퓨터 소프트웨어 공학과의 학과 홈�
 
 ## 아키텍처
 
+### MVC 패턴
+
+프로그램을 Model, View, Controller 3가지로 구성하는 디자인 패턴이다
+Model은 데이터를, View는 인터페이스 요소를, Controller는 Model과 View를 잇는 기능을 수행한다
+
+<p align="center">
+  <img alt="MVC architecture" src="https://user-images.githubusercontent.com/40172373/149278158-223ee397-cce5-4d73-a2dc-02d879e7da74.png" width="50%">
+  <p align="center">MVC 아키텍처</p>
+</p>
+
+직관적인 구조이다
+MVC 패턴은 널리 사용되었고 많은 파생 패턴이 있다 이들을 통칭해서 MV\* 패턴 이라고 한다
+
+<p align="center">
+  <img alt="complex MVC architecture" src="https://user-images.githubusercontent.com/40172373/149276240-7eddc1a9-d741-4ad4-b1f6-de0d2ae49246.png" width="50%">
+  <p align="center">복잡한 MVC 아키텍처</p>
+</p>
+
+하지만 큰 프로그램에는 많은 컴포넌트들이 사용되어 M,V,C 간의 연결이 복작하게 되었다
+위 그림에서 Controller가 Model을 조작하고, Model의 값이 View에 반영되고 View가 Model을 조정한다고 그려져 있지만 View와 Model은 직접 상호작용 하면 안된다 따라서 다음과 같이 디자인 패턴을 수정해야 한다
+
+<p align="center">
+  <img alt="new MVC architecture" src="https://user-images.githubusercontent.com/40172373/149279481-b3d041a9-2663-4264-9a56-33b92aa9c517.png" width="50%">
+  <p align="center">수정된 MVC 아키텍처</p>
+</p>
+
+사용자가 View를 통해 수정을 하면 Controller가 Model을 조작하고 수정된 Model이 View에 반영된다
+
+### Flux 패턴
+
+Flux 패턴의 핵심은 '단방향 흐름' 이다
+
+<p align="center">
+  <img alt="Flux architecture" src="https://user-images.githubusercontent.com/40172373/149278175-92f607be-b78a-4b5e-a9b1-c7fbad3a8a09.png" width="50%">
+  <p align="center">Flux 아키텍처</p>
+</p>
+
+사용자가 Action을 하면 그림의 Action에서부터 View까지 흐르기만 하면 반영이 된다
+Flux패턴으로 작성한 se_client의 코드구조는 다음과 같다
+
+<p align="center">
+  <img alt="SE boardFlux architecture" src="https://user-images.githubusercontent.com/40172373/149282874-11558946-cb58-4d37-8e7a-fade70ef6bf7.png" width="50%">
+  <p align="center">SE board의 Flux 아키텍처</p>
+</p>
+
 ### Flux
 
 ## 기술스택
@@ -187,7 +232,7 @@ SE 게시판은 금오공대 컴퓨터 소프트웨어 공학과의 학과 홈�
 </p>
 
 <p align="center">
-  <img alt="se code structure2" src="https://user-images.githubusercontent.com/40172373/149263621-b9ab7cde-d87b-46b1-9fcb-e4b1c2789c21.png" width="70%"/>
+  <img alt="se code structure2" src="https://user-images.githubusercontent.com/40172373/149282850-388ee15d-3be6-41c9-acd8-3e5b1c232409.png" width="70%"/>
   <p align="center">se_client Component 구조</p>
 </p>
 
