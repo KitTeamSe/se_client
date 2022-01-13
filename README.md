@@ -14,6 +14,7 @@
 
 SE게시판은 Software Engineering의 약자로 금오공대 컴퓨터 소프트웨어 공학과의 학과 게시판 이다
 아직 정식 배포 전으로 [기존 게시판](http://se.kumoh.ac.kr/) 의 데이터 마이그레이션이 되지 않았다
+
 [데모](https://se-testboard.duckdns.org/board/freeboard) 이다
 디자인은 Mui를 사용하였다
 
@@ -35,7 +36,7 @@ SE 게시판은 금오공대 컴퓨터 소프트웨어 공학과의 학과 홈�
 ### 회원가입, 아이디, 비밀번호 찾기 로그인, 로그아웃 기능
 
 로그인 화면
-아이디, 비밀번호 찾기 버튼, 회원가입 버튼이 포함한 Dialog로 구현하였다
+아이디, 비밀번호/아이디 찾기 버튼, 회원가입 버튼이 포함한 Dialog로 구현하였다
 
 <p align="center">
   <img alt="로그인 PC" src="https://user-images.githubusercontent.com/40172373/149066460-1481d9e0-474f-4a0b-a583-d80bff1770db.png" width="80%">
@@ -54,6 +55,7 @@ SE 게시판은 금오공대 컴퓨터 소프트웨어 공학과의 학과 홈�
   <img alt="회원가입 PC" src="https://user-images.githubusercontent.com/40172373/149066702-6a194e7b-a86f-431f-8f6a-098c9a9f7b35.png" width="80%">
   <p align="center">회원가입 PC화면</p>
 </p>
+
 <p align="center">
   <img alt="회원가입 모바일" src="https://user-images.githubusercontent.com/40172373/149066782-ec7b8ca9-128e-4df9-9a2e-6ffb005b7d03.png" width="50%">
   <p align="center">회원가입 모바일화면</p>
@@ -65,12 +67,13 @@ SE 게시판은 금오공대 컴퓨터 소프트웨어 공학과의 학과 홈�
 내 질문의 답변을 입력하면 비밀번호가 가입 이메일로 전송된다
 
 <p align="center">
-  <img alt="게시글 작성 PC" src="https://user-images.githubusercontent.com/40172373/149068364-fa94552a-8237-47bb-8fcb-c38344c7faba.png" width="80%">
-  <p align="center">게시글 작성 PC화면</p>
+  <img alt="비밀번호찾기 PC" src="https://user-images.githubusercontent.com/40172373/149067995-4af90ef2-c98e-44d2-90ca-98720067ea2c.png" width="80%">
+  <p align="center">비밀번호찾기 PC 화면</p>
 </p>
+
 <p align="center">
-  <img alt="댓글 작성 모바일" src="https://user-images.githubusercontent.com/40172373/149068464-3ff46fd1-21e3-46ad-a911-4f7d68a2c570.png" width="50%">
-  <p align="center">댓글작성 모바일 화면</p>
+  <img alt="비밀번호찾기 모바일" src="https://user-images.githubusercontent.com/40172373/149068024-8b332bd0-fc5d-4f57-8c5b-94b50866d92a.png" width="50%">
+  <p align="center">비밀번호찾기 모바일 화면</p>
 </p>
 
 ### 게시글, 댓글 작성, 수정, 삭제, 검색
@@ -82,12 +85,13 @@ SE 게시판은 금오공대 컴퓨터 소프트웨어 공학과의 학과 홈�
 게시글 검색은 제목, 내용, 댓글, 닉네임, 사용자ID, 태그를 이용하여 검색이 가능하다
 
 <p align="center">
-  <img alt="비밀번호찾기 PC" src="https://user-images.githubusercontent.com/40172373/149067995-4af90ef2-c98e-44d2-90ca-98720067ea2c.png" width="80%">
-  <p align="center">비밀번호찾기 PC 화면</p>
+  <img alt="게시글 작성 PC" src="https://user-images.githubusercontent.com/40172373/149068364-fa94552a-8237-47bb-8fcb-c38344c7faba.png" width="80%">
+  <p align="center">게시글 작성 PC화면</p>
 </p>
+
 <p align="center">
-  <img alt="비밀번호찾기 모바일" src="https://user-images.githubusercontent.com/40172373/149068024-8b332bd0-fc5d-4f57-8c5b-94b50866d92a.png" width="50%">
-  <p align="center">비밀번호찾기 모바일 화면</p>
+  <img alt="댓글 작성 모바일" src="https://user-images.githubusercontent.com/40172373/149068464-3ff46fd1-21e3-46ad-a911-4f7d68a2c570.png" width="50%">
+  <p align="center">댓글작성 모바일 화면</p>
 </p>
 
 비밀글에 접근하기 위해서는 게시 당시 설정한 비밀번호를 입력해야 한다
@@ -187,8 +191,6 @@ Flux패턴으로 작성한 se_client의 코드구조는 다음과 같다
   <img alt="SE boardFlux architecture" src="https://user-images.githubusercontent.com/40172373/149282874-11558946-cb58-4d37-8e7a-fade70ef6bf7.png" width="50%">
   <p align="center">SE board의 Flux 아키텍처</p>
 </p>
-
-### Flux
 
 ## 기술스택
 
