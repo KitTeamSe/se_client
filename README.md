@@ -1,8 +1,10 @@
-# se_web_client <img alt="react" src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
+# se_web_client <a href="#"><img alt="react" src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"></a>
 
 ## 목차
 
-- SE 게시판 소개
+- <a id="user-content-목차" class="anchor" aria-hidden="true" href="#목차">
+    SE 게시판 소개
+  </a>
 - 기능
 - 아키텍처
 - 기술스택
