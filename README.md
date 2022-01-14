@@ -1,16 +1,28 @@
-# se_web_client <a href="#"><img alt="react" src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"></a>
+# se_web_client <img align="center" alt="react" src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
 
 ## 목차
 
-- <a id="user-content-목차" class="anchor" aria-hidden="true" href="#목차">
+- <a href="#목차">
     SE 게시판 소개
   </a>
-- 기능
-- 아키텍처
-- 기술스택
-- 코드구조
-- 개발방법
-- 테스트
+- <a href="#기능">
+    기능
+  </a>
+- <a href="#아키텍처">
+    아키텍처
+  </a>
+- <a href="#기술스택">
+    기술스택
+  </a>
+- <a href="#코드구조">
+    코드구조
+  </a>
+- <a href="#개발방법">
+    개발방법
+  </a>
+- <a href="#테스트">
+    테스트
+  </a>
 
 ## SE 게시판
 
@@ -200,11 +212,11 @@ Redux-Saga가 Dispatcher의 역학을 Redux가 Store를, Containers와 Component
 ## 기술스택
 
 <img alt="react" src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img alt="redux" src="https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=black"> <img alt="redux saga" src="https://img.shields.io/badge/redux saga-999999?style=for-the-badge&logo=reduxsaga&logoColor=black"> <img alt="react router" src="https://img.shields.io/badge/react router-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white">
-
+<br/>
 <img alt="docker" src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"> <img alt="nginx" src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white"> <img alt="jenkins" src="https://img.shields.io/badge/jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white"> <img alt="portainer" src="https://img.shields.io/badge/portainer-13BEF9?style=for-the-badge&logo=portainer&logoColor=white">
-
+<br/>
 <img alt="github" src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img alt="eslint" src="https://img.shields.io/badge/eslint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white"> <img alt="prettier" src="https://img.shields.io/badge/prettier-F7B93E?style=for-the-badge&logo=prettier&logoColor=white">
-
+<br/>
 <img alt="cypress" src="https://img.shields.io/badge/cypress-17202C?style=for-the-badge&logo=cypress&logoColor=white">
 
 ## 코드구조
