@@ -174,6 +174,7 @@ MVC 패턴은 널리 사용되었고 많은 파생 패턴이 있다 이들을 �
 </p>
 
 사용자가 View를 통해 수정을 하면 Controller가 Model을 조작하고 수정된 Model이 View에 반영된다
+이 수정된 패턴이 Flux 패턴으로 이어진다
 
 ### Flux 패턴
 
@@ -191,6 +192,8 @@ Flux패턴으로 작성한 se_client의 코드구조는 다음과 같다
   <img alt="SE boardFlux architecture" src="https://user-images.githubusercontent.com/40172373/149282874-11558946-cb58-4d37-8e7a-fade70ef6bf7.png" width="50%">
   <p align="center">SE board의 Flux 아키텍처</p>
 </p>
+
+Redux-Saga가 Dispatcher의 역학을 Redux가 Store를, Containers와 Components가 View를 맡는다
 
 ## 기술스택
 
@@ -240,9 +243,21 @@ Flux패턴으로 작성한 se_client의 코드구조는 다음과 같다
 
 ## 개발방법
 
-### Jira
+Jira를 사용해 이슈기반의 개발을 진행한다
 
-### Sprint회의
+<p align="center">
+  <img alt="jira" src="https://user-images.githubusercontent.com/40172373/149447295-6c1f7cfe-b1de-460c-a399-9af0d4406655.png" width="70%"/>
+  <p align="center">se프로젝트의 Jira</p>
+</p>
+
+2주단위의 스프린트를 실시하여 해결해야할 이슈를 선정하고 프로젝트 참여자에게 분배후 할일, 진행 중, 완료 로 구분하여 진행사항을 공유한다
+
+<p align="center">
+  <img alt="confluence" src="https://user-images.githubusercontent.com/40172373/149447720-310f6c39-417c-4dc2-b915-1b3b79732bbc.png" width="70%"/>
+  <p align="center">se프로젝트의 Confluence</p>
+</p>
+Confluence를 이용해 프로젝트와 관련된 내용들을 문서화 했다
+Sprint 회의록이나 라이브러리 조사결과, Jenkins를 사용한 배포 방법 등이 포함된다
 
 ## 테스트 <img alt="cypress" src="https://img.shields.io/badge/cypress-17202C?style=for-the-badge&logo=cypress&logoColor=white">
 
